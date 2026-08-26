@@ -53,6 +53,11 @@ Pick your profile and step into a personalized learning studio:
 4. ⭐ **Independent XP, Streaks & Trophies**:
    * Each kid's progress, answer streaks, and achievements are tracked and saved separately in `localStorage`.
 
+## 🍁 Ontario, Canada Curriculum & Enriched Standards
+
+All subjects and learning modules adhere to our master design system:
+* 📖 [**`CURRICULUM_STYLE_GUIDE.md`**](./CURRICULUM_STYLE_GUIDE.md) — *Unified visual design tokens, Ontario Ministry of Education Curriculum alignment (Math 2020 & Science 2022), Canadian metric & cultural conventions, and the 3-Tier Enriched / Waterloo CEMC Contest difficulty framework.*
+
 ---
 
 ## 📂 Project Structure
