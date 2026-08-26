@@ -51,17 +51,20 @@ const DEFAULT_PROFILES = [
     },
     subjects: [
       { title: "✏️ Grade 3 Math Studio", icon: "📐", badge: "CORE STUDIO", desc: "Interactive practice & clean printable worksheet generator", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #a855f7, #ec4899)" },
+      { title: "⏰ Clock & Elapsed Time Studio", icon: "🕰️", badge: "NEW & INTERACTIVE", desc: "Read analog clocks, set hands, timeline jumps & time word problems", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #8b5cf6, #3b82f6)" },
       { title: "✖️ Times Table Blitz", icon: "⚡", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #f59e0b, #fbbf24)" },
-      { title: "⏰ Clock & Elapsed Time", icon: "🕰️", badge: "MEASUREMENT", desc: "Read analog clocks, calculate elapsed minutes and hours", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #06b6d4, #3b82f6)" },
       { title: "💰 Money & Coin Math", icon: "🪙", badge: "REAL LIFE", desc: "Counting dollars, quarters, dimes, nickels, and making change", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #10b981, #059669)" }
     ],
     topics: [
+      { title: "⏰ Telling Time & Clocks", icon: "🕰️", badge: "TIME MATH", desc: "Read hour & minute hands with 5-minute intervals", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
+      { title: "⏱️ Elapsed Time Numberline", icon: "📈", badge: "TIMELINE JUMPS", desc: "Calculate elapsed hours & minutes with visual jumps", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #06b6d4, #10b981)" },
       { title: "➕ 3-Digit Addition", icon: "✨", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" },
       { title: "➖ 3-Digit Subtraction", icon: "🎯", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #8b5cf6, #a855f7)" },
       { title: "🧩 Missing Addend Equations", icon: "🔍", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
       { title: "🍕 Early Equal Fractions", icon: "🍰", badge: "FRACTIONS", desc: "Visual halves, thirds, fourths, sixths, and eighths", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #f59e0b, #d97706)" }
     ],
     printable: [
+      { title: "🖨️ Printable Clock & Time Worksheets", icon: "⏰", badge: "CLOCK PDF", desc: "12-clock test generator to draw hands or write digital times", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #6d28d9, #4f46e5)" },
       { title: "🖨️ 100-Problem Times Table Sprint", icon: "📄", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
       { title: "🖨️ Daily Math Worksheet", icon: "📝", badge: "CUSTOM PDF", desc: "Generate custom mixed review tests with paper-saving keys", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
     ]

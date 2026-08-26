@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivia's Clock & Elapsed Time Studio ⏰✨</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/clock-styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="clock-app-header">
+    <div class="header-brand">
+      <a href="../index.html" class="btn-back-portal">🎬 StudyFlix Hub</a>
+      <a href="index.html" class="btn-back-math">✏️ Math Studio</a>
+      <div class="brand-text">
+        <h1>⏰ Olivia's Clock &amp; Elapsed Time Studio</h1>
+        <p>Grade 3 Interactive Clock Practice &amp; Printable Worksheet Generator</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="score-pill">⭐ Score: <span id="clock-score">0</span></div>
+      <div class="streak-pill">🔥 Streak: <span id="clock-streak">0</span></div>
+      <button class="btn btn-print-top" onclick="window.print()">🖨️ Print Worksheets</button>
+    </div>
+  </header>
+
+  <div class="clock-app-layout">
+    
+    <!-- Left Sidebar Controls -->
+    <aside class="clock-sidebar">
+      
+      <!-- Mode Selection Tabs -->
+      <div class="sidebar-section">
+        <h3>🎮 Select Learning Activity</h3>
+        <div class="activity-mode-buttons">
+          <button class="activity-btn active" data-mode="read_clock" onclick="setActivityMode('read_clock')">
+            <span class="act-icon">👀</span>
+            <div class="act-info">
+              <strong>1. Read the Clock</strong>
+              <small>Look at the clock &amp; write digital time</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="set_clock" onclick="setActivityMode('set_clock')">
+            <span class="act-icon">🖐️</span>
+            <div class="act-info">
+              <strong>2. Set the Hands</strong>
+              <small>Move hands to match the time</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="elapsed_time" onclick="setActivityMode('elapsed_time')">
+            <span class="act-icon">⏱️</span>
+            <div class="act-info">
+              <strong>3. Elapsed Time</strong>
+              <small>How much time passed? (Timeline jumps!)</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="word_problems" onclick="setActivityMode('word_problems')">
+            <span class="act-icon">📖</span>
+            <div class="act-info">
+              <strong>4. Time Story Problems</strong>
+              <small>Real-world schedule &amp; duration puzzles</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="worksheet_gen" onclick="setActivityMode('worksheet_gen')">
+            <span class="act-icon">🖨️</span>
+            <div class="act-info">
+              <strong>5. Printable Worksheet</strong>
+              <small>Generate paper worksheets with clocks</small>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Difficulty / Precision Controls -->
+      <div class="sidebar-section">
+        <h3>⚙️ Clock Precision Level</h3>
+        <div class="radio-options-grid">
+          <label class="custom-radio-card">
+            <input type="radio" name="precision" value="hour_half" onchange="updatePrecision(this.value)">
+            <span>🌟 Exact Hours &amp; Half-Hours (:00, :30)</span>
+          </label>
+          <label class="custom-radio-card">
+            <input type="radio" name="precision" value="quarters" onchange="updatePrecision(this.value)">
+            <span>🌟 15-Min Quarters (:00, :15, :30, :45)</span>
+          </label>
+          <label class="custom-radio-card">
+            <input type="radio" name="precision" value="five_min" checked onchange="updatePrecision(this.value)">
+            <span>🌟 5-Minute Intervals (:05, :10, :25...)</span>
+          </label>
+          <label class="custom-radio-card">
+            <input type="radio" name="precision" value="one_min" onchange="updatePrecision(this.value)">
+            <span>🌟 Exact to the Minute (e.g. 4:17)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Quick Tips Box -->
+      <div class="sidebar-section tip-box">
+        <h4>💡 Olivia's Clock Secrets:</h4>
+        <ul>
+          <li>🔴 <strong>Short Hand</strong> = <strong>Hour Hand</strong> (moves slowly)</li>
+          <li>🔵 <strong>Long Hand</strong> = <strong>Minute Hand</strong> (counts by 5s)</li>
+          <li>60 minutes = 1 whole hour!</li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- Main Interactive Workspace -->
+    <main class="clock-main-stage">
+      
+      <!-- ================================================================= -->
+      <!-- VIEW 1: READ THE CLOCK (INTERACTIVE) -->
+      <!-- ================================================================= -->
+      <section id="view-read-clock" class="activity-stage active">
+        <div class="stage-header">
+          <h2>👀 What Time Does the Clock Show?</h2>
+          <p>Read the hour (red) and minute (blue) hands, then type the digital time!</p>
+        </div>
+
+        <div class="interactive-clock-card">
+          <div class="clock-display-area">
+            <div id="read-clock-svg-container" class="svg-clock-wrapper">
+              <!-- SVG Clock Rendered via JS -->
+            </div>
+          </div>
+
+          <div class="clock-input-area">
+            <div class="digital-time-inputs">
+              <input type="number" id="read-hour-input" min="1" max="12" placeholder="HH" class="time-box">
+              <span class="colon">:</span>
+              <input type="number" id="read-minute-input" min="0" max="59" placeholder="MM" class="time-box">
+            </div>
+
+            <div class="feedback-msg hidden" id="read-clock-feedback"></div>
+
+            <div class="clock-action-buttons">
+              <button class="btn btn-primary" onclick="checkReadClockAnswer()">✅ Check Answer</button>
+              <button class="btn btn-secondary" onclick="generateNewReadClockQuestion()">🎲 Next Clock</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 2: SET THE HANDS (INTERACTIVE) -->
+      <!-- ================================================================= -->
+      <section id="view-set-clock" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>🖐️ Set the Clock Hands!</h2>
+          <p>Use the buttons or click the clock to set the hands to match the target time!</p>
+        </div>
+
+        <div class="interactive-clock-card">
+          <div class="target-time-badge">
+            Target Time: <span id="set-target-time-display">04:25</span>
+          </div>
+
+          <div class="clock-display-area">
+            <div id="set-clock-svg-container" class="svg-clock-wrapper">
+              <!-- Interactive SVG Clock -->
+            </div>
+          </div>
+
+          <div class="clock-hand-controllers">
+            <div class="hand-ctrl-group">
+              <label>🔴 Hour Hand:</label>
+              <div class="btn-group">
+                <button class="btn-sm" onclick="adjustHour(-1)">-1 Hr</button>
+                <span class="ctrl-val" id="ctrl-hour-val">12</span>
+                <button class="btn-sm" onclick="adjustHour(1)">+1 Hr</button>
+              </div>
+            </div>
+
+            <div class="hand-ctrl-group">
+              <label>🔵 Minute Hand:</label>
+              <div class="btn-group">
+                <button class="btn-sm" onclick="adjustMinute(-5)">-5 Min</button>
+                <button class="btn-sm" onclick="adjustMinute(-1)">-1 Min</button>
+                <span class="ctrl-val" id="ctrl-minute-val">00</span>
+                <button class="btn-sm" onclick="adjustMinute(1)">+1 Min</button>
+                <button class="btn-sm" onclick="adjustMinute(5)">+5 Min</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="feedback-msg hidden" id="set-clock-feedback"></div>
+
+          <div class="clock-action-buttons">
+            <button class="btn btn-primary" onclick="checkSetClockAnswer()">✅ Check Time</button>
+            <button class="btn btn-secondary" onclick="generateNewSetClockQuestion()">🎲 New Challenge</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 3: ELAPSED TIME TIMELINE JUMPS -->
+      <!-- ================================================================= -->
+      <section id="view-elapsed-time" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>⏱️ Elapsed Time: The Number Line Strategy!</h2>
+          <p>How much time passed between the Start Time and End Time?</p>
+        </div>
+
+        <div class="elapsed-card">
+          <div class="two-clocks-row">
+            <div class="clock-pair-item">
+              <span class="time-label">🟢 START TIME</span>
+              <div id="elapsed-start-clock" class="svg-clock-mini"></div>
+              <strong class="time-digital" id="elapsed-start-text">2:15 PM</strong>
+            </div>
+
+            <div class="elapsed-arrow">➔</div>
+
+            <div class="clock-pair-item">
+              <span class="time-label">🔴 END TIME</span>
+              <div id="elapsed-end-clock" class="svg-clock-mini"></div>
+              <strong class="time-digital" id="elapsed-end-text">4:45 PM</strong>
+            </div>
+          </div>
+
+          <!-- Visual Jump Numberline Helper -->
+          <div class="timeline-helper-box">
+            <h4>📈 Timeline Jump Strategy:</h4>
+            <div class="timeline-visual" id="timeline-visual-jumps">
+              <!-- Jump bubbles injected via JS -->
+            </div>
+          </div>
+
+          <div class="elapsed-inputs-box">
+            <label>How much total time has passed?</label>
+            <div class="elapsed-inputs-row">
+              <input type="number" id="elapsed-hrs-input" placeholder="0" min="0" max="12" class="time-box">
+              <span>hours and</span>
+              <input type="number" id="elapsed-mins-input" placeholder="0" min="0" max="59" class="time-box">
+              <span>minutes</span>
+            </div>
+
+            <div class="feedback-msg hidden" id="elapsed-feedback"></div>
+
+            <div class="clock-action-buttons">
+              <button class="btn btn-primary" onclick="checkElapsedTimeAnswer()">✅ Check Elapsed Time</button>
+              <button class="btn btn-secondary" onclick="generateNewElapsedQuestion()">🎲 Next Problem</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 4: TIME STORY WORD PROBLEMS -->
+      <!-- ================================================================= -->
+      <section id="view-word-problems" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>📖 Real-World Schedule Story Problems</h2>
+          <p>Solve fun schedule puzzles about sports, baking cookies, reading, and movie nights!</p>
+        </div>
+
+        <div class="story-problem-card">
+          <div class="story-icon">🧁</div>
+          <h3 id="story-problem-text" class="story-text">
+            Olivia put a batch of delicious blueberry muffins in the oven at 3:20 PM. They need to bake for 35 minutes. What time will the muffins be ready?
+          </h3>
+
+          <div class="story-options-grid" id="story-options-container">
+            <!-- Options injected via JS -->
+          </div>
+
+          <div class="feedback-msg hidden" id="story-feedback"></div>
+
+          <div class="clock-action-buttons">
+            <button class="btn btn-secondary" onclick="generateNewStoryProblem()">🎲 Next Story Problem</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 5: PRINTABLE CLOCK WORKSHEET GENERATOR -->
+      <!-- ================================================================= -->
+      <section id="view-worksheet-gen" class="activity-stage hidden">
+        <div class="stage-header no-print">
+          <h2>🖨️ Printable Clock Worksheet Generator</h2>
+          <p>Click "Generate New Sheet" to create clean vector-printed clock homework!</p>
+          <div class="worksheet-controls-row">
+            <button class="btn btn-primary" onclick="generatePrintableClocks()">🔄 Generate New Sheet</button>
+            <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Worksheet</button>
+            <label class="custom-check-pill">
+              <input type="checkbox" id="chk-show-answers-print" onchange="togglePrintAnswers(this.checked)">
+              <span>Show Answers / Keys</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Printable Document Canvas -->
+        <div class="printable-clock-doc" id="printable-clock-doc">
+          <div class="doc-header">
+            <div class="doc-title-row">
+              <h2>Grade 3 Telling Time &amp; Clocks Practice</h2>
+              <span class="doc-sub">Olivia's Learning Studio</span>
+            </div>
+            <div class="doc-meta-row">
+              <div>Name: <span class="doc-line">Olivia</span></div>
+              <div>Date: <span class="doc-line"></span></div>
+              <div>Score: <span class="doc-line" style="min-width: 60px;"></span></div>
+            </div>
+          </div>
+
+          <div class="printable-clocks-grid" id="printable-clocks-grid">
+            <!-- 12 Printable Clock Problems Injected via JS -->
+          </div>
+
+          <div class="doc-footer">
+            <span>Olivia's Math Studio • Grade 3 Curricula</span>
+            <span>⭐ Draw the time or write the digital numbers below each clock! ⭐</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="js/clock-engine.js"></script>
+</body>
+</html>
