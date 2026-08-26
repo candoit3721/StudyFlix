@@ -1,0 +1,1052 @@
+:root {
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #e0e7ff;
+  --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  --accent: #ec4899;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --warning: #f59e0b;
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Layout Container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar Controls */
+.sidebar {
+  width: 390px;
+  min-width: 350px;
+  max-width: 430px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.03);
+}
+
+.sidebar-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--primary-gradient);
+  color: #fff;
+}
+
+.sidebar-header h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-header p {
+  font-size: 0.85rem;
+  opacity: 0.92;
+  margin-top: 4px;
+}
+
+.sidebar-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+/* Section Grouping */
+.control-group {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-group h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Preset Buttons Grid */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.preset-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.preset-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.preset-btn .badge {
+  font-size: 0.68rem;
+  color: var(--primary);
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+/* Form Fields */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.form-select,
+.form-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  font-size: 0.9rem;
+  color: var(--text-main);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-select:focus,
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Custom Chip Radio / Checkbox */
+.custom-chip {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.custom-chip input[type="radio"],
+.custom-chip input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-chip span {
+  display: inline-block;
+  padding: 7px 11px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.custom-chip:hover span {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.custom-chip input:checked + span {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-hover);
+  font-weight: 600;
+}
+
+/* Sidebar Actions */
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 10px 16px;
+  background: #fff;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.15s ease;
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+/* Main Workspace Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+/* Top Toolbar */
+.top-bar {
+  padding: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.mode-toggle-group {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  gap: 4px;
+}
+
+.mode-btn {
+  padding: 7px 14px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.mode-btn.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border-color);
+  background: #fff;
+  color: var(--text-main);
+  transition: all 0.15s ease;
+}
+
+.action-btn:hover {
+  background: #f8fafc;
+}
+
+.action-btn.primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.action-btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Workspace Canvas Viewport */
+.worksheet-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+.pages-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+}
+
+/* Paper Sheet Simulation (8.5 x 11 inches) */
+.paper-sheet {
+  width: 8.5in;
+  min-height: 11in;
+  height: 11in;
+  max-width: 8.5in;
+  background: #fff;
+  padding: 0.45in 0.55in 0.4in 0.55in;
+  box-shadow: var(--shadow-lg);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.paper-sheet.answer-key-sheet {
+  height: auto;
+  min-height: 6in;
+}
+
+/* Interactive Single-Sheet Wrapper */
+.interactive-container {
+  width: 100%;
+  max-width: 8.5in;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Worksheet Header - Page 1 */
+.sheet-header {
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header-info h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.header-info p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+.student-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 210px;
+}
+
+.meta-field {
+  display: flex;
+  align-items: flex-end;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.meta-line {
+  flex: 1;
+  border-bottom: 1px solid #94a3b8;
+  margin-left: 6px;
+  height: 15px;
+  display: inline-block;
+  padding-left: 4px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.score-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.score-blank {
+  display: inline-block;
+  width: 44px;
+  height: 20px;
+  border: 1.5px solid #0f172a;
+  border-radius: 4px;
+  text-align: center;
+  line-height: 18px;
+}
+
+/* Compact Header for Subsequent Pages */
+.sheet-header-compact {
+  border-bottom: 1.5px solid #0f172a;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-meta-compact {
+  display: flex;
+  gap: 16px;
+  font-size: 0.82rem;
+  color: #334155;
+}
+
+.sheet-footer {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Questions Grid Container */
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px 16px;
+  flex: 1;
+  min-height: 0;
+}
+
+.problems-grid.cols-1 {
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  gap: 14px;
+}
+
+.problems-grid.cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 12px 16px;
+}
+
+.problems-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 10px 14px;
+}
+
+/* Problem Card */
+.problem-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  break-inside: avoid;
+  height: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.problem-card:hover {
+  border-color: #cbd5e1;
+}
+
+.problem-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.q-number {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 1px 7px;
+  border-radius: 10px;
+}
+
+.q-topic {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Math Expression & Typography */
+.math-expr {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  line-height: 1.4;
+  margin: 2px 0 6px 0;
+}
+
+.math-op {
+  color: #475569;
+  font-weight: 800;
+  margin: 0 2px;
+}
+
+.math-var {
+  color: #d946ef;
+  font-style: italic;
+  font-weight: 800;
+}
+
+.whole-num {
+  font-weight: 700;
+}
+
+/* Fraction Rendering */
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  text-align: center;
+  padding: 0 2px;
+  font-size: 0.95em;
+  line-height: 1.1;
+}
+
+.fraction .numerator {
+  border-bottom: 1.5px solid #1e293b;
+  padding-bottom: 1px;
+  font-weight: 700;
+}
+
+.fraction .denominator {
+  padding-top: 1px;
+  font-weight: 700;
+}
+
+.mixed-whole {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin-right: 3px;
+  line-height: 1;
+}
+
+.sqrt-sym {
+  font-size: 1.3em;
+  font-weight: 300;
+  margin-right: 1px;
+}
+
+.sqrt-num {
+  border-top: 1.5px solid #1e293b;
+  padding-top: 1px;
+  font-weight: 700;
+}
+
+.exp {
+  font-size: 0.75em;
+  font-weight: 800;
+  color: #4338ca;
+  vertical-align: super;
+}
+
+/* Word Problem Text */
+.word-problem-text {
+  font-size: 0.86rem;
+  line-height: 1.4;
+  color: #1e293b;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* Scratchpad / Work Area for Print */
+.workspace-box {
+  flex: 1;
+  min-height: 48px;
+  margin-top: 6px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  background-color: #fafbfc;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.workspace-box::before {
+  content: "Workspace";
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+
+.workspace-box .answer-line-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #334155;
+  margin-top: auto;
+}
+
+.answer-blank-line {
+  display: inline-block;
+  width: 90px;
+  border-bottom: 1.5px solid #1e293b;
+  height: 16px;
+}
+
+/* Interactive Mode Controls inside Problem Card */
+.interactive-answer-box {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.student-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.student-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.student-input.correct {
+  border-color: var(--success);
+  background-color: var(--success-light);
+  color: #065f46;
+}
+
+.student-input.incorrect {
+  border-color: var(--error);
+  background-color: var(--error-light);
+  color: #991b1b;
+}
+
+.feedback-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.feedback-badge.correct {
+  color: #065f46;
+  background: var(--success-light);
+}
+
+.feedback-badge.incorrect {
+  color: #991b1b;
+  background: var(--error-light);
+}
+
+/* Hint & Step-by-Step Accordion */
+.hint-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hint-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hint-toggle-btn:hover {
+  text-decoration: underline;
+}
+
+.hint-box {
+  background: #f0fdf4;
+  border-left: 3px solid var(--success);
+  padding: 6px 10px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.78rem;
+  color: #166534;
+  line-height: 1.4;
+  display: none;
+}
+
+.steps-box {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  color: #334155;
+  line-height: 1.45;
+  display: none;
+  margin-top: 4px;
+}
+
+.steps-box ol, .steps-box ul {
+  padding-left: 16px;
+  margin-top: 3px;
+}
+
+/* Paper-Saver Answer Key Sheet */
+.answer-key-sheet {
+  background: #fff;
+  border-top: 4px solid var(--primary);
+}
+
+.key-header {
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.key-header h3 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.compact-key-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 14px;
+  font-size: 0.82rem;
+}
+
+.key-item {
+  display: flex;
+  gap: 6px;
+  padding: 5px 8px;
+  background: #f8fafc;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.key-num {
+  font-weight: 800;
+  color: var(--primary);
+  min-width: 22px;
+}
+
+.key-val {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.key-steps-text {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.25;
+}
+
+/* Interactive Practice Status Bar */
+.interactive-toolbar {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+  z-index: 15;
+  width: 100%;
+  max-width: 8.5in;
+}
+
+.interactive-stats {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.stat-pill .val {
+  color: var(--primary);
+}
+
+.timer-pill {
+  font-family: 'Space Mono', monospace, monospace;
+  font-size: 0.95rem;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  color: #0f172a;
+}
+
+/* Confetti Canvas */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* PRINT MEDIA STYLES - ROBUST MULTI-PAGE PRINTING WITH EVEN DISTRIBUTION */
+@page {
+  size: letter portrait;
+  margin: 0.4in 0.45in;
+}
+
+@media print {
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+    color: #000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .sidebar,
+  .top-bar,
+  .interactive-toolbar,
+  .interactive-answer-box,
+  .hint-container,
+  #confetti-canvas {
+    display: none !important;
+  }
+
+  .app-container {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .main-content {
+    background: transparent !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .worksheet-viewport {
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    display: block !important;
+    gap: 0 !important;
+  }
+
+  .pages-container {
+    display: block !important;
+    width: 100% !important;
+    gap: 0 !important;
+  }
+
+  .paper-sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    height: 10.1in !important;
+    max-height: 10.1in !important;
+    min-height: 10.1in !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .paper-sheet:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  .paper-sheet.answer-key-sheet {
+    page-break-before: always !important;
+    break-before: page !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    border-top: none !important;
+    padding-top: 0.1in !important;
+  }
+
+  .problem-card {
+    border: 1px solid #94a3b8 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    height: 100% !important;
+  }
+
+  .workspace-box {
+    background-color: transparent !important;
+    border: 1px dashed #94a3b8 !important;
+  }
+
+  .workspace-box::before {
+    color: #94a3b8 !important;
+  }
+
+  .compact-key-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 8px 12px !important;
+  }
+
+  .key-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: transparent !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+}

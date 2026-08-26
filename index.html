@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kids Learning Hub | Netflix-Style Multi-Profile Portal 🎓✨</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-netflix">
+
+  <!-- TOP NAVBAR (VISIBLE ONCE PROFILE IS SELECTED) -->
+  <header id="main-header" class="top-nav hidden">
+    <div class="nav-left">
+      <div class="brand-logo" onclick="showProfileSelect()">
+        <span class="brand-badge">STUDY</span>FLIX
+      </div>
+      <nav class="nav-links">
+        <button class="nav-link active" onclick="showView('home')">Home</button>
+        <button class="nav-link" onclick="showView('topics')">All Subjects</button>
+        <button class="nav-link" onclick="showView('printable')">🖨️ Worksheets</button>
+        <button class="nav-link" onclick="showView('stats')">🏆 Trophies & Stats</button>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <div class="xp-pill">
+        <span class="xp-star">⭐</span>
+        <span id="current-profile-xp">0</span> XP
+      </div>
+      <div class="streak-pill">
+        <span class="streak-fire">🔥</span>
+        <span id="current-profile-streak">0</span> Day Streak
+      </div>
+      
+      <!-- Profile Dropdown Trigger -->
+      <div class="profile-menu-trigger" onclick="toggleProfileDropdown()">
+        <div class="profile-mini-avatar" id="nav-profile-avatar">👧</div>
+        <span class="profile-mini-name" id="nav-profile-name">Sophia</span>
+        <span class="dropdown-caret">▼</span>
+
+        <!-- Dropdown Menu -->
+        <div id="profile-dropdown" class="profile-dropdown hidden">
+          <div class="dropdown-header">Switch Profile:</div>
+          <div id="dropdown-profiles-list">
+            <!-- Injected via JS -->
+          </div>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" onclick="showProfileSelect()">
+            <span>👥 Manage / Choose Profiles</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 1. PROFILE SELECTION SCREEN (NETFLIX STYLE) -->
+  <!-- ========================================================================= -->
+  <section id="profile-select-screen" class="profile-select-container">
+    <div class="profile-select-content">
+      <div class="portal-brand">
+        <span class="portal-brand-badge">STUDY</span>FLIX
+      </div>
+      <h1 class="profile-prompt">Who's learning today?</h1>
+      
+      <div class="profiles-row" id="profiles-container">
+        <!-- Injected via JS -->
+      </div>
+
+      <div class="profile-actions">
+        <button class="btn btn-outline" id="manage-profiles-btn" onclick="toggleManageMode()">
+          ⚙️ Manage Profiles
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN DASHBOARD SCREEN (PER PROFILE) -->
+  <!-- ========================================================================= -->
+  <main id="dashboard-screen" class="dashboard-container hidden">
+
+    <!-- HERO BILLBOARD -->
+    <section class="hero-billboard" id="hero-billboard">
+      <div class="billboard-backdrop" id="hero-backdrop"></div>
+      <div class="billboard-content">
+        <div class="billboard-tag" id="hero-tag">🌟 FEATURED LEARNING QUEST</div>
+        <h2 class="billboard-title" id="hero-title">Sophia's Science & Chemistry Quest</h2>
+        <p class="billboard-desc" id="hero-desc">
+          Master the Periodic Table, discover element superpowers, explore cell biology, and ace roller coaster physics!
+        </p>
+        <div class="billboard-actions">
+          <button class="btn btn-netflix-play" id="hero-play-btn" onclick="launchFeaturedTopic()">
+            ▶ Play Studio Now
+          </button>
+          <button class="btn btn-netflix-info" onclick="showFeaturedDetails()">
+            ℹ️ More Details
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT ROWS (NETFLIX SLIDER ROWS) -->
+    <section class="content-rows-container">
+      
+      <!-- Row 1: Personalized Subjects -->
+      <div class="content-row">
+        <h3 class="row-header">
+          <span class="row-title" id="row1-title">Sophia's Core Subjects & Studios</span>
+          <span class="row-subtitle">Interactive practice, worksheet generators & instant feedback</span>
+        </h3>
+        <div class="row-slider" id="row-subjects-slider">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Row 2: Deep Dive Topics -->
+      <div class="content-row">
+        <h3 class="row-header">
+          <span class="row-title">🔥 Trending Topics & Super Quests</span>
+          <span class="row-subtitle">Curated specifically for your grade level</span>
+        </h3>
+        <div class="row-slider" id="row-topics-slider">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Row 3: Printable Worksheets & Guides -->
+      <div class="content-row">
+        <h3 class="row-header">
+          <span class="row-title">🖨️ Printable Worksheets & Workbooks</span>
+          <span class="row-subtitle">Paper-ready PDFs, practice tests, and comprehensive answer keys</span>
+        </h3>
+        <div class="row-slider" id="row-printable-slider">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 3. EMBEDDED STUDIO VIEWER (FULL-SCREEN APP PLAYER) -->
+  <!-- ========================================================================= -->
+  <div id="studio-viewer" class="studio-viewer hidden">
+    <div class="studio-viewer-bar">
+      <button class="btn-back-hub" onclick="closeStudioViewer()">
+        ← Return to StudyFlix Hub
+      </button>
+      <div class="studio-title-badge" id="studio-viewer-title">Sophia's Math Studio</div>
+      <div class="studio-actions">
+        <button class="btn-viewer-action" onclick="openStudioInNewTab()" title="Open in new window">
+          ↗️ Open New Tab
+        </button>
+        <button class="btn-viewer-action" onclick="closeStudioViewer()">
+          ✖ Close
+        </button>
+      </div>
+    </div>
+    <div class="studio-iframe-wrapper">
+      <iframe id="studio-iframe" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 4. PROFILE EDIT MODAL -->
+  <!-- ========================================================================= -->
+  <div id="profile-edit-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Profile</h3>
+        <button class="modal-close" onclick="closeProfileModal()">✖</button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-picker-row">
+          <label>Pick Avatar:</label>
+          <div class="avatar-options" id="avatar-options-grid">
+            <!-- Avatars injected via JS -->
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="edit-profile-name">Name:</label>
+          <input type="text" id="edit-profile-name" class="form-control" maxlength="15">
+        </div>
+        <div class="form-group">
+          <label for="edit-profile-grade">Grade / Level Description:</label>
+          <input type="text" id="edit-profile-grade" class="form-control" maxlength="30">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeProfileModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>

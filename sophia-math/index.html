@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia's Grade 5 & 6 Math Studio</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Sidebar Controls -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1><span>📐</span> Sophia's Math Studio</h1>
+        <p>Grade 5 &amp; 6 Custom Worksheet &amp; Interactive Practice</p>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- Quick Presets -->
+        <div class="control-group">
+          <h3>⚡ Quick Presets</h3>
+          <div class="preset-grid">
+            <button class="preset-btn" data-preset="g5_fractions">
+              <span>🍕 Fraction Mastery</span>
+              <span class="badge">Grade 5 (+, −, ×, ÷)</span>
+            </button>
+            <button class="preset-btn" data-preset="g5_decimals">
+              <span>🔢 Decimal Operations</span>
+              <span class="badge">Grade 5 Long Div &amp; Mult</span>
+            </button>
+            <button class="preset-btn" data-preset="g5_pemdas">
+              <span>🧩 PEMDAS Expressions</span>
+              <span class="badge">Grade 5 Order of Ops</span>
+            </button>
+            <button class="preset-btn" data-preset="g6_ratios">
+              <span>⚖️ Ratios &amp; Proportions</span>
+              <span class="badge">Grade 6 Rates &amp; Scales</span>
+            </button>
+            <button class="preset-btn" data-preset="g6_percentages">
+              <span>🏷️ Percentages &amp; Sales</span>
+              <span class="badge">Grade 6 Discounts &amp; Tax</span>
+            </button>
+            <button class="preset-btn" data-preset="g6_equations">
+              <span>💡 Pre-Algebra Equations</span>
+              <span class="badge">Grade 6 (1 &amp; 2-Step)</span>
+            </button>
+            <button class="preset-btn" data-preset="g6_integers">
+              <span>❄️ Negative Integers</span>
+              <span class="badge">Grade 6 Sprint Drill</span>
+            </button>
+            <button class="preset-btn" data-preset="g5_6_word_problems">
+              <span>📖 Multi-Step Stories</span>
+              <span class="badge">Grade 5/6 Word Problems</span>
+            </button>
+            <button class="preset-btn" data-preset="g5_6_assessment" style="grid-column: span 2;">
+              <span>🏆 5th/6th Grade Assessment</span>
+              <span class="badge">Comprehensive 20 Questions</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Topic Selection -->
+        <div class="control-group">
+          <h3>📚 Math Topic &amp; Skill</h3>
+          <div class="form-field">
+            <label for="topic-select">Category:</label>
+            <select id="topic-select" class="form-select">
+              <optgroup label="Grade 5 Topics">
+                <option value="fractions">🍕 Fractions (Add, Sub, Mult, Div)</option>
+                <option value="fractions_add_sub">➕ Fraction Addition &amp; Subtraction</option>
+                <option value="fractions_mult">✖️ Fraction Multiplication</option>
+                <option value="fractions_div">➗ Fraction Division (Keep-Change-Flip)</option>
+                <option value="decimals">🔢 Decimals (+, −, ×, Long Division)</option>
+                <option value="pemdas">🧩 Order of Operations (PEMDAS)</option>
+                <option value="geometry">📐 Geometry &amp; Volume (Prisms, Triangles)</option>
+                <option value="grade5_mixed">🌟 Grade 5 Mixed Skills</option>
+              </optgroup>
+              <optgroup label="Grade 6 Topics">
+                <option value="ratios">⚖️ Ratios, Rates &amp; Proportions</option>
+                <option value="percentages">🏷️ Percentages, Discounts &amp; Tax</option>
+                <option value="algebra">💡 Pre-Algebra &amp; Equations (Solve for x)</option>
+                <option value="integers">❄️ Integers &amp; Negative Numbers</option>
+                <option value="exponents">🚀 Exponents, GCF &amp; LCM</option>
+                <option value="statistics">📊 Statistics (Mean, Median, Mode, Range)</option>
+                <option value="grade6_mixed">🌟 Grade 6 Mixed Skills</option>
+              </optgroup>
+              <optgroup label="Multi-Step &amp; Assessment">
+                <option value="word_problems">📖 Grade 5/6 Multi-Step Word Problems</option>
+                <option value="all_mixed" selected>🎲 Comprehensive All-Topics Sprint</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <!-- Layout & Sheet Customization -->
+        <div class="control-group">
+          <h3>📋 Worksheet Setup</h3>
+          <div class="form-field">
+            <label for="question-count">Total Questions:</label>
+            <select id="question-count" class="form-select">
+              <option value="5">5 Questions</option>
+              <option value="6">6 Questions</option>
+              <option value="8">8 Questions</option>
+              <option value="10">10 Questions (Short Quiz)</option>
+              <option value="12">12 Questions</option>
+              <option value="15">15 Questions</option>
+              <option value="16">16 Questions (2 Full Pages)</option>
+              <option value="20" selected>20 Questions (Standard Drill)</option>
+              <option value="24">24 Questions (3 Full Pages)</option>
+              <option value="30">30 Questions</option>
+              <option value="40">40 Questions (Speed Sprint)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="grid-cols-select">Layout Columns:</label>
+            <select id="grid-cols-select" class="form-select">
+              <option value="1">1 Column (Spacious for Word Problems)</option>
+              <option value="2" selected>2 Columns (Standard Clean)</option>
+              <option value="3">3 Columns (High Density)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="per-page-select">Questions Per Page:</label>
+            <select id="per-page-select" class="form-select">
+              <option value="auto" selected>Auto-Fit (Recommended)</option>
+              <option value="4">4 per page (Spacious)</option>
+              <option value="6">6 per page</option>
+              <option value="8">8 per page (Standard 2-Col)</option>
+              <option value="10">10 per page</option>
+              <option value="12">12 per page (Dense 3-Col)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="student-name-input">Student Name:</label>
+            <input type="text" id="student-name-input" class="form-input" value="Sophia">
+          </div>
+
+          <div class="form-field">
+            <label for="worksheet-title-input">Worksheet Title:</label>
+            <input type="text" id="worksheet-title-input" class="form-input" value="Grade 5 & 6 Math Challenge">
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-workspace-check" checked>
+              <span>✏️ Include Calculation Workspaces</span>
+            </label>
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-answer-key-check" checked>
+              <span>🔑 Include Paper-Saver Answer Key</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="btn-generate" class="btn-primary">
+          <span>🔄 Generate New Questions</span>
+        </button>
+        <button id="btn-print-sidebar" class="btn-secondary">
+          <span>🖨️ Print Worksheet</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <div class="top-bar">
+        <div class="mode-toggle-group">
+          <button id="mode-print-btn" class="mode-btn active">
+            <span>🖨️ Printable Worksheet</span>
+          </button>
+          <button id="mode-interactive-btn" class="mode-btn">
+            <span>💻 Practice Online</span>
+          </button>
+        </div>
+
+        <div class="top-actions">
+          <button id="btn-print-top" class="action-btn primary">
+            <span>🖨️ Print Worksheet</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Worksheet Viewport -->
+      <div class="worksheet-viewport">
+        <!-- Interactive Toolbar (Only visible in Practice Online Mode) -->
+        <div id="interactive-toolbar" class="interactive-toolbar" style="display: none;">
+          <div class="interactive-stats">
+            <div class="stat-pill">
+              <span>Score:</span>
+              <span id="interactive-score" class="val">0 / 20</span>
+            </div>
+            <div class="stat-pill">
+              <span>⏱️ Timer:</span>
+              <span id="interactive-timer" class="timer-pill">00:00</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button id="btn-check-answers" class="action-btn primary">
+              <span>✅ Check Answers</span>
+            </button>
+            <button id="btn-reset-interactive" class="action-btn">
+              <span>🔄 Reset</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Pages Container -->
+        <div id="pages-container" class="pages-container">
+          <!-- Dynamically populated page sheets & answer key -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/math-engine.js"></script>
+  <script src="js/word-problems.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

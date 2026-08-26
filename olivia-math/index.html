@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivia's Grade 3 Math Worksheet Generator</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Settings -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1><span>✏️</span> Olivia's Math Studio</h1>
+        <p>Grade 3 Custom Worksheet &amp; Drill Generator</p>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- Quick Presets -->
+        <div class="control-group">
+          <h3>⚡ Quick Presets</h3>
+          <div class="preset-grid">
+            <button class="preset-btn" data-preset="mult_core">
+              <span>✖️ Times Tables (0-10)</span>
+              <span class="badge">20 Facts Drill</span>
+            </button>
+            <button class="preset-btn" data-preset="add_3digit">
+              <span>➕ 3-Digit Addition</span>
+              <span class="badge">With Regrouping</span>
+            </button>
+            <button class="preset-btn" data-preset="sub_3digit">
+              <span>➖ 3-Digit Subtraction</span>
+              <span class="badge">With Borrowing</span>
+            </button>
+            <button class="preset-btn" data-preset="all_mixed">
+              <span>🎲 Mixed 4 Operations</span>
+              <span class="badge">25 Questions</span>
+            </button>
+            <button class="preset-btn" data-preset="missing_ops">
+              <span>🧩 Missing Numbers</span>
+              <span class="badge">Fact Families</span>
+            </button>
+            <button class="preset-btn" data-preset="word_problems">
+              <span>📖 Word Problems</span>
+              <span class="badge">5 Story Problems</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Problem Type Selection -->
+        <div class="control-group">
+          <h3>📐 Operation &amp; Topic</h3>
+          <div class="form-field">
+            <label for="operation-type">Operation:</label>
+            <select id="operation-type" class="form-select">
+              <option value="addition">➕ Addition (+)</option>
+              <option value="subtraction">➖ Subtraction (−)</option>
+              <option value="add_sub_mixed">➕➖ Addition &amp; Subtraction Mixed</option>
+              <option value="multiplication">✖️ Multiplication (×)</option>
+              <option value="division">➗ Division (÷)</option>
+              <option value="mult_div_mixed">✖️➗ Multiplication &amp; Division Mixed</option>
+              <option value="all_mixed">🔀 All 4 Operations (+, −, ×, ÷)</option>
+              <option value="comparison">⚖️ Comparisons (&lt;, &gt;, =)</option>
+              <option value="word_problems">📖 Grade 3 Word Problems</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Operation Specific Options -->
+        <div class="control-group" id="operation-options-box">
+          <h3>⚙️ Difficulty &amp; Rules</h3>
+          
+          <!-- Addition / Subtraction Digits -->
+          <div class="form-field" id="field-digit-range">
+            <label>Digit Range:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="digitRange" value="2digit" checked>
+                <span>2-Digit (10–99)</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="digitRange" value="3digit">
+                <span>3-Digit (100–999)</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="digitRange" value="mixed">
+                <span>Mixed 2 &amp; 3-Digit</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Regrouping / Carrying -->
+          <div class="form-field" id="field-regrouping">
+            <label>Regrouping / Carrying:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="regrouping" value="any" checked>
+                <span>Mixed</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="regrouping" value="force">
+                <span>Require Regrouping</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="regrouping" value="none">
+                <span>No Regrouping</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Borrowing -->
+          <div class="form-field" id="field-borrowing" style="display: none;">
+            <label>Borrowing / Regrouping:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="borrowing" value="any" checked>
+                <span>Mixed</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="borrowing" value="force">
+                <span>Require Borrowing</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="borrowing" value="none">
+                <span>No Borrowing</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Multiplication Scope -->
+          <div class="form-field" id="field-multiplication-range" style="display: none;">
+            <label>Multiplication Range:</label>
+            <select id="mult-range-select" class="form-select">
+              <option value="0-10">0–10 Times Tables (Grade 3 Standard)</option>
+              <option value="0-12">0–12 Times Tables</option>
+              <option value="multiples_10">Multiples of 10 (e.g. 40 × 6)</option>
+              <option value="2digit_1digit">2-Digit × 1-Digit (e.g. 24 × 3)</option>
+              <option value="custom">Specific Times Tables</option>
+            </select>
+          </div>
+
+          <!-- Custom Times Tables Selector -->
+          <div class="form-field" id="field-custom-tables" style="display: none;">
+            <label>Select Tables to Practice:</label>
+            <div class="times-table-selector">
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="1"><span>1×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="2" checked><span>2×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="3" checked><span>3×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="4" checked><span>4×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="5" checked><span>5×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="6"><span>6×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="7"><span>7×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="8"><span>8×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="9"><span>9×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="10" checked><span>10×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="11"><span>11×</span></label>
+              <label class="custom-chip"><input type="checkbox" name="customTable" value="12"><span>12×</span></label>
+            </div>
+          </div>
+
+          <!-- Division Range -->
+          <div class="form-field" id="field-division-range" style="display: none;">
+            <label>Divisors Scope:</label>
+            <select id="div-range-select" class="form-select">
+              <option value="10">Facts up to 10 (÷ 1 to 10)</option>
+              <option value="12">Facts up to 12 (÷ 1 to 12)</option>
+            </select>
+          </div>
+
+          <!-- Missing Operand / Algebra Drill -->
+          <div class="form-field" id="field-missing-operand">
+            <label class="custom-chip">
+              <input type="checkbox" id="missing-operand-checkbox">
+              <span>🧩 Missing Numbers Mode (e.g. 45 + ___ = 82)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Layout & Sheet Options -->
+        <div class="control-group">
+          <h3>📋 Layout &amp; Sheet Setup</h3>
+          
+          <div class="form-field">
+            <label for="question-count">Number of Questions:</label>
+            <select id="question-count" class="form-select">
+              <option value="10">10 Questions (Quick Check)</option>
+              <option value="15">15 Questions</option>
+              <option value="20" selected>20 Questions (Standard Drill)</option>
+              <option value="25">25 Questions</option>
+              <option value="30">30 Questions</option>
+              <option value="40">40 Questions (Speed Drill)</option>
+            </select>
+          </div>
+
+          <div class="form-field" id="field-layout-format">
+            <label>Problem Format:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="layoutFormat" value="vertical" checked>
+                <span>Vertical Column</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="layoutFormat" value="horizontal">
+                <span>Horizontal Equation</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-field" id="field-columns">
+            <label>Columns per Page:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="2">
+                <span>2 Columns</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="3" checked>
+                <span>3 Columns</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="4">
+                <span>4 Columns</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="student-name">Student Name:</label>
+            <input type="text" id="student-name" class="form-input" value="Olivia">
+          </div>
+
+          <div class="form-field">
+            <label for="worksheet-title">Worksheet Title:</label>
+            <input type="text" id="worksheet-title" class="form-input" value="Grade 3 Math Practice">
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-answer-key" checked>
+              <span>📄 Include Answer Key (Compact Paper-Saver)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="sidebar-footer">
+        <button id="btn-generate" class="btn-primary">
+          <span>🔄</span> Generate New Worksheet
+        </button>
+        <button id="btn-print-sidebar" class="btn-secondary">
+          <span>🖨️</span> Print Worksheet
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Preview -->
+    <main class="preview-area">
+      <!-- Top Navigation & Mode Switch -->
+      <header class="top-bar">
+        <div class="top-bar-left">
+          <div class="view-mode-toggle">
+            <button id="mode-print-preview" class="view-mode-btn active">📄 Print Preview</button>
+            <button id="mode-interactive" class="view-mode-btn">💻 Practice Online</button>
+          </div>
+          <button id="btn-toggle-answers" class="view-mode-btn" style="border: 1px solid var(--border-color);">
+            👁️ Show Answers
+          </button>
+        </div>
+
+        <div class="top-bar-right">
+          <div id="interactive-timer" style="display: none; font-weight: 700; font-size: 1rem; color: #4f46e5;">
+            ⏱️ 00:00
+          </div>
+          <button id="btn-print-top" class="btn-print">
+            <span>🖨️</span> Print Worksheet
+          </button>
+        </div>
+      </header>
+
+      <!-- Scrollable Printable Area -->
+      <div class="document-viewport" id="document-viewport">
+        <!-- Main Worksheet Page -->
+        <div class="worksheet-page" id="worksheet-page">
+          <!-- Header Area -->
+          <div class="ws-header">
+            <div class="ws-title-row">
+              <h2 class="ws-title" id="rendered-ws-title">Grade 3 Math Practice</h2>
+              <span class="ws-subtitle" id="rendered-ws-subtitle">Multiplication Facts</span>
+            </div>
+            <div class="ws-meta-row">
+              <div class="meta-field">
+                <span>Name:</span>
+                <span class="meta-line" id="rendered-student-name" style="padding-left: 6px;">Olivia</span>
+              </div>
+              <div class="meta-field">
+                <span>Date:</span>
+                <span class="meta-line"></span>
+              </div>
+              <div class="meta-field">
+                <span>Score:</span>
+                <span class="meta-line" style="min-width: 80px;"></span>
+              </div>
+              <div class="meta-field">
+                <span>Time:</span>
+                <span class="meta-line" style="min-width: 80px;"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Problem Cards Grid -->
+          <div class="problems-container grid-cols-3" id="problems-container">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Footer -->
+          <div class="ws-footer">
+            <span>Olivia's Math Studio • Grade 3 Curricula</span>
+            <span class="ws-footer-quote">⭐ Great job! Keep up the fantastic effort! ⭐</span>
+          </div>
+        </div>
+
+        <!-- Optional Compact Paper-Saving Answer Key Page -->
+        <div class="worksheet-page answer-key-page" id="answer-key-page">
+          <div class="ws-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+            <div class="ws-title-row" style="margin-bottom: 6px;">
+              <h2 class="ws-title" style="font-size: 1.3rem;">Answer Key</h2>
+              <span class="answer-key-badge">PARENT / TEACHER QUICK KEY (PAPER SAVER)</span>
+            </div>
+            <div class="ws-meta-row" style="font-size: 0.85rem;">
+              <div class="meta-field">
+                <span>Student:</span>
+                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-student">Olivia</span>
+              </div>
+              <div class="meta-field">
+                <span>Subject:</span>
+                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-title">Grade 3 Math Practice</span>
+              </div>
+              <div class="meta-field">
+                <span>Total Questions:</span>
+                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-count">20</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="compact-answers-container grid-cols-5" id="answers-container">
+            <!-- Dynamically populated simplified Q-ID and Answer items -->
+          </div>
+
+          <div class="ws-footer" style="margin-top: 14px; padding-top: 6px;">
+            <span>Olivia's Math Studio • Quick Answer Key</span>
+            <span>Generated on <span id="key-date-stamp"></span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Mode Bottom Toolbar -->
+      <div class="interactive-toolbar" id="interactive-toolbar" style="display: none;">
+        <button id="btn-check-answers" class="btn-primary" style="width: auto; padding: 10px 24px;">
+          ✅ Check My Answers
+        </button>
+        <button id="btn-reset-interactive" class="btn-secondary" style="width: auto; padding: 10px 20px;">
+          🔄 Try Again
+        </button>
+        <div class="score-display" id="interactive-score-display">
+          Enter answers above and click Check!
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999; display: none;"></canvas>
+
+  <!-- Scripts -->
+  <script src="js/math-engine.js"></script>
+  <script src="js/word-problems.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
