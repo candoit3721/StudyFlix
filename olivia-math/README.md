@@ -45,6 +45,15 @@ An interactive and print-ready math worksheet generator designed specifically fo
 - **Comparisons**:
   - Fill in $<$, $>$, or $=$ between arithmetic expressions
 
+### 2. ⏰ Clock & Elapsed Time Course (Ontario Enriched)
+- **Interactive Clock Studio**: Open [`clock-time.html`](./clock-time.html) for:
+  - *Read the Clock*: High-contrast vector analog clock with hour and minute hands.
+  - *Set the Hands*: Interactive hand controls to match digital target times.
+  - *Mountain Jump Builder*: Interactive timeline jumps (+1hr Mountains, +15m Hills, +1m Rocks).
+  - *Canadian Story Problems*: Multi-step schedules (Blue Jays, Rideau Canal, Ottawa).
+  - *Waterloo CEMC Contest Logic*: Mirror reflection clocks, faulty museum clocks, time zone flights.
+- **Master Course Workbook**: [`worksheets/olivia_complete_clock_course_workbook.md`](./worksheets/olivia_complete_clock_course_workbook.md) — 5-chapter printable workbook with complete solutions!
+
 ---
 
 ## 🖨️ Print Layout & Sheet Options
