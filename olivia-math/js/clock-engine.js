@@ -215,12 +215,18 @@ function generateRandomTime() {
 function generateNewReadClockQuestion() {
   clockState.currentReadTime = generateRandomTime();
   const container = document.getElementById('read-clock-svg-container');
-  container.innerHTML = createClockSVG(clockState.currentReadTime.h, clockState.currentReadTime.m, 280);
+  if (container) {
+    container.innerHTML = createClockSVG(clockState.currentReadTime.h, clockState.currentReadTime.m, 280);
+  }
 
-  document.getElementById('read-hour-input').value = '';
-  document.getElementById('read-minute-input').value = '';
-  document.getElementById('read-clock-feedback').className = 'feedback-msg hidden';
-  document.getElementById('read-hour-input').focus();
+  const hInp = document.getElementById('read-hour-input');
+  const mInp = document.getElementById('read-minute-input');
+  const fb = document.getElementById('read-clock-feedback');
+
+  if (hInp) hInp.value = '';
+  if (mInp) mInp.value = '';
+  if (fb) fb.className = 'feedback-msg hidden';
+  if (hInp) hInp.focus();
 }
 
 function checkReadClockAnswer() {
@@ -262,19 +268,26 @@ function generateNewSetClockQuestion() {
   clockState.setTargetTime = generateRandomTime();
   clockState.setUserTime = { h: 12, m: 0 };
 
-  document.getElementById('set-target-time-display').textContent = 
-    `${clockState.setTargetTime.h}:${clockState.setTargetTime.m.toString().padStart(2, '0')}`;
+  const targetDisp = document.getElementById('set-target-time-display');
+  if (targetDisp) {
+    targetDisp.textContent = `${clockState.setTargetTime.h}:${clockState.setTargetTime.m.toString().padStart(2, '0')}`;
+  }
 
   renderUserClock();
-  document.getElementById('set-clock-feedback').className = 'feedback-msg hidden';
+  const fb = document.getElementById('set-clock-feedback');
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function renderUserClock() {
   const container = document.getElementById('set-clock-svg-container');
-  container.innerHTML = createClockSVG(clockState.setUserTime.h, clockState.setUserTime.m, 280);
+  if (container) {
+    container.innerHTML = createClockSVG(clockState.setUserTime.h, clockState.setUserTime.m, 280);
+  }
 
-  document.getElementById('ctrl-hour-val').textContent = clockState.setUserTime.h;
-  document.getElementById('ctrl-minute-val').textContent = clockState.setUserTime.m.toString().padStart(2, '0');
+  const hVal = document.getElementById('ctrl-hour-val');
+  const mVal = document.getElementById('ctrl-minute-val');
+  if (hVal) hVal.textContent = clockState.setUserTime.h;
+  if (mVal) mVal.textContent = clockState.setUserTime.m.toString().padStart(2, '0');
 }
 
 function adjustHour(delta) {
@@ -345,13 +358,19 @@ function generateNewJumpBuilderChallenge() {
     jumpsList: []
   };
 
-  document.getElementById('builder-start-text').textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
-  document.getElementById('builder-end-text').textContent = `${endH}:${endM.toString().padStart(2, '0')} PM`;
-  document.getElementById('builder-current-time').textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
-  document.getElementById('builder-total-jumped').textContent = `0h 0m`;
+  const bStart = document.getElementById('builder-start-text');
+  const bEnd = document.getElementById('builder-end-text');
+  const bCur = document.getElementById('builder-current-time');
+  const bTot = document.getElementById('builder-total-jumped');
+  const track = document.getElementById('jump-timeline-track');
+  const fb = document.getElementById('jump-builder-feedback');
 
-  document.getElementById('jump-timeline-track').innerHTML = `<span class="jump-bubble">🚩 Start: ${startH}:${startM.toString().padStart(2, '0')} PM</span>`;
-  document.getElementById('jump-builder-feedback').className = 'feedback-msg hidden';
+  if (bStart) bStart.textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
+  if (bEnd) bEnd.textContent = `${endH}:${endM.toString().padStart(2, '0')} PM`;
+  if (bCur) bCur.textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
+  if (bTot) bTot.textContent = `0h 0m`;
+  if (track) track.innerHTML = `<span class="jump-bubble">🚩 Start: ${startH}:${startM.toString().padStart(2, '0')} PM</span>`;
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function addTimelineJump(minutes, label) {
@@ -366,22 +385,26 @@ function addTimelineJump(minutes, label) {
   jb.currentH = newH;
   jb.currentM = newM;
 
-  // Calculate total duration jumped so far
   let totalJumpedM = jb.jumpsList.reduce((acc, j) => acc + j.minutes, 0);
   let jH = Math.floor(totalJumpedM / 60);
   let jM = totalJumpedM % 60;
 
-  document.getElementById('builder-current-time').textContent = `${newH}:${newM.toString().padStart(2, '0')} PM`;
-  document.getElementById('builder-total-jumped').textContent = `${jH}h ${jM}m`;
-
+  const bCur = document.getElementById('builder-current-time');
+  const bTot = document.getElementById('builder-total-jumped');
   const track = document.getElementById('jump-timeline-track');
-  const span = document.createElement('span');
-  span.className = minutes >= 60 ? 'jump-bubble' : (minutes >= 15 ? 'jump-bubble' : 'jump-bubble');
-  span.style.background = minutes >= 60 ? '#dcfce7' : (minutes >= 15 ? '#fef3c7' : '#fee2e2');
-  span.style.borderColor = minutes >= 60 ? '#86efac' : (minutes >= 15 ? '#fde68a' : '#fca5a5');
-  span.style.color = minutes >= 60 ? '#15803d' : (minutes >= 15 ? '#92400e' : '#991b1b');
-  span.textContent = `➔ ${label} (${newH}:${newM.toString().padStart(2, '0')} PM)`;
-  track.appendChild(span);
+
+  if (bCur) bCur.textContent = `${newH}:${newM.toString().padStart(2, '0')} PM`;
+  if (bTot) bTot.textContent = `${jH}h ${jM}m`;
+
+  if (track) {
+    const span = document.createElement('span');
+    span.className = 'jump-bubble';
+    span.style.background = minutes >= 60 ? '#dcfce7' : (minutes >= 15 ? '#fef3c7' : '#fee2e2');
+    span.style.borderColor = minutes >= 60 ? '#86efac' : (minutes >= 15 ? '#fde68a' : '#fca5a5');
+    span.style.color = minutes >= 60 ? '#15803d' : (minutes >= 15 ? '#92400e' : '#991b1b');
+    span.textContent = `➔ ${label} (${newH}:${newM.toString().padStart(2, '0')} PM)`;
+    track.appendChild(span);
+  }
 }
 
 function resetTimelineJumps() {
@@ -389,10 +412,16 @@ function resetTimelineJumps() {
   jb.currentH = jb.startH;
   jb.currentM = jb.startM;
   jb.jumpsList = [];
-  document.getElementById('builder-current-time').textContent = `${jb.startH}:${jb.startM.toString().padStart(2, '0')} PM`;
-  document.getElementById('builder-total-jumped').textContent = `0h 0m`;
-  document.getElementById('jump-timeline-track').innerHTML = `<span class="jump-bubble">🚩 Start: ${jb.startH}:${jb.startM.toString().padStart(2, '0')} PM</span>`;
-  document.getElementById('jump-builder-feedback').className = 'feedback-msg hidden';
+
+  const bCur = document.getElementById('builder-current-time');
+  const bTot = document.getElementById('builder-total-jumped');
+  const track = document.getElementById('jump-timeline-track');
+  const fb = document.getElementById('jump-builder-feedback');
+
+  if (bCur) bCur.textContent = `${jb.startH}:${jb.startM.toString().padStart(2, '0')} PM`;
+  if (bTot) bTot.textContent = `0h 0m`;
+  if (track) track.innerHTML = `<span class="jump-bubble">🚩 Start: ${jb.startH}:${jb.startM.toString().padStart(2, '0')} PM</span>`;
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function checkJumpBuilderCompletion() {
@@ -439,24 +468,32 @@ function generateNewElapsedQuestion() {
     diffM: diffTotal % 60
   };
 
-  // Render Start & End Clocks
-  document.getElementById('elapsed-start-clock').innerHTML = createClockSVG(startH, startM, 140);
-  document.getElementById('elapsed-end-clock').innerHTML = createClockSVG(endH, endM, 140);
-  document.getElementById('elapsed-start-text').textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
-  document.getElementById('elapsed-end-text').textContent = `${endH}:${endM.toString().padStart(2, '0')} PM`;
-
-  // Render Visual Timeline Jumps
+  const startClock = document.getElementById('elapsed-start-clock');
+  const endClock = document.getElementById('elapsed-end-clock');
+  const startText = document.getElementById('elapsed-start-text');
+  const endText = document.getElementById('elapsed-end-text');
   const jumpsContainer = document.getElementById('timeline-visual-jumps');
-  jumpsContainer.innerHTML = `
-    <span class="jump-bubble">Start at ${startH}:${startM.toString().padStart(2, '0')}</span>
-    ${jumpH > 0 ? `<span class="jump-bubble">➔ Jump +${jumpH} hr</span>` : ''}
-    ${jumpM > 0 ? `<span class="jump-bubble">➔ Jump +${jumpM} min</span>` : ''}
-    <span class="jump-bubble">➔ Arrive at ${endH}:${endM.toString().padStart(2, '0')}</span>
-  `;
+  const hrsInp = document.getElementById('elapsed-hrs-input');
+  const minsInp = document.getElementById('elapsed-mins-input');
+  const fb = document.getElementById('elapsed-feedback');
 
-  document.getElementById('elapsed-hrs-input').value = '';
-  document.getElementById('elapsed-mins-input').value = '';
-  document.getElementById('elapsed-feedback').className = 'feedback-msg hidden';
+  if (startClock) startClock.innerHTML = createClockSVG(startH, startM, 140);
+  if (endClock) endClock.innerHTML = createClockSVG(endH, endM, 140);
+  if (startText) startText.textContent = `${startH}:${startM.toString().padStart(2, '0')} PM`;
+  if (endText) endText.textContent = `${endH}:${endM.toString().padStart(2, '0')} PM`;
+
+  if (jumpsContainer) {
+    jumpsContainer.innerHTML = `
+      <span class="jump-bubble">Start at ${startH}:${startM.toString().padStart(2, '0')}</span>
+      ${jumpH > 0 ? `<span class="jump-bubble">➔ Jump +${jumpH} hr</span>` : ''}
+      ${jumpM > 0 ? `<span class="jump-bubble">➔ Jump +${jumpM} min</span>` : ''}
+      <span class="jump-bubble">➔ Arrive at ${endH}:${endM.toString().padStart(2, '0')}</span>
+    `;
+  }
+
+  if (hrsInp) hrsInp.value = '';
+  if (minsInp) minsInp.value = '';
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function checkElapsedTimeAnswer() {
@@ -492,20 +529,25 @@ function generateNewStoryProblem() {
   const item = TIME_STORY_PROBLEMS[Math.floor(Math.random() * TIME_STORY_PROBLEMS.length)];
   clockState.currentStoryProblem = item;
 
-  document.getElementById('story-icon').textContent = item.icon;
-  document.getElementById('story-problem-text').textContent = item.text;
+  const iconEl = document.getElementById('story-icon');
+  const textEl = document.getElementById('story-problem-text');
   const container = document.getElementById('story-options-container');
-  container.innerHTML = '';
+  const fb = document.getElementById('story-feedback');
 
-  item.options.forEach((opt, idx) => {
-    const btn = document.createElement('button');
-    btn.className = 'story-option-btn';
-    btn.textContent = opt;
-    btn.onclick = () => selectStoryOption(idx, btn);
-    container.appendChild(btn);
-  });
+  if (iconEl) iconEl.textContent = item.icon;
+  if (textEl) textEl.textContent = item.text;
+  if (container) {
+    container.innerHTML = '';
+    item.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'story-option-btn';
+      btn.textContent = opt;
+      btn.onclick = () => selectStoryOption(idx, btn);
+      container.appendChild(btn);
+    });
+  }
 
-  document.getElementById('story-feedback').className = 'feedback-msg hidden';
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function selectStoryOption(idx, btnEl) {
@@ -539,22 +581,28 @@ function selectStoryOption(idx, btnEl) {
 // =========================================================================
 function renderContestPuzzle() {
   const puzzle = WATERLOO_CONTEST_PUZZLES[clockState.contestIndex];
-  document.getElementById('contest-num').textContent = puzzle.num;
-  document.getElementById('contest-title').textContent = puzzle.title;
-  document.getElementById('contest-desc').textContent = puzzle.desc;
-
+  const numEl = document.getElementById('contest-num');
+  const titleEl = document.getElementById('contest-title');
+  const descEl = document.getElementById('contest-desc');
   const container = document.getElementById('contest-options-grid');
-  container.innerHTML = '';
+  const fb = document.getElementById('contest-feedback');
 
-  puzzle.options.forEach((opt, idx) => {
-    const btn = document.createElement('button');
-    btn.className = 'contest-opt-btn';
-    btn.textContent = opt;
-    btn.onclick = () => selectContestOption(idx, btn);
-    container.appendChild(btn);
-  });
+  if (numEl) numEl.textContent = puzzle.num;
+  if (titleEl) titleEl.textContent = puzzle.title;
+  if (descEl) descEl.textContent = puzzle.desc;
 
-  document.getElementById('contest-feedback').className = 'feedback-msg hidden';
+  if (container) {
+    container.innerHTML = '';
+    puzzle.options.forEach((opt, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'contest-opt-btn';
+      btn.textContent = opt;
+      btn.onclick = () => selectContestOption(idx, btn);
+      container.appendChild(btn);
+    });
+  }
+
+  if (fb) fb.className = 'feedback-msg hidden';
 }
 
 function selectContestOption(idx, btnEl) {
@@ -593,6 +641,7 @@ function nextContestPuzzle() {
 // =========================================================================
 function generatePrintableClocks() {
   const grid = document.getElementById('printable-clocks-grid');
+  if (!grid) return;
   grid.innerHTML = '';
 
   for (let i = 1; i <= 12; i++) {
@@ -636,36 +685,47 @@ function togglePrintAnswers(isChecked) {
 // =========================================================================
 function setActivityMode(mode) {
   clockState.currentMode = mode;
-  document.querySelectorAll('.activity-btn').forEach(b => b.classList.remove('active'));
-  const targetBtn = document.querySelector(`[data-mode="${mode}"]`);
-  if (targetBtn) targetBtn.classList.add('active');
+  
+  // Highlight active sidebar button
+  document.querySelectorAll('.activity-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
 
-  document.querySelectorAll('.activity-stage').forEach(s => s.classList.add('hidden'));
+  // Hide all activity stages
+  document.querySelectorAll('.activity-stage').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('hidden');
+  });
 
-  if (mode === 'course_lessons') {
-    document.getElementById('view-course-lessons').classList.remove('hidden');
-  } else if (mode === 'read_clock') {
-    document.getElementById('view-read-clock').classList.remove('hidden');
-    generateNewReadClockQuestion();
-  } else if (mode === 'set_clock') {
-    document.getElementById('view-set-clock').classList.remove('hidden');
-    generateNewSetClockQuestion();
-  } else if (mode === 'jump_builder') {
-    document.getElementById('view-jump-builder').classList.remove('hidden');
-    generateNewJumpBuilderChallenge();
-  } else if (mode === 'elapsed_time') {
-    document.getElementById('view-elapsed-time').classList.remove('hidden');
-    generateNewElapsedQuestion();
-  } else if (mode === 'word_problems') {
-    document.getElementById('view-word-problems').classList.remove('hidden');
-    generateNewStoryProblem();
-  } else if (mode === 'waterloo_puzzles') {
-    document.getElementById('view-waterloo-puzzles').classList.remove('hidden');
-    renderContestPuzzle();
-  } else if (mode === 'worksheet_gen') {
-    document.getElementById('view-worksheet-gen').classList.remove('hidden');
-    generatePrintableClocks();
+  // Map mode to target view section
+  const modeMap = {
+    'course_lessons': 'view-course-lessons',
+    'read_clock': 'view-read-clock',
+    'set_clock': 'view-set-clock',
+    'jump_builder': 'view-jump-builder',
+    'elapsed_time': 'view-elapsed-time',
+    'word_problems': 'view-word-problems',
+    'waterloo_puzzles': 'view-waterloo-puzzles',
+    'worksheet_gen': 'view-worksheet-gen'
+  };
+
+  const targetId = modeMap[mode];
+  if (targetId) {
+    const targetEl = document.getElementById(targetId);
+    if (targetEl) {
+      targetEl.classList.remove('hidden');
+      targetEl.classList.add('active');
+    }
   }
+
+  // Trigger generators for active mode
+  if (mode === 'read_clock') generateNewReadClockQuestion();
+  else if (mode === 'set_clock') generateNewSetClockQuestion();
+  else if (mode === 'jump_builder') generateNewJumpBuilderChallenge();
+  else if (mode === 'elapsed_time') generateNewElapsedQuestion();
+  else if (mode === 'word_problems') generateNewStoryProblem();
+  else if (mode === 'waterloo_puzzles') renderContestPuzzle();
+  else if (mode === 'worksheet_gen') generatePrintableClocks();
 }
 
 function updatePrecision(val) {
@@ -678,28 +738,34 @@ function updatePrecision(val) {
 function unlockBadge(badgeId, badgeTitle) {
   if (!clockState.badges.includes(badgeId)) {
     clockState.badges.push(badgeId);
-    document.getElementById('clock-badge-count').textContent = `${clockState.badges.length}/6 Badges`;
+    const badgeEl = document.getElementById('clock-badge-count');
+    if (badgeEl) badgeEl.textContent = `${clockState.badges.length}/6 Badges`;
   }
 }
 
 function updateStats() {
-  document.getElementById('clock-score').textContent = clockState.score;
-  document.getElementById('clock-streak').textContent = clockState.streak;
+  const scoreEl = document.getElementById('clock-score');
+  const streakEl = document.getElementById('clock-streak');
+  if (scoreEl) scoreEl.textContent = clockState.score;
+  if (streakEl) streakEl.textContent = clockState.streak;
 }
 
 // Confetti Particle System
 const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
 let confettiParticles = [];
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  if (canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
 }
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function launchConfetti() {
+  if (!canvas || !ctx) return;
   canvas.style.display = 'block';
   confettiParticles = [];
   const colors = ['#8b5cf6', '#ec4899', '#f59e0b', '#3b82f6', '#10b981'];
@@ -720,6 +786,7 @@ function launchConfetti() {
 }
 
 function updateConfetti() {
+  if (!canvas || !ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   confettiParticles = confettiParticles.filter(p => p.life > 0);
   confettiParticles.forEach(p => {

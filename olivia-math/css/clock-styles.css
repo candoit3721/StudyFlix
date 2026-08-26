@@ -158,6 +158,7 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
+  width: 100%;
 }
 
 .activity-btn:hover {
@@ -235,12 +236,12 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
 }
 
 .activity-stage {
-  display: none;
+  display: none !important;
   animation: fadeIn 0.3s ease;
 }
 
 .activity-stage.active {
-  display: block;
+  display: block !important;
 }
 
 @keyframes fadeIn {
@@ -320,6 +321,13 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   font-size: 0.9rem;
   color: #701a75;
   margin: 8px 0;
+}
+
+.jump-legend {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .course-actions-footer {
