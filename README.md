@@ -60,6 +60,17 @@ All subjects and learning modules adhere to our master design system:
 
 ---
 
+## 🖼️ Free Image Service APIs Reference
+
+| API Service | Best For | Rate Limit (Free Tier) | Core Advantage |
+|---|---|---|---|
+| [**Pexels API**](https://www.pexels.com/api/) | All-purpose apps & video | 200 requests/hour (10k/month) | Easiest to use, includes free video files |
+| [**Unsplash API**](https://unsplash.com/developers) | Premium visual aesthetics | 50 requests/hour (Demo) / 5k (Production) | Widest variety of stunning, high-quality photos |
+| [**Pixabay API**](https://pixabay.com/api/docs/) | Asset caching & downloads | 5,000 requests/hour | Very generous limits, allows direct file downloading |
+| [**Lorem Picsum**](https://picsum.photos/) | Fast UI placeholders | Unlimited (No key needed) | Perfect for quick prototyping without an account |
+
+---
+
 ## 📂 Project Structure
 
 ```

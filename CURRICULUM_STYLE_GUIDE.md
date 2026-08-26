@@ -266,6 +266,37 @@ When creating any new `.md`, `.html`, or `.js` worksheet, follow this standardiz
 
 ---
 
+## 🖼️ 8. Free Image & Asset API Integration Guide
+
+To enrich digital learning pages, lesson stories, hero billboards, and topic cards with high-quality visual media, use the following free image services and APIs:
+
+| API Service | Best For | Rate Limit (Free Tier) | Core Advantage |
+|---|---|---|---|
+| [**Pexels API**](https://www.pexels.com/api/) | All-purpose apps & video | 200 requests/hour (10k/month) | Easiest to use, includes free video files |
+| [**Unsplash API**](https://unsplash.com/developers) | Premium visual aesthetics | 50 requests/hour (Demo) / 5k (Production) | Widest variety of stunning, high-quality photos |
+| [**Pixabay API**](https://pixabay.com/api/docs/) | Asset caching & downloads | 5,000 requests/hour | Very generous limits, allows direct file downloading |
+| [**Lorem Picsum**](https://picsum.photos/) | Fast UI placeholders | Unlimited (No key needed) | Perfect for quick prototyping without an account |
+
+### 💡 Quick Usage Examples:
+* **Lorem Picsum (Zero Setup Placeholder)**:
+  ```html
+  <!-- Quick 600x400 science or nature placeholder -->
+  <img src="https://picsum.photos/600/400?random=1" alt="Science Illustration">
+  ```
+* **Dynamic Search (Fetch API Example)**:
+  ```javascript
+  // Example query for Canadian Nature or Science Lab topics
+  async function fetchTopicImage(query) {
+    const res = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+      headers: { Authorization: "YOUR_PEXELS_API_KEY" }
+    });
+    const data = await res.json();
+    return data.photos[0]?.src?.medium;
+  }
+  ```
+
+---
+
 ## 🌟 Summary: The StudyFlix Quality Promise
 
 By following this style guide, every subject created for Olivia, Sophia, Yaya, and future students will feel like part of a **single, world-class Canadian learning universe**:
