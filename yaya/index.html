@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaya's 高等数学与统计练习工作室 🎓✨</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for Beautiful Math Typesetting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <!-- Main Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Confetti Celebration Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- Left Sidebar Controls -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-badge">PRE-UNIVERSITY &amp; ENTRANCE EXAM</div>
+        <h1><span>📐</span> Yaya's Math Studio</h1>
+        <p>大学入学考试 · 微积分 · 概率与数理统计题库与试卷生成器</p>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- Quick Presets -->
+        <div class="control-group">
+          <h3>⚡ 快捷预设套卷 (Quick Presets)</h3>
+          <div class="preset-grid">
+            <button class="preset-btn" data-preset="calculus_derivatives">
+              <span>📈 导数与切线极值</span>
+              <span class="badge">单调性 · 极值 · 切线</span>
+            </button>
+            <button class="preset-btn" data-preset="calculus_inequalities">
+              <span>🎯 零点与放缩不等式</span>
+              <span class="badge">零点存在 · 切线放缩</span>
+            </button>
+            <button class="preset-btn" data-preset="calculus_integrals">
+              <span>📐 定积分与旋转体</span>
+              <span class="badge">换元/分部 · 面积/体积</span>
+            </button>
+            <button class="preset-btn" data-preset="prob_discrete">
+              <span>🎲 离散随机变量与期望</span>
+              <span class="badge">超几何 · 二项分布 · 决策</span>
+            </button>
+            <button class="preset-btn" data-preset="stats_normal">
+              <span>📊 正态分布与质量控制</span>
+              <span class="badge">3σ准则 · 标准化 Z 值</span>
+            </button>
+            <button class="preset-btn" data-preset="stats_chisquare">
+              <span>📑 列联表与卡方检验</span>
+              <span class="badge">2x2 列联表 · 独立性检验</span>
+            </button>
+            <button class="preset-btn" data-preset="stats_regression">
+              <span>📉 线性回归与拟合优度</span>
+              <span class="badge">最小二乘法 · R² 检验</span>
+            </button>
+            <button class="preset-btn" data-preset="preuni_mle">
+              <span>💡 大学先修：极限定积分MLE</span>
+              <span class="badge">泰勒展开 · 似然估计</span>
+            </button>
+            <button class="preset-btn full-span" data-preset="entrance_exam_mock">
+              <span>🏆 大学入学考试全真模拟卷</span>
+              <span class="badge">微积分 + 概率统计综合 150分制</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Topic Category Selection -->
+        <div class="control-group">
+          <h3>📚 知识专题与题型分类</h3>
+          <div class="form-field">
+            <label for="topic-select">选择考点专题：</label>
+            <select id="topic-select" class="form-select">
+              <optgroup label="微积分板块 (Calculus)">
+                <option value="calc_all">🌟 微积分全题型精选 (Calculus All)</option>
+                <option value="calc_derivatives">📈 导数定义、切线方程与极值最值</option>
+                <option value="calc_zeros_ineq">🎯 函数零点、参变分离与不等式放缩</option>
+                <option value="calc_integrals">📐 定积分计算 (换元法、分部积分法)</option>
+                <option value="calc_geometry">🌀 定积分几何应用 (面积、旋转体体积)</option>
+                <option value="calc_taylor_limits">🔍 极限计算、洛必达与泰勒展开思想</option>
+              </optgroup>
+              <optgroup label="概率与数理统计板块 (Probability &amp; Statistics)">
+                <option value="stats_all">🌟 概率统计全题型精选 (Stats All)</option>
+                <option value="prob_distributions">🎲 离散型随机变量 (超几何/二项/泊松分布)</option>
+                <option value="prob_normal">📊 连续型与正态分布 (Normal Distribution)</option>
+                <option value="stats_regression">📉 一元线性回归与非线性对数化模型</option>
+                <option value="stats_chisquare">📑 独立性检验与 2x2 列联表卡方计算</option>
+                <option value="stats_mle">💡 大学衔接：参数最大似然估计 (MLE)</option>
+              </optgroup>
+              <optgroup label="综合实战 (Comprehensive Exam)">
+                <option value="all_mixed" selected>🏆 高考/大学预科综合全科混编试卷</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="difficulty-select">题目难度等级：</label>
+            <select id="difficulty-select" class="form-select">
+              <option value="all" selected>🌟 循序渐进 (基础强化 + 压轴提高)</option>
+              <option value="standard">📘 高考必考强化 (★★★☆☆)</option>
+              <option value="advanced">🔥 压轴拔高培优 (★★★★☆ - ★★★★★)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Layout & Print Customization -->
+        <div class="control-group">
+          <h3>📋 试卷排版与打印配置</h3>
+          
+          <div class="form-field">
+            <label for="question-count">生成题目数量：</label>
+            <select id="question-count" class="form-select">
+              <option value="4">4 道大题 (精炼精讲)</option>
+              <option value="6">6 道综合题</option>
+              <option value="8">8 道题 (标准短测 1-2页)</option>
+              <option value="10">10 道题 (单元测试卷)</option>
+              <option value="12" selected>12 道题 (标准模拟考试)</option>
+              <option value="16">16 道题 (双周考全卷)</option>
+              <option value="20">20 道题 (高密度刷题)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="grid-cols-select">页面排版列数：</label>
+            <select id="grid-cols-select" class="form-select">
+              <option value="1" selected>单列大题排版 (1 Column - 空间充裕，适合大题解析)</option>
+              <option value="2">双列紧凑排版 (2 Columns - 标准试卷分栏)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="per-page-select">每页题目容量 (Questions Per Page)：</label>
+            <select id="per-page-select" class="form-select">
+              <option value="auto" selected>智能自动分页 (Auto-Fit 推荐)</option>
+              <option value="2">每页 2 道大题 (超大演算空间)</option>
+              <option value="3">每页 3 道大题 (标准大题)</option>
+              <option value="4">每页 4 道大题 (标准版面)</option>
+              <option value="6">每页 6 道题 (紧凑版面)</option>
+              <option value="8">每页 8 道题 (高密度刷题)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="font-size-select">题目字号与字体大小：</label>
+            <select id="font-size-select" class="form-select">
+              <option value="normal" selected>标准字体 (Standard 14px)</option>
+              <option value="large">适度放大 (Large 15.5px - 易于阅读)</option>
+              <option value="compact">紧凑小字 (Compact 13px - 节约纸张)</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="student-name-input">考生姓名 (Student Name)：</label>
+            <input type="text" id="student-name-input" class="form-input" value="Yaya">
+          </div>
+
+          <div class="form-field">
+            <label for="worksheet-title-input">试卷主标题 (Worksheet Title)：</label>
+            <input type="text" id="worksheet-title-input" class="form-input" value="大学入学考试数学模拟试卷（微积分与概率统计）">
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-workspace-check" checked>
+              <span>✏️ 预留答题与草稿演算区域 (Workspace)</span>
+            </label>
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-answer-key-check" checked>
+              <span>🔑 独立末页附带答案速查与详细分步评分解析 (Answer Sheet on Very Last Page)</span>
+            </label>
+          </div>
+
+          <div class="form-field">
+            <label class="custom-chip">
+              <input type="checkbox" id="include-hints-check" checked>
+              <span>💡 包含考点提示与思维引导 (Hints)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button id="btn-generate" class="btn-primary">
+          <span>🔄 重新生成试卷 (Generate)</span>
+        </button>
+        <button id="btn-print-sidebar" class="btn-secondary">
+          <span>🖨️ 打印试卷 (Print Worksheet)</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Navigation Bar -->
+      <div class="top-bar">
+        <div class="mode-toggle-group">
+          <button id="mode-print-btn" class="mode-btn active">
+            <span>🖨️ 试卷排版与打印预览 (Printable View)</span>
+          </button>
+          <button id="mode-interactive-btn" class="mode-btn">
+            <span>💻 在线互动实战练习 (Practice Online)</span>
+          </button>
+        </div>
+
+        <div class="top-actions">
+          <button id="btn-jump-to-answers" class="action-btn">
+            <span>🔑 查看末页答案解析 (Jump to Answer Key)</span>
+          </button>
+          <button id="btn-print-top" class="action-btn primary">
+            <span>🖨️ 打印试卷 (Print / PDF)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Worksheet Viewport -->
+      <div class="worksheet-viewport">
+        <!-- Interactive Toolbar (Only visible in Practice Online Mode) -->
+        <div id="interactive-toolbar" class="interactive-toolbar" style="display: none;">
+          <div class="interactive-stats">
+            <div class="stat-pill">
+              <span class="label">当前得分：</span>
+              <span id="interactive-score" class="val">0 / 12</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">⏱️ 考试计时：</span>
+              <span id="interactive-timer" class="timer-pill">00:00</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">已完成：</span>
+              <span id="interactive-progress" class="val">0%</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button id="btn-check-answers" class="action-btn primary">
+              <span>✅ 提交批改 (Check Answers)</span>
+            </button>
+            <button id="btn-reset-interactive" class="action-btn">
+              <span>🔄 清空重练 (Reset)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Pages Container -->
+        <div id="pages-container" class="pages-container">
+          <!-- Dynamically populated page sheets, question cards, and answer sheets -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/math-engine.js"></script>
+  <script src="js/stats-calculus-problems.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

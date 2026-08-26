@@ -1,0 +1,937 @@
+:root {
+  --primary: #4338ca;
+  --primary-hover: #3730a3;
+  --primary-light: #e0e7ff;
+  --primary-gradient: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+  --accent: #059669;
+  --accent-light: #d1fae5;
+  --warning: #d97706;
+  --warning-light: #fef3c7;
+  --danger: #dc2626;
+  --danger-light: #fee2e2;
+  --bg-app: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
+  --shadow-sheet: 0 12px 36px rgba(15, 23, 42, 0.08);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Confetti overlay */
+#confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* App Shell Container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Left Sidebar Controls */
+.sidebar {
+  width: 410px;
+  min-width: 370px;
+  max-width: 440px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
+}
+
+.sidebar-header {
+  padding: 22px 24px;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.brand-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.sidebar-header h1 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.sidebar-header p {
+  font-size: 0.82rem;
+  opacity: 0.92;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.sidebar-content {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex: 1;
+}
+
+/* Section Box */
+.control-group {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.control-group h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Preset Buttons Grid */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.preset-btn {
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.preset-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.preset-btn.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+.preset-btn.full-span {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #eef2ff 0%, #fae8ff 100%);
+  border-color: #c7d2fe;
+}
+
+.preset-btn .badge {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Form Controls */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-select, .form-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  font-family: inherit;
+  color: var(--text-main);
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-select:focus, .form-input:focus {
+  border-color: var(--primary);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12);
+}
+
+/* Checkbox chip */
+.custom-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-main);
+  user-select: none;
+}
+
+.custom-chip input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* Sidebar Footer Buttons */
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  opacity: 0.94;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 10px 16px;
+  background: #ffffff;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  background: var(--primary-light);
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-app);
+}
+
+/* Top Bar */
+.top-bar {
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+}
+
+.mode-toggle-group {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: var(--radius-md);
+  gap: 4px;
+}
+
+.mode-btn {
+  padding: 7px 16px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.mode-btn.active {
+  background: #ffffff;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  border: 1px solid var(--border-color);
+  background: #ffffff;
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.action-btn.primary {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.action-btn.primary:hover {
+  background: var(--primary-hover);
+}
+
+/* Worksheet Viewport */
+.worksheet-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px 32px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Interactive Top Stats Bar */
+.interactive-toolbar {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 15;
+}
+
+.interactive-stats {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}
+
+.stat-pill .val {
+  font-weight: 800;
+  color: var(--primary);
+  font-size: 1.05rem;
+}
+
+.timer-pill {
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+/* Printable Exam Sheet Container */
+.pages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  align-items: center;
+}
+
+.exam-page {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 40px 48px;
+  box-shadow: var(--shadow-sheet);
+  display: flex;
+  flex-direction: column;
+  min-height: 1160px; /* A4 aspect ratio approximation */
+  position: relative;
+}
+
+/* Exam Paper Header */
+.exam-header {
+  border-bottom: 2px solid var(--text-main);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.exam-header .exam-school {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.exam-header h2 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+
+.exam-meta-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  margin-top: 8px;
+}
+
+.exam-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exam-meta-item .underline-field {
+  border-bottom: 1px solid var(--text-main);
+  min-width: 90px;
+  display: inline-block;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Exam Score Table Box */
+.exam-instructions {
+  background: #f1f5f9;
+  border-left: 4px solid var(--primary);
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+/* Problem List Layout */
+.problems-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  flex: 1;
+}
+
+.problems-list.cols-2 {
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Problem Card */
+.problem-card {
+  border: 1px solid var(--border-subtle);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  page-break-inside: avoid;
+  break-inside: avoid;
+  transition: border-color 0.15s;
+}
+
+.problem-card:hover {
+  border-color: var(--border-color);
+}
+
+.problem-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.problem-number {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.problem-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: var(--text-muted);
+}
+
+.tag-badge.topic {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.difficulty-stars {
+  color: #f59e0b;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.problem-body {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-main);
+}
+
+.problem-body p {
+  margin-bottom: 8px;
+}
+
+.sub-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+  padding-left: 18px;
+}
+
+.sub-question-item {
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* Calculation Workspace */
+.workspace-box {
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  background: #fafbfd;
+  min-height: 110px;
+  padding: 8px 12px;
+  position: relative;
+  margin-top: 8px;
+}
+
+.workspace-watermark {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+/* Interactive Input in Online Mode */
+.interactive-input-group {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answer-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.math-answer-input {
+  flex: 1;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-family: 'Fira Code', 'Inter', monospace;
+  font-size: 0.92rem;
+  outline: none;
+}
+
+.math-answer-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12);
+}
+
+.math-answer-input.correct {
+  border-color: var(--accent);
+  background-color: var(--accent-light);
+}
+
+.math-answer-input.incorrect {
+  border-color: var(--danger);
+  background-color: var(--danger-light);
+}
+
+/* Multiple choice options */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.15s;
+  background: #f8fafc;
+}
+
+.option-label:hover {
+  border-color: var(--primary);
+  background: #ffffff;
+}
+
+.option-label input[type="radio"] {
+  accent-color: var(--primary);
+}
+
+/* Hints & Solution accordions */
+.hints-accordion, .solutions-accordion {
+  margin-top: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.accordion-header {
+  padding: 6px 12px;
+  background: #f8fafc;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.accordion-header:hover {
+  color: var(--primary);
+}
+
+.accordion-body {
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  background: #ffffff;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-main);
+}
+
+.hints-accordion .accordion-body {
+  background: #fffbeb;
+  border-left: 3px solid var(--warning);
+}
+
+.solutions-accordion .accordion-body {
+  background: #f8fafc;
+  border-left: 3px solid var(--primary);
+}
+
+/* Paper-Saver Answer Key Sheet */
+.answer-sheet-page {
+  page-break-before: always;
+  break-before: page;
+}
+
+.answer-sheet-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-align: center;
+  color: var(--primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--primary);
+}
+
+.quick-answer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 28px;
+}
+
+.quick-answer-item {
+  font-size: 0.86rem;
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quick-answer-item .q-idx {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.quick-answer-item .q-val {
+  font-family: 'Fira Code', monospace;
+  font-weight: 600;
+}
+
+/* Detailed step-by-step solutions list */
+.solutions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.solution-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 14px 18px;
+  background: #ffffff;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.solution-item h4 {
+  font-size: 0.96rem;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.solution-steps {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-main);
+}
+
+.solution-steps p {
+  margin-bottom: 6px;
+}
+
+/* Exam Page Footer */
+.exam-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Font size presets */
+.font-normal .problem-body { font-size: 0.95rem; }
+.font-large .problem-body { font-size: 1.05rem; }
+.font-compact .problem-body { font-size: 0.88rem; }
+.font-compact .exam-page { padding: 28px 36px; }
+
+/* ==========================================================================
+   PRINT STYLES (@media print)
+   ========================================================================== */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 15mm 15mm;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 10.5pt;
+  }
+
+  .sidebar,
+  .top-bar,
+  .interactive-toolbar,
+  .hints-accordion,
+  .action-btn,
+  .btn-primary,
+  .btn-secondary,
+  .accordion-header,
+  #confetti-canvas {
+    display: none !important;
+  }
+
+  .app-container {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .main-content {
+    height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .worksheet-viewport {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .pages-container {
+    gap: 0 !important;
+    width: 100% !important;
+  }
+
+  .exam-page {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin-bottom: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .problem-card {
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin-bottom: 16px !important;
+  }
+
+  .workspace-box {
+    background: #ffffff !important;
+    border: 1px dashed #9ca3af !important;
+    min-height: 120px !important;
+  }
+
+  .answer-sheet-page {
+    page-break-before: always !important;
+    break-before: page !important;
+    page-break-after: auto !important;
+    break-after: auto !important;
+    display: flex !important;
+    padding-top: 20px !important;
+  }
+}

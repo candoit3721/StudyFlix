@@ -1,0 +1,854 @@
+:root {
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-light: #eef2ff;
+  --accent: #f59e0b;
+  --success: #10b981;
+  --error: #ef4444;
+  --bg-app: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-app);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* App Container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar Controls */
+.sidebar {
+  width: 380px;
+  min-width: 340px;
+  max-width: 420px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.sidebar-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: #fff;
+}
+
+.sidebar-header h1 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sidebar-header p {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.sidebar-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Section Grouping */
+.control-group {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.control-group h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Preset Pills */
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.preset-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preset-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.preset-btn span.badge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* Form Controls */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-select, .form-input {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus, .form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.radio-group, .checkbox-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.custom-chip {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-chip input[type="radio"],
+.custom-chip input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.custom-chip span {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.custom-chip input:checked + span {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  font-weight: 600;
+}
+
+.times-table-selector {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+}
+
+.times-table-selector .custom-chip span {
+  width: 100%;
+  text-align: center;
+  padding: 6px 0;
+}
+
+/* Sidebar Actions */
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border-color);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-primary:active {
+  transform: scale(0.99);
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 10px;
+  background: #fff;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f1f5f9;
+}
+
+/* Main Preview Area */
+.preview-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #cbd5e1;
+  overflow: hidden;
+}
+
+.top-bar {
+  background: #fff;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.top-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.view-mode-toggle {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+}
+
+.view-mode-btn {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-mode-btn.active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-print {
+  background: #059669;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s;
+}
+
+.btn-print:hover {
+  background: #047857;
+}
+
+/* Document Container (Scrollable viewport for 8.5x11 page preview) */
+.document-viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Printable Worksheet Sheet Simulation */
+.worksheet-page {
+  width: 8.5in;
+  min-height: 11in;
+  background: #fff;
+  box-shadow: var(--shadow-lg);
+  padding: 0.55in 0.6in 0.6in 0.6in;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* Worksheet Header */
+.ws-header {
+  border-bottom: 2px solid #334155;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+.ws-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.ws-title {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.ws-subtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.ws-meta-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.meta-field {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.meta-line {
+  display: inline-block;
+  min-width: 140px;
+  border-bottom: 1px solid #64748b;
+  height: 1.1em;
+}
+
+/* Problems Grid Layout */
+.problems-container {
+  flex: 1;
+  display: grid;
+  gap: 20px 24px;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Problem Card */
+.problem-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  position: relative;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.problem-card.print-clean {
+  border: 1px solid transparent;
+}
+
+.problem-number {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* Vertical Column Format */
+.vertical-math-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Courier New', Courier, monospace, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+  width: 120px;
+  margin: 10px auto 0 auto;
+}
+
+.carry-box-row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 18px;
+  margin-bottom: 4px;
+}
+
+.carry-box {
+  width: 18px;
+  height: 18px;
+  border: 1px dashed #94a3b8;
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.math-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.math-op {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #334155;
+}
+
+.math-num {
+  text-align: right;
+  letter-spacing: 0.1em;
+}
+
+.math-line {
+  width: 100%;
+  border-bottom: 2.5px solid #1e293b;
+  margin: 3px 0 6px 0;
+}
+
+.math-answer-space {
+  height: 38px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Horizontal Equation Format */
+.horizontal-math-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 10px 0;
+  gap: 8px;
+}
+
+.blank-box {
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  border: 1.5px solid #64748b;
+  border-radius: 4px;
+  background: #fafafa;
+  text-align: center;
+  line-height: 30px;
+}
+
+.blank-line {
+  display: inline-block;
+  min-width: 60px;
+  border-bottom: 2px solid #334155;
+}
+
+/* Comparison Box Format */
+.comparison-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 8px 0;
+}
+
+.circle-target {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #64748b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+/* Word Problem Card Layout */
+.word-problem-card {
+  grid-column: 1 / -1;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wp-text {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.wp-work-space {
+  min-height: 55px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 4px;
+  background: #fdfdfd;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 8px 12px;
+}
+
+.wp-answer-line {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Worksheet Footer */
+.ws-footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.ws-footer-quote {
+  font-style: italic;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+/* Interactive Practice Mode Styles */
+.interactive-input {
+  width: 70px;
+  height: 36px;
+  border: 2px solid var(--primary);
+  border-radius: 4px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  background: #fff;
+  transition: all 0.2s;
+}
+
+.interactive-input:focus {
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.interactive-input.correct {
+  border-color: var(--success);
+  background-color: #ecfdf5;
+  color: #065f46;
+}
+
+.interactive-input.incorrect {
+  border-color: var(--error);
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+.interactive-toolbar {
+  position: sticky;
+  bottom: 20px;
+  background: #fff;
+  border: 1px solid var(--border-color);
+  padding: 12px 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 100;
+}
+
+.score-display {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Answer Key Page Specifics (Paper Saver) */
+.answer-key-page {
+  page-break-before: always;
+  min-height: auto;
+}
+
+.answer-key-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid #fde68a;
+  letter-spacing: 0.03em;
+}
+
+.answer-highlight {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+/* Compact Answer Key Grid */
+.compact-answers-container {
+  display: grid;
+  gap: 6px 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+}
+
+.compact-answers-container.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.compact-answers-container.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.compact-answers-container.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.compact-answers-container.grid-cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.compact-answer-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.compact-q-id {
+  font-weight: 700;
+  color: #475569;
+  font-size: 0.85rem;
+  min-width: 24px;
+}
+
+.compact-q-ans {
+  font-weight: 800;
+  color: #dc2626;
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: 1.05rem;
+}
+
+/* PRINT MEDIA STYLES - CRITICAL FOR CLEAN WORKSHEET PRINTING */
+@page {
+  size: portrait;
+  margin: 0.4in;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .sidebar,
+  .top-bar,
+  .interactive-toolbar,
+  .non-printable,
+  #confetti-canvas {
+    display: none !important;
+  }
+
+  .app-container {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .preview-area {
+    background: transparent !important;
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  .document-viewport {
+    padding: 0 !important;
+    overflow: visible !important;
+    gap: 0 !important;
+  }
+
+  .worksheet-page {
+    width: 100% !important;
+    min-height: auto !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0.3in 0.35in !important;
+    margin: 0 !important;
+    page-break-after: always;
+  }
+
+  .worksheet-page.answer-key-page {
+    padding: 0.25in 0.35in !important;
+    min-height: auto !important;
+    page-break-before: always;
+  }
+
+  .worksheet-page:last-child {
+    page-break-after: auto;
+  }
+
+  .compact-answers-container {
+    background: transparent !important;
+    border: 1px solid #94a3b8 !important;
+    padding: 6px !important;
+    gap: 4px 8px !important;
+  }
+
+  .compact-answer-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 3px 6px !important;
+    font-size: 0.85rem !important;
+    break-inside: avoid;
+  }
+
+  .problem-card {
+    border: 1px solid #e2e8f0 !important;
+    break-inside: avoid;
+  }
+
+  .problem-card.print-clean {
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  .interactive-input {
+    border: 1px solid #64748b !important;
+    background: transparent !important;
+  }
+}
