@@ -16,6 +16,179 @@ const BADGES = [
   { id: 'grand_connoisseur', name: 'Grand Connoisseur', icon: '👑', desc: 'Earned 200+ Coffee XP' }
 ];
 
+const MAP_ORIGINS_DATA = {
+  ethiopia: {
+    region: "africa",
+    flag: "🇪🇹",
+    title: "Ethiopia • Yirgacheffe & Guji (埃塞俄比亚 • 耶加雪菲)",
+    sub: "The Ancestral Homeland of Arabica • Great Rift Valley Highlands",
+    alt: "1,800m - 2,200m (High Mountain)",
+    var: "Indigenous Heirloom (原生树种)",
+    proc: "Washed (Floral Tea) & Natural (Berry Jam)",
+    harvest: "October - January",
+    tags: ["Jasmine Blossom", "Bergamot Citrus", "White Peach", "Earl Grey Tea"],
+    story: "Grown under the natural forest canopy in high-altitude volcanic soils, Ethiopian coffees are celebrated as the 'Champagne of Coffee'. Washed Yirgacheffe delivers crisp, tea-like jasmine and citrus elegance, while natural Guji explodes with sun-drenched blueberries and floral honey!",
+    flavourMatch: "floral",
+    acidMatch: "high"
+  },
+  kenya: {
+    region: "africa",
+    flag: "🇰🇪",
+    title: "Kenya • Mount Kenya & Nyeri (肯尼亚 • 涅里 AA)",
+    sub: "Phosphoric Red Volcanic Loam • Scott Laboratories Royalty",
+    alt: "1,700m - 2,100m",
+    var: "SL-28, SL-34, Ruiru 11, Batian",
+    proc: "Double Washed (Kenya 72h Fermentation)",
+    harvest: "November - January (Main Crop)",
+    tags: ["Blackcurrant", "Ruby Grapefruit", "Blackberry", "Tomato Jam Sweetness"],
+    story: "Kenya coffees are revered for their complex phosphoric acidity and mouthwatering blackcurrant fruit punch. The double-washed fermentation with mountain spring water leaves an intensely vibrant, clean, and juicy cup.",
+    flavourMatch: "fruity",
+    acidMatch: "high"
+  },
+  yemen: {
+    region: "africa",
+    flag: "🇾🇪",
+    title: "Yemen • Port of Al-Makha & Haraz (也门 • 摩卡港古树)",
+    sub: "Ancient Terraced Dry Mountains • 15th Century Sufi Heritage",
+    alt: "1,900m - 2,400m",
+    var: "Ancient Heirloom (Udaini, Dawairi)",
+    proc: "Traditional Dry Natural (Rooftop Sun-Dried)",
+    harvest: "October - December",
+    tags: ["Baker's Cacao", "Dried Fig", "Cardamom & Cinnamon", "Winey Depth"],
+    story: "Perched on ancient stone mountain terraces, Yemen's ancient wild coffee trees are harvested by hand and dried on stone rooftops. Produces an exotic, deeply complex cup with notes of rich dark chocolate, dried fruit, and oriental spices.",
+    flavourMatch: "spicy",
+    acidMatch: "low"
+  },
+  panama: {
+    region: "americas",
+    flag: "🇵🇦",
+    title: "Panama • Boquete & Volcán Barú (巴拿马 • 翡翠瑰夏)",
+    sub: "Volcanic Cloud Forest • The Microclimate Miracle",
+    alt: "1,600m - 1,950m",
+    var: "Geisha / Gesha, Typica, Catuai",
+    proc: "Washed & Anaerobic Slow Dry",
+    harvest: "December - March",
+    tags: ["White Jasmine", "Bergamot", "Meyer Lemon", "Orange Blossom Honey"],
+    story: "Grown along the slopes of Volcán Barú where Pacific and Caribbean winds converge in gentle mists ('Bajareque'). Panama Geisha is the most decorated coffee in world auctions, offering an intoxicating perfume of white blossoms and silky bergamot.",
+    flavourMatch: "floral",
+    acidMatch: "high"
+  },
+  colombia: {
+    region: "americas",
+    flag: "🇨🇴",
+    title: "Colombia • Huila & Nariño (哥伦比亚 • 慧兰/娜玲珑)",
+    sub: "Andes Cordillera Mountain Terroir • Year-Round Fresh Harvests",
+    alt: "1,500m - 2,000m",
+    var: "Castillo, Caturra, Colombia, Pink Bourbon",
+    proc: "Washed & Extended Fermentation",
+    harvest: "April - June & October - December",
+    tags: ["Milk Chocolate", "Crisp Red Apple", "Caramel Sugar", "Silky Butter Body"],
+    story: "Nurtured across the high Andes Cordillera, Colombia produces the world's most balanced and comforting cups. Expect harmonious sweetness, red apple brightness, and a velvety milk chocolate body.",
+    flavourMatch: "nutty",
+    acidMatch: "medium"
+  },
+  guatemala: {
+    region: "americas",
+    flag: "🇬🇹",
+    title: "Guatemala • Antigua & Huehuetenango (危地马拉 • 安提瓜)",
+    sub: "Three Surrounding Volcanoes (Agua, Fuego, Acatenango)",
+    alt: "1,500m - 1,800m",
+    var: "Bourbon, Caturra, Typica",
+    proc: "Washed",
+    harvest: "January - April",
+    tags: ["Dark Chocolate", "Roasted Hazelnut", "Subtle Smoky Cacao", "Orange Zest"],
+    story: "Rich volcanic ash soils around Antigua retain natural moisture, infusing beans with deep baker's cocoa, sweet roasted hazelnut, and delicate warm spice.",
+    flavourMatch: "nutty",
+    acidMatch: "medium"
+  },
+  costarica: {
+    region: "americas",
+    flag: "🇨🇷",
+    title: "Costa Rica • Tarrazú & Canet (哥斯达黎加 • 塔拉珠)",
+    sub: "Pioneers of Micro-Mill Honey Processing & Musician Series",
+    alt: "1,400m - 1,900m",
+    var: "Catuai, Caturra, Villa Sarchi",
+    proc: "Yellow / Red / Black Honey & Anaerobic",
+    harvest: "December - March",
+    tags: ["Apricot Jam", "Wild Honey", "Raisin Sweetness", "Rose Perfume"],
+    story: "Costa Rica's artisan micro-mills perfected Honey processing (leaving sweet fruit mucilage during drying) and anaerobic fermentation (Musician series like Mozart & Beethoven), producing fragrant floral and dried apricot notes.",
+    flavourMatch: "fruity",
+    acidMatch: "medium"
+  },
+  brazil: {
+    region: "americas",
+    flag: "🇧🇷",
+    title: "Brazil • Cerrado Mineiro & Sul de Minas (巴西 • 喜拉多)",
+    sub: "Sun-Drenched Plateaus • The Global Specialty Powerhouse",
+    alt: "1,000m - 1,300m",
+    var: "Yellow Bourbon, Mundo Novo, Catuai",
+    proc: "Natural (Dry) & Pulped Natural",
+    harvest: "May - August",
+    tags: ["Roasted Peanut / Pecan", "Creamy Milk Chocolate", "Brown Sugar", "Low Acidity"],
+    story: "The quintessential morning comfort coffee! Brazilian Naturals feature heavy crema, buttery chocolate sweetness, roasted nut aromas, and almost zero acidity.",
+    flavourMatch: "nutty",
+    acidMatch: "low"
+  },
+  indonesia: {
+    region: "asia",
+    flag: "🇮🇩",
+    title: "Indonesia • Sumatra Lake Toba & Gayo (印尼 • 曼特宁)",
+    sub: "Ancient Volcanic Lake Toba • Traditional Wet-Hulled Process",
+    alt: "1,200m - 1,600m",
+    var: "Typica, Ateng, Tim Tim (Gayo 1)",
+    proc: "Wet-Hulled (Giling Basah)",
+    harvest: "October - December & March - May",
+    tags: ["Cedarwood", "Dark Cocoa", "Clove & Cardamom", "Syrupy Heavy Body"],
+    story: "The unique Indonesian 'Giling Basah' wet-hulling technique strips the parchment hull at 50% moisture, creating intense forest cedar, dark baker's chocolate, and a lush velvety body that cuts wonderfully through milk.",
+    flavourMatch: "spicy",
+    acidMatch: "low"
+  },
+  yunnan: {
+    region: "asia",
+    flag: "🇨🇳",
+    title: "China • Yunnan Baoshan & Pu'er (中国 • 云南保山/普洱)",
+    sub: "Gaoligong Mountain Range & Ancient Tea Terraces",
+    alt: "1,200m - 1,650m",
+    var: "Catimor, Typica, Bourbon",
+    proc: "Double Washed, Natural & Pu'er Tea Anaerobic",
+    harvest: "November - March",
+    tags: ["Black Tea", "Dried Plum", "Brown Sugar", "Nutty Cocoa Finish"],
+    story: "Grown alongside ancient tea trees in Yunnan's misty mountain valleys. Yunnan specialty lots showcase delightful black tea aromas, sweet dried red plum, and comforting brown sugar cane sweetness.",
+    flavourMatch: "nutty",
+    acidMatch: "medium"
+  },
+  hawaii: {
+    region: "asia",
+    flag: "🇺🇸",
+    title: "Hawaii, USA • Kona Coast (美国夏威夷 • 科纳)",
+    sub: "Mauna Loa Volcanic Slopes • Sunny Mornings & Afternoon Cloud Cover",
+    alt: "600m - 900m",
+    var: "Kona Typica (Guatemalan Ancestor)",
+    proc: "Washed",
+    harvest: "August - January",
+    tags: ["Buttery Caramel", "Macadamia Nut", "Sweet Brown Sugar", "Gentle Floral"],
+    story: "Benefiting from rich volcanic soil and Hawaii's natural afternoon cloud cover ('free shade'), pure 100% Kona coffee offers a remarkably clean, buttery mouthfeel with sweet macadamia nut nuances.",
+    flavourMatch: "nutty",
+    acidMatch: "medium"
+  },
+  jamaica: {
+    region: "americas",
+    flag: "🇯🇲",
+    title: "Jamaica • Blue Mountain (牙买加 • 蓝山)",
+    sub: "Misty Blue Mountain Peak • Traditional Wooden Barrel Export",
+    alt: "1,000m - 1,700m",
+    var: "Typica",
+    proc: "Washed",
+    harvest: "January - May",
+    tags: ["Sweet Floral", "Mild Cocoa", "Smooth Hazelnut", "Zero Bitterness"],
+    story: "Grown in the cool Caribbean mountain mist, Jamaica Blue Mountain is famous for its gentle mildness, silk-smooth mouthfeel, and complete lack of bitterness.",
+    flavourMatch: "nutty",
+    acidMatch: "low"
+  }
+};
+
+let currentSelectedOriginId = "ethiopia";
+
 const FLAVOUR_CATEGORIES = {
   floral: {
     title: "🌸 Floral Notes (优雅花香家族)",
@@ -254,6 +427,7 @@ function toggleSound() {
 function init() {
   updateUIStats();
   setupNavTabs();
+  selectMapOrigin('ethiopia');
   filterFlavourCategory('floral');
   updateRoastSimulator(1);
   calculateMamaMatch();
@@ -317,6 +491,102 @@ function handleHashNavigation() {
   }
 }
 window.addEventListener('hashchange', handleHashNavigation);
+
+// =============================================================================
+// Map Functions: Select Origin, Filter Region & Brew Spotlight
+// =============================================================================
+function selectMapOrigin(originId) {
+  const origin = MAP_ORIGINS_DATA[originId];
+  if (!origin) return;
+  currentSelectedOriginId = originId;
+
+  // Highlight Pin
+  document.querySelectorAll('.map-pin-item').forEach(p => p.classList.remove('active'));
+  const pin = document.querySelector(`.map-pin-item[data-id="${originId}"]`);
+  if (pin) pin.classList.add('active');
+
+  // Update Spotlight UI
+  const flagElem = document.getElementById('spotlight-flag');
+  const titleElem = document.getElementById('spotlight-title');
+  const subElem = document.getElementById('spotlight-sub');
+  const altElem = document.getElementById('spotlight-alt');
+  const varElem = document.getElementById('spotlight-var');
+  const procElem = document.getElementById('spotlight-proc');
+  const harvestElem = document.getElementById('spotlight-harvest');
+  const storyElem = document.getElementById('spotlight-story');
+
+  if (flagElem) flagElem.textContent = origin.flag;
+  if (titleElem) titleElem.textContent = origin.title;
+  if (subElem) subElem.textContent = origin.sub;
+  if (altElem) altElem.textContent = origin.alt;
+  if (varElem) varElem.textContent = origin.var;
+  if (procElem) procElem.textContent = origin.proc;
+  if (harvestElem) harvestElem.textContent = origin.harvest;
+  if (storyElem) storyElem.textContent = origin.story;
+
+  const tagsContainer = document.getElementById('spotlight-tags');
+  if (tagsContainer) {
+    tagsContainer.innerHTML = '';
+    origin.tags.forEach(t => {
+      const span = document.createElement('span');
+      span.textContent = t;
+      tagsContainer.appendChild(span);
+    });
+  }
+
+  playSound('chime');
+  awardBadge('origin_explorer');
+}
+
+function filterMapRegion(region) {
+  document.querySelectorAll('.map-pill').forEach(p => p.classList.remove('active'));
+  if (event && event.target && event.target.classList) {
+    event.target.classList.add('active');
+  }
+
+  const pins = document.querySelectorAll('.map-pin-item');
+  pins.forEach(pin => {
+    const pinId = pin.getAttribute('data-id');
+    const data = MAP_ORIGINS_DATA[pinId];
+    if (region === 'all' || (data && data.region === region)) {
+      pin.classList.remove('hidden-region');
+    } else {
+      pin.classList.add('hidden-region');
+    }
+  });
+
+  // Select first visible origin in this region
+  for (const [id, d] of Object.entries(MAP_ORIGINS_DATA)) {
+    if (region === 'all' || d.region === region) {
+      selectMapOrigin(id);
+      break;
+    }
+  }
+
+  playSound('click');
+}
+
+function brewSpotlightOrigin() {
+  const origin = MAP_ORIGINS_DATA[currentSelectedOriginId] || MAP_ORIGINS_DATA.ethiopia;
+  
+  // Switch to Matchmaker Tab
+  switchTab('tab-matchmaker');
+
+  // Set flavor and acidity
+  state.matchmaker.flavour = origin.flavourMatch || 'floral';
+  state.matchmaker.acid = origin.acidMatch || 'high';
+
+  // Highlight UI Buttons in Matchmaker
+  document.querySelectorAll('.choice-btn[data-type="flavour"]').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-val') === state.matchmaker.flavour);
+  });
+  document.querySelectorAll('.choice-btn[data-type="acid"]').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-val') === state.matchmaker.acid);
+  });
+
+  calculateMamaMatch();
+  playSound('triumph');
+}
 
 // =============================================================================
 // 4. Interactive Tools: Anatomy, Flavour Wheel & Roast

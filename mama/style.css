@@ -413,8 +413,252 @@ h1, h2, h3, h4 {
   color: var(--coffee-gold);
 }
 
-.fact-item span {
+/* =========================================================================
+   INTERACTIVE WORLD COFFEE MAP
+   ========================================================================= */
+.map-section-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.map-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.map-badge {
+  display: inline-block;
+  background: rgba(229, 169, 60, 0.15);
+  border: 1px solid var(--border-subtle);
+  color: var(--coffee-gold);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.map-title {
+  font-size: 1.35rem;
+  color: var(--coffee-gold-light);
+  margin-bottom: 4px;
+}
+
+.map-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+.map-filter-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.map-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-pill:hover {
+  background: rgba(229, 169, 60, 0.15);
+  color: var(--text-primary);
+}
+
+.map-pill.active {
+  background: var(--coffee-gold);
+  color: #120e0d;
+  border-color: var(--coffee-gold);
+}
+
+.world-map-wrapper {
+  background: #140f0e;
+  border: 1px solid rgba(229, 169, 60, 0.25);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+  margin-bottom: 20px;
+}
+
+.coffee-world-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Map Pins */
+.map-pin-item {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.map-pin-item:hover {
+  transform: scale(1.2);
+}
+
+.pin-core {
+  fill: #ffd27d;
+  stroke: #b45309;
+  stroke-width: 2;
+  filter: url(#glow);
+  transition: all 0.2s;
+}
+
+.map-pin-item.active .pin-core {
+  fill: #ffffff;
+  stroke: #e5a93c;
+  stroke-width: 3;
+}
+
+.pin-pulse {
+  fill: rgba(229, 169, 60, 0.35);
+  animation: pinPulse 2s infinite ease-out;
+  transform-origin: center;
+}
+
+@keyframes pinPulse {
+  0% { r: 6; opacity: 0.9; }
+  100% { r: 18; opacity: 0; }
+}
+
+.pin-label {
+  font-size: 11px;
+  font-weight: 800;
+  fill: #fcf8f2;
+  text-anchor: middle;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.9);
+  pointer-events: none;
+}
+
+.map-pin-item.hidden-region {
+  display: none;
+}
+
+/* Terroir Spotlight Detail Card */
+.origin-spotlight-box {
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.4) 0%, rgba(30, 24, 22, 0.8) 100%);
+  border: 1.5px solid var(--border-active);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.spotlight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.spotlight-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.spotlight-flag {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 0 8px rgba(229, 169, 60, 0.3));
+}
+
+.spotlight-header h4 {
+  font-size: 1.25rem;
+  color: var(--coffee-gold-light);
+  margin-bottom: 2px;
+}
+
+.spotlight-header p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.btn-brew-spotlight {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+}
+
+.spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 16px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+}
+
+.spotlight-stat {
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-lbl {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.spotlight-stat strong {
+  color: #f1f5f9;
+}
+
+.spotlight-notes-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.notes-lbl {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--coffee-gold);
+}
+
+.spotlight-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.spotlight-tags span {
+  background: rgba(229, 169, 60, 0.15);
+  border: 1px solid var(--border-subtle);
+  color: var(--coffee-gold-light);
+  font-size: 0.78rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.spotlight-story {
+  font-size: 0.88rem;
   color: #cbd5e1;
+  line-height: 1.55;
+  border-left: 3px solid var(--coffee-gold);
+  padding-left: 12px;
 }
 
 /* Origins Grid */
