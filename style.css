@@ -369,16 +369,17 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   box-shadow: 0 0 0 4px var(--nf-white);
 }
 
-/* Changing your picture must be reachable without first finding a settings
-   toggle, so the pencil lives on the picture and is always in the DOM. */
+/* Editing is gated behind Manage Profiles: the pencil only appears once the
+   grown-up has opted in, so a kid tapping around the chooser always lands in a
+   studio rather than in an editor. */
 .avatar-edit-badge {
+  display: none;
   position: absolute;
   right: -8px;
   bottom: -8px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  display: grid;
   place-items: center;
   border: 3px solid #141414;
   background: var(--nf-red);
@@ -390,10 +391,18 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   padding: 0;
 }
 
-.profile-card:hover .avatar-edit-badge,
+.manage-mode .avatar-edit-badge { display: grid; }
+
+.manage-mode .profile-card:hover .avatar-edit-badge,
 .avatar-edit-badge:focus-visible {
   opacity: 1;
   transform: scale(1.08);
+}
+
+/* In manage mode the whole card is an edit target, so say so on the picture
+   rather than leaving the pencil as the only clue. */
+.manage-mode .profile-card:hover .profile-avatar-box .sf-avatar {
+  box-shadow: 0 0 0 4px var(--nf-red);
 }
 
 .avatar-edit-badge:hover { background: #f6121d; }
