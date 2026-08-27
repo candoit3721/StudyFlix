@@ -19,6 +19,8 @@ const DEFAULT_PROFILES = [
     id: "sophia",
     name: "Sophia",
     glyph: "flask",
+    avatar: "astronaut",
+    avatarBg: "ocean",
     grade: "Grade 5 & 6 Champion",
     themeClass: "theme-sophia",
     family: "rome",
@@ -60,6 +62,8 @@ const DEFAULT_PROFILES = [
     id: "olivia",
     name: "Olivia",
     glyph: "clock",
+    avatar: "unicorn",
+    avatarBg: "berry",
     grade: "Grade 3 Explorer",
     themeClass: "theme-olivia",
     family: "grade3",
@@ -95,6 +99,8 @@ const DEFAULT_PROFILES = [
     id: "yaya",
     name: "Yaya",
     glyph: "sigma",
+    avatar: "owl",
+    avatarBg: "deep",
     grade: "Pre-University Calculus",
     themeClass: "theme-yaya",
     family: "calculus",
@@ -127,6 +133,8 @@ const DEFAULT_PROFILES = [
     id: "mama",
     name: "Mama",
     glyph: "coffee",
+    avatar: "bear",
+    avatarBg: "mocha",
     grade: "Master Coffee Connoisseur",
     themeClass: "theme-mama",
     family: "coffee",
@@ -161,7 +169,7 @@ const DEFAULT_PROFILES = [
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "3.0.0";
+const APP_VERSION = "3.1.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
@@ -178,8 +186,21 @@ if (savedProfiles) {
       ...def,
       name: saved.name || def.name,
       glyph: (saved.glyph && SFIcons.has(saved.glyph)) ? saved.glyph : def.glyph,
+      // A picture a kid chose is theirs to keep: only fall back to the default
+      // when the stored id is not one this build can actually draw.
+      avatar: (saved.avatar && SFAvatars.hasCharacter(saved.avatar)) ? saved.avatar : def.avatar,
+      avatarBg: (saved.avatarBg && SFAvatars.hasBackdrop(saved.avatarBg)) ? saved.avatarBg : def.avatarBg,
       grade: saved.grade || def.grade
     };
+  });
+}
+
+/** One place that turns a profile into its picture, at any size. */
+function profileAvatarMarkup(profile, size, radius) {
+  return SFAvatars.render(profile.avatar, profile.avatarBg, {
+    size: size,
+    radius: radius,
+    title: `${profile.name}'s picture: ${SFAvatars.labelOf(profile.avatar)}`
   });
 }
 let activeProfileId = localStorage.getItem('studyflix_active_profile_id') || null;
@@ -283,16 +304,31 @@ function renderProfileSelectScreen() {
   appProfiles.forEach(p => {
     const card = document.createElement('div');
     card.className = 'profile-card';
-    // Every avatar is built the same way: monogram on the profile's own colour,
-    // with a small subject glyph. No profile can read as a broken avatar.
+    // The chooser is the first screen of the product, so it has to be usable
+    // from the keyboard: the :focus-visible ring already existed but nothing
+    // could ever receive the focus.
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `${p.name}, ${p.grade}`);
+    // The picture is a drawn character, not a monogram: it is the one place in
+    // the product that belongs to the kid rather than to the design system.
+    // The pencil is always in the DOM so changing the picture is discoverable
+    // without first hunting for "Manage Profiles".
     card.innerHTML = `
-      <div class="profile-avatar-box ${p.themeClass}">
-        <span class="profile-monogram">${p.name.charAt(0).toUpperCase()}</span>
-        <span class="profile-glyph">${SFIcons.icon(p.glyph, { size: 22 })}</span>
+      <div class="profile-avatar-box">
+        ${profileAvatarMarkup(p, 140, 16)}
+        <button type="button" class="avatar-edit-badge" title="Change ${p.name}'s picture"
+                aria-label="Change ${p.name}'s picture">
+          <span data-sf-icon="pencil" data-sf-size="16"></span>
+        </button>
       </div>
       <div class="profile-name">${p.name}</div>
       <div class="profile-grade-tag">${p.grade}</div>
     `;
+    card.querySelector('.avatar-edit-badge').onclick = (e) => {
+      e.stopPropagation();
+      openEditProfileModal(p.id);
+    };
     card.onclick = () => {
       if (isManageMode) {
         openEditProfileModal(p.id);
@@ -300,8 +336,16 @@ function renderProfileSelectScreen() {
         selectProfile(p.id, true);
       }
     };
+    card.onkeydown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    };
     container.appendChild(card);
   });
+
+  SFIcons.upgrade(container);
 }
 
 function toggleManageMode() {
@@ -339,8 +383,8 @@ function selectProfile(profileId, triggerConfetti = true) {
 
   // Update UI Elements for active profile
   const navAvatar = document.getElementById('nav-profile-avatar');
-  navAvatar.textContent = profile.name.charAt(0).toUpperCase();
-  navAvatar.className = 'profile-mini-avatar ' + profile.themeClass;
+  navAvatar.innerHTML = profileAvatarMarkup(profile, 34, 18);
+  navAvatar.className = 'profile-mini-avatar';
   document.getElementById('nav-profile-name').textContent = profile.name;
 
   // Opening the hub counts as studying today, then the shell shows the ONE
@@ -385,7 +429,7 @@ function renderProfileDropdown() {
       const item = document.createElement('button');
       item.className = 'dropdown-item';
       item.innerHTML = `
-        <span class="dropdown-avatar ${p.themeClass}">${p.name.charAt(0).toUpperCase()}</span>
+        <span class="dropdown-avatar">${profileAvatarMarkup(p, 32, 16)}</span>
         <div>
           <div style="font-weight:700;">${p.name}</div>
           <div style="font-size:0.75rem; color:#888;">${p.grade}</div>
@@ -399,6 +443,13 @@ function renderProfileDropdown() {
       list.appendChild(item);
     }
   });
+}
+
+/** Open the picture editor for whoever is signed in right now. */
+function editActiveProfile() {
+  const dd = document.getElementById('profile-dropdown');
+  if (dd) dd.classList.add('hidden');
+  if (activeProfileId) openEditProfileModal(activeProfileId);
 }
 
 function toggleProfileDropdown() {
@@ -598,39 +649,112 @@ function openStudioInNewTab() {
   }
 }
 
-// 4. Edit Profile Modal
-// Glyphs come from the one icon set, so a chosen avatar can never render as
-// a different picture on a different device.
-const AVAILABLE_GLYPHS = [
-  "person", "flask", "temple", "ruler", "clock", "coffee",
-  "sigma", "chartLine", "globe", "microscope", "atom", "star"
-];
-let selectedModalGlyph = "person";
+// 4. Edit Profile Modal (the "Picture Studio")
+// The picture is chosen as character + backdrop rather than as a single flat
+// option, so a small cast still gives every kid a picture that feels their own.
+let selectedAvatar = 'fox';
+let selectedAvatarBg = 'ocean';
+
+/** Repaint the big live preview and its caption from the current selection. */
+function refreshAvatarPreview() {
+  const stage = document.getElementById('avatar-preview-stage');
+  const caption = document.getElementById('avatar-preview-caption');
+  if (stage) stage.innerHTML = SFAvatars.render(selectedAvatar, selectedAvatarBg, { size: 116, radius: 16 });
+  if (caption) {
+    const bg = SFAvatars.backdrops.find(b => b.id === selectedAvatarBg);
+    caption.textContent = `${SFAvatars.labelOf(selectedAvatar)} · ${bg ? bg.label : ''}`;
+  }
+}
+
+function renderCharacterPicker() {
+  const grid = document.getElementById('avatar-options-grid');
+  grid.innerHTML = '';
+  SFAvatars.characters.forEach(c => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `avatar-option-btn ${c.id === selectedAvatar ? 'selected' : ''}`;
+    btn.title = c.label;
+    btn.setAttribute('aria-label', c.label);
+    btn.setAttribute('aria-pressed', String(c.id === selectedAvatar));
+    // Each option previews on the backdrop the kid has actually picked, so the
+    // grid always shows the real result rather than a stand-in colour.
+    btn.innerHTML = SFAvatars.render(c.id, selectedAvatarBg, { size: 56, radius: 14 }) +
+      `<span class="avatar-option-name">${c.label}</span>`;
+    btn.onclick = () => {
+      selectedAvatar = c.id;
+      grid.querySelectorAll('.avatar-option-btn').forEach(b => {
+        b.classList.remove('selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('selected');
+      btn.setAttribute('aria-pressed', 'true');
+      refreshAvatarPreview();
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function renderBackdropPicker() {
+  const row = document.getElementById('avatar-backdrop-row');
+  row.innerHTML = '';
+  SFAvatars.backdrops.forEach(bg => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `backdrop-swatch ${bg.id === selectedAvatarBg ? 'selected' : ''}`;
+    btn.title = bg.label;
+    btn.setAttribute('aria-label', `${bg.label} background`);
+    btn.setAttribute('aria-pressed', String(bg.id === selectedAvatarBg));
+    btn.style.background = `linear-gradient(145deg, ${bg.from} 0%, ${bg.to} 100%)`;
+    btn.onclick = () => {
+      selectedAvatarBg = bg.id;
+      row.querySelectorAll('.backdrop-swatch').forEach(b => {
+        b.classList.remove('selected');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('selected');
+      btn.setAttribute('aria-pressed', 'true');
+      // The character tiles preview on the live backdrop, so they repaint too.
+      renderCharacterPicker();
+      refreshAvatarPreview();
+    };
+    row.appendChild(btn);
+  });
+}
+
+/** Roll a picture nobody has to think about - the fastest way to try the cast. */
+function surpriseMeAvatar() {
+  const chars = SFAvatars.characters;
+  const bgs = SFAvatars.backdrops;
+  let nextChar = selectedAvatar;
+  let nextBg = selectedAvatarBg;
+  // Never hand back the picture already on screen; a no-op reads as a dead button.
+  while (nextChar === selectedAvatar && chars.length > 1) {
+    nextChar = chars[Math.floor(Math.random() * chars.length)].id;
+  }
+  while (nextBg === selectedAvatarBg && bgs.length > 1) {
+    nextBg = bgs[Math.floor(Math.random() * bgs.length)].id;
+  }
+  selectedAvatar = nextChar;
+  selectedAvatarBg = nextBg;
+  renderCharacterPicker();
+  renderBackdropPicker();
+  refreshAvatarPreview();
+}
 
 function openEditProfileModal(profileId) {
   editingProfileId = profileId;
   const p = appProfiles.find(x => x.id === profileId);
   if (!p) return;
 
-  selectedModalGlyph = p.glyph;
+  selectedAvatar = SFAvatars.hasCharacter(p.avatar) ? p.avatar : SFAvatars.characters[0].id;
+  selectedAvatarBg = SFAvatars.hasBackdrop(p.avatarBg) ? p.avatarBg : SFAvatars.backdrops[0].id;
   document.getElementById('edit-profile-name').value = p.name;
   document.getElementById('edit-profile-grade').value = p.grade;
+  document.getElementById('avatar-modal-title').textContent = `${p.name}'s Picture Studio`;
 
-  const grid = document.getElementById('avatar-options-grid');
-  grid.innerHTML = '';
-  AVAILABLE_GLYPHS.forEach(av => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = `avatar-option-btn ${av === selectedModalGlyph ? 'selected' : ''}`;
-    btn.title = av;
-    btn.innerHTML = SFIcons.icon(av, { size: 22 });
-    btn.onclick = () => {
-      document.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedModalGlyph = av;
-    };
-    grid.appendChild(btn);
-  });
+  renderBackdropPicker();
+  renderCharacterPicker();
+  refreshAvatarPreview();
 
   document.getElementById('profile-edit-modal').classList.remove('hidden');
 }
@@ -646,10 +770,21 @@ function saveProfileChanges() {
   if (p) {
     p.name = document.getElementById('edit-profile-name').value.trim() || p.name;
     p.grade = document.getElementById('edit-profile-grade').value.trim() || p.grade;
-    p.glyph = selectedModalGlyph;
+    p.avatar = selectedAvatar;
+    p.avatarBg = selectedAvatarBg;
 
     localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
     renderProfileSelectScreen();
+    // Editing can happen from inside the dashboard, so every place the picture
+    // and name are shown has to follow along - not just the chooser screen.
+    if (activeProfileId) {
+      const active = appProfiles.find(x => x.id === activeProfileId);
+      if (active) {
+        document.getElementById('nav-profile-avatar').innerHTML = profileAvatarMarkup(active, 34, 18);
+        document.getElementById('nav-profile-name').textContent = active.name;
+      }
+      renderProfileDropdown();
+    }
     closeProfileModal();
     launchConfetti();
   }
