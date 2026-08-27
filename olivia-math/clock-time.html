@@ -7,30 +7,31 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.0.0">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/clock-styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="sf-subject-grade3 sf-on-light">
 
   <!-- Top Header Navigation -->
   <header class="clock-app-header">
     <div class="header-brand">
-      <a href="../index.html" class="btn-back-portal">🎬 StudyFlix Hub</a>
-      <a href="index.html" class="btn-back-math">✏️ Math Studio</a>
+      <a href="../index.html" class="btn-back-portal"><span data-sf-icon="arrowLeft" data-sf-size="15"></span><span>StudyFlix Hub</span></a>
+      <a href="index.html" class="btn-back-math"><span data-sf-icon="ruler" data-sf-size="15"></span><span>Math Studio</span></a>
       <div class="brand-text">
-        <h1>⏰ Olivia's Clock &amp; Elapsed Time Course 🇨🇦</h1>
+        <h1><span data-sf-icon="clock" data-sf-size="22"></span>Olivia's Clock &amp; Elapsed Time Course</h1>
         <p>Ontario Grade 3 Enriched &bull; Interactive Lessons &bull; Waterloo Contest Puzzles</p>
       </div>
     </div>
 
     <div class="header-actions">
       <div class="score-pill">⭐ Score: <span id="clock-score">0</span></div>
-      <div class="streak-pill">🔥 Streak: <span id="clock-streak">0</span></div>
-      <div class="score-pill" style="background:#fdf4ff; color:#86198f;">🏆 <span id="clock-badge-count">0/6 Badges</span></div>
-      <button class="btn btn-print-top" onclick="window.print()">🖨️ Print Worksheet</button>
+      <div class="streak-pill"><span data-sf-icon="flame" data-sf-size="15"></span>Streak: <span id="clock-streak">0</span></div>
+      <div class="score-pill" style="background:#fdf4ff; color:#86198f;"><span data-sf-icon="trophy" data-sf-size="15"></span><span id="clock-badge-count">0/6 Badges</span></div>
+      <button class="btn btn-print-top" onclick="window.print()"><span data-sf-icon="printer" data-sf-size="15"></span><span>Print Worksheet</span></button>
     </div>
   </header>
 
@@ -41,11 +42,11 @@
       
       <!-- Mode Selection Tabs -->
       <div class="sidebar-section">
-        <h3>🎮 Course Modules &amp; Activities</h3>
+        <h3>Course Modules &amp; Activities</h3>
         <div class="activity-mode-buttons">
           
           <button class="activity-btn active" data-mode="course_lessons" onclick="setActivityMode('course_lessons')">
-            <span class="act-icon">📖</span>
+            <span class="act-icon" data-sf-icon="lesson" data-sf-size="22"></span>
             <div class="act-info">
               <strong>1. Course Lessons Hub</strong>
               <small>5 illustrated Ontario chapters &amp; secrets</small>
@@ -53,7 +54,7 @@
           </button>
 
           <button class="activity-btn" data-mode="read_clock" onclick="setActivityMode('read_clock')">
-            <span class="act-icon">👀</span>
+            <span class="act-icon" data-sf-icon="search" data-sf-size="22"></span>
             <div class="act-info">
               <strong>2. Read the Clock</strong>
               <small>Look at hands &amp; type digital time</small>
@@ -61,7 +62,7 @@
           </button>
 
           <button class="activity-btn" data-mode="set_clock" onclick="setActivityMode('set_clock')">
-            <span class="act-icon">🖐️</span>
+            <span class="act-icon" data-sf-icon="person" data-sf-size="22"></span>
             <div class="act-info">
               <strong>3. Set the Hands</strong>
               <small>Move hands to match target time</small>
@@ -69,7 +70,7 @@
           </button>
 
           <button class="activity-btn" data-mode="jump_builder" onclick="setActivityMode('jump_builder')">
-            <span class="act-icon">🏔️</span>
+            <span class="act-icon" data-sf-icon="map" data-sf-size="22"></span>
             <div class="act-info">
               <strong>4. Mountain Jump Builder</strong>
               <small>Build +1hr, +15m, +5m timeline jumps!</small>
@@ -77,7 +78,7 @@
           </button>
 
           <button class="activity-btn" data-mode="elapsed_time" onclick="setActivityMode('elapsed_time')">
-            <span class="act-icon">⏱️</span>
+            <span class="act-icon" data-sf-icon="clock" data-sf-size="22"></span>
             <div class="act-info">
               <strong>5. Elapsed Time Challenge</strong>
               <small>Calculate total elapsed duration</small>
@@ -85,7 +86,7 @@
           </button>
 
           <button class="activity-btn" data-mode="word_problems" onclick="setActivityMode('word_problems')">
-            <span class="act-icon">🍁</span>
+            <span class="act-icon" data-sf-icon="leaf" data-sf-size="22"></span>
             <div class="act-info">
               <strong>6. Canadian Schedule Stories</strong>
               <small>Blue Jays, Rideau Canal &amp; baking puzzles</small>
@@ -93,7 +94,7 @@
           </button>
 
           <button class="activity-btn" data-mode="waterloo_puzzles" onclick="setActivityMode('waterloo_puzzles')">
-            <span class="act-icon">⭐</span>
+            <span class="act-icon" data-sf-icon="star" data-sf-size="22"></span>
             <div class="act-info">
               <strong>7. Waterloo Contest Logic</strong>
               <small>Mirror clocks, faulty clocks &amp; time zones</small>
@@ -101,7 +102,7 @@
           </button>
 
           <button class="activity-btn" data-mode="worksheet_gen" onclick="setActivityMode('worksheet_gen')">
-            <span class="act-icon">🖨️</span>
+            <span class="act-icon" data-sf-icon="printer" data-sf-size="22"></span>
             <div class="act-info">
               <strong>8. Printable Worksheets</strong>
               <small>Vector clocks + Master Course Workbook</small>
@@ -112,30 +113,30 @@
 
       <!-- Difficulty / Precision Controls -->
       <div class="sidebar-section">
-        <h3>⚙️ Clock Precision Level</h3>
+        <h3>Clock Precision Level</h3>
         <div class="radio-options-grid">
           <label class="custom-radio-card">
             <input type="radio" name="precision" value="hour_half" onchange="updatePrecision(this.value)">
-            <span>🌟 Exact Hours &amp; Half-Hours (:00, :30)</span>
+            <span>Exact Hours &amp; Half-Hours (:00, :30)</span>
           </label>
           <label class="custom-radio-card">
             <input type="radio" name="precision" value="quarters" onchange="updatePrecision(this.value)">
-            <span>🌟 15-Min Quarters (:00, :15, :30, :45)</span>
+            <span>15-Min Quarters (:00, :15, :30, :45)</span>
           </label>
           <label class="custom-radio-card">
             <input type="radio" name="precision" value="five_min" checked onchange="updatePrecision(this.value)">
-            <span>🌟 5-Minute Intervals (:05, :10, :25...)</span>
+            <span>5-Minute Intervals (:05, :10, :25...)</span>
           </label>
           <label class="custom-radio-card">
             <input type="radio" name="precision" value="one_min" onchange="updatePrecision(this.value)">
-            <span>🌟 Exact to the Minute (e.g. 4:17)</span>
+            <span>Exact to the Minute (e.g. 4:17)</span>
           </label>
         </div>
       </div>
 
       <!-- Quick Tips Box -->
       <div class="sidebar-section tip-box">
-        <h4>💡 Olivia's Clock Secrets:</h4>
+        <h4>Olivia's Clock Secrets:</h4>
         <ul>
           <li>🔴 <strong>Short Hand</strong> = <strong>Hour Hand</strong> (moves slowly)</li>
           <li>🔵 <strong>Long Hand</strong> = <strong>Minute Hand</strong> (counts by 5s)</li>
@@ -155,7 +156,7 @@
       <!-- ================================================================= -->
       <section id="view-course-lessons" class="activity-stage active">
         <div class="stage-header">
-          <h2>📖 Olivia's Complete Time &amp; Clock Course 🇨🇦</h2>
+          <h2>Olivia's Complete Time &amp; Clock Course</h2>
           <p>Read through the 5 chapters, master clock secrets, and unlock your Time Champion certificate!</p>
         </div>
 
@@ -164,7 +165,7 @@
           <!-- Chapter 1 -->
           <div class="course-chapter-card">
             <div class="chapter-badge">Chapter 1</div>
-            <h3>🕰️ Anatomy of the Analog Clock &amp; Hand Mechanics</h3>
+            <h3>Anatomy of the Analog Clock &amp; Hand Mechanics</h3>
             <p>An analog clock is a circle with <strong>12 big hours</strong> and <strong>60 small minute ticks</strong>.</p>
             <div class="chapter-highlight">
               <strong>🔴 The Hour Hand Secret:</strong> The short red hand does NOT stay frozen! At 3:30, it points <em>halfway between 3 and 4</em>. At 3:55, it is almost at 4, but it is STILL in the 3-o'clock hour!
@@ -177,7 +178,7 @@
           <!-- Chapter 2 -->
           <div class="course-chapter-card">
             <div class="chapter-badge">Chapter 2</div>
-            <h3>☀️ AM vs. PM &amp; Canadian 24-Hour Airport Time</h3>
+            <h3>AM vs. PM &amp; Canadian 24-Hour Airport Time</h3>
             <p>There are 24 hours in a full Earth day. We split it into two 12-hour halves:</p>
             <ul>
               <li>🌅 <strong>A.M. (Morning)</strong>: From 12:00 Midnight to 11:59 AM (Breakfast at 7:30 AM, Morning Recess at 10:15 AM).</li>
@@ -189,36 +190,95 @@
           <!-- Chapter 3 -->
           <div class="course-chapter-card">
             <div class="chapter-badge">Chapter 3</div>
-            <h3>🏔️ Elapsed Time: The "Mountains, Hills &amp; Rocks" Strategy</h3>
-            <p>How much time passed between Start Time and End Time?</p>
+            <h3>Elapsed Time: The "Mountains, Hills &amp; Rocks" Strategy</h3>
+            <p>How much time passed between Start Time and End Time? Hop along the number line: take the big jumps first, then the small ones.</p>
+
             <div class="jump-legend">
-              <span class="jump-bubble">🏔️ Mountain = +1 Hour</span>
-              <span class="jump-bubble" style="background:#fef3c7; border-color:#f59e0b; color:#92400e;">⛰️ Hill = +15 or +10 Min</span>
-              <span class="jump-bubble" style="background:#fee2e2; border-color:#ef4444; color:#991b1b;">🪨 Rock = +1 Min</span>
+              <span class="jump-bubble jump-bubble--mountain">Mountain = +1 hour</span>
+              <span class="jump-bubble jump-bubble--hill">Hill = +15 or +10 min</span>
+              <span class="jump-bubble jump-bubble--rock">Rock = +1 min</span>
             </div>
-            <p><em>Example: From 2:45 PM to 5:10 PM &rarr; 2:45 + 1hr (3:45) + 1hr (4:45) + 15m (5:00) + 10m (5:10) = <strong>2 Hours and 25 Minutes!</strong></em></p>
+
+            <!-- Elapsed time is an inherently visual idea, so the worked example
+                 is drawn rather than described only in words and colour. -->
+            <figure class="elapsed-numberline">
+              <svg viewBox="0 0 820 214" role="img"
+                   aria-label="Number line from 2:45 PM to 5:10 PM. Two mountain jumps of one hour each reach 4:45, a hill jump of 15 minutes reaches 5:00, and a hill jump of 10 minutes reaches 5:10. Total elapsed time is 2 hours 25 minutes.">
+                <line x1="40" y1="150" x2="790" y2="150" stroke="#334155" stroke-width="3"/>
+                <polygon points="790,150 778,144 778,156" fill="#334155"/>
+
+                <g fill="none" stroke-width="3.5" stroke-linecap="round">
+                  <path d="M70 150 Q185 62 300 150" stroke="#7c3aed"/>
+                  <path d="M300 150 Q415 62 530 150" stroke="#7c3aed"/>
+                  <path d="M530 150 Q575 100 620 150" stroke="#d97706"/>
+                  <path d="M620 150 Q660 106 700 150" stroke="#d97706"/>
+                </g>
+
+                <g font-family="Nunito, sans-serif" font-size="15" font-weight="800" text-anchor="middle">
+                  <text x="185" y="52" fill="#6d28d9">+1 hour</text>
+                  <text x="415" y="52" fill="#6d28d9">+1 hour</text>
+                  <text x="575" y="88" fill="#b45309">+15 min</text>
+                  <text x="660" y="94" fill="#b45309">+10 min</text>
+                </g>
+                <g font-family="Nunito, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">
+                  <text x="185" y="68">Mountain</text>
+                  <text x="415" y="68">Mountain</text>
+                  <text x="575" y="104">Hill</text>
+                  <text x="660" y="110">Hill</text>
+                </g>
+
+                <g>
+                  <circle cx="70" cy="150" r="7" fill="#7c3aed"/>
+                  <circle cx="300" cy="150" r="6" fill="#fff" stroke="#7c3aed" stroke-width="3"/>
+                  <circle cx="530" cy="150" r="6" fill="#fff" stroke="#7c3aed" stroke-width="3"/>
+                  <circle cx="620" cy="150" r="6" fill="#fff" stroke="#d97706" stroke-width="3"/>
+                  <circle cx="700" cy="150" r="7" fill="#059669"/>
+                </g>
+                <g font-family="'Space Mono', monospace" font-size="16" font-weight="700" text-anchor="middle" fill="#1e293b">
+                  <text x="70" y="180">2:45</text>
+                  <text x="300" y="180">3:45</text>
+                  <text x="530" y="180">4:45</text>
+                  <text x="620" y="180">5:00</text>
+                  <text x="700" y="180">5:10</text>
+                </g>
+                <g font-family="Nunito, sans-serif" font-size="12" font-weight="800" text-anchor="middle">
+                  <text x="70" y="202" fill="#7c3aed">START</text>
+                  <text x="700" y="202" fill="#059669">END</text>
+                </g>
+              </svg>
+              <figcaption>
+                2:45 PM to 5:10 PM = 1 hr + 1 hr + 15 min + 10 min =
+                <strong>2 hours and 25 minutes</strong>
+              </figcaption>
+            </figure>
           </div>
 
           <!-- Chapter 4 -->
           <div class="course-chapter-card">
             <div class="chapter-badge">Chapter 4</div>
-            <h3>🍁 Real-World Canadian Schedule Problem Solving</h3>
+            <h3>Real-World Canadian Schedule Problem Solving</h3>
             <p>Multi-step timing for real Canadian adventures: Toronto Blue Jays baseball innings, skating the frozen Rideau Canal in Ottawa, Algonquin Park hikes, and baking maple butter tarts!</p>
           </div>
 
           <!-- Chapter 5 -->
           <div class="course-chapter-card">
             <div class="chapter-badge">Chapter 5</div>
-            <h3>⭐ Waterloo CEMC &amp; Kangaroo Contest Logic (Tier 3)</h3>
+            <h3>Waterloo CEMC &amp; Kangaroo Contest Logic (Tier 3)</h3>
             <p>Enriched logic puzzles: Mirror clock reflections, clocks that lose 4 minutes every hour, cross-Canada time zones (Ottawa EST vs. Vancouver PST is 3 hours earlier!), and overlapping clock hands.</p>
           </div>
 
         </div>
 
         <div class="course-actions-footer">
-          <button class="btn btn-primary" onclick="setActivityMode('read_clock')">🚀 Start Practice Drills</button>
-          <button class="btn btn-secondary" onclick="setActivityMode('jump_builder')">🏔️ Try Mountain Jump Builder</button>
-          <a href="worksheets/olivia_complete_clock_course_workbook.md" class="btn btn-accent" download>📥 Download Master Course Workbook (.md)</a>
+          <button class="sf-btn sf-btn--play" onclick="setActivityMode('read_clock')">
+            <span data-sf-icon="play" data-sf-size="18"></span><span>Start Practice Drills</span>
+          </button>
+          <button class="sf-btn sf-btn--explore" onclick="setActivityMode('jump_builder')">
+            <span data-sf-icon="chartLine" data-sf-size="18"></span><span>Try Mountain Jump Builder</span>
+          </button>
+          <a href="worksheets/olivia_complete_clock_course_workbook.md" class="sf-btn sf-btn--print" download>
+            <span data-sf-icon="printable" data-sf-size="18"></span><span>Download Master Course Workbook</span>
+          </a>
         </div>
       </section>
 
@@ -227,7 +287,7 @@
       <!-- ================================================================= -->
       <section id="view-read-clock" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>👀 What Time Does the Clock Show?</h2>
+          <h2>What Time Does the Clock Show?</h2>
           <p>Read the hour (red) and minute (blue) hands, then type the digital time!</p>
         </div>
 
@@ -248,8 +308,8 @@
             <div class="feedback-msg hidden" id="read-clock-feedback"></div>
 
             <div class="clock-action-buttons">
-              <button class="btn btn-primary" onclick="checkReadClockAnswer()">✅ Check Answer</button>
-              <button class="btn btn-secondary" onclick="generateNewReadClockQuestion()">🎲 Next Clock</button>
+              <button class="btn btn-primary" onclick="checkReadClockAnswer()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Answer</span></button>
+              <button class="btn btn-secondary" onclick="generateNewReadClockQuestion()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Clock</span></button>
             </div>
           </div>
         </div>
@@ -260,7 +320,7 @@
       <!-- ================================================================= -->
       <section id="view-set-clock" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>🖐️ Set the Clock Hands!</h2>
+          <h2>Set the Clock Hands!</h2>
           <p>Use the buttons or click the clock to set the hands to match the target time!</p>
         </div>
 
@@ -300,8 +360,8 @@
           <div class="feedback-msg hidden" id="set-clock-feedback"></div>
 
           <div class="clock-action-buttons">
-            <button class="btn btn-primary" onclick="checkSetClockAnswer()">✅ Check Time</button>
-            <button class="btn btn-secondary" onclick="generateNewSetClockQuestion()">🎲 New Challenge</button>
+            <button class="btn btn-primary" onclick="checkSetClockAnswer()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Time</span></button>
+            <button class="btn btn-secondary" onclick="generateNewSetClockQuestion()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>New Challenge</span></button>
           </div>
         </div>
       </section>
@@ -311,7 +371,7 @@
       <!-- ================================================================= -->
       <section id="view-jump-builder" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>🏔️ Interactive "Mountains, Hills &amp; Rocks" Jump Builder</h2>
+          <h2>Interactive "Mountains, Hills &amp; Rocks" Jump Builder</h2>
           <p>Click the jump buttons below to build your timeline path from Start Time to End Time!</p>
         </div>
 
@@ -354,8 +414,8 @@
           <div class="feedback-msg hidden" id="jump-builder-feedback"></div>
 
           <div class="clock-action-buttons">
-            <button class="btn btn-primary" onclick="checkJumpBuilderCompletion()">🏁 Check Goal Reached</button>
-            <button class="btn btn-secondary" onclick="generateNewJumpBuilderChallenge()">🎲 New Challenge</button>
+            <button class="btn btn-primary" onclick="checkJumpBuilderCompletion()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Goal Reached</span></button>
+            <button class="btn btn-secondary" onclick="generateNewJumpBuilderChallenge()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>New Challenge</span></button>
           </div>
         </div>
       </section>
@@ -365,7 +425,7 @@
       <!-- ================================================================= -->
       <section id="view-elapsed-time" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>⏱️ Elapsed Time Challenge: How Much Time Passed?</h2>
+          <h2>Elapsed Time Challenge: How Much Time Passed?</h2>
           <p>Look at the Start and End Clocks and calculate the total duration!</p>
         </div>
 
@@ -388,7 +448,7 @@
 
           <!-- Visual Jump Numberline Helper -->
           <div class="timeline-helper-box">
-            <h4>📈 Timeline Jump Strategy:</h4>
+            <h4>Timeline Jump Strategy:</h4>
             <div class="timeline-visual" id="timeline-visual-jumps">
               <!-- Jump bubbles injected via JS -->
             </div>
@@ -406,8 +466,8 @@
             <div class="feedback-msg hidden" id="elapsed-feedback"></div>
 
             <div class="clock-action-buttons">
-              <button class="btn btn-primary" onclick="checkElapsedTimeAnswer()">✅ Check Elapsed Time</button>
-              <button class="btn btn-secondary" onclick="generateNewElapsedQuestion()">🎲 Next Problem</button>
+              <button class="btn btn-primary" onclick="checkElapsedTimeAnswer()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Elapsed Time</span></button>
+              <button class="btn btn-secondary" onclick="generateNewElapsedQuestion()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Problem</span></button>
             </div>
           </div>
         </div>
@@ -418,15 +478,13 @@
       <!-- ================================================================= -->
       <section id="view-word-problems" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>🍁 Real-World Canadian Schedule Story Problems</h2>
+          <h2>Real-World Canadian Schedule Story Problems</h2>
           <p>Solve multi-step schedule puzzles about sports, baking, wilderness hikes, and train rides!</p>
         </div>
 
         <div class="story-problem-card">
           <div class="story-icon" id="story-icon">🧁</div>
-          <h3 id="story-problem-text" class="story-text">
-            Olivia put a batch of blueberry muffins in the oven at 3:20 PM. They need to bake for 35 minutes. What time will the muffins be ready?
-          </h3>
+          <h3 id="story-problem-text" class="story-text">Olivia put a batch of blueberry muffins in the oven at 3:20 PM. They need to bake for 35 minutes. What time will the muffins be ready?</h3>
 
           <div class="story-options-grid" id="story-options-container">
             <!-- Options injected via JS -->
@@ -435,7 +493,7 @@
           <div class="feedback-msg hidden" id="story-feedback"></div>
 
           <div class="clock-action-buttons">
-            <button class="btn btn-secondary" onclick="generateNewStoryProblem()">🎲 Next Story Problem</button>
+            <button class="btn btn-secondary" onclick="generateNewStoryProblem()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Story Problem</span></button>
           </div>
         </div>
       </section>
@@ -445,14 +503,14 @@
       <!-- ================================================================= -->
       <section id="view-waterloo-puzzles" class="activity-stage hidden">
         <div class="stage-header">
-          <h2>⭐ Waterloo CEMC &amp; Kangaroo Contest Logic Arena</h2>
+          <h2>Waterloo CEMC &amp; Kangaroo Contest Logic Arena</h2>
           <p>Enriched Tier 3 Contest Challenges: Mirror clocks, faulty clocks &amp; cross-Canada time zones!</p>
         </div>
 
         <div class="contest-puzzles-container">
           <div class="contest-card">
             <div class="contest-tag">CONTEST PUZZLE #<span id="contest-num">1</span></div>
-            <h3 id="contest-title">The Mirror Reflection Clock Mystery 🪞</h3>
+            <h3 id="contest-title">The Mirror Reflection Clock Mystery</h3>
             <p id="contest-desc">Olivia looks into a mirror and sees the clock reflection behind her showing what looks like 3:40. What is the real time on the actual clock?</p>
             
             <div class="contest-visual-box" id="contest-visual-box">
@@ -466,7 +524,7 @@
             <div class="feedback-msg hidden" id="contest-feedback"></div>
 
             <div class="clock-action-buttons">
-              <button class="btn btn-secondary" onclick="nextContestPuzzle()">🎲 Next Contest Puzzle</button>
+              <button class="btn btn-secondary" onclick="nextContestPuzzle()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Contest Puzzle</span></button>
             </div>
           </div>
         </div>
@@ -477,11 +535,11 @@
       <!-- ================================================================= -->
       <section id="view-worksheet-gen" class="activity-stage hidden">
         <div class="stage-header no-print">
-          <h2>🖨️ Printable Clock Worksheet &amp; Master Workbook Generator</h2>
+          <h2>Printable Clock Worksheet &amp; Master Workbook Generator</h2>
           <p>Generate clean vector-printed clock homework or download the master 5-unit curriculum workbook!</p>
           <div class="worksheet-controls-row">
-            <button class="btn btn-primary" onclick="generatePrintableClocks()">🔄 Generate 12 Clocks</button>
-            <button class="btn btn-secondary" onclick="window.print()">🖨️ Print Worksheet (Paper Saver)</button>
+            <button class="btn btn-primary" onclick="generatePrintableClocks()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Generate 12 Clocks</span></button>
+            <button class="btn btn-secondary" onclick="window.print()"><span data-sf-icon="printer" data-sf-size="16"></span><span>Print Worksheet (Paper Saver)</span></button>
             <a href="worksheets/olivia_complete_clock_course_workbook.md" class="btn btn-accent" download>📥 Download Master Workbook (.md)</a>
             <label class="custom-check-pill">
               <input type="checkbox" id="chk-show-answers-print" onchange="togglePrintAnswers(this.checked)">
@@ -521,6 +579,8 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
+  <script src="../assets/sf/icons.js?v=3.0.0"></script>
+  <script src="../assets/sf/progress.js?v=3.0.0"></script>
   <script src="js/clock-engine.js"></script>
 </body>
 </html>

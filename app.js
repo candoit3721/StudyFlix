@@ -4,146 +4,164 @@
  */
 
 // Default Profile Configurations
+/**
+ * Default profile catalog.
+ *
+ * Every catalog entry declares three things the UI needs in order to look
+ * like a curated shelf instead of a palette test:
+ *   kind    quest | lesson | printable  -> the card treatment and type mark,
+ *                                          so the ICON tells you what opens
+ *   family  subject palette             -> shared across a subject's tiles
+ *   art     key-art scene id            -> a drawn scene, never a flat gradient
+ */
 const DEFAULT_PROFILES = [
   {
     id: "sophia",
     name: "Sophia",
-    avatar: "👩‍🔬",
+    glyph: "flask",
     grade: "Grade 5 & 6 Champion",
     themeClass: "theme-sophia",
+    family: "rome",
     featured: {
-      tag: "🏛️ ANCIENT ROME & CIVILIZATION QUEST",
+      tag: "FEATURED QUEST",
       title: "Sophia's Ancient Rome & Engineering Quest",
       desc: "Step back 2,000 years! Master Roman semi-circular arch keystones, aqueduct gravity hydraulics, the Colosseum hypogeum, Caesar's military ciphers, and Senate law!",
       link: "sophia-rome/index.html",
-      bgGradient: "linear-gradient(135deg, rgba(200,16,46,0.9) 0%, rgba(212,175,55,0.85) 50%, rgba(26,26,36,0.95) 100%)"
+      family: "rome",
+      art: "rome-forum"
     },
     subjects: [
-      { title: "🏛️ Ancient Rome Quest & Studio", icon: "🏛️", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
-      { title: "🧪 Science & Chemistry Quest", icon: "⚛️", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
-      { title: "📐 Grade 5/6 Math Studio", icon: "📏", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #6366f1, #3b82f6)" }
+      { title: "Ancient Rome Quest & Studio", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", kind: "quest", family: "rome", art: "rome-forum" },
+      { title: "Science & Chemistry Quest", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", kind: "quest", family: "science", art: "sci-atom" },
+      { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" }
     ],
     topics: [
-      { title: "🌉 Roman Arch & Keystone Lab", icon: "🏛️", badge: "ENGINEERING", desc: "Interactive keystone insertion, compression forces & abutments", link: "sophia-rome/index.html#tab-engineering", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
-      { title: "💧 Aqueduct Hydraulic Flow", icon: "🌊", badge: "HYDRAULICS", desc: "Adjust gravity slopes (0.2%-0.5%) to transport mountain water", link: "sophia-rome/index.html#tab-engineering", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
-      { title: "🕵️ Caesar's Military Cipher", icon: "🕶️", badge: "CRYPTOGRAPHY", desc: "Decode top-secret battlefield messages sent across Gaul", link: "sophia-rome/index.html#tab-cipher", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
-      { title: "🔢 Roman Numeral Converter", icon: "📜", badge: "ROMAN MATH", desc: "Additive and subtractive numeral calculations (IV, IX, XL, CM)", link: "sophia-rome/index.html#tab-cipher", bg: "linear-gradient(135deg, #4338ca, #6366f1)" },
-      { title: "⚖️ Senate & Twelve Tables", icon: "📜", badge: "CIVICS & LAW", desc: "Patricians vs. Plebeians, Rule of Law & Canadian Charter", link: "sophia-rome/index.html#lesson-2", bg: "linear-gradient(135deg, #7c2d12, #ea580c)" },
-      { title: "🌋 Pompeii & Mount Vesuvius", icon: "🏺", badge: "DAILY LIFE", desc: "Explore Thermae baths, hypocaust heating, and 79 CE artifacts", link: "sophia-rome/index.html#lesson-5", bg: "linear-gradient(135deg, #b45309, #d97706)" },
-      { title: "🎯 Roman Quiz Arena", icon: "👑", badge: "CHALLENGE", desc: "Test Republic history, engineering feats & gladiators for XP", link: "sophia-rome/index.html#tab-quiz", bg: "linear-gradient(135deg, #a21caf, #e11d48)" },
-      { title: "⚛️ Periodic Table First 20", icon: "🧪", badge: "CHEMISTRY", desc: "Mnemonics ('Happy Henry...') & Element Superpowers", link: "sophia-science/index.html#tab-periodic", bg: "linear-gradient(135deg, #0ea5e9, #6366f1)" },
-      { title: "🥞 Matter & Reactions", icon: "🔥", badge: "GRADE 5 CORE", desc: "Physical vs. Chemical changes and Conservation of Mass", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #f59e0b, #ef4444)" },
-      { title: "🕵️ Chemical Word Decoder", icon: "🧩", badge: "SCIENCE PUZZLE", desc: "Crack secret spy words built from element symbols!", link: "sophia-science/index.html#tab-decoder", bg: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
-      { title: "🏙️ Cell City Biology Lab", icon: "🔬", badge: "GRADE 6 PREP", desc: "Nucleus Mayor, Mitochondria Powerhouse & plant cell organelles", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #10b981, #059669)" },
-      { title: "🎢 Roller Coaster Physics", icon: "🚀", badge: "PHYSICS", desc: "Potential vs. Kinetic energy & Newton's 3 Laws of Motion", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #8b5cf6, #3b82f6)" },
-      { title: "🍕 Fraction Mastery", icon: "🍰", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" }
+      { title: "Roman Arch & Keystone Lab", badge: "ENGINEERING", desc: "Interactive keystone insertion, compression forces & abutments", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-arch" },
+      { title: "Aqueduct Hydraulic Flow", badge: "HYDRAULICS", desc: "Adjust gravity slopes (0.2%-0.5%) to transport mountain water", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-aqueduct" },
+      { title: "Caesar's Military Cipher", badge: "CRYPTOGRAPHY", desc: "Decode top-secret battlefield messages sent across Gaul", link: "sophia-rome/index.html#tab-cipher", kind: "lesson", family: "rome", art: "rome-cipher" },
+      { title: "Roman Numeral Converter", badge: "ROMAN MATH", desc: "Additive and subtractive numeral calculations (IV, IX, XL, CM)", link: "sophia-rome/index.html#tab-cipher", kind: "lesson", family: "rome", art: "rome-numerals" },
+      { title: "Senate & Twelve Tables", badge: "CIVICS & LAW", desc: "Patricians vs. Plebeians, Rule of Law & Canadian Charter", link: "sophia-rome/index.html#lesson-2", kind: "lesson", family: "rome", art: "rome-senate" },
+      { title: "Pompeii & Mount Vesuvius", badge: "DAILY LIFE", desc: "Explore Thermae baths, hypocaust heating, and 79 CE artifacts", link: "sophia-rome/index.html#lesson-5", kind: "lesson", family: "rome", art: "rome-vesuvius" },
+      { title: "Roman Quiz Arena", badge: "CHALLENGE", desc: "Test Republic history, engineering feats & gladiators for XP", link: "sophia-rome/index.html#tab-quiz", kind: "lesson", family: "rome", art: "generic-quiz" },
+      { title: "Periodic Table First 20", badge: "CHEMISTRY", desc: "Mnemonics ('Happy Henry...') & Element Superpowers", link: "sophia-science/index.html#tab-periodic", kind: "lesson", family: "science", art: "sci-periodic" },
+      { title: "Matter & Reactions", badge: "GRADE 5 CORE", desc: "Physical vs. Chemical changes and Conservation of Mass", link: "sophia-science/index.html#tab-learn", kind: "lesson", family: "science", art: "sci-reaction" },
+      { title: "Chemical Word Decoder", badge: "SCIENCE PUZZLE", desc: "Crack secret spy words built from element symbols!", link: "sophia-science/index.html#tab-decoder", kind: "lesson", family: "science", art: "sci-decoder" },
+      { title: "Cell City Biology Lab", badge: "GRADE 6 PREP", desc: "Nucleus Mayor, Mitochondria Powerhouse & plant cell organelles", link: "sophia-science/index.html#tab-learn", kind: "lesson", family: "science", art: "sci-cell" },
+      { title: "Roller Coaster Physics", badge: "PHYSICS", desc: "Potential vs. Kinetic energy & Newton's 3 Laws of Motion", link: "sophia-science/index.html#tab-learn", kind: "lesson", family: "science", art: "sci-coaster" },
+      { title: "Fraction Mastery", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", kind: "lesson", family: "math", art: "math-fractions" }
     ],
     printable: [
-      { title: "📖 Complete Ancient Rome Workbook", icon: "🏛️", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
-      { title: "📖 Complete Science Workbook", icon: "📘", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
-      { title: "🖨️ Grade 5/6 Math Practice", icon: "📝", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
+      { title: "Complete Ancient Rome Workbook", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", kind: "printable", family: "rome", art: "generic-printable" },
+      { title: "Complete Science Workbook", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", kind: "printable", family: "science", art: "generic-printable" },
+      { title: "Grade 5/6 Math Practice", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", kind: "printable", family: "math", art: "math-worksheet" }
     ]
   },
   {
     id: "olivia",
     name: "Olivia",
-    avatar: "👧",
+    glyph: "clock",
     grade: "Grade 3 Explorer",
     themeClass: "theme-olivia",
+    family: "grade3",
     featured: {
-      tag: "✏️ GRADE 3 MATH STUDIO",
+      tag: "FEATURED STUDIO",
       title: "Olivia's Math Worksheet Studio",
       desc: "Operations with carrying & borrowing, 12x12 times tables, clock time, money math, geometry, and fun word problems!",
       link: "olivia-math/index.html",
-      bgGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.85) 100%)"
+      family: "grade3",
+      art: "math-operations"
     },
     subjects: [
-      { title: "✏️ Grade 3 Math Studio", icon: "📐", badge: "CORE STUDIO", desc: "Interactive practice & clean printable worksheet generator", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #a855f7, #ec4899)" },
-      { title: "⏰ Clock & Elapsed Time Studio", icon: "🕰️", badge: "NEW & INTERACTIVE", desc: "Read analog clocks, set hands, timeline jumps & time word problems", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #8b5cf6, #3b82f6)" },
-      { title: "✖️ Times Table Blitz", icon: "⚡", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #f59e0b, #fbbf24)" },
-      { title: "💰 Money & Coin Math", icon: "🪙", badge: "REAL LIFE", desc: "Counting dollars, quarters, dimes, nickels, and making change", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #10b981, #059669)" }
+      { title: "Grade 3 Math Studio", badge: "CORE STUDIO", desc: "Interactive practice & clean printable worksheet generator", link: "olivia-math/index.html", kind: "quest", family: "grade3", art: "math-operations" },
+      { title: "Clock & Elapsed Time Studio", badge: "NEW & INTERACTIVE", desc: "Read analog clocks, set hands, timeline jumps & time word problems", link: "olivia-math/clock-time.html", kind: "quest", family: "grade3", art: "g3-clock" },
+      { title: "Times Table Blitz", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-times" },
+      { title: "Money & Coin Math", badge: "REAL LIFE", desc: "Counting dollars, quarters, dimes, nickels, and making change", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-money" }
     ],
     topics: [
-      { title: "⏰ Telling Time & Clocks", icon: "🕰️", badge: "TIME MATH", desc: "Read hour & minute hands with 5-minute intervals", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
-      { title: "⏱️ Elapsed Time Numberline", icon: "📈", badge: "TIMELINE JUMPS", desc: "Calculate elapsed hours & minutes with visual jumps", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #06b6d4, #10b981)" },
-      { title: "➕ 3-Digit Addition", icon: "✨", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" },
-      { title: "➖ 3-Digit Subtraction", icon: "🎯", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #8b5cf6, #a855f7)" },
-      { title: "🧩 Missing Addend Equations", icon: "🔍", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #3b82f6, #06b6d4)" },
-      { title: "🍕 Early Equal Fractions", icon: "🍰", badge: "FRACTIONS", desc: "Visual halves, thirds, fourths, sixths, and eighths", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #f59e0b, #d97706)" }
+      { title: "Telling Time & Clocks", badge: "TIME MATH", desc: "Read hour & minute hands with 5-minute intervals", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-clock" },
+      { title: "Elapsed Time Numberline", badge: "TIMELINE JUMPS", desc: "Calculate elapsed hours & minutes with visual jumps", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-numberline" },
+      { title: "3-Digit Addition", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column" },
+      { title: "3-Digit Subtraction", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column-borrow" },
+      { title: "Missing Addend Equations", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-missing" },
+      { title: "Early Equal Fractions", badge: "FRACTIONS", desc: "Visual halves, thirds, fourths, sixths, and eighths", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "math-fractions" }
     ],
     printable: [
-      { title: "🖨️ Printable Clock & Time Worksheets", icon: "⏰", badge: "CLOCK PDF", desc: "12-clock test generator to draw hands or write digital times", link: "olivia-math/clock-time.html", bg: "linear-gradient(135deg, #6d28d9, #4f46e5)" },
-      { title: "🖨️ 100-Problem Times Table Sprint", icon: "📄", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
-      { title: "🖨️ Daily Math Worksheet", icon: "📝", badge: "CUSTOM PDF", desc: "Generate custom mixed review tests with paper-saving keys", link: "olivia-math/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
+      { title: "Printable Clock & Time Worksheets", badge: "CLOCK PDF", desc: "12-clock test generator to draw hands or write digital times", link: "olivia-math/clock-time.html", kind: "printable", family: "grade3", art: "g3-clock" },
+      { title: "100-Problem Times Table Sprint", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "g3-times" },
+      { title: "Daily Math Worksheet", badge: "CUSTOM PDF", desc: "Generate custom mixed review tests with paper-saving keys", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "math-worksheet" }
     ]
   },
   {
     id: "yaya",
     name: "Yaya",
-    avatar: "🧑‍🎓",
-    grade: "Pre-University & Calculus Advanced",
+    glyph: "sigma",
+    grade: "Pre-University Calculus",
     themeClass: "theme-yaya",
+    family: "calculus",
     featured: {
-      tag: "🎓 ADVANCED MATHEMATICS & STATISTICS",
+      tag: "FEATURED STUDIO",
       title: "Yaya's Calculus & Statistics Studio",
       desc: "Pre-University, AP Calculus AB/BC, College Entrance Exam Prep, Derivatives, Integrals, Probability Distributions, and Hypothesis Testing.",
       link: "yaya/index.html",
-      bgGradient: "linear-gradient(135deg, rgba(30,58,138,0.85) 0%, rgba(59,130,246,0.85) 50%, rgba(245,158,11,0.9) 100%)"
+      family: "calculus",
+      art: "calc-derivative"
     },
     subjects: [
-      { title: "🎓 Calculus & Statistics Studio", icon: "📈", badge: "EXAM STUDIO", desc: "Derivatives, Integrals, Probability & Statistical Inference", link: "yaya/index.html", bg: "linear-gradient(135deg, #1e3a8a, #3b82f6)" },
-      { title: "📉 Derivative & Extrema Analyzer", icon: "📐", badge: "CALCULUS", desc: "Tangent equations, monotonic intervals, inflection points", link: "yaya/index.html", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
-      { title: "📊 Probability & Statistics Hub", icon: "🎲", badge: "STATISTICS", desc: "Discrete distributions, Normal distribution & Chi-Square test", link: "yaya/index.html", bg: "linear-gradient(135deg, #d97706, #b45309)" },
-      { title: "📐 Definite Integrals & Volume", icon: "🌌", badge: "INTEGRATION", desc: "Integration by substitution, by parts, and solids of revolution", link: "yaya/index.html", bg: "linear-gradient(135deg, #4f46e5, #7c3aed)" }
+      { title: "Calculus & Statistics Studio", badge: "EXAM STUDIO", desc: "Derivatives, Integrals, Probability & Statistical Inference", link: "yaya/index.html", kind: "quest", family: "calculus", art: "calc-derivative" },
+      { title: "Derivative & Extrema Analyzer", badge: "CALCULUS", desc: "Tangent equations, monotonic intervals, inflection points", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-tangent" },
+      { title: "Probability & Statistics Hub", badge: "STATISTICS", desc: "Discrete distributions, Normal distribution & Chi-Square test", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-distribution" },
+      { title: "Definite Integrals & Volume", badge: "INTEGRATION", desc: "Integration by substitution, by parts, and solids of revolution", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-integral" }
     ],
     topics: [
-      { title: "📉 参变分离法与函数零点", icon: "📐", badge: "高难度专题", desc: "导数切线不等式放缩与泰勒展开二阶逼近", link: "yaya/index.html", bg: "linear-gradient(135deg, #1e3a8a, #0284c7)" },
-      { title: "🎲 超几何分布与二项分布", icon: "🎯", badge: "概率决策", desc: "离散型随机变量期望与方差性质与经济决策模型", link: "yaya/index.html", bg: "linear-gradient(135deg, #b45309, #d97706)" },
-      { title: "📊 2x2 列联表与卡方检验", icon: "📋", badge: "统计推断", desc: "独立性检验卡方统计量计算与显著性水平决策", link: "yaya/index.html", bg: "linear-gradient(135deg, #0f766e, #0d9488)" },
-      { title: "📈 最小二乘线性回归", icon: "🔬", badge: "回归分析", desc: "相关系数 r 计算与非线性指数增长对数线性化", link: "yaya/index.html", bg: "linear-gradient(135deg, #4338ca, #6366f1)" }
+      { title: "参变分离法与函数零点", badge: "高难度专题", desc: "导数切线不等式放缩与泰勒展开二阶逼近", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-roots" },
+      { title: "超几何分布与二项分布", badge: "概率决策", desc: "离散型随机变量期望与方差性质与经济决策模型", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-distribution" },
+      { title: "2x2 列联表与卡方检验", badge: "统计推断", desc: "独立性检验卡方统计量计算与显著性水平决策", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-table" },
+      { title: "最小二乘线性回归", badge: "回归分析", desc: "相关系数 r 计算与非线性指数增长对数线性化", link: "yaya/index.html", kind: "lesson", family: "calculus", art: "calc-regression" }
     ],
     printable: [
-      { title: "🖨️ 高考数学/自主招生标准试卷", icon: "📄", badge: "A4 试卷排版", desc: "标准考场抬头、草稿答题区与独立答案速查页", link: "yaya/index.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
-      { title: "🖨️ AP Calculus Diagnostic Exam", icon: "📝", badge: "DIAGNOSTIC", desc: "Full section test generator with detailed rubric solutions", link: "yaya/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
+      { title: "高考数学/自主招生标准试卷", badge: "A4 试卷排版", desc: "标准考场抬头、草稿答题区与独立答案速查页", link: "yaya/index.html", kind: "printable", family: "calculus", art: "calc-exam" },
+      { title: "AP Calculus Diagnostic Exam", badge: "DIAGNOSTIC", desc: "Full section test generator with detailed rubric solutions", link: "yaya/index.html", kind: "printable", family: "calculus", art: "generic-printable" }
     ]
   },
   {
     id: "mama",
     name: "Mama",
-    avatar: "☕",
+    glyph: "coffee",
     grade: "Master Coffee Connoisseur",
     themeClass: "theme-mama",
+    family: "coffee",
     featured: {
-      tag: "☕ SPECIALTY COFFEE MASTERCLASS",
+      tag: "FEATURED MASTERCLASS",
       title: "Mama's Specialty Coffee & Bean Tasting Studio",
       desc: "Explore single-origin terroirs (Ethiopia, Panama, Colombia), Arabica varietals (Geisha, Bourbon, Typica), processing methods, SCA Flavour Wheel, and golden hand-drip brewing recipes!",
       link: "mama/index.html",
-      bgGradient: "linear-gradient(135deg, rgba(180,83,9,0.9) 0%, rgba(229,169,60,0.85) 50%, rgba(26,22,21,0.95) 100%)"
+      family: "coffee",
+      art: "coffee-cup"
     },
     subjects: [
-      { title: "☕ Specialty Coffee Masterclass", icon: "☕", badge: "NEW STUDIO", desc: "Bean Knowledge, Global Terroirs, Processing & Flavour Wheels", link: "mama/index.html", bg: "linear-gradient(135deg, #b45309, #d49a37)" },
-      { title: "🌍 World Coffee Atlas & Origins", icon: "🌍", badge: "TERROIR", desc: "Ethiopia Yirgacheffe, Kenya AA, Panama Geisha, Colombia Huila", link: "mama/index.html#tab-origins", bg: "linear-gradient(135deg, #2d6a4f, #52b788)" },
-      { title: "🎨 SCA Flavour Wheel & Tasting", icon: "🎨", badge: "CUPPING", desc: "Floral, Fruity, Caramel, Cocoa & Spices Cupping Guide", link: "mama/index.html#tab-flavour", bg: "linear-gradient(135deg, #c84b31, #e5a93c)" },
-      { title: "⚖️ Mama's Bean Matchmaker", icon: "🎯", badge: "BREWING RECIPE", desc: "Personalized bean pairing, grind sizes & golden V60 ratios", link: "mama/index.html#tab-matchmaker", bg: "linear-gradient(135deg, #7c2d12, #b45309)" }
+      { title: "Specialty Coffee Masterclass", badge: "NEW STUDIO", desc: "Bean Knowledge, Global Terroirs, Processing & Flavour Wheels", link: "mama/index.html", kind: "quest", family: "coffee", art: "coffee-cup" },
+      { title: "World Coffee Atlas & Origins", badge: "TERROIR", desc: "Ethiopia Yirgacheffe, Kenya AA, Panama Geisha, Colombia Huila", link: "mama/index.html#tab-origins", kind: "lesson", family: "coffee", art: "coffee-belt" },
+      { title: "SCA Flavour Wheel & Tasting", badge: "CUPPING", desc: "Floral, Fruity, Caramel, Cocoa & Spices Cupping Guide", link: "mama/index.html#tab-flavour", kind: "lesson", family: "coffee", art: "coffee-flavour" },
+      { title: "Mama's Bean Matchmaker", badge: "BREWING RECIPE", desc: "Personalized bean pairing, grind sizes & golden V60 ratios", link: "mama/index.html#tab-matchmaker", kind: "lesson", family: "coffee", art: "coffee-brew" }
     ],
     topics: [
-      { title: "🐐 Legend of Kaldi & Coffee Belt", icon: "🌍", badge: "HISTORY", desc: "Ethiopian highlands, ancient Mocha port & high-altitude terroir", link: "mama/index.html#tab-origins", bg: "linear-gradient(135deg, #b45309, #d97706)" },
-      { title: "👑 Panama Geisha & Arabica Lineages", icon: "🌿", badge: "VARIETALS", desc: "Geisha jasmine floral, Bourbon sweetness & Typica ancestors", link: "mama/index.html#tab-varietals", bg: "linear-gradient(135deg, #2d6a4f, #1b4332)" },
-      { title: "🔬 Cherry Anatomy & Layers", icon: "🍒", badge: "BOTANY", desc: "Pulp mesocarp, sugar mucilage, parchment & green coffee bean", link: "mama/index.html#tab-varietals", bg: "linear-gradient(135deg, #c84b31, #a83232)" },
-      { title: "💧 Washed vs. Natural vs. Honey", icon: "☀️", badge: "PROCESSING", desc: "Clean citric tea clarity vs. sun-dried strawberry berry sweetness", link: "mama/index.html#tab-processing", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
-      { title: "🔥 Interactive Roast Spectrum", icon: "🔥", badge: "ROASTING", desc: "Light City to Dark French Roast with First Crack caramelization", link: "mama/index.html#tab-processing", bg: "linear-gradient(135deg, #451a03, #b45309)" },
-      { title: "☕ Golden V60 Pour-Over Recipe", icon: "📋", badge: "BREWING", desc: "1:16 ratio, 92°C water temp, 45g bloom for clean balance", link: "mama/index.html#tab-matchmaker", bg: "linear-gradient(135deg, #b45309, #e5a93c)" },
-      { title: "🏆 Barista Connoisseur Quiz Arena", icon: "🏅", badge: "QUIZ & TROPHIES", desc: "Test cupping knowledge and unlock 8 Master Barista Badges", link: "mama/index.html#tab-quiz", bg: "linear-gradient(135deg, #7c3aed, #ec4899)" }
+      { title: "Legend of Kaldi & Coffee Belt", badge: "HISTORY", desc: "Ethiopian highlands, ancient Mocha port & high-altitude terroir", link: "mama/index.html#tab-origins", kind: "lesson", family: "coffee", art: "coffee-mountain" },
+      { title: "Panama Geisha & Arabica Lineages", badge: "VARIETALS", desc: "Geisha jasmine floral, Bourbon sweetness & Typica ancestors", link: "mama/index.html#tab-varietals", kind: "lesson", family: "coffee", art: "coffee-varietal" },
+      { title: "Cherry Anatomy & Layers", badge: "BOTANY", desc: "Pulp mesocarp, sugar mucilage, parchment & green coffee bean", link: "mama/index.html#tab-varietals", kind: "lesson", family: "coffee", art: "coffee-cherry" },
+      { title: "Washed vs. Natural vs. Honey", badge: "PROCESSING", desc: "Clean citric tea clarity vs. sun-dried strawberry berry sweetness", link: "mama/index.html#tab-processing", kind: "lesson", family: "coffee", art: "coffee-processing" },
+      { title: "Interactive Roast Spectrum", badge: "ROASTING", desc: "Light City to Dark French Roast with First Crack caramelization", link: "mama/index.html#tab-processing", kind: "lesson", family: "coffee", art: "coffee-roast" },
+      { title: "Golden V60 Pour-Over Recipe", badge: "BREWING", desc: "1:16 ratio, 92°C water temp, 45g bloom for clean balance", link: "mama/index.html#tab-matchmaker", kind: "lesson", family: "coffee", art: "coffee-brew" },
+      { title: "Barista Connoisseur Quiz Arena", badge: "QUIZ & TROPHIES", desc: "Test cupping knowledge and unlock 8 Master Barista Badges", link: "mama/index.html#tab-quiz", kind: "lesson", family: "coffee", art: "generic-quiz" }
     ],
     printable: [
-      { title: "📖 Mama's Coffee Tasting Journal", icon: "☕", badge: "PRINTABLE LOG", desc: "SCA cupping scoresheets, origin matrix & golden brewing compass", link: "mama/workbook.html", bg: "linear-gradient(135deg, #b45309, #7c2d12)" },
-      { title: "📄 Complete Coffee Masterclass Handbook", icon: "📜", badge: "MASTER GUIDE", desc: "Comprehensive origin profiles, genetics & extraction science", link: "mama/00_MAMA_COFFEE_MASTERCLASS_GUIDE.md", bg: "linear-gradient(135deg, #1e293b, #334155)" }
+      { title: "Mama's Coffee Tasting Journal", badge: "PRINTABLE LOG", desc: "SCA cupping scoresheets, origin matrix & golden brewing compass", link: "mama/workbook.html", kind: "printable", family: "coffee", art: "coffee-journal" },
+      { title: "Complete Coffee Masterclass Handbook", badge: "MASTER GUIDE", desc: "Comprehensive origin profiles, genetics & extraction science", link: "mama/00_MAMA_COFFEE_MASTERCLASS_GUIDE.md", kind: "printable", family: "coffee", art: "generic-printable" }
     ]
   }
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "2.6.0";
+const APP_VERSION = "3.0.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
@@ -159,7 +177,7 @@ if (savedProfiles) {
     return {
       ...def,
       name: saved.name || def.name,
-      avatar: saved.avatar || def.avatar,
+      glyph: (saved.glyph && SFIcons.has(saved.glyph)) ? saved.glyph : def.glyph,
       grade: saved.grade || def.grade
     };
   });
@@ -223,6 +241,7 @@ function init() {
   localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
   buildSearchIndex();
   renderProfileSelectScreen();
+  initRowAffordances();
 
   // Check if there was an active profile previously selected
   if (activeProfileId) {
@@ -264,9 +283,12 @@ function renderProfileSelectScreen() {
   appProfiles.forEach(p => {
     const card = document.createElement('div');
     card.className = 'profile-card';
+    // Every avatar is built the same way: monogram on the profile's own colour,
+    // with a small subject glyph. No profile can read as a broken avatar.
     card.innerHTML = `
       <div class="profile-avatar-box ${p.themeClass}">
-        ${p.avatar}
+        <span class="profile-monogram">${p.name.charAt(0).toUpperCase()}</span>
+        <span class="profile-glyph">${SFIcons.icon(p.glyph, { size: 22 })}</span>
       </div>
       <div class="profile-name">${p.name}</div>
       <div class="profile-grade-tag">${p.grade}</div>
@@ -286,11 +308,11 @@ function toggleManageMode() {
   isManageMode = !isManageMode;
   const btn = document.getElementById('manage-profiles-btn');
   if (isManageMode) {
-    btn.textContent = '✅ Done Managing';
+    btn.innerHTML = SFIcons.icon('check', { size: 18 }) + '<span>Done Managing</span>';
     btn.classList.add('btn-primary');
     btn.classList.remove('btn-outline');
   } else {
-    btn.textContent = '⚙️ Manage Profiles';
+    btn.innerHTML = SFIcons.icon('settings', { size: 18 }) + '<span>Manage Profiles</span>';
     btn.classList.remove('btn-primary');
     btn.classList.add('btn-outline');
   }
@@ -316,14 +338,15 @@ function selectProfile(profileId, triggerConfetti = true) {
   localStorage.setItem('studyflix_active_profile_id', profileId);
 
   // Update UI Elements for active profile
-  document.getElementById('nav-profile-avatar').textContent = profile.avatar;
+  const navAvatar = document.getElementById('nav-profile-avatar');
+  navAvatar.textContent = profile.name.charAt(0).toUpperCase();
+  navAvatar.className = 'profile-mini-avatar ' + profile.themeClass;
   document.getElementById('nav-profile-name').textContent = profile.name;
-  
-  // Profile Stats
-  const profileXp = localStorage.getItem(`studyflix_${profileId}_xp`) || '120';
-  const profileStreak = localStorage.getItem(`studyflix_${profileId}_streak`) || '3';
-  document.getElementById('current-profile-xp').textContent = profileXp;
-  document.getElementById('current-profile-streak').textContent = profileStreak;
+
+  // Opening the hub counts as studying today, then the shell shows the ONE
+  // canonical XP/streak record that the studios also read and write.
+  SFProgress.touch(profileId);
+  renderProfileStats(profileId);
 
   // Render Dropdown List
   renderProfileDropdown();
@@ -344,6 +367,10 @@ function selectProfile(profileId, triggerConfetti = true) {
   document.getElementById('dashboard-screen').classList.remove('hidden');
   document.getElementById('main-header').classList.remove('hidden');
 
+  // Rows are measured only once they are actually laid out; doing it while the
+  // dashboard is still hidden reports zero width and hides every arrow.
+  refreshRowAffordances();
+
   if (triggerConfetti) {
     launchConfetti();
   }
@@ -358,7 +385,7 @@ function renderProfileDropdown() {
       const item = document.createElement('button');
       item.className = 'dropdown-item';
       item.innerHTML = `
-        <span style="font-size:1.2rem;">${p.avatar}</span>
+        <span class="dropdown-avatar ${p.themeClass}">${p.name.charAt(0).toUpperCase()}</span>
         <div>
           <div style="font-weight:700;">${p.name}</div>
           <div style="font-size:0.75rem; color:#888;">${p.grade}</div>
@@ -380,12 +407,33 @@ function toggleProfileDropdown() {
 }
 
 // 2. Populate Dashboard Content
+/** Paint the nav XP and streak pills from the shared progress record. */
+function renderProfileStats(profileId) {
+  const rec = SFProgress.get(profileId);
+  const xpEl = document.getElementById('current-profile-xp');
+  const streakEl = document.getElementById('current-profile-streak');
+  if (xpEl) xpEl.textContent = rec.xp;
+  if (streakEl) streakEl.textContent = rec.streak;
+}
+
+// A studio inside the iframe can award XP; the shell must not go stale.
+SFProgress.onChange((profileId) => {
+  if (profileId === activeProfileId) renderProfileStats(profileId);
+});
+
 function populateDashboard(profile) {
-  // Hero Billboard
+  // Hero Billboard — real key art for the featured quest, not an abstract
+  // gradient that says nothing about what the quest contains.
   document.getElementById('hero-tag').textContent = profile.featured.tag;
   document.getElementById('hero-title').textContent = profile.featured.title;
   document.getElementById('hero-desc').textContent = profile.featured.desc;
-  document.getElementById('hero-billboard').style.background = `linear-gradient(180deg, rgba(20,20,20,0.1) 0%, rgba(20,20,20,0.85) 80%, #141414 100%), ${profile.featured.bgGradient}`;
+  const backdrop = document.getElementById('hero-backdrop');
+  if (backdrop) {
+    backdrop.innerHTML = SFKeyArt.art(profile.featured.art, profile.featured.family, 'quest');
+  }
+  const billboard = document.getElementById('hero-billboard');
+  billboard.style.setProperty('--hero-accent', SFKeyArt.palette(profile.featured.family).accent);
+  billboard.style.background = '';
 
   // Row 1: Core Subjects
   document.getElementById('row1-title').textContent = `${profile.name}'s Core Subjects & Studios`;
@@ -398,25 +446,103 @@ function populateDashboard(profile) {
   renderMediaRow('row-printable-slider', profile.printable);
 }
 
+// A card's type mark tells you what you are about to open, before you read
+// the label. One icon per content type, product-wide.
+const CONTENT_TYPES = {
+  quest:     { icon: 'quest',     label: 'Quest' },
+  lesson:    { icon: 'lesson',    label: 'Lesson' },
+  printable: { icon: 'printable', label: 'Printable' }
+};
+
 function renderMediaRow(sliderId, items) {
   const slider = document.getElementById(sliderId);
   slider.innerHTML = '';
 
   items.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'media-card';
+    const kind = CONTENT_TYPES[item.kind] ? item.kind : 'lesson';
+    const type = CONTENT_TYPES[kind];
+    const card = document.createElement('button');
+    card.className = `media-card media-card--${kind}`;
+    card.type = 'button';
+    card.style.setProperty('--card-accent', SFKeyArt.palette(item.family).accent);
     card.innerHTML = `
-      <div class="card-bg-gradient" style="background: ${item.bg}"></div>
-      <div class="card-icon">${item.icon}</div>
-      <div class="card-badge">${item.badge}</div>
-      <div class="card-content">
-        <div class="card-title">${item.title}</div>
-        <div class="card-desc">${item.desc}</div>
-      </div>
+      <span class="card-art">${SFKeyArt.art(item.art, item.family, kind)}</span>
+      <span class="card-scrim"></span>
+      <span class="card-type" data-kind="${kind}">
+        ${SFIcons.icon(type.icon, { size: 15 })}<span>${type.label}</span>
+      </span>
+      <span class="card-badge">${item.badge}</span>
+      <span class="card-content">
+        <span class="card-title">${item.title}</span>
+        <span class="card-desc">${item.desc}</span>
+      </span>
     `;
     card.onclick = () => openStudio(item.link, item.title);
     slider.appendChild(card);
   });
+}
+
+/**
+ * Recompute every row's fades and arrows.
+ * Runs immediately AND on the next frame: a row measured before its first
+ * paint reports zero width, which would leave a scrollable row with no
+ * visible way to scroll it.
+ */
+function refreshRowAffordances() {
+  const run = () => document.querySelectorAll('.row-slider').forEach(s => updateRowAffordances(s));
+  // This is usually called immediately after a container stops being
+  // display:none. Force the pending style recalculation first, or the rows
+  // still measure as zero-width and a scrollable row shows no way to scroll.
+  void document.body.offsetHeight;
+  run();
+  requestAnimationFrame(run);
+}
+
+/**
+ * Netflix either peeks the next tile deliberately or fades it under a mask.
+ * A hard crop reads as unfinished, so every row gets edge fades plus real
+ * arrow controls, and both are hidden when there is nothing more to scroll to.
+ */
+function updateRowAffordances(slider) {
+  const wrap = slider.closest('.row-slider-wrap');
+  if (!wrap) return;
+  const max = slider.scrollWidth - slider.clientWidth;
+  // Sub-pixel layout and the slider's own padding can leave scrollLeft a
+  // hair off zero; a few pixels is still "at the start".
+  const EPS = 6;
+  const scrollable = max > EPS;
+  wrap.classList.toggle('can-scroll-left', scrollable && slider.scrollLeft > EPS);
+  wrap.classList.toggle('can-scroll-right', scrollable && slider.scrollLeft < max - EPS);
+}
+
+function scrollRow(button, direction) {
+  const wrap = button.closest('.row-slider-wrap');
+  const slider = wrap && wrap.querySelector('.row-slider');
+  if (!slider) return;
+  // Advance by whole tiles so a card is never left half-cropped.
+  const card = slider.querySelector('.media-card');
+  const step = card ? (card.offsetWidth + 16) * Math.max(1, Math.floor(slider.clientWidth / (card.offsetWidth + 16))) : slider.clientWidth * 0.8;
+  // Jump instead of gliding when the reader has asked for reduced motion.
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  slider.scrollBy({ left: direction * step, behavior: reduced ? 'auto' : 'smooth' });
+  if (reduced) updateRowAffordances(slider);
+}
+
+function initRowAffordances() {
+  const supportsObserver = typeof ResizeObserver !== 'undefined';
+  const observer = supportsObserver
+    ? new ResizeObserver(entries => entries.forEach(e => updateRowAffordances(e.target)))
+    : null;
+
+  document.querySelectorAll('.row-slider').forEach(slider => {
+    slider.addEventListener('scroll', () => updateRowAffordances(slider), { passive: true });
+    // The row is populated and resized long after this runs, so watch it
+    // rather than relying on a single well-timed measurement.
+    if (observer) observer.observe(slider);
+    updateRowAffordances(slider);
+  });
+
+  window.addEventListener('resize', refreshRowAffordances);
 }
 
 // 3. Studio Launcher & Fullscreen Viewer
@@ -429,11 +555,29 @@ function launchFeaturedTopic() {
   }
 }
 
+// A native alert() blocks the page and cannot be styled. The details panel is
+// part of the product, so it gets the product's own chrome.
 function showFeaturedDetails() {
   const profile = appProfiles.find(p => p.id === activeProfileId);
-  if (profile) {
-    alert(`🌟 ${profile.featured.title}\n\n${profile.featured.desc}\n\nClick 'Play Studio Now' to launch interactive practice!`);
-  }
+  if (!profile) return;
+  const modal = document.getElementById('featured-details-modal');
+  document.getElementById('featured-details-tag').textContent = profile.featured.tag;
+  document.getElementById('featured-details-title').textContent = profile.featured.title;
+  document.getElementById('featured-details-desc').textContent = profile.featured.desc;
+  document.getElementById('featured-details-art').innerHTML =
+    SFKeyArt.art(profile.featured.art, profile.featured.family, 'quest');
+  modal.classList.remove('hidden');
+  const closeBtn = modal.querySelector('.modal-close');
+  if (closeBtn) closeBtn.focus();
+}
+
+function closeFeaturedDetails() {
+  document.getElementById('featured-details-modal').classList.add('hidden');
+}
+
+function playFeaturedFromDetails() {
+  closeFeaturedDetails();
+  launchFeaturedTopic();
 }
 
 function openStudio(link, title) {
@@ -455,28 +599,35 @@ function openStudioInNewTab() {
 }
 
 // 4. Edit Profile Modal
-const AVAILABLE_AVATARS = ["👧", "👩‍🔬", "🧑‍🎓", "🚀", "🎨", "🦁", "🌟", "⚡", "🐱", "🦄", "👑", "⚽"];
-let selectedModalAvatar = "👧";
+// Glyphs come from the one icon set, so a chosen avatar can never render as
+// a different picture on a different device.
+const AVAILABLE_GLYPHS = [
+  "person", "flask", "temple", "ruler", "clock", "coffee",
+  "sigma", "chartLine", "globe", "microscope", "atom", "star"
+];
+let selectedModalGlyph = "person";
 
 function openEditProfileModal(profileId) {
   editingProfileId = profileId;
   const p = appProfiles.find(x => x.id === profileId);
   if (!p) return;
 
-  selectedModalAvatar = p.avatar;
+  selectedModalGlyph = p.glyph;
   document.getElementById('edit-profile-name').value = p.name;
   document.getElementById('edit-profile-grade').value = p.grade;
 
   const grid = document.getElementById('avatar-options-grid');
   grid.innerHTML = '';
-  AVAILABLE_AVATARS.forEach(av => {
+  AVAILABLE_GLYPHS.forEach(av => {
     const btn = document.createElement('button');
-    btn.className = `avatar-option-btn ${av === selectedModalAvatar ? 'selected' : ''}`;
-    btn.textContent = av;
+    btn.type = 'button';
+    btn.className = `avatar-option-btn ${av === selectedModalGlyph ? 'selected' : ''}`;
+    btn.title = av;
+    btn.innerHTML = SFIcons.icon(av, { size: 22 });
     btn.onclick = () => {
       document.querySelectorAll('.avatar-option-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      selectedModalAvatar = av;
+      selectedModalGlyph = av;
     };
     grid.appendChild(btn);
   });
@@ -495,7 +646,7 @@ function saveProfileChanges() {
   if (p) {
     p.name = document.getElementById('edit-profile-name').value.trim() || p.name;
     p.grade = document.getElementById('edit-profile-grade').value.trim() || p.grade;
-    p.avatar = selectedModalAvatar;
+    p.glyph = selectedModalGlyph;
 
     localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
     renderProfileSelectScreen();
@@ -592,15 +743,16 @@ function buildSearchIndex() {
         id: `${p.id}-featured`,
         profileId: p.id,
         profileName: p.name,
-        profileAvatar: p.avatar,
+        profileGlyph: p.glyph,
         profileGrade: p.grade,
         title: p.featured.title,
         desc: p.featured.desc,
         badge: p.featured.tag || "FEATURED",
-        icon: "🌟",
+        kind: "quest",
+        family: p.featured.family,
+        art: p.featured.art,
         link: p.featured.link,
-        category: "Featured Quest",
-        bg: p.featured.bgGradient || "linear-gradient(135deg, #c8102e, #d4af37)"
+        category: "Featured Quest"
       });
     }
 
@@ -611,15 +763,16 @@ function buildSearchIndex() {
           id: `${p.id}-subject-${idx}`,
           profileId: p.id,
           profileName: p.name,
-          profileAvatar: p.avatar,
+          profileGlyph: p.glyph,
           profileGrade: p.grade,
           title: s.title,
           desc: s.desc,
           badge: s.badge || "STUDIO",
-          icon: s.icon || "📐",
+          kind: s.kind,
+          family: s.family,
+          art: s.art,
           link: s.link,
-          category: "Core Subject",
-          bg: s.bg
+          category: "Core Subject"
         });
       });
     }
@@ -631,15 +784,16 @@ function buildSearchIndex() {
           id: `${p.id}-topic-${idx}`,
           profileId: p.id,
           profileName: p.name,
-          profileAvatar: p.avatar,
+          profileGlyph: p.glyph,
           profileGrade: p.grade,
           title: t.title,
           desc: t.desc,
           badge: t.badge || "TOPIC",
-          icon: t.icon || "🔥",
+          kind: t.kind,
+          family: t.family,
+          art: t.art,
           link: t.link,
-          category: "Deep-Dive Topic",
-          bg: t.bg
+          category: "Deep-Dive Topic"
         });
       });
     }
@@ -651,15 +805,16 @@ function buildSearchIndex() {
           id: `${p.id}-print-${idx}`,
           profileId: p.id,
           profileName: p.name,
-          profileAvatar: p.avatar,
+          profileGlyph: p.glyph,
           profileGrade: p.grade,
           title: w.title,
           desc: w.desc,
           badge: w.badge || "WORKBOOK",
-          icon: w.icon || "📖",
+          kind: w.kind,
+          family: w.family,
+          art: w.art,
           link: w.link,
-          category: "Printable Worksheet",
-          bg: w.bg
+          category: "Printable Worksheet"
         });
       });
     }
@@ -684,6 +839,7 @@ function handleSearchInput(value) {
     if (searchSection) searchSection.classList.add('hidden');
     if (heroBillboard) heroBillboard.classList.remove('hidden');
     if (contentRows) contentRows.classList.remove('hidden');
+    refreshRowAffordances();
   }
 }
 
@@ -747,7 +903,7 @@ function renderSearchResults() {
   if (results.length === 0) {
     grid.innerHTML = `
       <div class="search-empty-box">
-        <h3>🔍 No matching topics found in ${currentProfile.name}'s courses for "${searchQuery}"</h3>
+        <h3>No matching topics found in ${currentProfile.name}'s courses for "${searchQuery}"</h3>
         <p>Try searching with another keyword above or explore ${currentProfile.name}'s full curriculum!</p>
         <button class="btn btn-primary" style="margin-top:14px;" onclick="clearSearch()">View ${currentProfile.name}'s Full Dashboard</button>
       </div>
@@ -758,25 +914,40 @@ function renderSearchResults() {
   results.forEach(item => {
     const card = document.createElement('div');
     card.className = 'search-result-card';
+    const kind = CONTENT_TYPES[item.kind] ? item.kind : 'lesson';
+    const type = CONTENT_TYPES[kind];
+    card.style.setProperty('--card-accent', SFKeyArt.palette(item.family).accent);
     card.innerHTML = `
-      <div class="result-card-banner" style="background:${item.bg}">
+      <div class="result-card-banner">
+        <span class="result-card-art">${SFKeyArt.art(item.art, item.family, kind)}</span>
         <span class="result-profile-badge">
-          <span>${item.profileAvatar}</span> ${item.profileName} &bull; ${item.profileGrade.split(' ')[0]}
+          ${SFIcons.icon(item.profileGlyph, { size: 14 })} ${item.profileName}
         </span>
         <span class="result-type-badge">${item.badge}</span>
+        <span class="card-type" data-kind="${kind}">
+          ${SFIcons.icon(type.icon, { size: 14 })}<span>${type.label}</span>
+        </span>
       </div>
       <div class="result-card-body">
         <div class="result-card-title">${highlightMatch(item.title, searchQuery)}</div>
         <div class="result-card-desc">${highlightMatch(item.desc, searchQuery)}</div>
-        <button class="result-card-action">
-          ▶ Launch Topic
-        </button>
+        <span class="result-card-action">
+          ${SFIcons.icon('play', { size: 15 })}<span>Launch ${type.label}</span>
+        </span>
       </div>
     `;
     card.onclick = () => openStudio(item.link, item.title);
     grid.appendChild(card);
   });
 }
+
+// A studio can ask the hub to close the viewer from its own "back" control.
+window.addEventListener('message', (e) => {
+  const d = e && e.data;
+  if (d && d.source === 'studyflix-nav' && d.action === 'close-studio') {
+    closeStudioViewer();
+  }
+});
 
 // Global Keyboard Shortcuts (/ or Cmd+K / Ctrl+K to search, Esc to close)
 window.addEventListener('keydown', (e) => {
@@ -791,9 +962,16 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
     searchInput.focus();
     searchInput.select();
-  } else if (e.key === 'Escape' && document.activeElement === searchInput) {
-    clearSearch();
-    searchInput.blur();
+  } else if (e.key === 'Escape') {
+    const details = document.getElementById('featured-details-modal');
+    if (details && !details.classList.contains('hidden')) {
+      closeFeaturedDetails();
+      return;
+    }
+    if (document.activeElement === searchInput) {
+      clearSearch();
+      searchInput.blur();
+    }
   }
 });
 

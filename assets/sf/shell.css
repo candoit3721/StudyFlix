@@ -1,0 +1,328 @@
+/* =========================================================================
+   StudyFlix Shared Shell
+   -------------------------------------------------------------------------
+   ONE quest shell for every studio: same header layout, same stat cluster,
+   same tab bar, same button hierarchy. A subject changes only its accent
+   colour and its icon set.
+
+   Rationale (design review): the hub, the Rome quest and the Science quest
+   read as three products bolted together. Netflix stays recognisable across
+   wildly different key art because the CHROME never changes.
+   ========================================================================= */
+
+:root {
+  /* Neutral shell chrome, identical in every studio. */
+  --sf-shell-bg: #101013;
+  --sf-shell-bar: #17171c;
+  --sf-shell-line: rgba(255, 255, 255, 0.10);
+  --sf-shell-text: #f4f4f6;
+  --sf-shell-muted: #a1a1aa;
+
+  /* Per-subject accent. Each studio overrides ONLY these two. */
+  --sf-accent: #e50914;
+  --sf-accent-ink: #ffffff;
+
+  /* Action colours carry a fixed meaning across the whole product.
+     "Print" is styled as PAPER rather than as one more accent colour, so it
+     stays distinguishable from "play" even in a studio whose accent is amber. */
+  --sf-print-paper: #f4efe4;
+  --sf-print-ink: #7c4a10;
+  --sf-print-edge: #d9b98b;
+
+  --sf-radius: 8px;
+  --sf-radius-pill: 999px;
+  --sf-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Subject accents. The ONLY thing that changes between studios. */
+.sf-subject-rome     { --sf-accent: #c8102e; --sf-accent-ink: #ffffff; }
+.sf-subject-science  { --sf-accent: #0d9488; --sf-accent-ink: #ffffff; }
+.sf-subject-math     { --sf-accent: #6366f1; --sf-accent-ink: #ffffff; }
+.sf-subject-grade3   { --sf-accent: #db2777; --sf-accent-ink: #ffffff; }
+.sf-subject-calculus { --sf-accent: #2563eb; --sf-accent-ink: #ffffff; }
+.sf-subject-coffee   { --sf-accent: #b45309; --sf-accent-ink: #ffffff; }
+
+/* =========================================================================
+   ICONS
+   ========================================================================= */
+.sf-icon {
+  display: block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+/* The placeholder span that icons.js upgrades. */
+[data-sf-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+/* =========================================================================
+   ACTION BUTTONS — one meaning per colour, everywhere
+   -------------------------------------------------------------------------
+     .sf-btn--play     accent   start / open the interactive thing
+     .sf-btn--explore  neutral  move to another part of the same studio
+     .sf-btn--print    amber    produces paper (worksheet, workbook, PDF)
+     .sf-btn--info     outline  tells you about something, changes nothing
+   ========================================================================= */
+.sf-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--sf-radius);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.18s var(--sf-ease),
+              border-color 0.18s var(--sf-ease),
+              transform 0.18s var(--sf-ease);
+}
+
+.sf-btn:active { transform: translateY(1px); }
+
+.sf-btn:focus-visible {
+  outline: 2px solid var(--sf-accent);
+  outline-offset: 2px;
+}
+
+.sf-btn--play {
+  background: var(--sf-accent);
+  color: var(--sf-accent-ink);
+}
+.sf-btn--play:hover { filter: brightness(1.12); }
+
+.sf-btn--explore {
+  background: rgba(255, 255, 255, 0.10);
+  color: var(--sf-shell-text);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.sf-btn--explore:hover { background: rgba(255, 255, 255, 0.17); }
+
+/* Paper, with a ruled edge: unmistakably "this produces a printout", and it
+   never reads as a second play button whatever the subject accent is. */
+.sf-btn--print {
+  background: var(--sf-print-paper);
+  color: var(--sf-print-ink);
+  border-color: var(--sf-print-edge);
+  padding-left: 26px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sf-btn--print::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 7px;
+  background: repeating-linear-gradient(180deg,
+    var(--sf-print-paper) 0 7px, var(--sf-print-edge) 7px 9px);
+}
+
+.sf-btn--print:hover { background: #ffffff; border-color: #c9a06a; }
+
+.sf-btn--info {
+  background: transparent;
+  color: var(--sf-shell-muted);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.sf-btn--info:hover { color: var(--sf-shell-text); border-color: rgba(255, 255, 255, 0.45); }
+
+.sf-btn--sm { padding: 7px 13px; font-size: 0.85rem; }
+
+/* Light-surface studios need readable neutral variants. */
+.sf-on-light .sf-btn--explore {
+  background: rgba(15, 23, 42, 0.06);
+  color: #1e293b;
+  border-color: rgba(15, 23, 42, 0.16);
+}
+.sf-on-light .sf-btn--explore:hover { background: rgba(15, 23, 42, 0.11); }
+.sf-on-light .sf-btn--info { color: #475569; border-color: rgba(15, 23, 42, 0.22); }
+.sf-on-light .sf-btn--info:hover { color: #0f172a; border-color: rgba(15, 23, 42, 0.45); }
+
+/* =========================================================================
+   QUEST SHELL CHROME
+   ========================================================================= */
+.sf-shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  background: var(--sf-shell-bar);
+  border-bottom: 1px solid var(--sf-shell-line);
+  color: var(--sf-shell-text);
+  position: relative;
+}
+
+/* The accent is a hairline, not a whole new visual language. */
+.sf-shell-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 2px;
+  background: var(--sf-accent);
+}
+
+.sf-shell-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.sf-back-hub {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--sf-radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sf-shell-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.18s var(--sf-ease);
+}
+.sf-back-hub:hover { background: rgba(255, 255, 255, 0.14); }
+
+.sf-shell-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.sf-shell-glyph {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--sf-accent);
+  color: var(--sf-accent-ink);
+}
+
+.sf-shell-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: var(--sf-shell-text);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-shell-sub {
+  font-size: 0.76rem;
+  color: var(--sf-shell-muted);
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sf-shell-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sf-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  border-radius: var(--sf-radius-pill);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--sf-shell-line);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--sf-shell-text);
+  white-space: nowrap;
+}
+
+.sf-stat .sf-icon { color: var(--sf-accent); }
+.sf-stat--xp .sf-icon { color: #fbbf24; }
+.sf-stat--streak .sf-icon { color: #fb7185; }
+.sf-stat--badges .sf-icon { color: #a3e635; }
+
+.sf-stat-label { color: var(--sf-shell-muted); font-weight: 600; }
+
+.sf-icon-btn {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--sf-radius-pill);
+  border: 1px solid var(--sf-shell-line);
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--sf-shell-text);
+  cursor: pointer;
+  transition: background-color 0.18s var(--sf-ease);
+}
+.sf-icon-btn:hover { background: rgba(255, 255, 255, 0.16); }
+
+/* ---- shared tab bar ---- */
+.sf-shell-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 24px;
+  background: var(--sf-shell-bar);
+  border-bottom: 1px solid var(--sf-shell-line);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sf-shell-tabs::-webkit-scrollbar { display: none; }
+
+.sf-shell-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--sf-shell-muted);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.88rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.18s var(--sf-ease), border-color 0.18s var(--sf-ease);
+}
+.sf-shell-tab:hover { color: var(--sf-shell-text); }
+.sf-shell-tab.active {
+  color: var(--sf-shell-text);
+  border-bottom-color: var(--sf-accent);
+}
+.sf-shell-tab.active .sf-icon { color: var(--sf-accent); }
+
+@media (max-width: 720px) {
+  .sf-shell-header { padding: 10px 14px; }
+  .sf-shell-sub { display: none; }
+  .sf-shell-tabs { padding: 0 10px; }
+}
+
+/* Respect a reduced-motion preference across the shared shell. */
+@media (prefers-reduced-motion: reduce) {
+  .sf-btn, .sf-back-hub, .sf-icon-btn, .sf-shell-tab { transition: none; }
+  .sf-btn:active { transform: none; }
+}

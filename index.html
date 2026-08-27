@@ -7,7 +7,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=2.6.0">
+  <link rel="stylesheet" href="assets/sf/shell.css?v=3.0.0">
+  <link rel="stylesheet" href="style.css?v=3.0.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -21,34 +22,42 @@
         <span class="brand-badge">STUDY</span>FLIX
       </div>
       <nav class="nav-links">
-        <button class="nav-link active" onclick="showView('home')">Home</button>
-        <button class="nav-link" onclick="showView('topics')">All Subjects</button>
-        <button class="nav-link" onclick="showView('printable')">🖨️ Worksheets</button>
-        <button class="nav-link" onclick="showView('stats')">🏆 Trophies & Stats</button>
+        <button class="nav-link active" onclick="showView('home')">
+          <span data-sf-icon="home" data-sf-size="17"></span><span>Home</span>
+        </button>
+        <button class="nav-link" onclick="showView('topics')">
+          <span data-sf-icon="grid" data-sf-size="17"></span><span>All Subjects</span>
+        </button>
+        <button class="nav-link" onclick="showView('printable')">
+          <span data-sf-icon="printer" data-sf-size="17"></span><span>Worksheets</span>
+        </button>
+        <button class="nav-link" onclick="showView('stats')">
+          <span data-sf-icon="trophy" data-sf-size="17"></span><span>Trophies &amp; Stats</span>
+        </button>
       </nav>
     </div>
 
     <div class="nav-right">
       <!-- Search Input in Navbar -->
       <div class="nav-search-box">
-        <span class="search-icon">🔍</span>
+        <span class="search-icon" data-sf-icon="search" data-sf-size="17"></span>
         <input type="text" id="global-search-input" class="nav-search-input" placeholder="Search topics, courses, ciphers... (/)" autocomplete="off" oninput="handleSearchInput(this.value)">
-        <button id="search-clear-btn" class="search-clear-btn hidden" onclick="clearSearch()" title="Clear search">✖</button>
+        <button id="search-clear-btn" class="search-clear-btn hidden" onclick="clearSearch()" title="Clear search" aria-label="Clear search"><span data-sf-icon="close" data-sf-size="15"></span></button>
       </div>
-      <div class="xp-pill">
-        <span class="xp-star">⭐</span>
+      <div class="xp-pill" title="Total XP earned across every studio">
+        <span class="xp-star" data-sf-icon="star" data-sf-size="15"></span>
         <span id="current-profile-xp">0</span> XP
       </div>
-      <div class="streak-pill">
-        <span class="streak-fire">🔥</span>
+      <div class="streak-pill" title="Consecutive days studied">
+        <span class="streak-fire" data-sf-icon="flame" data-sf-size="15"></span>
         <span id="current-profile-streak">0</span> Day Streak
       </div>
       
       <!-- Profile Dropdown Trigger -->
       <div class="profile-menu-trigger" onclick="toggleProfileDropdown()">
-        <div class="profile-mini-avatar" id="nav-profile-avatar">👧</div>
+        <div class="profile-mini-avatar" id="nav-profile-avatar">S</div>
         <span class="profile-mini-name" id="nav-profile-name">Sophia</span>
-        <span class="dropdown-caret">▼</span>
+        <span class="dropdown-caret" data-sf-icon="chevronDown" data-sf-size="14"></span>
 
         <!-- Dropdown Menu -->
         <div id="profile-dropdown" class="profile-dropdown hidden">
@@ -58,7 +67,8 @@
           </div>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item" onclick="showProfileSelect()">
-            <span>👥 Manage / Choose Profiles</span>
+            <span class="dropdown-avatar dropdown-avatar--action" data-sf-icon="users" data-sf-size="16"></span>
+            <span>Manage / Choose Profiles</span>
           </button>
         </div>
       </div>
@@ -81,7 +91,7 @@
 
       <div class="profile-actions">
         <button class="btn btn-outline" id="manage-profiles-btn" onclick="toggleManageMode()">
-          ⚙️ Manage Profiles
+          <span data-sf-icon="settings" data-sf-size="18"></span><span>Manage Profiles</span>
         </button>
       </div>
     </div>
@@ -96,11 +106,13 @@
     <section id="search-results-section" class="search-results-section hidden">
       <div class="search-results-header">
         <div>
-          <h2 class="search-heading">🔍 <span id="search-profile-name">Sophia</span>'s Results: "<span id="search-query-display"></span>"</h2>
+          <h2 class="search-heading"><span data-sf-icon="search" data-sf-size="20"></span><span id="search-profile-name">Sophia</span>'s Results: "<span id="search-query-display"></span>"</h2>
           <p class="search-subheading" id="search-count-display">Showing 0 matching topics</p>
         </div>
         <div class="search-filter-buttons">
-          <button class="btn-clear-search" onclick="clearSearch()">✖ Close Search</button>
+          <button class="btn-clear-search" onclick="clearSearch()">
+            <span data-sf-icon="close" data-sf-size="15"></span><span>Close Search</span>
+          </button>
         </div>
       </div>
 
@@ -117,17 +129,17 @@
     <section class="hero-billboard" id="hero-billboard">
       <div class="billboard-backdrop" id="hero-backdrop"></div>
       <div class="billboard-content">
-        <div class="billboard-tag" id="hero-tag">🌟 FEATURED LEARNING QUEST</div>
+        <div class="billboard-tag" id="hero-tag">FEATURED LEARNING QUEST</div>
         <h2 class="billboard-title" id="hero-title">Sophia's Science & Chemistry Quest</h2>
         <p class="billboard-desc" id="hero-desc">
           Master the Periodic Table, discover element superpowers, explore cell biology, and ace roller coaster physics!
         </p>
         <div class="billboard-actions">
           <button class="btn btn-netflix-play" id="hero-play-btn" onclick="launchFeaturedTopic()">
-            ▶ Play Studio Now
+            <span data-sf-icon="play" data-sf-size="19"></span><span>Play Studio Now</span>
           </button>
           <button class="btn btn-netflix-info" onclick="showFeaturedDetails()">
-            ℹ️ More Details
+            <span data-sf-icon="info" data-sf-size="19"></span><span>More Details</span>
           </button>
         </div>
       </div>
@@ -142,30 +154,54 @@
           <span class="row-title" id="row1-title">Sophia's Core Subjects & Studios</span>
           <span class="row-subtitle">Interactive practice, worksheet generators & instant feedback</span>
         </h3>
-        <div class="row-slider" id="row-subjects-slider">
-          <!-- Injected via JS -->
+        <div class="row-slider-wrap">
+          <button class="row-arrow row-arrow--prev" type="button" onclick="scrollRow(this, -1)" aria-label="Scroll core subjects left" tabindex="-1">
+            <span data-sf-icon="chevronLeft" data-sf-size="26"></span>
+          </button>
+          <div class="row-slider" id="row-subjects-slider">
+            <!-- Injected via JS -->
+          </div>
+          <button class="row-arrow row-arrow--next" type="button" onclick="scrollRow(this, 1)" aria-label="Scroll core subjects right" tabindex="-1">
+            <span data-sf-icon="chevronRight" data-sf-size="26"></span>
+          </button>
         </div>
       </div>
 
       <!-- Row 2: Deep Dive Topics -->
       <div class="content-row">
         <h3 class="row-header">
-          <span class="row-title">🔥 Trending Topics & Super Quests</span>
+          <span class="row-title">Trending Topics &amp; Super Quests</span>
           <span class="row-subtitle">Curated specifically for your grade level</span>
         </h3>
-        <div class="row-slider" id="row-topics-slider">
-          <!-- Injected via JS -->
+        <div class="row-slider-wrap">
+          <button class="row-arrow row-arrow--prev" type="button" onclick="scrollRow(this, -1)" aria-label="Scroll trending topics left" tabindex="-1">
+            <span data-sf-icon="chevronLeft" data-sf-size="26"></span>
+          </button>
+          <div class="row-slider" id="row-topics-slider">
+            <!-- Injected via JS -->
+          </div>
+          <button class="row-arrow row-arrow--next" type="button" onclick="scrollRow(this, 1)" aria-label="Scroll trending topics right" tabindex="-1">
+            <span data-sf-icon="chevronRight" data-sf-size="26"></span>
+          </button>
         </div>
       </div>
 
       <!-- Row 3: Printable Worksheets & Guides -->
       <div class="content-row">
         <h3 class="row-header">
-          <span class="row-title">🖨️ Printable Worksheets & Workbooks</span>
+          <span class="row-title">Printable Worksheets &amp; Workbooks</span>
           <span class="row-subtitle">Paper-ready PDFs, practice tests, and comprehensive answer keys</span>
         </h3>
-        <div class="row-slider" id="row-printable-slider">
-          <!-- Injected via JS -->
+        <div class="row-slider-wrap">
+          <button class="row-arrow row-arrow--prev" type="button" onclick="scrollRow(this, -1)" aria-label="Scroll printable worksheets left" tabindex="-1">
+            <span data-sf-icon="chevronLeft" data-sf-size="26"></span>
+          </button>
+          <div class="row-slider" id="row-printable-slider">
+            <!-- Injected via JS -->
+          </div>
+          <button class="row-arrow row-arrow--next" type="button" onclick="scrollRow(this, 1)" aria-label="Scroll printable worksheets right" tabindex="-1">
+            <span data-sf-icon="chevronRight" data-sf-size="26"></span>
+          </button>
         </div>
       </div>
 
@@ -179,15 +215,15 @@
   <div id="studio-viewer" class="studio-viewer hidden">
     <div class="studio-viewer-bar">
       <button class="btn-back-hub" onclick="closeStudioViewer()">
-        ← Return to StudyFlix Hub
+        <span data-sf-icon="arrowLeft" data-sf-size="17"></span><span>Return to StudyFlix Hub</span>
       </button>
       <div class="studio-title-badge" id="studio-viewer-title">Sophia's Math Studio</div>
       <div class="studio-actions">
         <button class="btn-viewer-action" onclick="openStudioInNewTab()" title="Open in new window">
-          ↗️ Open New Tab
+          <span data-sf-icon="externalLink" data-sf-size="16"></span><span>Open New Tab</span>
         </button>
         <button class="btn-viewer-action" onclick="closeStudioViewer()">
-          ✖ Close
+          <span data-sf-icon="close" data-sf-size="16"></span><span>Close</span>
         </button>
       </div>
     </div>
@@ -203,11 +239,11 @@
     <div class="modal-card">
       <div class="modal-header">
         <h3>Edit Profile</h3>
-        <button class="modal-close" onclick="closeProfileModal()">✖</button>
+        <button class="modal-close" onclick="closeProfileModal()" aria-label="Close"><span data-sf-icon="close" data-sf-size="18"></span></button>
       </div>
       <div class="modal-body">
         <div class="avatar-picker-row">
-          <label>Pick Avatar:</label>
+          <label>Pick a glyph:</label>
           <div class="avatar-options" id="avatar-options-grid">
             <!-- Avatars injected via JS -->
           </div>
@@ -228,9 +264,39 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- 5. FEATURED DETAILS MODAL (replaces a native alert) -->
+  <!-- ========================================================================= -->
+  <div id="featured-details-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeFeaturedDetails()">
+    <div class="modal-card modal-card--wide" role="dialog" aria-modal="true" aria-labelledby="featured-details-title">
+      <div class="featured-details-art" id="featured-details-art"></div>
+      <div class="modal-header">
+        <div>
+          <div class="billboard-tag" id="featured-details-tag">FEATURED</div>
+          <h3 id="featured-details-title">Featured Quest</h3>
+        </div>
+        <button class="modal-close" onclick="closeFeaturedDetails()" aria-label="Close details">
+          <span data-sf-icon="close" data-sf-size="18"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="featured-details-desc" class="featured-details-desc"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-netflix-info" onclick="closeFeaturedDetails()">Close</button>
+        <button class="btn btn-primary" onclick="playFeaturedFromDetails()">
+          <span data-sf-icon="play" data-sf-size="18"></span><span>Play Studio Now</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="app.js?v=2.6.0"></script>
+  <script src="assets/sf/icons.js?v=3.0.0"></script>
+  <script src="assets/sf/keyart.js?v=3.0.0"></script>
+  <script src="assets/sf/progress.js?v=3.0.0"></script>
+  <script src="app.js?v=3.0.0"></script>
 </body>
 </html>

@@ -852,3 +852,34 @@ body {
     background: transparent !important;
   }
 }
+
+/* Worksheet preset glyphs come from the shared StudyFlix icon set, so they
+   render identically on every device instead of as platform emoji. */
+.preset-glyph {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 7px;
+  vertical-align: -3px;
+  color: currentColor;
+  opacity: 0.85;
+}
+
+.studio-glyph {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: -4px;
+}
+
+.view-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.btn-glyph {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 7px;
+  vertical-align: -3px;
+}

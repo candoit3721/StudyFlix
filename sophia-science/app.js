@@ -5,8 +5,10 @@
 
 // Global State
 const state = {
-  xp: parseInt(localStorage.getItem('sophia_science_xp') || '0'),
-  streak: 0,
+  // Science XP is this studio's subtotal of the shared, profile-wide record.
+  xp: 0,
+  // A correct-answer run, NOT the hub's day streak.
+  answerRun: 0,
   soundEnabled: true,
   badges: JSON.parse(localStorage.getItem('sophia_science_badges') || '[]'),
   completedQuests: JSON.parse(localStorage.getItem('sophia_science_completed_quests') || '[]'),
@@ -49,15 +51,15 @@ const ELEMENTS = [
 
 // Quests Definition for Map
 const QUESTS = [
-  { id: "q0", icon: "🔬", title: "Visual Science Super-Lab", desc: "Build spinning Bohr atoms, trigger reaction flasks, explore cell cities, and run roller coasters!", targetTab: "tab-lab" },
-  { id: "q1", icon: "🧪", title: "Periodic Table Superheroes", desc: "Master the first 20 elements, symbols, and real-world superpowers.", targetTab: "tab-periodic", quizMode: "periodic" },
-  { id: "q2", icon: "🕶️", title: "Secret Chemical Decoder", desc: "Crack hidden words built from chemical element symbols!", targetTab: "tab-decoder" },
-  { id: "q3", icon: "🥞", title: "Matter & Kitchen Chemistry", desc: "Physical vs. Chemical changes, lemonade solutions, and conservation of mass.", targetTab: "tab-learn", quizMode: "grade5" },
-  { id: "q4", icon: "🌲", title: "Ecosystems & Energy Flow", desc: "Photosynthesis, food webs, and the 10% energy pyramid rule.", targetTab: "tab-learn", quizMode: "grade5" },
-  { id: "q5", icon: "🌎", title: "Earth's 4 Spheres & Water", desc: "Explore the dinosaur water cycle and sphere interactions.", targetTab: "tab-learn", quizMode: "grade5" },
-  { id: "q6", icon: "🏙️", title: "Cell City Biology (Grade 6)", desc: "Nucleus Mayor, Mitochondria Powerhouse, and Plant Cell upgrades!", targetTab: "tab-learn", quizMode: "grade6" },
-  { id: "q7", icon: "🎢", title: "Roller Coaster Physics (Grade 6)", desc: "Potential vs. Kinetic energy and Newton's 3 Laws of Motion.", targetTab: "tab-learn", quizMode: "grade6" },
-  { id: "q8", icon: "🕵️", title: "Scientific Method Detective", desc: "Master the I-D-C Variable rule and design fair science tests.", targetTab: "tab-learn", quizMode: "grade6" }
+  { id: "q0", glyph: "microscope", title: "Visual Science Super-Lab", desc: "Build spinning Bohr atoms, trigger reaction flasks, explore cell cities, and run roller coasters!", targetTab: "tab-lab" },
+  { id: "q1", glyph: "atom", title: "Periodic Table Superheroes", desc: "Master the first 20 elements, symbols, and real-world superpowers.", targetTab: "tab-periodic", quizMode: "periodic" },
+  { id: "q2", glyph: "cipher", title: "Secret Chemical Decoder", desc: "Crack hidden words built from chemical element symbols!", targetTab: "tab-decoder" },
+  { id: "q3", glyph: "flask", title: "Matter & Kitchen Chemistry", desc: "Physical vs. Chemical changes, lemonade solutions, and conservation of mass.", targetTab: "tab-learn", quizMode: "grade5" },
+  { id: "q4", glyph: "leaf", title: "Ecosystems & Energy Flow", desc: "Photosynthesis, food webs, and the 10% energy pyramid rule.", targetTab: "tab-learn", quizMode: "grade5" },
+  { id: "q5", glyph: "droplet", title: "Earth's 4 Spheres & Water", desc: "Explore the dinosaur water cycle and sphere interactions.", targetTab: "tab-learn", quizMode: "grade5" },
+  { id: "q6", glyph: "cell", title: "Cell City Biology (Grade 6)", desc: "Nucleus Mayor, Mitochondria Powerhouse, and Plant Cell upgrades!", targetTab: "tab-learn", quizMode: "grade6" },
+  { id: "q7", glyph: "chartLine", title: "Roller Coaster Physics (Grade 6)", desc: "Potential vs. Kinetic energy and Newton's 3 Laws of Motion.", targetTab: "tab-learn", quizMode: "grade6" },
+  { id: "q8", glyph: "lesson", title: "Scientific Method Detective", desc: "Master the I-D-C Variable rule and design fair science tests.", targetTab: "tab-learn", quizMode: "grade6" }
 ];
 
 // Decoder Words Database
@@ -74,14 +76,14 @@ const DECODER_DATA = [
 
 // Badges Database
 const BADGES = [
-  { id: "first_quest", icon: "🌱", title: "Curious Explorer", desc: "Completed your very first science quiz!" },
-  { id: "streak_3", icon: "🔥", title: "On Fire!", desc: "Got 3 correct answers in a row!" },
-  { id: "chemist_queen", icon: "🧪", title: "Element Queen", desc: "Scored 100% on the Periodic Table Quiz!" },
-  { id: "code_breaker", icon: "🕵️", title: "Secret Code Breaker", desc: "Unlocked all 8 secret chemical words!" },
-  { id: "grade5_champ", icon: "🌍", title: "Grade 5 Science Master", desc: "Mastered matter, ecosystems & Earth spheres!" },
-  { id: "cell_mayor", icon: "🏙️", title: "Cell City Mayor", desc: "Aced the cell biology & organelle questions!" },
-  { id: "physics_wizard", icon: "🎢", title: "Physics Wizard", desc: "Conquered roller coaster physics & Newton's laws!" },
-  { id: "science_legend", icon: "👑", title: "Grand Science Legend", desc: "Accumulated over 500 total XP!" }
+  { id: "first_quest", glyph: "flask", title: "Curious Explorer", desc: "Completed your very first science quiz!" },
+  { id: "streak_3", glyph: "flame", title: "On Fire!", desc: "Got 3 correct answers in a row!" },
+  { id: "chemist_queen", glyph: "atom", title: "Element Queen", desc: "Scored 100% on the Periodic Table Quiz!" },
+  { id: "code_breaker", glyph: "cipher", title: "Secret Code Breaker", desc: "Unlocked all 8 secret chemical words!" },
+  { id: "grade5_champ", glyph: "leaf", title: "Grade 5 Science Master", desc: "Mastered matter, ecosystems & Earth spheres!" },
+  { id: "cell_mayor", glyph: "cell", title: "Cell City Mayor", desc: "Aced the cell biology & organelle questions!" },
+  { id: "physics_wizard", glyph: "chartLine", title: "Physics Wizard", desc: "Conquered roller coaster physics & Newton's laws!" },
+  { id: "science_legend", glyph: "trophy", title: "Grand Science Legend", desc: "Accumulated over 500 total XP!" }
 ];
 
 // Sound Synthesizer via Web Audio API
@@ -193,6 +195,7 @@ function updateConfetti() {
 
 // UI Initialization & Tab Switching
 function initUI() {
+  SFQuest.init({ module: 'science', profileId: 'sophia', badgeTotal: BADGES.length });
   // Update header stats
   updateStatsDisplay();
 
@@ -214,7 +217,7 @@ function initUI() {
   switchCellType('plant');
 
   // Tab click listeners
-  document.querySelectorAll('.nav-tab').forEach(tab => {
+  document.querySelectorAll('.sf-shell-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       switchTab(tab.getAttribute('data-tab'));
     });
@@ -232,7 +235,10 @@ function initUI() {
   // Sound toggle button
   document.getElementById('sound-toggle-btn').addEventListener('click', () => {
     state.soundEnabled = !state.soundEnabled;
-    document.getElementById('sound-toggle-btn').textContent = state.soundEnabled ? '🔊' : '🔇';
+    // One icon set, so the muted state cannot render as a different
+    // picture on a different platform.
+    document.getElementById('sound-toggle-btn').innerHTML =
+      SFIcons.icon(state.soundEnabled ? 'volumeOn' : 'volumeOff', { size: 18 });
   });
 
   // Decoder Enter key support
@@ -256,7 +262,7 @@ function handleHashNavigation() {
 window.addEventListener('hashchange', handleHashNavigation);
 
 function switchTab(tabId) {
-  document.querySelectorAll('.nav-tab').forEach(tab => {
+  document.querySelectorAll('.sf-shell-tab').forEach(tab => {
     tab.classList.toggle('active', tab.getAttribute('data-tab') === tabId);
   });
   document.querySelectorAll('.tab-content').forEach(content => {
@@ -266,17 +272,19 @@ function switchTab(tabId) {
 }
 
 function updateStatsDisplay() {
-  document.getElementById('xp-count').textContent = state.xp;
-  document.getElementById('streak-count').textContent = state.streak;
-  document.getElementById('badge-count').textContent = `${state.badges.length}/${BADGES.length}`;
+  // The shell pills show the profile-wide totals, identical to the hub.
+  state.xp = SFQuest.moduleXp();
+  SFQuest.renderStats(state.badges.length);
 
-  localStorage.setItem('sophia_science_xp', state.xp.toString());
+  const runEl = document.getElementById('answer-run-count');
+  if (runEl) runEl.textContent = state.answerRun;
+
   localStorage.setItem('sophia_science_badges', JSON.stringify(state.badges));
   localStorage.setItem('sophia_science_completed_quests', JSON.stringify(state.completedQuests));
 }
 
 function addXP(amount) {
-  state.xp += amount;
+  SFQuest.award(amount);
   updateStatsDisplay();
   if (state.xp >= 500 && !state.badges.includes('science_legend')) {
     unlockBadge('science_legend');
@@ -286,6 +294,7 @@ function addXP(amount) {
 function unlockBadge(badgeId) {
   if (!state.badges.includes(badgeId)) {
     state.badges.push(badgeId);
+    SFQuest.unlockBadge(badgeId);
     updateStatsDisplay();
     renderTrophies();
     launchConfetti();
@@ -305,14 +314,15 @@ function renderQuests() {
     card.innerHTML = `
       <div>
         <div class="quest-card-header">
-          <div class="quest-icon">${q.icon}</div>
+          <div class="quest-icon">${SFIcons.icon(q.glyph, { size: 20 })}</div>
           <h4>${q.title}</h4>
         </div>
         <p>${q.desc}</p>
       </div>
       <div>
         <span class="quest-status-badge ${isCompleted ? 'completed' : 'ready'}">
-          ${isCompleted ? '✅ Completed' : '⚡ Ready to Play'}
+          ${SFIcons.icon(isCompleted ? 'check' : 'play', { size: 14 })}
+          <span>${isCompleted ? 'Completed' : 'Ready to Play'}</span>
         </span>
       </div>
     `;
@@ -961,18 +971,18 @@ function selectOption(selectedIndex) {
 
   if (isCorrect) {
     state.quizScore++;
-    state.streak++;
+    state.answerRun++;
     addXP(15);
     playSound('correct');
     optionButtons[selectedIndex].classList.add('correct');
 
-    if (state.streak >= 3 && !state.badges.includes('streak_3')) {
+    if (state.answerRun >= 3 && !state.badges.includes('streak_3')) {
       unlockBadge('streak_3');
     }
 
     showFeedback(true, "🎉 Awesome Job, Sophia!", q.exp);
   } else {
-    state.streak = 0;
+    state.answerRun = 0;
     playSound('wrong');
     optionButtons[selectedIndex].classList.add('wrong');
     optionButtons[q.ans].classList.add('correct');
@@ -1122,11 +1132,11 @@ function renderTrophies() {
     const card = document.createElement('div');
     card.className = `trophy-card ${isUnlocked ? 'unlocked' : ''}`;
     card.innerHTML = `
-      <div class="trophy-icon">${b.icon}</div>
+      <div class="trophy-icon">${SFIcons.icon(b.glyph, { size: 26 })}</div>
       <h4>${b.title}</h4>
       <p>${b.desc}</p>
       <small style="display:block; margin-top:8px; font-weight:800; color:${isUnlocked ? '#059669' : '#94a3b8'};">
-        ${isUnlocked ? '✨ UNLOCKED' : '🔒 LOCKED'}
+        ${isUnlocked ? 'UNLOCKED' : 'LOCKED'}
       </small>
     `;
     grid.appendChild(card);

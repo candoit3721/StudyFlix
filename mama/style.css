@@ -1768,6 +1768,7 @@ h1, h2, h3, h4 {
     font-size: 10pt;
   }
 
+  .sf-shell-header, .sf-shell-tabs, .sf-btn, .sf-icon-btn, .sf-back-hub,
   .app-header, .nav-bar, .welcome-buttons, .icon-btn, .btn,
   #confetti-canvas, input, button, .matchmaker-controls,
   .quiz-card, .trophy-shelf-box {
@@ -1804,4 +1805,47 @@ h1, h2, h3, h4 {
   p, li, span, small {
     color: #1e293b !important;
   }
+}
+
+/* =========================================================================
+   SHARED SHELL ADJUSTMENTS
+   The header, tab bar and action buttons now come from assets/sf/shell.css,
+   so this studio's chrome matches the hub and every other studio.
+   ========================================================================= */
+
+/* Icon glyphs replaced emoji here, so these need a colour and a box rather
+   than a font size that was tuned for emoji. */
+.trophy-icon,
+.pillar-icon {
+  display: grid;
+  place-items: center;
+  color: var(--coffee-gold);
+  line-height: 0;
+}
+
+.trophy-badge-card.unlocked .trophy-icon { color: var(--coffee-gold-light); }
+
+/* Content panels fade in on tab change. Honour a reduced-motion preference:
+   the panel should appear immediately rather than animate from opacity 0. */
+@media (prefers-reduced-motion: reduce) {
+  .tab-content,
+  .tab-content.active {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Map region pills and the atlas view toggle now carry shared glyphs. */
+.map-pill,
+.toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
 }

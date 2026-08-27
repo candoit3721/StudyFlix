@@ -967,3 +967,49 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   pointer-events: none;
   z-index: 999;
 }
+
+/* =========================================================================
+   ELAPSED TIME NUMBER LINE
+   The Mountains / Hills / Rocks metaphor used to be taught only through
+   coloured pill badges and a sentence. Elapsed time is an inherently visual
+   Grade 3 idea, so the worked example is now drawn.
+   ========================================================================= */
+.elapsed-numberline {
+  margin: 18px 0 14px;
+  padding: 14px 10px 8px;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 14px;
+  overflow-x: auto;
+}
+
+.elapsed-numberline svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  height: auto;
+}
+
+.elapsed-numberline figcaption {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #475569;
+}
+
+.elapsed-numberline figcaption strong { color: #059669; }
+
+/* The legend pills carry their meaning in text, with colour as reinforcement
+   rather than as the only cue. */
+.jump-bubble--mountain { background: #ede9fe; border-color: #7c3aed; color: #5b21b6; }
+.jump-bubble--hill     { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+.jump-bubble--rock     { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+
+/* Action buttons carry a shared glyph plus their label. */
+.btn,
+.btn-jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}

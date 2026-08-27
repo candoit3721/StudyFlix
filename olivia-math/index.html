@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.0.0">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,41 +18,41 @@
     <!-- Sidebar Settings -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1><span>✏️</span> Olivia's Math Studio</h1>
+        <h1>Olivia's Math Studio</h1>
         <p>Grade 3 Custom Worksheet &amp; Drill Generator</p>
         <div style="margin-top: 10px; display: flex; gap: 6px;">
-          <a href="../index.html" style="background:#181818; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;">🎬 StudyFlix Hub</a>
-          <a href="clock-time.html" style="background:#8b5cf6; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;">⏰ Clock &amp; Elapsed Time</a>
+          <a href="../index.html" style="background:#181818; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;"><span data-sf-icon="arrowLeft" data-sf-size="14"></span><span>StudyFlix Hub</span></a>
+          <a href="clock-time.html" style="background:#8b5cf6; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;"><span data-sf-icon="clock" data-sf-size="14"></span><span>Clock &amp; Elapsed Time</span></a>
         </div>
       </div>
 
       <div class="sidebar-content">
         <!-- Quick Presets -->
         <div class="control-group">
-          <h3>⚡ Quick Presets</h3>
+          <h3>Quick Presets</h3>
           <div class="preset-grid">
             <button class="preset-btn" data-preset="mult_core">
-              <span>✖️ Times Tables (0-10)</span>
+              <span><span class="preset-glyph" data-sf-icon="ruler" data-sf-size="17"></span>Times Tables (0-10)</span>
               <span class="badge">20 Facts Drill</span>
             </button>
             <button class="preset-btn" data-preset="add_3digit">
-              <span>➕ 3-Digit Addition</span>
+              <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>3-Digit Addition</span>
               <span class="badge">With Regrouping</span>
             </button>
             <button class="preset-btn" data-preset="sub_3digit">
-              <span>➖ 3-Digit Subtraction</span>
+              <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>3-Digit Subtraction</span>
               <span class="badge">With Borrowing</span>
             </button>
             <button class="preset-btn" data-preset="all_mixed">
-              <span>🎲 Mixed 4 Operations</span>
+              <span><span class="preset-glyph" data-sf-icon="quest" data-sf-size="17"></span>Mixed 4 Operations</span>
               <span class="badge">25 Questions</span>
             </button>
             <button class="preset-btn" data-preset="missing_ops">
-              <span>🧩 Missing Numbers</span>
+              <span><span class="preset-glyph" data-sf-icon="lightbulb" data-sf-size="17"></span>Missing Numbers</span>
               <span class="badge">Fact Families</span>
             </button>
             <button class="preset-btn" data-preset="word_problems">
-              <span>📖 Word Problems</span>
+              <span><span class="preset-glyph" data-sf-icon="lesson" data-sf-size="17"></span>Word Problems</span>
               <span class="badge">5 Story Problems</span>
             </button>
           </div>
@@ -59,26 +60,26 @@
 
         <!-- Problem Type Selection -->
         <div class="control-group">
-          <h3>📐 Operation &amp; Topic</h3>
+          <h3>Operation &amp; Topic</h3>
           <div class="form-field">
             <label for="operation-type">Operation:</label>
             <select id="operation-type" class="form-select">
-              <option value="addition">➕ Addition (+)</option>
-              <option value="subtraction">➖ Subtraction (−)</option>
-              <option value="add_sub_mixed">➕➖ Addition &amp; Subtraction Mixed</option>
-              <option value="multiplication">✖️ Multiplication (×)</option>
-              <option value="division">➗ Division (÷)</option>
-              <option value="mult_div_mixed">✖️➗ Multiplication &amp; Division Mixed</option>
-              <option value="all_mixed">🔀 All 4 Operations (+, −, ×, ÷)</option>
-              <option value="comparison">⚖️ Comparisons (&lt;, &gt;, =)</option>
-              <option value="word_problems">📖 Grade 3 Word Problems</option>
+              <option value="addition">Addition (+)</option>
+              <option value="subtraction">Subtraction (−)</option>
+              <option value="add_sub_mixed">Addition &amp; Subtraction Mixed</option>
+              <option value="multiplication">Multiplication (×)</option>
+              <option value="division">Division (÷)</option>
+              <option value="mult_div_mixed">Multiplication &amp; Division Mixed</option>
+              <option value="all_mixed">All 4 Operations (+, −, ×, ÷)</option>
+              <option value="comparison">Comparisons (&lt;, &gt;, =)</option>
+              <option value="word_problems">Grade 3 Word Problems</option>
             </select>
           </div>
         </div>
 
         <!-- Operation Specific Options -->
         <div class="control-group" id="operation-options-box">
-          <h3>⚙️ Difficulty &amp; Rules</h3>
+          <h3>Difficulty &amp; Rules</h3>
           
           <!-- Addition / Subtraction Digits -->
           <div class="form-field" id="field-digit-range">
@@ -181,14 +182,14 @@
           <div class="form-field" id="field-missing-operand">
             <label class="custom-chip">
               <input type="checkbox" id="missing-operand-checkbox">
-              <span>🧩 Missing Numbers Mode (e.g. 45 + ___ = 82)</span>
+              <span><span class="btn-glyph" data-sf-icon="lightbulb" data-sf-size="16"></span>Missing Numbers Mode (e.g. 45 + ___ = 82)</span>
             </label>
           </div>
         </div>
 
         <!-- Layout & Sheet Options -->
         <div class="control-group">
-          <h3>📋 Layout &amp; Sheet Setup</h3>
+          <h3>Layout &amp; Sheet Setup</h3>
           
           <div class="form-field">
             <label for="question-count">Number of Questions:</label>
@@ -247,7 +248,7 @@
           <div class="form-field">
             <label class="custom-chip">
               <input type="checkbox" id="include-answer-key" checked>
-              <span>📄 Include Answer Key (Compact Paper-Saver)</span>
+              <span><span class="btn-glyph" data-sf-icon="printable" data-sf-size="16"></span>Include Answer Key (Compact Paper-Saver)</span>
             </label>
           </div>
         </div>
@@ -256,10 +257,10 @@
       <!-- Action Buttons -->
       <div class="sidebar-footer">
         <button id="btn-generate" class="btn-primary">
-          <span>🔄</span> Generate New Worksheet
+          <span class="btn-glyph" data-sf-icon="refresh" data-sf-size="16"></span> Generate New Worksheet
         </button>
         <button id="btn-print-sidebar" class="btn-secondary">
-          <span>🖨️</span> Print Worksheet
+          <span class="btn-glyph" data-sf-icon="printer" data-sf-size="16"></span> Print Worksheet
         </button>
       </div>
     </aside>
@@ -270,11 +271,11 @@
       <header class="top-bar">
         <div class="top-bar-left">
           <div class="view-mode-toggle">
-            <button id="mode-print-preview" class="view-mode-btn active">📄 Print Preview</button>
-            <button id="mode-interactive" class="view-mode-btn">💻 Practice Online</button>
+            <button id="mode-print-preview" class="view-mode-btn active"><span data-sf-icon="printable" data-sf-size="16"></span><span>Print Preview</span></button>
+            <button id="mode-interactive" class="view-mode-btn"><span data-sf-icon="play" data-sf-size="16"></span><span>Practice Online</span></button>
           </div>
           <button id="btn-toggle-answers" class="view-mode-btn" style="border: 1px solid var(--border-color);">
-            👁️ Show Answers
+            <span class="btn-glyph" data-sf-icon="lightbulb" data-sf-size="16"></span>Show Answers
           </button>
         </div>
 
@@ -283,7 +284,7 @@
             ⏱️ 00:00
           </div>
           <button id="btn-print-top" class="btn-print">
-            <span>🖨️</span> Print Worksheet
+            <span class="btn-glyph" data-sf-icon="printer" data-sf-size="16"></span> Print Worksheet
           </button>
         </div>
       </header>
@@ -367,10 +368,10 @@
       <!-- Interactive Mode Bottom Toolbar -->
       <div class="interactive-toolbar" id="interactive-toolbar" style="display: none;">
         <button id="btn-check-answers" class="btn-primary" style="width: auto; padding: 10px 24px;">
-          ✅ Check My Answers
+          <span class="btn-glyph" data-sf-icon="check" data-sf-size="16"></span>Check My Answers
         </button>
         <button id="btn-reset-interactive" class="btn-secondary" style="width: auto; padding: 10px 20px;">
-          🔄 Try Again
+          <span class="btn-glyph" data-sf-icon="refresh" data-sf-size="16"></span>Try Again
         </button>
         <div class="score-display" id="interactive-score-display">
           Enter answers above and click Check!
@@ -382,6 +383,7 @@
   <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999; display: none;"></canvas>
 
   <!-- Scripts -->
+  <script src="../assets/sf/icons.js?v=3.0.0"></script>
   <script src="js/math-engine.js"></script>
   <script src="js/word-problems.js"></script>
   <script src="js/app.js"></script>

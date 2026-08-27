@@ -7,50 +7,58 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=2.0.0">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.0.0">
+  <link rel="stylesheet" href="style.css?v=3.0.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="sf-subject-science sf-on-light">
 
-  <!-- Top Navbar -->
-  <header class="app-header">
-    <div class="logo-container">
-      <span class="logo-icon">🧪</span>
-      <div>
-        <h1 class="logo-title">Sophia's Science Quest!</h1>
-        <p class="logo-subtitle">Chemistry &bull; Grade 5 Core &bull; Grade 6 Super-Prep</p>
+  <!-- Shared StudyFlix quest shell: identical structure in every studio,
+       only the accent colour and the glyph change. -->
+  <header class="sf-shell-header">
+    <div class="sf-shell-left">
+      <button class="sf-back-hub" type="button" onclick="SFQuest.backToHub()">
+        <span data-sf-icon="arrowLeft" data-sf-size="16"></span><span>StudyFlix Hub</span>
+      </button>
+      <div class="sf-shell-mark">
+        <span class="sf-shell-glyph" data-sf-icon="flask" data-sf-size="22"></span>
+        <div>
+          <h1 class="sf-shell-title">Science &amp; Chemistry Quest</h1>
+          <p class="sf-shell-sub">Chemistry &bull; Grade 5 Core &bull; Grade 6 Super-Prep</p>
+        </div>
       </div>
     </div>
-    
-    <!-- User Stats / XP Bar -->
-    <div class="header-stats">
-      <div class="stat-pill">
-        <span class="stat-label">🌟 XP:</span>
-        <span id="xp-count" class="stat-value">0</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">🔥 Streak:</span>
-        <span id="streak-count" class="stat-value">0</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">🏆 Badges:</span>
-        <span id="badge-count" class="stat-value">0/8</span>
-      </div>
-      <button id="sound-toggle-btn" class="icon-btn" title="Toggle Sound">🔊</button>
+
+    <div class="sf-shell-right">
+      <span class="sf-stat sf-stat--xp" title="Total XP across every StudyFlix studio">
+        <span data-sf-icon="star" data-sf-size="15"></span>
+        <span id="sf-xp-count">0</span><span class="sf-stat-label">XP</span>
+      </span>
+      <span class="sf-stat sf-stat--streak" title="Consecutive days studied">
+        <span data-sf-icon="flame" data-sf-size="15"></span>
+        <span id="sf-streak-count">0</span><span class="sf-stat-label">day streak</span>
+      </span>
+      <span class="sf-stat sf-stat--badges" title="Science badges unlocked">
+        <span data-sf-icon="trophy" data-sf-size="15"></span>
+        <span id="sf-badge-count">0/8</span>
+      </span>
+      <button id="sound-toggle-btn" class="sf-icon-btn" title="Toggle sound" aria-label="Toggle sound">
+        <span data-sf-icon="volumeOn" data-sf-size="18"></span>
+      </button>
     </div>
   </header>
 
   <!-- Navigation Tabs -->
-  <nav class="nav-bar">
-    <button class="nav-tab active" data-tab="tab-map">🗺️ Adventure Map</button>
-    <button class="nav-tab" data-tab="tab-periodic">🧪 Periodic Table Explorer</button>
-    <button class="nav-tab" data-tab="tab-lab">🔬 Visual Super-Lab</button>
-    <button class="nav-tab" data-tab="tab-learn">📖 Story & Learning Hub</button>
-    <button class="nav-tab" data-tab="tab-quiz">🎯 Interactive Quiz Arena</button>
-    <button class="nav-tab" data-tab="tab-decoder">🕵️ Secret Word Decoder</button>
-    <button class="nav-tab" data-tab="tab-trophies">🏆 Trophy Room</button>
+  <nav class="sf-shell-tabs">
+    <button class="sf-shell-tab active" data-tab="tab-map"><span data-sf-icon="map" data-sf-size="17"></span><span>Adventure Map</span></button>
+    <button class="sf-shell-tab" data-tab="tab-periodic"><span data-sf-icon="atom" data-sf-size="17"></span><span>Periodic Table Explorer</span></button>
+    <button class="sf-shell-tab" data-tab="tab-lab"><span data-sf-icon="microscope" data-sf-size="17"></span><span>Visual Super-Lab</span></button>
+    <button class="sf-shell-tab" data-tab="tab-learn"><span data-sf-icon="lesson" data-sf-size="17"></span><span>Story &amp; Learning Hub</span></button>
+    <button class="sf-shell-tab" data-tab="tab-quiz"><span data-sf-icon="quest" data-sf-size="17"></span><span>Interactive Quiz Arena</span></button>
+    <button class="sf-shell-tab" data-tab="tab-decoder"><span data-sf-icon="cipher" data-sf-size="17"></span><span>Secret Word Decoder</span></button>
+    <button class="sf-shell-tab" data-tab="tab-trophies"><span data-sf-icon="trophy" data-sf-size="17"></span><span>Trophy Room</span></button>
   </nav>
 
   <!-- Main Content Container -->
@@ -60,20 +68,20 @@
     <section id="tab-map" class="tab-content active">
       <div class="welcome-banner">
         <div class="welcome-text">
-          <h2>Welcome to Your Science Super-Lab, Sophia! 🚀</h2>
+          <h2>Welcome to Your Science Super-Lab, Sophia!</h2>
           <p>Explore the secrets of the universe, unlock chemical superpowers, master the periodic table, and get ready to ace Grade 6 science!</p>
           <div class="welcome-buttons">
-            <button class="btn btn-primary" onclick="switchTab('tab-lab')">🔬 Launch Visual Lab</button>
-            <button class="btn btn-secondary" onclick="switchTab('tab-periodic')">⚡ Explore Periodic Table</button>
-            <button class="btn btn-accent" onclick="window.open('workbook.html', '_blank')">🖨️ Print Clean Worksheets</button>
+            <button class="sf-btn sf-btn--play" onclick="switchTab('tab-lab')"><span data-sf-icon="play" data-sf-size="18"></span><span>Launch Visual Lab</span></button>
+            <button class="sf-btn sf-btn--explore" onclick="switchTab('tab-periodic')"><span data-sf-icon="atom" data-sf-size="18"></span><span>Explore Periodic Table</span></button>
+            <button class="sf-btn sf-btn--print" onclick="window.open('workbook.html', '_blank')"><span data-sf-icon="printer" data-sf-size="18"></span><span>Print Clean Worksheets</span></button>
           </div>
         </div>
         <div class="welcome-avatar">
-          <div class="avatar-circle">👩‍🔬</div>
+          <div class="avatar-circle" data-sf-icon="flask" data-sf-size="46"></div>
         </div>
       </div>
 
-      <h3 class="section-heading">🌟 Your Quest Progress</h3>
+      <h3 class="section-heading">Your Quest Progress</h3>
       <div class="quest-grid" id="quest-cards-grid">
         <!-- Injected via JavaScript -->
       </div>
@@ -82,16 +90,16 @@
     <!-- TAB 2: INTERACTIVE PERIODIC TABLE EXPLORER -->
     <section id="tab-periodic" class="tab-content">
       <div class="section-header-box">
-        <h2>🧪 Interactive Periodic Table & Superhero Guide</h2>
+        <h2>Interactive Periodic Table & Superhero Guide</h2>
         <p>Click on any element card below to reveal its real-world superpowers, secret stories, and mnemonic hacks!</p>
       </div>
 
       <div class="filter-bar">
         <button class="filter-btn active" data-filter="all">All Top 20 Elements</button>
-        <button class="filter-btn" data-filter="gas">🫧 Gases</button>
-        <button class="filter-btn" data-filter="metal">⚡ Metals</button>
-        <button class="filter-btn" data-filter="noble">👑 Noble Gases</button>
-        <button class="filter-btn" data-filter="vip">💎 Famous VIPs (Gold, Silver, Iron)</button>
+        <button class="filter-btn" data-filter="gas"><span data-sf-icon="droplet" data-sf-size="15"></span><span>Gases</span></button>
+        <button class="filter-btn" data-filter="metal"><span data-sf-icon="cipher" data-sf-size="15"></span><span>Metals</span></button>
+        <button class="filter-btn" data-filter="noble"><span data-sf-icon="trophy" data-sf-size="15"></span><span>Noble Gases</span></button>
+        <button class="filter-btn" data-filter="vip"><span data-sf-icon="star" data-sf-size="15"></span><span>Famous VIPs (Gold, Silver, Iron)</span></button>
       </div>
 
       <div class="periodic-grid" id="elements-grid">
@@ -104,7 +112,7 @@
           <div class="detail-badge" id="modal-atomic-num">#1</div>
           <h3 id="modal-name">Hydrogen</h3>
           <span class="detail-symbol" id="modal-symbol">H</span>
-          <button class="close-btn" onclick="closeElementModal()">✖</button>
+          <button class="close-btn" onclick="closeElementModal()" aria-label="Close"><span data-sf-icon="close" data-sf-size="18"></span></button>
         </div>
         <div class="detail-body">
           <!-- Live Animated Bohr Rutherford Atom Model Preview -->
@@ -139,16 +147,16 @@
     <section id="tab-lab" class="tab-content">
       <div class="section-header-box">
         <span class="lab-super-badge">✨ HANDS-ON GRAPHICAL LAB</span>
-        <h2>🔬 Sophia's Interactive Science Super-Lab</h2>
+        <h2>Sophia's Interactive Science Super-Lab</h2>
         <p>Experiment with visual atom orbits, trigger colorful chemical reactions, explore cell cities, and test roller coaster physics!</p>
       </div>
 
       <!-- Lab Station Switcher Tabs -->
       <div class="lab-station-nav">
-        <button class="lab-tab-btn active" onclick="switchLabStation('atom')">⚛️ 1. Bohr Atom Builder</button>
-        <button class="lab-tab-btn" onclick="switchLabStation('reactions')">🧪 2. Reaction Flask</button>
-        <button class="lab-tab-btn" onclick="switchLabStation('cell')">🏙️ 3. Cell City Micro-Map</button>
-        <button class="lab-tab-btn" onclick="switchLabStation('physics')">🎢 4. Roller Coaster Physics</button>
+        <button class="lab-tab-btn active" onclick="switchLabStation('atom')"><span data-sf-icon="atom" data-sf-size="16"></span><span>1. Bohr Atom Builder</span></button>
+        <button class="lab-tab-btn" onclick="switchLabStation('reactions')"><span data-sf-icon="flask" data-sf-size="16"></span><span>2. Reaction Flask</span></button>
+        <button class="lab-tab-btn" onclick="switchLabStation('cell')"><span data-sf-icon="cell" data-sf-size="16"></span><span>3. Cell City Micro-Map</span></button>
+        <button class="lab-tab-btn" onclick="switchLabStation(\'physics\')"><span data-sf-icon="chartLine" data-sf-size="16"></span><span>4. Roller Coaster Physics</span></button>
       </div>
 
       <!-- STATION 1: BOHR RUTHERFORD ATOM BUILDER -->
@@ -156,7 +164,7 @@
         <div class="station-header">
           <div>
             <span class="station-tag">ATOMIC STRUCTURE LAB</span>
-            <h3>⚛️ Station 1: Interactive Bohr Rutherford Atom Builder</h3>
+            <h3>Station 1: Interactive Bohr Rutherford Atom Builder</h3>
             <p>Select any element below to observe its nucleus protons (p<sup>+</sup>), neutrons (n<sup>0</sup>), and revolving electron energy levels (K, L, M, N).</p>
           </div>
         </div>
@@ -242,7 +250,7 @@
         <div class="station-header">
           <div>
             <span class="station-tag">MOLECULAR REACTION FLASK</span>
-            <h3>🧪 Station 2: Kitchen Chemistry & Molecular Reaction Simulator</h3>
+            <h3>Station 2: Kitchen Chemistry & Molecular Reaction Simulator</h3>
             <p>Trigger real physical and chemical changes! Observe gas production, temperature shifts, and the Law of Conservation of Mass.</p>
           </div>
         </div>
@@ -278,7 +286,7 @@
                 <span class="scale-screen" id="scale-screen">⚖️ 110.0 g</span>
               </div>
             </div>
-            <button class="btn btn-primary btn-spark-reaction" onclick="replayCurrentReaction()">
+            <button class="sf-btn sf-btn--play btn-spark-reaction" onclick="replayCurrentReaction()">
               ⚡ Spark Reaction Again!
             </button>
           </div>
@@ -313,12 +321,12 @@
         <div class="station-header">
           <div>
             <span class="station-tag">CELL BIOLOGY MICRO-MAP</span>
-            <h3>🏙️ Station 3: Cell City Organelle Visualizer</h3>
+            <h3>Station 3: Cell City Organelle Visualizer</h3>
             <p>Every living cell functions like a thriving miniature metropolis. Click any organelle to inspect its city role and compare Plant vs. Animal cells!</p>
           </div>
           <div class="cell-toggle-group">
-            <button class="toggle-btn active" id="btn-cell-plant" onclick="switchCellType('plant')">🌿 Plant Cell (With Superpowers!)</button>
-            <button class="toggle-btn" id="btn-cell-animal" onclick="switchCellType('animal')">🐾 Animal Cell</button>
+            <button class="toggle-btn active" id="btn-cell-plant" onclick="switchCellType('plant')"><span data-sf-icon="leaf" data-sf-size="15"></span><span>Plant Cell (With Superpowers!)</span></button>
+            <button class="toggle-btn" id="btn-cell-animal" onclick="switchCellType(\'animal\')"><span data-sf-icon="person" data-sf-size="15"></span><span>Animal Cell</span></button>
           </div>
         </div>
 
@@ -408,7 +416,7 @@
         <div class="station-header">
           <div>
             <span class="station-tag">PHYSICS & MOTION LAB</span>
-            <h3>🎢 Station 4: Roller Coaster Mechanical Energy Simulator</h3>
+            <h3>Station 4: Roller Coaster Mechanical Energy Simulator</h3>
             <p>Observe how Potential Energy (height) and Kinetic Energy (speed) continuously trade places while Total Mechanical Energy remains 100% constant!</p>
           </div>
         </div>
@@ -454,15 +462,15 @@
 
             <!-- Coaster Control Buttons -->
             <div class="coaster-controls-bar">
-              <button class="btn btn-primary" id="btn-coaster-play" onclick="toggleCoasterAnimation()">▶️ Start Coaster Run</button>
-              <button class="btn btn-secondary" onclick="jumpCoasterPosition('top')">🏔️ Jump to Top Peak</button>
-              <button class="btn btn-secondary" onclick="jumpCoasterPosition('bottom')">🏎️ Jump to Bottom Valley</button>
+              <button class="sf-btn sf-btn--play" id="btn-coaster-play" onclick="toggleCoasterAnimation()"><span data-sf-icon="play" data-sf-size="17"></span><span>Start Coaster Run</span></button>
+              <button class="sf-btn sf-btn--explore" onclick="jumpCoasterPosition('top')">Jump to Top Peak</button>
+              <button class="sf-btn sf-btn--explore" onclick="jumpCoasterPosition('bottom')">Jump to Bottom Valley</button>
             </div>
           </div>
 
           <!-- Real-Time Live Energy Meters -->
           <div class="energy-meters-panel">
-            <h4>⚡ Real-Time Energy Dashboard</h4>
+            <h4>Real-Time Energy Dashboard</h4>
             
             <!-- Potential Energy Meter -->
             <div class="meter-row">
@@ -507,7 +515,7 @@
     <!-- TAB 4: STORY & LEARNING HUB -->
     <section id="tab-learn" class="tab-content">
       <div class="section-header-box">
-        <h2>📖 Interactive Story & Learning Hub</h2>
+        <h2>Interactive Story & Learning Hub</h2>
         <p>Read the science story, discover how nature works, and test your understanding!</p>
       </div>
 
@@ -517,7 +525,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">⚛️</span>
+              <span class="lesson-icon" data-sf-icon="atom" data-sf-size="22"></span>
               <div>
                 <h3>1. What on Earth is an Atom?</h3>
                 <p>Protons, Neutrons, Electrons, and Dmitri Mendeleev's Secret Table</p>
@@ -531,13 +539,13 @@
               
               <div class="lesson-visual-banner">
                 <div class="banner-badge">🔬 Interactive Graphic Simulator Available</div>
-                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('atom', 6)">
+                <button class="sf-btn sf-btn--play sf-btn--sm lesson-lab-btn" onclick="openLabFromLesson('atom', 6)">
                   ⚛️ Launch Carbon (#6) Atom Builder in Super-Lab ➔
                 </button>
               </div>
 
               <div class="concept-callout">
-                <h4>🔴 Inside Every Atom:</h4>
+                <h4>Inside Every Atom:</h4>
                 <ul>
                   <li><strong>Protons (p<sup>+</sup>)</strong>: Positive charge in the center. The number of protons is the <strong>Atomic Number</strong> — it gives the element its identity!</li>
                   <li><strong>Neutrons (n<sup>0</sup>)</strong>: Neutral particles packed inside the nucleus with protons.</li>
@@ -545,7 +553,7 @@
                 </ul>
               </div>
               <div class="mnemonic-box">
-                <h4>🍕 The First 10 Elements Memory Sentence:</h4>
+                <h4>The First 10 Elements Memory Sentence:</h4>
                 <p class="highlight-text">"<strong>H</strong>appy <strong>He</strong>nry <strong>Li</strong>kes <strong>Be</strong>rries, <strong>B</strong>ut <strong>C</strong>an <strong>N</strong>ot <strong>O</strong>ffer <strong>F</strong>our <strong>N</strong>uts."</p>
                 <p><em>(H, He, Li, Be, B, C, N, O, F, Ne)</em></p>
               </div>
@@ -571,25 +579,25 @@
               
               <div class="lesson-visual-banner">
                 <div class="banner-badge">🧪 Visual Reaction Simulator Available</div>
-                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('reactions', 'baking_soda')">
+                <button class="sf-btn sf-btn--play sf-btn--sm lesson-lab-btn" onclick="openLabFromLesson('reactions', 'baking_soda')">
                   🌋 Trigger Baking Soda + Vinegar Flask in Super-Lab ➔
                 </button>
               </div>
 
               <div class="comparison-grid">
                 <div class="compare-card physical">
-                  <h4>🧊 Physical Change</h4>
+                  <h4>Physical Change</h4>
                   <p>Only changes size, shape, or state (solid/liquid/gas). <strong>NO new substance is created!</strong></p>
                   <p><em>Examples: Melting ice, dissolving sugar, tearing paper.</em></p>
                 </div>
                 <div class="compare-card chemical">
-                  <h4>🔥 Chemical Change</h4>
+                  <h4>Chemical Change</h4>
                   <p>Bonds break and rearrange to create a <strong>BRAND NEW substance!</strong></p>
                   <p><em>4 Clues: Gas bubbles 🫧, Color change 🎨, Temp change 🔥, New odor/smell 🍞.</em></p>
                 </div>
               </div>
               <div class="concept-callout">
-                <h4>⚖️ The Magic Scale Rule (Conservation of Mass):</h4>
+                <h4>The Magic Scale Rule (Conservation of Mass):</h4>
                 <p>Matter cannot be created out of nowhere, and it cannot be destroyed! If you mix 10g sugar with 100g water in a cup, the total weight is <strong>exactly 110g</strong>!</p>
               </div>
             </div>
@@ -600,7 +608,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🌲</span>
+              <span class="lesson-icon" data-sf-icon="leaf" data-sf-size="22"></span>
               <div>
                 <h3>3. Ecosystems & The Sun's Energy Flow</h3>
                 <p>Photosynthesis, Food Webs, and the 10% Energy Pyramid Rule</p>
@@ -619,7 +627,7 @@
                 <span class="flow-step">🍄 Decomposers</span>
               </div>
               <div class="concept-callout">
-                <h4>⚡ The 10% Energy Rule:</h4>
+                <h4>The 10% Energy Rule:</h4>
                 <p>When an animal eats another organism, <strong>only ~10% of the energy</strong> is stored. The other 90% is used for running, breathing, and body heat!</p>
               </div>
             </div>
@@ -630,7 +638,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🏙️</span>
+              <span class="lesson-icon" data-sf-icon="cell" data-sf-size="22"></span>
               <div>
                 <h3>4. Cell City & Living Organisms (Grade 6 Prep)</h3>
                 <p>Nucleus Mayor, Mitochondria Powerhouse, and Plant Cell Superpowers</p>
@@ -644,7 +652,7 @@
               
               <div class="lesson-visual-banner">
                 <div class="banner-badge">🏙️ Micro-Map Visualizer Available</div>
-                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('cell', 'plant')">
+                <button class="sf-btn sf-btn--play sf-btn--sm lesson-lab-btn" onclick="openLabFromLesson('cell', 'plant')">
                   🌿 Inspect Plant & Animal Cell Micro-Map in Super-Lab ➔
                 </button>
               </div>
@@ -665,7 +673,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🎢</span>
+              <span class="lesson-icon" data-sf-icon="chartLine" data-sf-size="22"></span>
               <div>
                 <h3>5. Roller Coaster Physics & Newton's Laws (Grade 6 Prep)</h3>
                 <p>Potential Energy vs. Kinetic Energy, Gravity, Friction & Newton's 3 Laws</p>
@@ -677,20 +685,20 @@
             <div class="lesson-body">
               <div class="lesson-visual-banner">
                 <div class="banner-badge">🎢 Kinetic Simulator Available</div>
-                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('physics', 'top')">
+                <button class="sf-btn sf-btn--play sf-btn--sm lesson-lab-btn" onclick="openLabFromLesson('physics', 'top')">
                   🎢 Run Roller Coaster Energy Simulator in Super-Lab ➔
                 </button>
               </div>
 
               <div class="concept-callout">
-                <h4>🎢 The Roller Coaster Secret:</h4>
+                <h4>The Roller Coaster Secret:</h4>
                 <ul>
                   <li><strong>Potential Energy (PE):</strong> Stored energy. Maximum at the highest hill!</li>
                   <li><strong>Kinetic Energy (KE):</strong> Motion energy. Maximum at the fastest, lowest bottom!</li>
                 </ul>
               </div>
               <div class="mnemonic-box">
-                <h4>🏎️ Newton's 3 Laws in Plain English:</h4>
+                <h4>Newton's 3 Laws in Plain English:</h4>
                 <ol>
                   <li><strong>1st Law (Inertia):</strong> Objects keep resting or moving unless pushed (wear seatbelts!).</li>
                   <li><strong>2nd Law (<em>F</em> = <em>ma</em>):</strong> Heavier objects need stronger pushes to accelerate.</li>
@@ -705,7 +713,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🕵️</span>
+              <span class="lesson-icon" data-sf-icon="cipher" data-sf-size="22"></span>
               <div>
                 <h3>6. The Scientific Method & Variables (Grade 6 Prep)</h3>
                 <p>The #1 Middle School Skill: Independent, Dependent, and Controlled Variables</p>
@@ -716,7 +724,7 @@
           <div class="lesson-content">
             <div class="lesson-body">
               <div class="concept-callout">
-                <h4>🔍 The I-D-C Variable Formula:</h4>
+                <h4>The I-D-C Variable Formula:</h4>
                 <ul>
                   <li>🎛️ <strong>Independent Variable (IV):</strong> The ONE thing <em>"I"</em> change on purpose to test.</li>
                   <li>📏 <strong>Dependent Variable (DV):</strong> What you <em>MEASURE</em> (the data/result).</li>
@@ -737,37 +745,37 @@
         <!-- Quiz Selection Screen -->
         <div id="quiz-selection-screen" class="quiz-screen">
           <div class="section-header-box">
-            <h2>🎯 Sophia's Interactive Quiz Arena</h2>
+            <h2>Sophia's Interactive Quiz Arena</h2>
             <p>Choose a mission, test your knowledge, earn XP, and unlock champion badges!</p>
           </div>
           
           <div class="quiz-modes-grid">
             <div class="quiz-mode-card" onclick="startQuiz('periodic')">
-              <span class="mode-icon">🧪</span>
+              <span class="mode-icon" data-sf-icon="flask" data-sf-size="22"></span>
               <h3>Periodic Table Superheroes</h3>
               <p>10 Questions on Elements 1-20, symbols, and real-world powers!</p>
-              <button class="btn btn-primary">Start Chemistry Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Chemistry Quiz</button>
             </div>
             
             <div class="quiz-mode-card" onclick="startQuiz('grade5')">
-              <span class="mode-icon">🌍</span>
+              <span class="mode-icon" data-sf-icon="globe" data-sf-size="22"></span>
               <h3>Grade 5 Core Science</h3>
               <p>Matter, chemical changes, food webs, and Earth's 4 spheres!</p>
-              <button class="btn btn-primary">Start Grade 5 Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Grade 5 Quiz</button>
             </div>
 
             <div class="quiz-mode-card" onclick="startQuiz('grade6')">
-              <span class="mode-icon">🚀</span>
+              <span class="mode-icon" data-sf-icon="play" data-sf-size="22"></span>
               <h3>Grade 6 Readiness Super-Prep</h3>
               <p>Cell city organelles, roller coaster physics, and variables!</p>
-              <button class="btn btn-primary">Start Grade 6 Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Grade 6 Quiz</button>
             </div>
 
             <div class="quiz-mode-card" onclick="startQuiz('marathon')">
-              <span class="mode-icon">🏆</span>
+              <span class="mode-icon" data-sf-icon="trophy" data-sf-size="22"></span>
               <h3>Grand Science Marathon</h3>
               <p>All topics combined in one ultimate science showdown!</p>
-              <button class="btn btn-accent">Start Grand Marathon</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Grand Marathon</button>
             </div>
           </div>
         </div>
@@ -775,11 +783,15 @@
         <!-- Active Quiz Play Screen -->
         <div id="quiz-play-screen" class="quiz-screen hidden">
           <div class="quiz-header">
-            <button class="btn-sm btn-secondary" onclick="quitQuiz()">← Back to Menu</button>
+            <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="quitQuiz()"><span data-sf-icon="arrowLeft" data-sf-size="15"></span><span>Back to Menu</span></button>
             <div class="quiz-progress-bar-container">
               <div id="quiz-progress-fill" class="quiz-progress-fill" style="width: 0%;"></div>
             </div>
             <span id="quiz-step-counter" class="quiz-counter">Q 1/10</span>
+            <span class="quiz-run-counter" title="Correct answers in a row">
+              <span data-sf-icon="flame" data-sf-size="15"></span>
+              <span id="answer-run-count">0</span> in a row
+            </span>
           </div>
 
           <div class="quiz-question-card">
@@ -800,8 +812,8 @@
             </div>
 
             <div class="quiz-action-footer">
-              <button id="quiz-hint-btn" class="btn btn-secondary" onclick="showHint()">💡 Need a Hint?</button>
-              <button id="quiz-next-btn" class="btn btn-primary hidden" onclick="nextQuestion()">Next Question ➔</button>
+              <button id="quiz-hint-btn" class="sf-btn sf-btn--explore" onclick="showHint()"><span data-sf-icon="lightbulb" data-sf-size="17"></span><span>Need a Hint?</span></button>
+              <button id="quiz-next-btn" class="sf-btn sf-btn--play hidden" onclick="nextQuestion()"><span>Next Question</span><span data-sf-icon="chevronRight" data-sf-size="17"></span></button>
             </div>
           </div>
         </div>
@@ -825,8 +837,8 @@
             </div>
 
             <div class="result-buttons">
-              <button class="btn btn-primary" onclick="restartCurrentQuiz()">🔄 Play Again</button>
-              <button class="btn btn-secondary" onclick="showQuizSelection()">🎯 Choose Another Quiz</button>
+              <button class="sf-btn sf-btn--play" onclick="restartCurrentQuiz()"><span data-sf-icon="refresh" data-sf-size="17"></span><span>Play Again</span></button>
+              <button class="sf-btn sf-btn--explore" onclick="showQuizSelection()"><span data-sf-icon="quest" data-sf-size="17"></span><span>Choose Another Quiz</span></button>
             </div>
           </div>
         </div>
@@ -837,7 +849,7 @@
     <!-- TAB 5: SECRET ELEMENT DECODER -->
     <section id="tab-decoder" class="tab-content">
       <div class="section-header-box">
-        <h2>🕵️ Secret Agent Chemical Word Decoder 🕶️</h2>
+        <h2>Secret Agent Chemical Word Decoder</h2>
         <p>Combine element symbols to crack top-secret word codes!</p>
       </div>
 
@@ -851,15 +863,15 @@
 
           <div class="decoder-input-group">
             <input type="text" id="decoder-answer-input" placeholder="TYPE SECRET WORD..." autocomplete="off">
-            <button class="btn btn-primary" onclick="checkDecoderAnswer()">Unlock Code 🔓</button>
+            <button class="sf-btn sf-btn--play" onclick="checkDecoderAnswer()"><span data-sf-icon="check" data-sf-size="17"></span><span>Unlock Code</span></button>
           </div>
 
           <div id="decoder-feedback" class="decoder-feedback hidden"></div>
 
           <div class="decoder-nav">
-            <button class="btn-sm btn-secondary" onclick="prevDecoder()">← Previous Word</button>
+            <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="prevDecoder()"><span data-sf-icon="chevronLeft" data-sf-size="15"></span><span>Previous Word</span></button>
             <span id="decoder-tracker">Word 1 of 8</span>
-            <button class="btn-sm btn-secondary" onclick="nextDecoder()">Next Word →</button>
+            <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="nextDecoder()"><span>Next Word</span><span data-sf-icon="chevronRight" data-sf-size="15"></span></button>
           </div>
         </div>
       </div>
@@ -868,7 +880,7 @@
     <!-- TAB 6: TROPHY ROOM & BADGES -->
     <section id="tab-trophies" class="tab-content">
       <div class="section-header-box">
-        <h2>🏆 Sophia's Science Trophy Room</h2>
+        <h2>Sophia's Science Trophy Room</h2>
         <p>Unlock achievements as you complete quests, answer questions, and build streaks!</p>
       </div>
 
@@ -882,6 +894,10 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
+  <script src="../assets/sf/icons.js?v=3.0.0"></script>
+  <script src="../assets/sf/keyart.js?v=3.0.0"></script>
+  <script src="../assets/sf/progress.js?v=3.0.0"></script>
+  <script src="../assets/sf/quest-bridge.js?v=3.0.0"></script>
   <script src="app.js?v=2.0.0"></script>
 </body>
 </html>
