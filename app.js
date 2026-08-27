@@ -106,11 +106,44 @@ const DEFAULT_PROFILES = [
       { title: "🖨️ 高考数学/自主招生标准试卷", icon: "📄", badge: "A4 试卷排版", desc: "标准考场抬头、草稿答题区与独立答案速查页", link: "yaya/index.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
       { title: "🖨️ AP Calculus Diagnostic Exam", icon: "📝", badge: "DIAGNOSTIC", desc: "Full section test generator with detailed rubric solutions", link: "yaya/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
     ]
+  },
+  {
+    id: "mama",
+    name: "Mama",
+    avatar: "☕",
+    grade: "Master Coffee Connoisseur",
+    themeClass: "theme-mama",
+    featured: {
+      tag: "☕ SPECIALTY COFFEE MASTERCLASS",
+      title: "Mama's Specialty Coffee & Bean Tasting Studio",
+      desc: "Explore single-origin terroirs (Ethiopia, Panama, Colombia), Arabica varietals (Geisha, Bourbon, Typica), processing methods, SCA Flavour Wheel, and golden hand-drip brewing recipes!",
+      link: "mama/index.html",
+      bgGradient: "linear-gradient(135deg, rgba(180,83,9,0.9) 0%, rgba(229,169,60,0.85) 50%, rgba(26,22,21,0.95) 100%)"
+    },
+    subjects: [
+      { title: "☕ Specialty Coffee Masterclass", icon: "☕", badge: "NEW STUDIO", desc: "Bean Knowledge, Global Terroirs, Processing & Flavour Wheels", link: "mama/index.html", bg: "linear-gradient(135deg, #b45309, #d49a37)" },
+      { title: "🌍 World Coffee Atlas & Origins", icon: "🌍", badge: "TERROIR", desc: "Ethiopia Yirgacheffe, Kenya AA, Panama Geisha, Colombia Huila", link: "mama/index.html#tab-origins", bg: "linear-gradient(135deg, #2d6a4f, #52b788)" },
+      { title: "🎨 SCA Flavour Wheel & Tasting", icon: "🎨", badge: "CUPPING", desc: "Floral, Fruity, Caramel, Cocoa & Spices Cupping Guide", link: "mama/index.html#tab-flavour", bg: "linear-gradient(135deg, #c84b31, #e5a93c)" },
+      { title: "⚖️ Mama's Bean Matchmaker", icon: "🎯", badge: "BREWING RECIPE", desc: "Personalized bean pairing, grind sizes & golden V60 ratios", link: "mama/index.html#tab-matchmaker", bg: "linear-gradient(135deg, #7c2d12, #b45309)" }
+    ],
+    topics: [
+      { title: "🐐 Legend of Kaldi & Coffee Belt", icon: "🌍", badge: "HISTORY", desc: "Ethiopian highlands, ancient Mocha port & high-altitude terroir", link: "mama/index.html#tab-origins", bg: "linear-gradient(135deg, #b45309, #d97706)" },
+      { title: "👑 Panama Geisha & Arabica Lineages", icon: "🌿", badge: "VARIETALS", desc: "Geisha jasmine floral, Bourbon sweetness & Typica ancestors", link: "mama/index.html#tab-varietals", bg: "linear-gradient(135deg, #2d6a4f, #1b4332)" },
+      { title: "🔬 Cherry Anatomy & Layers", icon: "🍒", badge: "BOTANY", desc: "Pulp mesocarp, sugar mucilage, parchment & green coffee bean", link: "mama/index.html#tab-varietals", bg: "linear-gradient(135deg, #c84b31, #a83232)" },
+      { title: "💧 Washed vs. Natural vs. Honey", icon: "☀️", badge: "PROCESSING", desc: "Clean citric tea clarity vs. sun-dried strawberry berry sweetness", link: "mama/index.html#tab-processing", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
+      { title: "🔥 Interactive Roast Spectrum", icon: "🔥", badge: "ROASTING", desc: "Light City to Dark French Roast with First Crack caramelization", link: "mama/index.html#tab-processing", bg: "linear-gradient(135deg, #451a03, #b45309)" },
+      { title: "☕ Golden V60 Pour-Over Recipe", icon: "📋", badge: "BREWING", desc: "1:16 ratio, 92°C water temp, 45g bloom for clean balance", link: "mama/index.html#tab-matchmaker", bg: "linear-gradient(135deg, #b45309, #e5a93c)" },
+      { title: "🏆 Barista Connoisseur Quiz Arena", icon: "🏅", badge: "QUIZ & TROPHIES", desc: "Test cupping knowledge and unlock 8 Master Barista Badges", link: "mama/index.html#tab-quiz", bg: "linear-gradient(135deg, #7c3aed, #ec4899)" }
+    ],
+    printable: [
+      { title: "📖 Mama's Coffee Tasting Journal", icon: "☕", badge: "PRINTABLE LOG", desc: "SCA cupping scoresheets, origin matrix & golden brewing compass", link: "mama/workbook.html", bg: "linear-gradient(135deg, #b45309, #7c2d12)" },
+      { title: "📄 Complete Coffee Masterclass Handbook", icon: "📜", badge: "MASTER GUIDE", desc: "Comprehensive origin profiles, genetics & extraction science", link: "mama/00_MAMA_COFFEE_MASTERCLASS_GUIDE.md", bg: "linear-gradient(135deg, #1e293b, #334155)" }
+    ]
   }
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "2.5.0";
+const APP_VERSION = "2.6.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
@@ -520,6 +553,17 @@ const PROFILE_QUICK_TAGS = {
     { label: "∫ Definite Integrals", query: "Integral" },
     { label: "🎯 Probability Theory", query: "Probability" },
     { label: "📝 Diagnostic Exam", query: "Diagnostic" }
+  ],
+  mama: [
+    { label: "☕ Specialty Coffee", query: "Coffee" },
+    { label: "👑 Panama Geisha", query: "Geisha" },
+    { label: "🌸 Ethiopia Yirgacheffe", query: "Yirgacheffe" },
+    { label: "🍫 Colombia Huila", query: "Colombia" },
+    { label: "☀️ Washed vs Natural", query: "Processing" },
+    { label: "🔥 Roast Spectrum", query: "Roast" },
+    { label: "🎨 Flavour Wheel", query: "Flavour" },
+    { label: "⚖️ Golden Brew Ratio", query: "Brewing" },
+    { label: "📖 Cupping Journal", query: "Journal" }
   ]
 };
 

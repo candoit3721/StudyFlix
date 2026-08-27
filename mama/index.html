@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mama's Specialty Coffee Masterclass ☕✨</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css?v=1.0.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="theme-cafe">
+
+  <!-- Top Bar / Navbar -->
+  <header class="app-header">
+    <div class="header-left">
+      <a href="../index.html" class="back-hub-btn" title="Back to StudyFlix Hub">← StudyFlix Hub</a>
+      <div class="header-branding">
+        <span class="header-icon">☕</span>
+        <div>
+          <h1 class="header-title">Mama's Coffee Connoisseur Studio</h1>
+          <p class="header-sub">Specialty Coffee Beans &bull; World Origins &bull; Flavour Wheels &bull; Brewing Compass</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="stat-pill xp-pill" title="Tasting XP Earned">
+        <span class="stat-icon">⭐</span>
+        <span id="xp-count">0</span> XP
+      </div>
+      <div class="stat-pill streak-pill" title="Daily Tasting Streak">
+        <span class="stat-icon">☕</span>
+        <span id="streak-count">1</span> Day Cup
+      </div>
+      <div class="stat-pill badge-pill" title="Connoisseur Badges Unlocked">
+        <span class="stat-icon">🏅</span>
+        <span id="badge-count">0/8</span>
+      </div>
+      <button id="sound-toggle-btn" class="icon-btn" onclick="toggleSound()" title="Toggle Ambience Sounds">🔊</button>
+    </div>
+  </header>
+
+  <!-- Navigation Bar Tabs -->
+  <nav class="nav-bar">
+    <div class="nav-tabs-container">
+      <button class="nav-tab active" data-tab="tab-origins">🌍 World Coffee Atlas</button>
+      <button class="nav-tab" data-tab="tab-varietals">🌿 Bean Varietals & Anatomy</button>
+      <button class="nav-tab" data-tab="tab-processing">☀️ Processing & Roasting Lab</button>
+      <button class="nav-tab" data-tab="tab-flavour">🎨 SCA Flavour Wheel</button>
+      <button class="nav-tab" data-tab="tab-matchmaker">☕ Mama's Bean Matchmaker</button>
+      <button class="nav-tab" data-tab="tab-quiz">🏆 Tasting Quiz & Trophies</button>
+    </div>
+  </nav>
+
+  <!-- Main Content Stage -->
+  <main class="main-container">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: WORLD COFFEE ATLAS & ORIGINS -->
+    <!-- ========================================================================= -->
+    <section id="tab-origins" class="tab-content active">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Welcome to Your Coffee Masterclass, Mama! ☕🌸</h2>
+          <p>Every coffee bean tells a story of volcanic soil, high-altitude mountain mists, and the passion of master growers. Discover the <strong>Coffee Belt</strong>, explore how terroir shapes taste, and unlock the world's most sought-after single origins!</p>
+          <div class="welcome-buttons">
+            <button class="btn btn-primary" onclick="switchTab('tab-matchmaker')">☕ Find Mama's Perfect Bean</button>
+            <button class="btn btn-secondary" onclick="switchTab('tab-flavour')">🎨 Explore Flavour Wheel</button>
+            <button class="btn btn-accent" onclick="window.open('workbook.html', '_blank')">🖨️ Print Tasting Journal</button>
+          </div>
+        </div>
+        <div class="welcome-avatar">
+          <div class="avatar-circle">☕</div>
+          <span class="avatar-tag">Master Connoisseur</span>
+        </div>
+      </div>
+
+      <!-- History Legend Section -->
+      <div class="story-history-card">
+        <div class="story-badge">The Birth of Coffee &bull; 850 CE</div>
+        <h3>🐐 The Legend of Kaldi & The Ethiopian Highlands</h3>
+        <p>In the lush, cloud-draped mountain forests of <strong>Kaffa, Ethiopia</strong>, an observant goat herder named <strong>Kaldi</strong> noticed his goats leaping with boundless joy after grazing on vibrant crimson berries from a wild tree. Intrigued, Kaldi chewed the sweet fruit and felt a surge of joyful alertness! He brought the cherries to a nearby Sufi monastery, where monks brewed the world's first cup of coffee to sustain long evenings of prayer and contemplation.</p>
+        
+        <div class="origin-key-facts">
+          <div class="fact-item">
+            <strong>🌍 The Coffee Belt (赤道咖啡带)</strong>
+            <span>Grown exclusively between Latitude 25°N (Tropic of Cancer) and 25°S (Tropic of Capricorn).</span>
+          </div>
+          <div class="fact-item">
+            <strong>🏔️ The Altitude Rule (海拔黄金法则)</strong>
+            <span>High altitudes (1,200m - 2,200m) have cooler nights, slowing cherry maturation and concentrating delicate floral sugars & fruit acids!</span>
+          </div>
+          <div class="fact-item">
+            <strong>☕ The Port of Mocha (也门摩卡传奇)</strong>
+            <span>In the 15th century, Yemen's ancient port of Mocha guarded the world's coffee trade, creating the historic Mocha-Java chocolatey blend.</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-heading">🌍 The 3 Great Global Terroirs (全球三大咖啡产区图鉴)</h3>
+      <div class="origins-grid">
+        
+        <!-- Region 1: Africa -->
+        <div class="origin-card african" onclick="filterOriginStory('africa')">
+          <div class="origin-card-header">
+            <span class="region-badge">AFRICA (非洲产区)</span>
+            <span class="origin-altitude">1,700m - 2,200m</span>
+          </div>
+          <h4>🌸 Floral, Bright Citrus & Black Tea Elegance</h4>
+          <p class="origin-headline">Ethiopia (Yirgacheffe, Guji, Sidamo), Kenya (Nyeri, Kirinyaga), Rwanda</p>
+          <div class="tasting-notes-tags">
+            <span class="note-pill">Jasmine (茉莉花)</span>
+            <span class="note-pill">Bergamot (佛手柑)</span>
+            <span class="note-pill">Peach (水蜜桃)</span>
+            <span class="note-pill">Blackcurrant (黑加仑)</span>
+            <span class="note-pill">Earl Grey Tea (伯爵红茶)</span>
+          </div>
+          <div class="origin-quote">"Known as the Champagne of Coffee — vibrant, winey acidity with delicate tea-like clarity."</div>
+        </div>
+
+        <!-- Region 2: Central & South America -->
+        <div class="origin-card americas" onclick="filterOriginStory('americas')">
+          <div class="origin-card-header">
+            <span class="region-badge">CENTRAL & SOUTH AMERICA (美洲产区)</span>
+            <span class="origin-altitude">1,100m - 1,900m</span>
+          </div>
+          <h4>🍫 Balanced, Sweet Caramel, Nutty & Chocolate Warmth</h4>
+          <p class="origin-headline">Colombia (Huila, Nariño), Guatemala (Antigua), Costa Rica (Tarrazú), Panama (Boquete)</p>
+          <div class="tasting-notes-tags">
+            <span class="note-pill">Milk Chocolate (牛奶巧克力)</span>
+            <span class="note-pill">Roasted Almond (烤扁桃仁)</span>
+            <span class="note-pill">Brown Sugar (红糖焦糖)</span>
+            <span class="note-pill">Red Apple (红苹果)</span>
+            <span class="note-pill">Honey (金黄洋槐蜜)</span>
+          </div>
+          <div class="origin-quote">"The crowd-pleasing daily favourite — round, silky body with chocolate sweetness and nutty finish."</div>
+        </div>
+
+        <!-- Region 3: Asia & Indo-Pacific -->
+        <div class="origin-card asia" onclick="filterOriginStory('asia')">
+          <div class="origin-card-header">
+            <span class="region-badge">INDO-PACIFIC & ASIA (亚洲/海岛产区)</span>
+            <span class="origin-altitude">800m - 1,600m</span>
+          </div>
+          <h4>🌿 Earthy, Velvety Full Body, Spices & Herbal Depth</h4>
+          <p class="origin-headline">Indonesia (Sumatra Mandheling 曼特宁, Java), Yunnan (云南保山), Hawaii (Kona)</p>
+          <div class="tasting-notes-tags">
+            <span class="note-pill">Dark Cocoa (黑巧可可)</span>
+            <span class="note-pill">Cedarwood (雪松香气)</span>
+            <span class="note-pill">Warm Spices (肉桂丁香)</span>
+            <span class="note-pill">Herbal Tea (草本韵味)</span>
+            <span class="note-pill">Creamy Syrup (稠厚脂质)</span>
+          </div>
+          <div class="origin-quote">"Full-bodied, low acidity, and intensely rich with notes of dark cedar and baker's cacao."</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: BEAN VARIETALS & ANATOMY -->
+    <!-- ========================================================================= -->
+    <section id="tab-varietals" class="tab-content">
+      <div class="section-intro">
+        <h2>🌿 Specialty Arabica Varietals & Botanical Anatomy</h2>
+        <p>Like fine wine grape varietals (Cabernet vs. Pinot Noir), coffee cherries possess distinct genetic lineages that dictate natural sweetness, cup complexity, and aroma.</p>
+      </div>
+
+      <!-- Arabica vs Robusta Showdown -->
+      <div class="showdown-card">
+        <h3>⚔️ The Two Big Species: Arabica vs. Robusta</h3>
+        <div class="showdown-grid">
+          <div class="showdown-col arabica-col">
+            <div class="species-header">
+              <span class="species-tag">Specialty Standard (60-70% of Global Coffee)</span>
+              <h4>🌿 Coffea Arabica (阿拉比卡)</h4>
+            </div>
+            <ul>
+              <li><strong>Chromosomes (染色体):</strong> 44 chromosomes (Self-pollinating, gentle complexity).</li>
+              <li><strong>Altitude (生长海拔):</strong> 1,000m - 2,200m (High mountain mists).</li>
+              <li><strong>Sugar Content (自然糖分):</strong> 6% - 9% (Twice as sweet as Robusta!).</li>
+              <li><strong>Lipids & Oils (油脂含量):</strong> 15% - 17% (Silky, velvety mouthfeel).</li>
+              <li><strong>Caffeine (咖啡因):</strong> 1.1% - 1.5% (Smooth, gentle energy).</li>
+              <li><strong>Cup Profile:</strong> Delicate floral, juicy berry, citrus sweetness, chocolate elegance.</li>
+            </ul>
+          </div>
+
+          <div class="showdown-col robusta-col">
+            <div class="species-header">
+              <span class="species-tag">Commercial & Crema (30-40% of Global Coffee)</span>
+              <h4>🌳 Coffea Canephora / Robusta (罗布斯塔)</h4>
+            </div>
+            <ul>
+              <li><strong>Chromosomes (染色体):</strong> 22 chromosomes (Hardy, pest-resistant).</li>
+              <li><strong>Altitude (生长海拔):</strong> Sea level to 800m (Lowland tropical heat).</li>
+              <li><strong>Sugar Content (自然糖分):</strong> 3% - 5% (Low sweetness).</li>
+              <li><strong>Lipids & Oils (油脂含量):</strong> 10% - 11% (Thick espresso crema).</li>
+              <li><strong>Caffeine (咖啡因):</strong> 2.2% - 2.7% (Double caffeine, natural insect repellent).</li>
+              <li><strong>Cup Profile:</strong> Earthy, rubbery, bitter dark cacao, heavy burnt caramel.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specialty Arabica Lineages -->
+      <h3 class="section-heading">🌟 Famous Arabica Varietal Lineages (精品豆种名录)</h3>
+      <div class="varietals-grid">
+        
+        <div class="varietal-card geisha">
+          <div class="varietal-badge">👑 The Queen of Coffee</div>
+          <h4>Panama Geisha / Gesha (瑰夏)</h4>
+          <div class="varietal-origin">Origin: Gesha Village, Ethiopia &bull; Perfected in Boquete, Panama</div>
+          <p>Discovered in the 1930s and brought to fame by Hacienda La Esmeralda in 2004. Features intoxicating aromas of white jasmine blossom, bergamot, orange blossom, and peach tea.</p>
+          <div class="flavour-pill-row">
+            <span>Jasmine</span><span>Bergamot</span><span>Peach</span><span>Meyer Lemon</span>
+          </div>
+        </div>
+
+        <div class="varietal-card typica">
+          <div class="varietal-badge">📜 Ancient Noble Lineage</div>
+          <h4>Typica (铁皮卡)</h4>
+          <div class="varietal-origin">Origin: Yemen & Ethiopia &bull; Global Ancestor</div>
+          <p>The foundational heirloom varietal from which modern coffee descend. Produces an exquisitely clean cup with mild floral aroma, sweet red apple acidity, and a silky smooth finish.</p>
+          <div class="flavour-pill-row">
+            <span>Red Apple</span><span>Floral</span><span>Cane Sugar</span><span>Silky Body</span>
+          </div>
+        </div>
+
+        <div class="varietal-card bourbon">
+          <div class="varietal-badge">🍯 Sweetness Champion</div>
+          <h4>Bourbon & Yellow Bourbon (波旁 / 黄波旁)</h4>
+          <div class="varietal-origin">Origin: Réunion Island (Île Bourbon) &bull; Central/South America</div>
+          <p>A natural mutation of Typica prized for exceptionally high glucose and fructose sugars. Yellow Bourbon ripens into a vibrant golden cherry with buttery caramel, roasted pecan, and chocolate notes.</p>
+          <div class="flavour-pill-row">
+            <span>Caramel</span><span>Pecan</span><span>Milk Chocolate</span><span>Honey</span>
+          </div>
+        </div>
+
+        <div class="varietal-card sl28">
+          <div class="varietal-badge">🍇 Complex African Acidic Royalty</div>
+          <h4>Kenya SL-28 / SL-34 (肯尼亚 SL 基因)</h4>
+          <div class="varietal-origin">Origin: Scott Laboratories (Kenya, 1930s)</div>
+          <p>Bred for drought resistance in Kenya's rich red volcanic loam. Famous worldwide for its explosive phosphoric/citric brightness, blackcurrant, ruby grapefruit, and juicy tomato notes.</p>
+          <div class="flavour-pill-row">
+            <span>Blackcurrant</span><span>Grapefruit</span><span>Plum</span><span>Tomato Sweetness</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Anatomy Peeler -->
+      <div class="anatomy-interactive-card">
+        <h3>🔬 The Anatomy of a Coffee Cherry (一颗咖啡樱桃的解剖学)</h3>
+        <p>Click on any layer below to reveal how it impacts the final cup in your morning brew:</p>
+        
+        <div class="cherry-layers-interactive">
+          <div class="layer-pill" onclick="showLayerInfo('exocarp')">1. Outer Skin (Exocarp 果皮)</div>
+          <div class="layer-pill" onclick="showLayerInfo('mesocarp')">2. Sweet Pulp (Mesocarp 果肉)</div>
+          <div class="layer-pill" onclick="showLayerInfo('mucilage')">3. Sticky Mucilage (果胶层)</div>
+          <div class="layer-pill" onclick="showLayerInfo('endocarp')">4. Parchment (Endocarp 羊皮纸)</div>
+          <div class="layer-pill" onclick="showLayerInfo('silverskin')">5. Silver Skin (银皮)</div>
+          <div class="layer-pill active" onclick="showLayerInfo('bean')">6. Green Coffee Bean (生豆种子)</div>
+        </div>
+
+        <div id="layer-detail-box" class="layer-detail-box">
+          <h4 id="layer-title">6. Green Coffee Bean (咖啡生豆 - 胚乳)</h4>
+          <p id="layer-desc">The two twin seeds nestled inside the cherry! Packed with chlorogenic acids, amino acids, and complex sucrose carbohydrates ready to be caramelized into aromatic aroma compounds during roasting.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: PROCESSING & ROASTING LAB -->
+    <!-- ========================================================================= -->
+    <section id="tab-processing" class="tab-content">
+      <div class="section-intro">
+        <h2>☀️ Green Bean Processing & The Chemistry of Roasting</h2>
+        <p>How the raw coffee cherry is stripped and dried completely transforms its cup profile — turning the same tree's fruit from sparkling clean lemonade into a rich, winey blueberry jam!</p>
+      </div>
+
+      <!-- 3 Master Processing Methods -->
+      <div class="processing-methods-grid">
+        
+        <div class="proc-card washed">
+          <div class="proc-badge">💧 Clean & Bright</div>
+          <h3>Washed / Wet Process (水洗处理法)</h3>
+          <p class="proc-summary">De-pulped immediately &bull; Fermented in water tanks (12-36h) &bull; Washed clean with fresh mountain water &bull; Sun-dried on raised beds.</p>
+          <div class="proc-profile">
+            <strong>Cup Character:</strong> Clean, crisp clarity, floral transparency, lively sparkling acidity, elegant tea-like body.
+          </div>
+          <div class="proc-icons">💧 ➔ 🫧 ➔ ☀️ ➔ ☕ Clean Elegance</div>
+        </div>
+
+        <div class="proc-card natural">
+          <div class="proc-badge">☀️ Sweet & Fruity</div>
+          <h3>Natural / Dry Process (日晒处理法)</h3>
+          <p class="proc-summary">Whole intact cherries dried under the sun on African raised beds for 20-30 days while fermenting naturally with all fruit sugars intact.</p>
+          <div class="proc-profile">
+            <strong>Cup Character:</strong> Intense strawberry & blueberry aroma, heavy syrup mouthfeel, tropical sweetness, winey rich body.
+          </div>
+          <div class="proc-icons">🍒 ➔ ☀️ ➔ 🍇 ➔ ☕ Berry Explosion</div>
+        </div>
+
+        <div class="proc-card honey">
+          <div class="proc-badge">🍯 Balanced & Jammy</div>
+          <h3>Honey Process (蜜处理法 - Yellow/Red/Black)</h3>
+          <p class="proc-summary">Skin is peeled off, but the sticky sugar-rich mucilage layer is left on the parchment bean to dry slowly under controlled shade/sun.</p>
+          <div class="proc-profile">
+            <strong>Cup Character:</strong> Harmonious balance of washed acidity and natural sweetness; notes of honey, apricot, and brown sugar.
+          </div>
+          <div class="proc-icons">🍯 ➔ 🌤️ ➔ 🍑 ➔ ☕ Honey Sweetness</div>
+        </div>
+
+      </div>
+
+      <!-- Interactive Roast Level Simulator -->
+      <div class="roast-simulator-card">
+        <h3>🔥 Interactive Roast Spectrum Simulator (咖啡烘焙风味阶梯)</h3>
+        <p>Move the slider to see how heat converts bean acids into sweet caramelized Maillard compounds and deep roasted aromatics:</p>
+
+        <div class="roast-slider-container">
+          <div class="roast-slider-header">
+            <span>Roast Level: <strong id="roast-name-display">Light Roast (浅度烘焙 &bull; City)</strong></span>
+            <span class="bean-temp" id="roast-temp-display">195°C - 205°C</span>
+          </div>
+          <input type="range" id="roast-range" min="1" max="4" value="1" step="1" oninput="updateRoastSimulator(this.value)">
+          <div class="roast-spectrum-labels">
+            <span>1. Light (浅烘)</span>
+            <span>2. Medium (中烘)</span>
+            <span>3. Medium-Dark (深中烘)</span>
+            <span>4. Dark (深烘)</span>
+          </div>
+        </div>
+
+        <div class="roast-visual-result" id="roast-visual-result">
+          <div class="roast-bean-preview" id="roast-bean-preview">🫘</div>
+          <div class="roast-details">
+            <h4 id="roast-title-desc">Light Roast (City / Cinnamon) — 浅度烘焙</h4>
+            <p id="roast-text-desc">Roasted just after the "First Crack" (一爆). Retains the maximum single-origin terroir, delicate florals, sparkling fruity acidity, and light tea-like body. Zero bitterness!</p>
+            <div class="roast-meter-grid">
+              <div>Acidity (果酸明亮感): <span class="meter-bar"><span id="meter-acid" style="width:90%;"></span></span></div>
+              <div>Sweetness (焦糖甜感): <span class="meter-bar"><span id="meter-sweet" style="width:65%;"></span></span></div>
+              <div>Body (醇厚度脂质): <span class="meter-bar"><span id="meter-body" style="width:40%;"></span></span></div>
+              <div>Bitterness (焦苦味): <span class="meter-bar"><span id="meter-bitter" style="width:10%;"></span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: SCA FLAVOUR WHEEL & TASTING GUIDE -->
+    <!-- ========================================================================= -->
+    <section id="tab-flavour" class="tab-content">
+      <div class="section-intro">
+        <h2>🎨 The Specialty Coffee Flavour Wheel (SCA 咖啡风味轮)</h2>
+        <p>Developed by the Specialty Coffee Association (SCA) and World Coffee Research, the Flavour Wheel is the universal language of coffee sommeliers. Click on any category below to explore its aroma notes:</p>
+      </div>
+
+      <!-- Flavour Wheel Explorer -->
+      <div class="flavour-wheel-interactive">
+        <div class="flavour-category-nav">
+          <button class="wheel-btn active" onclick="filterFlavourCategory('floral')">🌸 Floral (花香调)</button>
+          <button class="wheel-btn" onclick="filterFlavourCategory('fruity')">🍓 Fruity (水果调)</button>
+          <button class="wheel-btn" onclick="filterFlavourCategory('sweet')">🍯 Sweet & Caramel (焦糖甜)</button>
+          <button class="wheel-btn" onclick="filterFlavourCategory('nutty')">🍫 Nutty & Cocoa (坚果可可)</button>
+          <button class="wheel-btn" onclick="filterFlavourCategory('spices')">🌿 Spices & Herbal (香料草本)</button>
+        </div>
+
+        <div id="flavour-display-box" class="flavour-display-box">
+          <div class="flavour-header-group">
+            <h3 id="flavour-group-title">🌸 Floral Notes (优雅花香家族)</h3>
+            <p id="flavour-group-desc">The hallmark of high-altitude Ethiopian and Panamanian Geisha coffees. Highly volatile, delicate aromatic compounds reminiscent of fresh blossoms.</p>
+          </div>
+
+          <div class="flavour-tags-cloud" id="flavour-tags-cloud">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="cupping-tip-box">
+            <strong>💡 Mama's Tasting Secret:</strong> When smelling the dry grounds (Fragrance / 干香), take three gentle short sniffs. When tasting the brew (Aroma & Flavour / 湿香啜吸), lightly slurp with air to atomize the liquid across your tongue and palate!
+          </div>
+        </div>
+      </div>
+
+      <!-- The 4 Pillars of Cup Quality -->
+      <h3 class="section-heading" style="margin-top:28px;">☕ The 4 Pillars of a Perfect Cup (咖啡风味四大维度)</h3>
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon">🍋</div>
+          <h4>1. Acidity (酸质活力)</h4>
+          <p>Not sourness or vinegar! Pleasant acidity is like crisp green apple (malic), ripe citrus (citric), or grape (tartaric) that makes coffee lively and thirst-quenching.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">🍯</div>
+          <h4>2. Sweetness (回甘甜度)</h4>
+          <p>Caramelized sugars created during roasting. A sign of fully ripe, hand-picked cherries grown at high elevations.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">🥛</div>
+          <h4>3. Body & Mouthfeel (醇厚度触感)</h4>
+          <p>The tactile weight and texture on your tongue — ranging from delicate silk or tea to heavy cream and velvety melted dark chocolate.</p>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">✨</div>
+          <h4>4. Aftertaste (余韵与洁净度)</h4>
+          <p>The lingering sweet fragrance that remains in your throat and nose 1 to 5 minutes after swallowing.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: MAMA'S COFFEE MATCHMAKER & RECOMMENDATIONS -->
+    <!-- ========================================================================= -->
+    <section id="tab-matchmaker" class="tab-content">
+      <div class="section-intro">
+        <h2>☕ Mama's Personal Coffee Matchmaker (专属寻豆罗盘)</h2>
+        <p>Tell us what flavours and morning mood you love, and we will calculate the exact single-origin bean, roast level, and optimal brewing parameters for you!</p>
+      </div>
+
+      <div class="matchmaker-container">
+        <!-- Interactive Form -->
+        <div class="matchmaker-controls">
+          
+          <div class="control-group">
+            <label class="control-label">1. What flavour profile are you craving today? (喜爱的风味偏好)</label>
+            <div class="radio-pill-group">
+              <button class="choice-btn active" data-type="flavour" data-val="floral" onclick="selectMatchmakerChoice(this)">🌸 Floral & Tea-like (花香清雅如茶)</button>
+              <button class="choice-btn" data-type="flavour" data-val="fruity" onclick="selectMatchmakerChoice(this)">🍓 Juicy Berry & Fruit (浓郁浆果日晒)</button>
+              <button class="choice-btn" data-type="flavour" data-val="nutty" onclick="selectMatchmakerChoice(this)">🍫 Sweet Chocolate & Nutty (坚果焦糖醇厚)</button>
+              <button class="choice-btn" data-type="flavour" data-val="spicy" onclick="selectMatchmakerChoice(this)">🌿 Earthy Cocoa & Spices (雪松浓厚低酸)</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">2. How much acidity (brightness) do you prefer? (酸度接受度)</label>
+            <div class="radio-pill-group">
+              <button class="choice-btn active" data-type="acid" data-val="high" onclick="selectMatchmakerChoice(this)">🍋 Love Bright Citrus (明亮如果汁)</button>
+              <button class="choice-btn" data-type="acid" data-val="medium" onclick="selectMatchmakerChoice(this)">🍎 Balanced Soft Sweet (温和微酸回甘)</button>
+              <button class="choice-btn" data-type="acid" data-val="low" onclick="selectMatchmakerChoice(this)">☕ Low Acidity / Round (柔和低酸无刺激)</button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">3. What is your favorite brew method? (常使用的冲煮器具)</label>
+            <div class="radio-pill-group">
+              <button class="choice-btn active" data-type="method" data-val="pourover" onclick="selectMatchmakerChoice(this)">☕ V60 / Hand Drip (手冲滴滤)</button>
+              <button class="choice-btn" data-type="method" data-val="espresso" onclick="selectMatchmakerChoice(this)">⚡ Espresso Machine (意式浓缩/拿铁)</button>
+              <button class="choice-btn" data-type="method" data-val="frenchpress" onclick="selectMatchmakerChoice(this)">🫖 French Press (法压壶)</button>
+              <button class="choice-btn" data-type="method" data-val="coldbrew" onclick="selectMatchmakerChoice(this)">🧊 Cold Brew (冷萃冰咖啡)</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-calc-match" onclick="calculateMamaMatch()">
+            ✨ Generate Mama's Coffee Recipe & Bean Pick
+          </button>
+        </div>
+
+        <!-- Result Recommendation Card -->
+        <div class="match-result-card" id="match-result-card">
+          <div class="match-badge">🎯 MAMA'S PERFECT MATCH</div>
+          <h3 id="rec-bean-title">Ethiopia Yirgacheffe G1 Washed (埃塞俄比亚 &bull; 耶加雪菲 水洗)</h3>
+          <div class="rec-sub" id="rec-bean-sub">Kochere Washing Station &bull; Heirloom Varietals &bull; 1,900m - 2,100m</div>
+          
+          <div class="rec-flavour-tags" id="rec-flavour-tags">
+            <span>🌸 Jasmine Blossom</span>
+            <span>🍋 Bergamot Citrus</span>
+            <span>🍑 White Peach</span>
+            <span>🍵 Earl Grey Tea Finish</span>
+          </div>
+
+          <div class="brewing-recipe-box">
+            <h4>📋 Mama's Golden Pour-Over Brewing Recipe (黄金冲煮参数)</h4>
+            <div class="recipe-grid">
+              <div class="recipe-item">
+                <span class="r-label">Coffee Dose (粉量)</span>
+                <span class="r-val" id="rec-dose">15 g</span>
+              </div>
+              <div class="recipe-item">
+                <span class="r-label">Water Amount (水量)</span>
+                <span class="r-val" id="rec-water">240 mL (1:16 Ratio)</span>
+              </div>
+              <div class="recipe-item">
+                <span class="r-label">Water Temp (水温)</span>
+                <span class="r-val" id="rec-temp">92°C (198°F)</span>
+              </div>
+              <div class="recipe-item">
+                <span class="r-label">Grind Size (研磨度)</span>
+                <span class="r-val" id="rec-grind">Medium-Fine (如海盐粗细)</span>
+              </div>
+              <div class="recipe-item">
+                <span class="r-label">Brew Time (萃取时间)</span>
+                <span class="r-val" id="rec-time">2m 15s - 2m 30s</span>
+              </div>
+              <div class="recipe-item">
+                <span class="r-label">Bloom (预浸焖蒸)</span>
+                <span class="r-val" id="rec-bloom">45g water for 35 seconds</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 6: TASTING QUIZ & TROPHIES -->
+    <!-- ========================================================================= -->
+    <section id="tab-quiz" class="tab-content">
+      <div class="section-intro">
+        <h2>🏆 Mama's Coffee Connoisseur Quiz & Trophies</h2>
+        <p>Test your bean knowledge, origin geography, and cupping mastery to unlock the 8 Master Barista Trophies!</p>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-card" id="quiz-card">
+          <div class="quiz-progress-bar">
+            <div id="quiz-progress-fill" style="width: 10%;"></div>
+          </div>
+          <div class="quiz-header-row">
+            <span class="quiz-question-num" id="quiz-q-num">Question 1 of 10</span>
+            <span class="quiz-xp-badge">+25 XP</span>
+          </div>
+
+          <h3 class="quiz-question-text" id="quiz-q-text">Which coffee-growing country is world-famous for its natural wild heirloom coffee and floral jasmine notes?</h3>
+          
+          <div class="quiz-options-list" id="quiz-options-list">
+            <!-- Injected via JS -->
+          </div>
+
+          <div id="quiz-feedback-box" class="quiz-feedback-box hidden">
+            <div id="feedback-message"></div>
+            <button class="btn btn-primary" id="btn-next-question" onclick="nextQuestion()">Next Question ➔</button>
+          </div>
+        </div>
+
+        <!-- Trophy Shelf -->
+        <div class="trophy-shelf-box">
+          <h3>🏅 Mama's Unlocked Connoisseur Badges (咖啡品鉴师荣誉榜)</h3>
+          <div class="trophies-grid" id="trophies-grid">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="app.js?v=1.0.0"></script>
+</body>
+</html>
