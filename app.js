@@ -309,7 +309,8 @@ function renderProfileSelectScreen() {
     // could ever receive the focus.
     card.tabIndex = 0;
     card.setAttribute('role', 'button');
-    card.setAttribute('aria-label', `${p.name}, ${p.grade}`);
+    card.dataset.profileLabel = `${p.name}, ${p.grade}`;
+    card.setAttribute('aria-label', isManageMode ? `Edit ${p.name}, ${p.grade}` : `${p.name}, ${p.grade}`);
     // The picture is a drawn character, not a monogram: it is the one place in
     // the product that belongs to the kid rather than to the design system.
     // The pencil is always in the DOM so changing the picture is discoverable
@@ -317,8 +318,8 @@ function renderProfileSelectScreen() {
     card.innerHTML = `
       <div class="profile-avatar-box">
         ${profileAvatarMarkup(p, 140, 16)}
-        <button type="button" class="avatar-edit-badge" title="Change ${p.name}'s picture"
-                aria-label="Change ${p.name}'s picture">
+        <button type="button" class="avatar-edit-badge"
+                title="Edit ${p.name}'s profile" aria-label="Edit ${p.name}'s profile">
           <span data-sf-icon="pencil" data-sf-size="16"></span>
         </button>
       </div>
@@ -348,10 +349,20 @@ function renderProfileSelectScreen() {
   SFIcons.upgrade(container);
 }
 
-function toggleManageMode() {
-  isManageMode = !isManageMode;
+/**
+ * Manage Profiles is the gate for editing: the pencil on each picture only
+ * appears once the grown-up has opted in, so a kid tapping around the chooser
+ * lands in a studio rather than in an editor.
+ */
+function setManageMode(on) {
+  isManageMode = on;
   const btn = document.getElementById('manage-profiles-btn');
-  if (isManageMode) {
+  const screen = document.getElementById('profile-select-screen');
+  const hint = document.getElementById('profile-picture-hint-text');
+
+  screen.classList.toggle('manage-mode', on);
+
+  if (on) {
     btn.innerHTML = SFIcons.icon('check', { size: 18 }) + '<span>Done Managing</span>';
     btn.classList.add('btn-primary');
     btn.classList.remove('btn-outline');
@@ -360,6 +371,22 @@ function toggleManageMode() {
     btn.classList.remove('btn-primary');
     btn.classList.add('btn-outline');
   }
+
+  document.querySelectorAll('#profiles-container .profile-card').forEach(card => {
+    const base = card.dataset.profileLabel || '';
+    card.setAttribute('aria-label', on ? `Edit ${base}` : base);
+  });
+
+  // The hint has to name the control that is actually on screen right now.
+  if (hint) {
+    hint.textContent = on
+      ? 'Tap the pencil on a picture to pick a new character.'
+      : 'Tap Manage Profiles to change a name or picture.';
+  }
+}
+
+function toggleManageMode() {
+  setManageMode(!isManageMode);
 }
 
 function showProfileSelect() {
@@ -369,9 +396,7 @@ function showProfileSelect() {
   document.getElementById('dashboard-screen').classList.add('hidden');
   document.getElementById('studio-viewer').classList.add('hidden');
   document.getElementById('profile-select-screen').classList.remove('hidden');
-  isManageMode = false;
-  toggleManageMode();
-  toggleManageMode(); // Reset button text
+  setManageMode(false);
 }
 
 function selectProfile(profileId, triggerConfetti = true) {
@@ -443,13 +468,6 @@ function renderProfileDropdown() {
       list.appendChild(item);
     }
   });
-}
-
-/** Open the picture editor for whoever is signed in right now. */
-function editActiveProfile() {
-  const dd = document.getElementById('profile-dropdown');
-  if (dd) dd.classList.add('hidden');
-  if (activeProfileId) openEditProfileModal(activeProfileId);
 }
 
 function toggleProfileDropdown() {
@@ -775,16 +793,6 @@ function saveProfileChanges() {
 
     localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
     renderProfileSelectScreen();
-    // Editing can happen from inside the dashboard, so every place the picture
-    // and name are shown has to follow along - not just the chooser screen.
-    if (activeProfileId) {
-      const active = appProfiles.find(x => x.id === activeProfileId);
-      if (active) {
-        document.getElementById('nav-profile-avatar').innerHTML = profileAvatarMarkup(active, 34, 18);
-        document.getElementById('nav-profile-name').textContent = active.name;
-      }
-      renderProfileDropdown();
-    }
     closeProfileModal();
     launchConfetti();
   }

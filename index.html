@@ -66,10 +66,6 @@
             <!-- Injected via JS -->
           </div>
           <div class="dropdown-divider"></div>
-          <button class="dropdown-item" onclick="editActiveProfile()">
-            <span class="dropdown-avatar dropdown-avatar--action" data-sf-icon="pencil" data-sf-size="16"></span>
-            <span>Change My Picture</span>
-          </button>
           <button class="dropdown-item" onclick="showProfileSelect()">
             <span class="dropdown-avatar dropdown-avatar--action" data-sf-icon="users" data-sf-size="16"></span>
             <span>Manage / Choose Profiles</span>
@@ -95,7 +91,7 @@
 
       <p class="profile-picture-hint">
         <span data-sf-icon="pencil" data-sf-size="15"></span>
-        <span>Tap the pencil on a picture to pick a new character.</span>
+        <span id="profile-picture-hint-text">Tap Manage Profiles to change a name or picture.</span>
       </p>
 
       <div class="profile-actions">
