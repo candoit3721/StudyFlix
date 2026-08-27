@@ -448,10 +448,29 @@ function init() {
   setupNavTabs();
   loadDispatch(state.cipherIndex);
   convertArabicToRoman(2026);
+  handleHashNavigation();
 
   // Check initial recruit badge
   awardBadge('recruit');
 }
+
+function handleHashNavigation() {
+  const hash = window.location.hash.replace('#', '');
+  if (!hash) return;
+
+  if (hash.startsWith('lesson-')) {
+    switchTab('tab-learn');
+    const lessonIdx = parseInt(hash.replace('lesson-', '')) - 1;
+    const cards = document.querySelectorAll('.lesson-card');
+    if (cards[lessonIdx]) {
+      cards[lessonIdx].classList.add('open');
+      cards[lessonIdx].scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (document.getElementById(hash)) {
+    switchTab(hash);
+  }
+}
+window.addEventListener('hashchange', handleHashNavigation);
 
 function updateUIStats() {
   document.getElementById('xp-count').textContent = state.xp;

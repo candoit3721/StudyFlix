@@ -19,22 +19,24 @@ const DEFAULT_PROFILES = [
       bgGradient: "linear-gradient(135deg, rgba(200,16,46,0.9) 0%, rgba(212,175,55,0.85) 50%, rgba(26,26,36,0.95) 100%)"
     },
     subjects: [
-      { title: "🏛️ Ancient Rome & Civilization Quest", icon: "🏛️", badge: "NEW & FEATURED", desc: "Engineering, Arches, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
-      { title: "🧪 Science & Chemistry Quest", icon: "⚛️", badge: "SCIENCE QUEST", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
-      { title: "📐 Grade 5/6 Math Studio", icon: "📏", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #6366f1, #3b82f6)" },
-      { title: "🕵️ Caesar's Military Cipher", icon: "🕶️", badge: "CRYPTOGRAPHY", desc: "Decode top-secret messages sent across the Roman Empire!", link: "sophia-rome/index.html#tab-cipher", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
-      { title: "🌉 Roman Keystone & Arch Lab", icon: "🏛️", badge: "STEM LAB", desc: "Master arch physics, aqueduct slopes, and concrete chemistry", link: "sophia-rome/index.html#tab-engineering", bg: "linear-gradient(135deg, #0f766e, #0d9488)" },
-      { title: "🏙️ Cell City Biology Lab", icon: "🔬", badge: "GRADE 6 PREP", desc: "Explore the microscopic organelles powering living things", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #10b981, #059669)" }
+      { title: "🏛️ Ancient Rome Quest & Studio", icon: "🏛️", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
+      { title: "🧪 Science & Chemistry Quest", icon: "⚛️", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
+      { title: "📐 Grade 5/6 Math Studio", icon: "📏", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #6366f1, #3b82f6)" }
     ],
     topics: [
-      { title: "🏛️ Roman Arch & Aqueduct STEM", icon: "🌉", badge: "ENGINEERING", desc: "Keystones, compression forces, and gravity gradient flow", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
-      { title: "⚔️ Senate, Caesar & Roman Law", icon: "⚖️", badge: "HISTORY & CIVICS", desc: "Twelve Tables, Rule of Law & Canadian Charter connections", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #7c2d12, #ea580c)" },
-      { title: "🔢 Roman Numerals & Caesar Cipher", icon: "📜", badge: "MATH & CODES", desc: "Subtractive numeral notation & single-shift military encryption", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #4338ca, #6366f1)" },
+      { title: "🌉 Roman Arch & Keystone Lab", icon: "🏛️", badge: "ENGINEERING", desc: "Interactive keystone insertion, compression forces & abutments", link: "sophia-rome/index.html#tab-engineering", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
+      { title: "💧 Aqueduct Hydraulic Flow", icon: "🌊", badge: "HYDRAULICS", desc: "Adjust gravity slopes (0.2%-0.5%) to transport mountain water", link: "sophia-rome/index.html#tab-engineering", bg: "linear-gradient(135deg, #0284c7, #0d9488)" },
+      { title: "🕵️ Caesar's Military Cipher", icon: "🕶️", badge: "CRYPTOGRAPHY", desc: "Decode top-secret battlefield messages sent across Gaul", link: "sophia-rome/index.html#tab-cipher", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
+      { title: "🔢 Roman Numeral Converter", icon: "📜", badge: "ROMAN MATH", desc: "Additive and subtractive numeral calculations (IV, IX, XL, CM)", link: "sophia-rome/index.html#tab-cipher", bg: "linear-gradient(135deg, #4338ca, #6366f1)" },
+      { title: "⚖️ Senate & Twelve Tables", icon: "📜", badge: "CIVICS & LAW", desc: "Patricians vs. Plebeians, Rule of Law & Canadian Charter", link: "sophia-rome/index.html#lesson-2", bg: "linear-gradient(135deg, #7c2d12, #ea580c)" },
+      { title: "🌋 Pompeii & Mount Vesuvius", icon: "🏺", badge: "DAILY LIFE", desc: "Explore Thermae baths, hypocaust heating, and 79 CE artifacts", link: "sophia-rome/index.html#lesson-5", bg: "linear-gradient(135deg, #b45309, #d97706)" },
+      { title: "🎯 Roman Quiz Arena", icon: "👑", badge: "CHALLENGE", desc: "Test Republic history, engineering feats & gladiators for XP", link: "sophia-rome/index.html#tab-quiz", bg: "linear-gradient(135deg, #a21caf, #e11d48)" },
       { title: "⚛️ Periodic Table First 20", icon: "🧪", badge: "CHEMISTRY", desc: "Mnemonics ('Happy Henry...') & Element Superpowers", link: "sophia-science/index.html#tab-periodic", bg: "linear-gradient(135deg, #0ea5e9, #6366f1)" },
       { title: "🥞 Matter & Reactions", icon: "🔥", badge: "GRADE 5 CORE", desc: "Physical vs. Chemical changes and Conservation of Mass", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #f59e0b, #ef4444)" },
-      { title: "🍕 Fraction Mastery", icon: "🍰", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" },
-      { title: "🎢 Roller Coaster Physics", icon: "🚀", badge: "PHYSICS", desc: "Potential vs. Kinetic energy & Newton's 3 Laws", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #8b5cf6, #3b82f6)" },
-      { title: "🎛️ The I-D-C Variable Rule", icon: "🔍", badge: "METHOD", desc: "Independent, Dependent & Controlled variables for fair tests", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #10b981, #14b8a6)" }
+      { title: "🕵️ Chemical Word Decoder", icon: "🧩", badge: "SCIENCE PUZZLE", desc: "Crack secret spy words built from element symbols!", link: "sophia-science/index.html#tab-decoder", bg: "linear-gradient(135deg, #8b5cf6, #ec4899)" },
+      { title: "🏙️ Cell City Biology Lab", icon: "🔬", badge: "GRADE 6 PREP", desc: "Nucleus Mayor, Mitochondria Powerhouse & plant cell organelles", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #10b981, #059669)" },
+      { title: "🎢 Roller Coaster Physics", icon: "🚀", badge: "PHYSICS", desc: "Potential vs. Kinetic energy & Newton's 3 Laws of Motion", link: "sophia-science/index.html#tab-learn", bg: "linear-gradient(135deg, #8b5cf6, #3b82f6)" },
+      { title: "🍕 Fraction Mastery", icon: "🍰", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" }
     ],
     printable: [
       { title: "📖 Complete Ancient Rome Workbook", icon: "🏛️", badge: "NEW WORKBOOK", desc: "Master Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/00_SOPHIA_COMPLETE_ANCIENT_ROME_WORKBOOK.md", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
@@ -108,7 +110,7 @@ const DEFAULT_PROFILES = [
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "2.2.0";
+const APP_VERSION = "2.3.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
