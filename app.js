@@ -39,8 +39,8 @@ const DEFAULT_PROFILES = [
       { title: "🍕 Fraction Mastery", icon: "🍰", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #ec4899, #f43f5e)" }
     ],
     printable: [
-      { title: "📖 Complete Ancient Rome Workbook", icon: "🏛️", badge: "NEW WORKBOOK", desc: "Master Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/00_SOPHIA_COMPLETE_ANCIENT_ROME_WORKBOOK.md", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
-      { title: "📖 Complete Science Workbook", icon: "📘", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/00_SOPHIA_COMPLETE_SCIENCE_WORKBOOK.md", bg: "linear-gradient(135deg, #1e293b, #334155)" },
+      { title: "📖 Complete Ancient Rome Workbook", icon: "🏛️", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", bg: "linear-gradient(135deg, #8b0000, #b45309)" },
+      { title: "📖 Complete Science Workbook", icon: "📘", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", bg: "linear-gradient(135deg, #1e293b, #334155)" },
       { title: "🖨️ Grade 5/6 Math Practice", icon: "📝", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", bg: "linear-gradient(135deg, #374151, #4b5563)" }
     ]
   },
