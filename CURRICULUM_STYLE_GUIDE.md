@@ -196,14 +196,15 @@ When introducing any new lesson, worksheet, or interactive module, always follow
 ### 🚀 Profile 2: Sophia (Grade 5 & 6 Readiness — Ages 10–12)
 
 #### Key Pedagogical Objectives:
+* **Ancient Rome & Early Civilizations (Social Studies & STEM)**: The Roman Republic vs. Empire, Senate, Patricians vs. Plebeians, Twelve Tables & Rule of Law (connection to Canadian Charter), Roman semi-circular arch & keystone compression physics, aqueduct gravity gradient hydraulics ($0.2\% - 0.5\%$), volcanic pozzolana concrete (*opus caementicium*), Pantheon dome & Colosseum hypogeum mechanics, Roman road engineering (*Via Appia*), Roman numeral arithmetic, Caesar cipher military encryption, and Latin roots in French/English.
 * **Advanced Chemistry**: The Periodic Table first 20 elements, element superpowers, Dmitri Mendeleev's periodic law, atomic structure (protons, neutrons, electrons), chemical compound formulas ($H_2O, NaCl, C_6H_{12}O_6$), and Latin symbol origins ($Au, Fe, K, Na$).
 * **Grade 5 Core Science**: Physical vs. Chemical changes, Conservation of Mass, Ecosystems (photosynthesis, food webs, 10% energy rule, trophic cascades), Earth's 4 spheres (Atmosphere, Hydrosphere, Geosphere, Biosphere).
 * **Grade 6 Super-Prep**: Cell Biology preview (Cell City organelles, Plant vs. Animal cell walls/chloroplasts), Physics in Motion (Potential vs. Kinetic energy on roller coasters, Newton's 3 Laws), and Scientific Method Mastery (Independent, Dependent, and Controlled variables).
 * **Grade 5/6 Math Studio**: Fractions with unlike denominators, Keep-Change-Flip division, PEMDAS order of operations, decimal long division, pre-algebra expressions, and area/perimeter of composite polygons.
 
 #### Tone & Design:
-* Cyan, emerald green, and deep indigo (`#06B6D4`, `#10B981`, `#6366F1`).
-* Detective badges, secret word decoders, scientific laboratory aesthetic.
+* Cyan, emerald green, imperial crimson and laurel gold (`#06B6D4`, `#10B981`, `#C8102E`, `#D4AF37`).
+* Detective badges, secret word decoders, scientific laboratory & imperial Roman aesthetic.
 
 ---
 

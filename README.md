@@ -28,12 +28,12 @@ Pick your profile and step into a personalized learning studio:
                                      │
          ┌───────────────────────────┼───────────────────────────┐
          ▼                           ▼                           ▼
-    👧 OLIVIA                   👩‍🔬 SOPHIA                    🧑‍🎓 YAYA
-  (Grade 3 Explorer)      (Grade 5 & 6 Champion)      (Calculus & Statistics)
-  • Operations & Math     • Science & Chemistry Quest • AP Calculus AB/BC
-  • Times Table Blitz     • Grade 5/6 Math Studio     • Probability & Stats
-  • Clocks & Money        • Periodic Table Superheroes • 高考压轴与考前冲刺
-  • Geometry & Shapes     • Cell City & Physics       • 导数积分与假设检验
+     👧 OLIVIA                   👩‍🔬 SOPHIA                    🧑‍🎓 YAYA
+   (Grade 3 Explorer)      (Grade 5 & 6 Champion)      (Calculus & Statistics)
+   • Operations & Math     • Ancient Rome & Engineering • AP Calculus AB/BC
+   • Times Table Blitz     • Science & Chemistry Quest • Probability & Stats
+   • Clocks & Money        • Grade 5/6 Math Studio     • 高考压轴与考前冲刺
+   • Geometry & Shapes     • Periodic Table & Physics  • 导数积分与假设检验
 ```
 
 ---
@@ -56,7 +56,7 @@ Pick your profile and step into a personalized learning studio:
 ## 🍁 Ontario, Canada Curriculum & Enriched Standards
 
 All subjects and learning modules adhere to our master design system:
-* 📖 [**`CURRICULUM_STYLE_GUIDE.md`**](./CURRICULUM_STYLE_GUIDE.md) — *Unified visual design tokens, Ontario Ministry of Education Curriculum alignment (Math 2020 & Science 2022), Canadian metric & cultural conventions, and the 3-Tier Enriched / Waterloo CEMC Contest difficulty framework.*
+* 📖 [**`CURRICULUM_STYLE_GUIDE.md`**](./CURRICULUM_STYLE_GUIDE.md) — *Unified visual design tokens, Ontario Ministry of Education Curriculum alignment (Math 2020, Science 2022 & Social Studies), Canadian metric & cultural conventions, and the 3-Tier Enriched / Waterloo CEMC Contest difficulty framework.*
 
 ---
 
@@ -82,5 +82,6 @@ kids/
 ├── olivia-math/                 <-- Olivia's Grade 3 Math Studio
 ├── sophia-math/                 <-- Sophia's Grade 5/6 Math Studio
 ├── sophia-science/              <-- Sophia's Science & Chemistry Quest
+├── sophia-rome/                 <-- Sophia's Ancient Rome & Engineering Quest
 └── yaya/                        <-- Yaya's Calculus & Statistics Exam Studio
 ```

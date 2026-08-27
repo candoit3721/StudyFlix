@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia's Ancient Rome Quest & Engineering Studio! 🏛️⚔️</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Cinzel:wght@600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="app-header">
+    <div class="logo-container">
+      <span class="logo-icon">🏛️</span>
+      <div>
+        <h1 class="logo-title">Sophia's Ancient Rome Quest!</h1>
+        <p class="logo-subtitle">Republic to Empire &bull; Engineering & STEM &bull; Latin & Cryptography</p>
+      </div>
+    </div>
+    
+    <!-- User Stats / XP Bar -->
+    <div class="header-stats">
+      <div class="stat-pill">
+        <span class="stat-label">🌟 XP:</span>
+        <span id="xp-count" class="stat-value">0</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">🔥 Streak:</span>
+        <span id="streak-count" class="stat-value">0</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">🏆 Badges:</span>
+        <span id="badge-count" class="stat-value">0/8</span>
+      </div>
+      <button id="sound-toggle-btn" class="icon-btn" title="Toggle Sound" onclick="toggleSound()">🔊</button>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="nav-bar">
+    <button class="nav-tab active" data-tab="tab-map">🗺️ Empire Map</button>
+    <button class="nav-tab" data-tab="tab-engineering">🏛️ Engineering & Wonders</button>
+    <button class="nav-tab" data-tab="tab-learn">📖 Story & Inquiry Hub</button>
+    <button class="nav-tab" data-tab="tab-quiz">🎯 Roman Quiz Arena</button>
+    <button class="nav-tab" data-tab="tab-cipher">🔢 Numerals & Caesar Cipher</button>
+    <button class="nav-tab" data-tab="tab-trophies">🏆 Trophy Room</button>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- ========================================================================= -->
+    <!-- TAB 1: ADVENTURE MAP / DASHBOARD -->
+    <!-- ========================================================================= -->
+    <section id="tab-map" class="tab-content active">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Salve, Sophia! Welcome to Ancient Rome 🏛️✨</h2>
+          <p>Step back in time over 2,000 years to explore the heart of the Roman Republic and Empire! Master Roman engineering, unlock the physics of arches and aqueducts, decode Caesar's secret military ciphers, and discover how Roman law shaped modern Canada!</p>
+          <div class="welcome-buttons">
+            <button class="btn btn-primary" onclick="switchTab('tab-engineering')">⚡ Roman Engineering Lab</button>
+            <button class="btn btn-secondary" onclick="switchTab('tab-cipher')">🕵️ Caesar's Cipher Decoder</button>
+            <button class="btn btn-accent" onclick="window.print()">🖨️ Print Master Workbook</button>
+          </div>
+        </div>
+        <div class="welcome-avatar">
+          <div class="avatar-circle">🏛️</div>
+          <span class="avatar-tag">Civis Romanus</span>
+        </div>
+      </div>
+
+      <div class="roman-quote-banner">
+        <span class="laurel-leaf">🌿</span>
+        <em>"Veni, Vidi, Vici" — I came, I saw, I conquered!</em>
+        <span class="laurel-leaf">🌿</span>
+      </div>
+
+      <h3 class="section-heading">🌟 Your 6 Imperial Quests</h3>
+      <div class="quest-grid" id="quest-cards-grid">
+        <!-- Injected via JavaScript -->
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: ROMAN ENGINEERING & MONUMENTS LAB -->
+    <!-- ========================================================================= -->
+    <section id="tab-engineering" class="tab-content">
+      <div class="section-header-box">
+        <h2>🏛️ Roman Engineering & STEM Lab</h2>
+        <p>Explore the brilliant architectural and scientific marvels that allowed Rome to stand for centuries!</p>
+      </div>
+
+      <div class="engineering-grid">
+
+        <!-- INTERACTIVE LAB 1: KEYSTONE ARCH BUILDER -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <span class="eng-icon">🌉</span>
+            <div>
+              <h3>1. The Roman True Arch & Keystone Physics</h3>
+              <p class="eng-subtitle">Learn how compression forces distribute weight sideways into ground abutments!</p>
+            </div>
+          </div>
+          <div class="eng-card-body">
+            <p>Unlike flat beams that bend under heavy loads (tension), the Roman <strong>semi-circular arch</strong> turns downward gravity into pure <strong>lateral compression</strong>!</p>
+            
+            <div class="arch-demo-box">
+              <svg id="arch-svg" viewBox="0 0 400 200" class="arch-svg">
+                <!-- Abutment left -->
+                <rect x="40" y="100" width="60" height="90" fill="#71717a" rx="4"/>
+                <text x="70" y="150" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">Abutment</text>
+                <!-- Abutment right -->
+                <rect x="300" y="100" width="60" height="90" fill="#71717a" rx="4"/>
+                <text x="330" y="150" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">Abutment</text>
+                
+                <!-- Voussoirs (Wedge Stones) -->
+                <path d="M 100 100 A 100 100 0 0 1 140 45 L 150 25 A 130 130 0 0 0 100 100 Z" fill="#9ca3af" stroke="#333" stroke-width="2"/>
+                <path d="M 140 45 A 100 100 0 0 1 180 20 L 185 0 A 130 130 0 0 0 150 25 Z" fill="#cbd5e1" stroke="#333" stroke-width="2"/>
+                
+                <path d="M 260 45 A 100 100 0 0 0 220 20 L 215 0 A 130 130 0 0 1 250 25 Z" fill="#cbd5e1" stroke="#333" stroke-width="2"/>
+                <path d="M 300 100 A 100 100 0 0 0 260 45 L 250 25 A 130 130 0 0 1 300 100 Z" fill="#9ca3af" stroke="#333" stroke-width="2"/>
+
+                <!-- Keystone (Interactive) -->
+                <path id="keystone-stone" d="M 180 20 L 185 0 L 215 0 L 220 20 L 200 22 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2.5"/>
+                <text id="keystone-text" x="200" y="15" text-anchor="middle" fill="#1e1e2d" font-size="11" font-weight="bold">👑 Keystone</text>
+
+                <!-- Force arrows -->
+                <g id="force-arrows" class="force-arrows hidden">
+                  <path d="M 200 5 L 200 35" stroke="#ef4444" stroke-width="3"/>
+                  <path d="M 170 30 L 120 70" stroke="#10b981" stroke-width="3"/>
+                  <path d="M 230 30 L 280 70" stroke="#10b981" stroke-width="3"/>
+                  <text x="200" y="55" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">Weight (Down)</text>
+                  <text x="80" y="85" fill="#10b981" font-size="11" font-weight="bold">Compression ➔</text>
+                  <text x="320" y="85" fill="#10b981" font-size="11" font-weight="bold">⬅ Compression</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="arch-controls">
+              <button id="keystone-btn" class="btn btn-sm btn-primary" onclick="toggleKeystone()">👑 Insert / Remove Keystone</button>
+              <div id="arch-status" class="status-callout success">
+                <strong>Status:</strong> Keystone locked! Arch holds over 5,000 kg of load! 🛡️
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE LAB 2: AQUEDUCT SLOPE SIMULATOR -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <span class="eng-icon">💧</span>
+            <div>
+              <h3>2. Aqueduct Gravity Flow Simulator</h3>
+              <p class="eng-subtitle">Adjust the gradient to transport mountain spring water without stagnation or overflow!</p>
+            </div>
+          </div>
+          <div class="eng-card-body">
+            <p>Roman engineers used the <em>chorobates</em> level to maintain an exact slope of ~<strong>0.2% to 0.5%</strong> (drop of 1 to 2 metres per kilometre) across dozens of kilometres!</p>
+            
+            <div class="aqueduct-sim-box">
+              <div class="slope-visualizer">
+                <div class="mountain-source">🏔️ Mountain Spring (Fresh)</div>
+                <div class="channel-track">
+                  <div id="water-stream" class="water-stream optimal"></div>
+                </div>
+                <div class="city-fountain">⛲ Rome Fountains</div>
+              </div>
+              <div class="slope-control-row">
+                <label for="slope-slider">Adjust Slope Gradient: <strong id="slope-value">0.3% (Optimal)</strong></label>
+                <input type="range" id="slope-slider" min="0.0" max="2.0" step="0.1" value="0.3" oninput="updateAqueductSlope(this.value)">
+              </div>
+              <div id="aqueduct-feedback" class="status-callout success">
+                ✅ <strong>Perfect Flow!</strong> Smooth laminar stream delivers 1,000,000 m³ clean drinking water daily!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE LAB 3: THE COLOSSEUM & HYPOGEUM -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <span class="eng-icon">🏟️</span>
+            <div>
+              <h3>3. The Colosseum (Flavian Amphitheatre)</h3>
+              <p class="eng-subtitle">Explore crowd control, retractable awnings, and underground lift systems.</p>
+            </div>
+          </div>
+          <div class="eng-card-body">
+            <div class="interactive-monument-grid">
+              <div class="monument-feature" onclick="inspectMonumentFeature('velarium')">
+                <span class="feat-icon">🎪</span>
+                <h4>Velarium</h4>
+                <p>Giant retractable canvas sail operated by Roman sailors to shade 50,000 spectators!</p>
+              </div>
+              <div class="monument-feature" onclick="inspectMonumentFeature('vomitoria')">
+                <span class="feat-icon">🚪</span>
+                <h4>Vomitoria (Exits)</h4>
+                <p>76 numbered arched entrance gates allowing 50,000 citizens to exit in under 15 minutes!</p>
+              </div>
+              <div class="monument-feature" onclick="inspectMonumentFeature('hypogeum')">
+                <span class="feat-icon">⚙️</span>
+                <h4>Hypogeum</h4>
+                <p>2-story subterranean labyrinth with 28 pulley elevators lifting lions and gladiators directly onto the arena floor!</p>
+              </div>
+              <div class="monument-feature" onclick="inspectMonumentFeature('arena')">
+                <span class="feat-icon">🪵</span>
+                <h4>Arena Floor</h4>
+                <p>Wooden floor covered in sand (*harena* in Latin) to absorb moisture, with trapdoors everywhere!</p>
+              </div>
+            </div>
+            <div id="monument-detail-box" class="monument-detail-box">
+              <h4 id="monument-detail-title">💡 Click any feature above to inspect details!</h4>
+              <p id="monument-detail-desc">Discover how Roman architects solved modern stadium challenges 2,000 years ago.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE LAB 4: PANTHEON DOME & ROMAN CONCRETE -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <span class="eng-icon">🏛️</span>
+            <div>
+              <h3>4. The Pantheon & Opus Caementicium</h3>
+              <p class="eng-subtitle">The world's largest unreinforced concrete dome (43.3m diameter) still standing today!</p>
+            </div>
+          </div>
+          <div class="eng-card-body">
+            <div class="concrete-secret-box">
+              <div class="secret-step">
+                <span class="step-num">1</span>
+                <strong>Volcanic Ash (Pozzolana)</strong>
+                <p>Contains reactive silica and alumina that chemically bonds in water.</p>
+              </div>
+              <div class="secret-step">
+                <span class="step-num">2</span>
+                <strong>Tapering Thickness</strong>
+                <p>Dome thickness shrinks from 6.4m at the base down to only 1.2m at the top!</p>
+              </div>
+              <div class="secret-step">
+                <span class="step-num">3</span>
+                <strong>Pumice Aggregate</strong>
+                <p>Heavy travertine stone at base, ultra-light floating pumice stone near the crown.</p>
+              </div>
+              <div class="secret-step">
+                <span class="step-num">4</span>
+                <strong>The Oculus (Eye)</strong>
+                <p>9-metre round open skylight that relieves structural tension at the dome vertex.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE LAB 5: ROMAN ROAD CROSS-SECTION -->
+        <div class="eng-card full-width">
+          <div class="eng-card-header">
+            <span class="eng-icon">🛣️</span>
+            <div>
+              <h3>5. Layered Roman Highway Engineering ("All Roads Lead to Rome")</h3>
+              <p class="eng-subtitle">Over 80,000 kilometres of paved military highways built with multi-layered drainage.</p>
+            </div>
+          </div>
+          <div class="eng-card-body">
+            <div class="road-layers-diagram">
+              <div class="road-layer layer-4">
+                <span class="layer-title">Layer 4: Pavimentum (Surface)</span>
+                <span class="layer-info">Large, interlocking polygonal basalt lava slabs crowned in the centre for water runoff.</span>
+              </div>
+              <div class="road-layer layer-3">
+                <span class="layer-title">Layer 3: Nucleus (Bedding)</span>
+                <span class="layer-info">Fine gravel, sand, and lime concrete mortar forming a watertight cushion.</span>
+              </div>
+              <div class="road-layer layer-2">
+                <span class="layer-title">Layer 2: Rudus (Rubble Base)</span>
+                <span class="layer-info">Broken stones and crushed bricks mixed with lime mortar for drainage (25 cm thick).</span>
+              </div>
+              <div class="road-layer layer-1">
+                <span class="layer-title">Layer 1: Statumen (Foundation)</span>
+                <span class="layer-info">Hand-laid large flat stone blocks (30–60 cm) resting on compacted earth trench (*fossa*).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: STORY & INQUIRY LEARNING HUB -->
+    <!-- ========================================================================= -->
+    <section id="tab-learn" class="tab-content">
+      <div class="section-header-box">
+        <h2>📖 Interactive Story & Inquiry Hub</h2>
+        <p>Explore the six essential chapters of Roman civilization, complete with Canadian connections and Latin roots!</p>
+      </div>
+
+      <div class="lesson-accordion">
+
+        <!-- Chapter 1 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">🐺</span>
+              <div>
+                <h3>1. The Birth of Rome & The Seven Hills</h3>
+                <p>Legend of Romulus & Remus, Tiber River geography, and the Etruscan kings</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>According to legend, Rome was founded in <strong>753 BCE</strong> by twin brothers <strong>Romulus and Remus</strong>, rescued by a she-wolf (*Lupa*) on the banks of the <strong>Tiber River</strong>.</p>
+              
+              <div class="concept-callout">
+                <h4>🏔️ Why Geography Was Rome's Secret Superpower:</h4>
+                <ul>
+                  <li><strong>7 Defensible Hills</strong> (Palatine, Capitoline, Aventine, etc.) protected early settlers from enemy raids and seasonal river floods.</li>
+                  <li><strong>Tiber River Crossing</strong>: Easy access to trade routes and salt beds, but far enough inland (25 km from the sea) to be protected from pirate fleets!</li>
+                </ul>
+              </div>
+
+              <div class="latin-box">
+                <h4>🏛️ Latin Root Decoder:</h4>
+                <p><strong>Civis</strong> = Citizen $\rightarrow$ <em>Civics, Civilian, Civilization</em>.</p>
+                <p><strong>Urbs</strong> = City $\rightarrow$ <em>Urban, Suburb, Urbanization</em>.</p>
+              </div>
+
+              <div class="checkpoint-box">
+                <strong>✏️ Quick Checkpoint:</strong> Why was building on 7 hills advantageous compared to a flat flood plain?
+                <button class="btn-reveal" onclick="revealAnswer(this)">Show Answer</button>
+                <div class="checkpoint-ans hidden">Hills provided military high-ground defense against invaders and protection against river flooding and mosquito-borne swamp illnesses!</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 2 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">⚖️</span>
+              <div>
+                <h3>2. The Roman Republic & The Rule of Law</h3>
+                <p>Senate, Consuls, Patricians vs. Plebeians, and the Twelve Tables</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>In <strong>509 BCE</strong>, Romans overthrew their tyrannical king (Tarquin the Proud) and established a <strong>Republic</strong> (*Res Publica* = "Public Affair") where citizens elected their leaders!</p>
+
+              <div class="comparison-grid">
+                <div class="compare-card patrician">
+                  <h4>🏛️ Patricians (Nobles)</h4>
+                  <p>Wealthy land-owning aristocratic families who held Senate seats and religious priesthoods.</p>
+                </div>
+                <div class="compare-card plebeian">
+                  <h4>🌾 Plebeians (Common Citizens)</h4>
+                  <p>Farmers, merchants, craftspeople, and soldiers. They went on strike (*Secessio Plebis*) to win equal rights and elected <strong>Tribunes</strong> with veto power!</p>
+                </div>
+              </div>
+
+              <div class="concept-callout">
+                <h4>📜 The Twelve Tables (450 BCE) & Modern Canada:</h4>
+                <p>Written laws carved into bronze tablets and posted in the Roman Forum so judges could not change rules unfairly. This gave birth to the <strong>Rule of Law</strong>, which forms the bedrock of Canada's legal system today: <em>“All people are equal before the law, and innocent until proven guilty.”</em></p>
+              </div>
+
+              <div class="latin-box">
+                <h4>🏛️ Latin Root Decoder:</h4>
+                <p><strong>Senex</strong> = Elder/Old Man $\rightarrow$ <em>Senate, Senator, Senior</em>.</p>
+                <p><strong>Veto</strong> = "I forbid" $\rightarrow$ <em>Presidential/Mayoral Veto</em>.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 3 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">👑</span>
+              <div>
+                <h3>3. Julius Caesar, The Rubicon & The Imperial Era</h3>
+                <p>Crossing the Rubicon, the Ides of March (44 BCE), and Caesar Augustus</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>In 49 BCE, general <strong>Julius Caesar</strong> conquered Gaul (modern France) and famously marched his legion across the <strong>Rubicon River</strong> into Italy, uttering: <em>"Alea iacta est" (The die is cast)</em> — meaning there was no turning back!</p>
+
+              <div class="concept-callout">
+                <h4>🌟 Caesar Augustus & The Pax Romana:</h4>
+                <p>After Caesar's assassination on the <strong>Ides of March (March 15, 44 BCE)</strong>, his adopted nephew <strong>Octavian</strong> became Rome's first Emperor, taking the title <strong>Caesar Augustus</strong>. He established the <strong>Pax Romana (Roman Peace)</strong>, a 200-year golden era of stability, booming trade, and cultural flourish!</p>
+              </div>
+
+              <div class="latin-box">
+                <h4>🏛️ Latin Root Decoder:</h4>
+                <p><strong>Imperium</strong> = Supreme command/power $\rightarrow$ <em>Empire, Imperial, Emperor</em>.</p>
+                <p><strong>Pax</strong> = Peace $\rightarrow$ <em>Pacific, Pacifist, Pax Romana</em>.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 4 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">⚔️</span>
+              <div>
+                <h3>4. The Roman Legion & Military Might</h3>
+                <p>Century & Legion structure, gladius sword, scutum shield, and the Testudo (Tortoise)</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>The Roman army was the most disciplined fighting force of the ancient world. A <strong>Legion</strong> consisted of ~5,000 professional heavy infantry soldiers (*Legionaries*), divided into 10 cohorts and centuries led by <strong>Centurions</strong>.</p>
+
+              <div class="gear-grid">
+                <div class="gear-item">🗡️ <strong>Gladius:</strong> Short double-edged thrusting sword designed for tight battle lines.</div>
+                <div class="gear-item">🛡️ <strong>Scutum:</strong> Large curved rectangular wooden shield covered in leather with a metal boss.</div>
+                <div class="gear-item">🏹 <strong>Pilum:</strong> Heavy throwing javelin with a soft iron neck designed to bend upon impact so enemies could not throw it back!</div>
+                <div class="gear-item">🐢 <strong>Testudo Formation:</strong> Shield-wall forming a literal "tortoise shell" on top and sides to deflect enemy arrows and spears!</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 5 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">🏺</span>
+              <div>
+                <h3>5. Daily Life, The Forum & Pompeii (79 CE)</h3>
+                <p>Thermae public baths, Circus Maximus chariot races, togas, and Mount Vesuvius</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>What was a day in the life of a Roman kid like? Wealthy families lived in a *domus* (townhouse) or *villa*, while most citizens lived in multi-story apartment buildings called *insulae*.</p>
+
+              <div class="concept-callout">
+                <h4>♨️ The Roman Bath Experience (Thermae):</h4>
+                <ol>
+                  <li><strong>Apodyterium:</strong> Changing room with cubbies.</li>
+                  <li><strong>Tepidarium:</strong> Warm room for relaxing.</li>
+                  <li><strong>Caldarium:</strong> Hot steam bath heated from below by the <strong>Hypocaust</strong> underfloor furnace!</li>
+                  <li><strong>Frigidarium:</strong> Ice-cold plunge pool to close pores and refresh!</li>
+                </ol>
+              </div>
+
+              <div class="volcano-box">
+                <h4>🌋 Pompeii & Mount Vesuvius (79 CE):</h4>
+                <p>On August 24, 79 CE, Mount Vesuvius erupted, burying the vibrant seaside city of Pompeii under metres of volcanic ash and pumice. Because ash sealed everything in an airtight layer, modern archaeologists discovered preserved bread loaves, colorful frescoes, graffiti, and mosaics!</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Chapter 6 -->
+        <article class="lesson-card">
+          <div class="lesson-header" onclick="toggleLesson(this)">
+            <div class="lesson-title-group">
+              <span class="lesson-icon">🇨🇦</span>
+              <div>
+                <h3>6. The Enduring Legacy of Rome in Modern Canada</h3>
+                <p>Languages, Architecture, Calendar, and Chemistry connections</p>
+              </div>
+            </div>
+            <span class="toggle-arrow">▼</span>
+          </div>
+          <div class="lesson-content">
+            <div class="lesson-body">
+              <p>Rome didn't disappear — its DNA is woven into our modern Canadian world every single day!</p>
+
+              <div class="legacy-grid">
+                <div class="legacy-card">
+                  <h4>🗣️ Romance Languages</h4>
+                  <p>Latin evolved into French (one of Canada's official languages!), Spanish, Italian, and Portuguese. Over 60% of English words have Latin roots!</p>
+                </div>
+                <div class="legacy-card">
+                  <h4>📅 The Solar Calendar</h4>
+                  <p>Our 12-month calendar comes from Julius Caesar. <strong>July</strong> is named after Julius Caesar, <strong>August</strong> after Caesar Augustus!</p>
+                </div>
+                <div class="legacy-card">
+                  <h4>🧪 Chemical Element Symbols</h4>
+                  <p>From Sophia's chemistry quest: Gold is <strong>Au</strong> (*Aurum*), Iron is <strong>Fe</strong> (*Ferrum*), Lead is <strong>Pb</strong> (*Plumbum* - origin of "plumbing"!), Silver is <strong>Ag</strong> (*Argentum*).</p>
+                </div>
+                <div class="legacy-card">
+                  <h4>🏛️ Neoclassical Architecture</h4>
+                  <p>Canada's Supreme Court building, Parliament Hill arches, and Ontario bank columns are inspired by Roman architecture!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: INTERACTIVE QUIZ ARENA -->
+    <!-- ========================================================================= -->
+    <section id="tab-quiz" class="tab-content">
+      <div class="quiz-container">
+        
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="quiz-screen">
+          <div class="section-header-box">
+            <h2>🎯 Sophia's Roman Quiz Arena</h2>
+            <p>Test your historical knowledge, earn XP, build your winning streak, and claim imperial laurels!</p>
+          </div>
+          
+          <div class="quiz-modes-grid">
+            <div class="quiz-mode-card" onclick="startQuiz('republic')">
+              <span class="mode-icon">⚖️</span>
+              <h3>Roman Republic & Senate</h3>
+              <p>10 Questions on Romulus, Patricians vs. Plebeians, Twelve Tables, and Julius Caesar!</p>
+              <button class="btn btn-primary">Start Republic Quiz</button>
+            </div>
+            
+            <div class="quiz-mode-card" onclick="startQuiz('engineering')">
+              <span class="mode-icon">🏛️</span>
+              <h3>Engineering & Marvels</h3>
+              <p>10 Questions on Arch keystones, Aqueduct gravity flow, Pantheon concrete & Roads!</p>
+              <button class="btn btn-primary">Start Engineering Quiz</button>
+            </div>
+
+            <div class="quiz-mode-card" onclick="startQuiz('daily_life')">
+              <span class="mode-icon">🏺</span>
+              <h3>Daily Life & Gladiator Arena</h3>
+              <p>10 Questions on Roman baths, Circus Maximus, Pompeii 79 CE, and Latin roots!</p>
+              <button class="btn btn-primary">Start Daily Life Quiz</button>
+            </div>
+
+            <div class="quiz-mode-card" onclick="startQuiz('triumph')">
+              <span class="mode-icon">👑</span>
+              <h3>Grand Roman Triumph Marathon</h3>
+              <p>The ultimate 15-question mixed challenge across all Roman topics!</p>
+              <button class="btn btn-accent">Start Imperial Marathon</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Quiz Play Screen -->
+        <div id="quiz-play-screen" class="quiz-screen hidden">
+          <div class="quiz-header">
+            <button class="btn-sm btn-secondary" onclick="quitQuiz()">← Back to Menu</button>
+            <div class="quiz-progress-bar-container">
+              <div id="quiz-progress-fill" class="quiz-progress-fill" style="width: 0%;"></div>
+            </div>
+            <span id="quiz-step-counter" class="quiz-counter">Q 1/10</span>
+          </div>
+
+          <div class="quiz-question-card">
+            <div class="question-badge" id="quiz-category-tag">🏛️ Ancient Rome</div>
+            <h3 id="quiz-question-text" class="question-title">Question loading...</h3>
+            
+            <div id="quiz-options-container" class="options-grid">
+              <!-- Injected via JS -->
+            </div>
+
+            <!-- Feedback Box -->
+            <div id="quiz-feedback-box" class="feedback-box hidden">
+              <div id="feedback-icon" class="feedback-icon">🎉</div>
+              <div>
+                <h4 id="feedback-title">Optime! (Excellent!)</h4>
+                <p id="feedback-explanation">Explanation text here...</p>
+              </div>
+            </div>
+
+            <div class="quiz-action-footer">
+              <button id="quiz-hint-btn" class="btn btn-secondary" onclick="showHint()">💡 Need a Hint?</button>
+              <button id="quiz-next-btn" class="btn btn-primary hidden" onclick="nextQuestion()">Next Question ➔</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Completion Screen -->
+        <div id="quiz-result-screen" class="quiz-screen hidden">
+          <div class="result-card">
+            <div class="result-trophy">👑</div>
+            <h2>Triumphus! Quest Conquered! 🏛️</h2>
+            <p class="result-sub">You have mastered Roman history and engineering like a true Scholar!</p>
+            
+            <div class="score-display">
+              <div class="score-circle">
+                <span id="result-score">10/10</span>
+                <small id="result-percentage">100%</small>
+              </div>
+            </div>
+
+            <div class="reward-box" id="result-reward-box">
+              <span>🌟 Earned +<strong id="result-xp-earned">100</strong> XP!</span>
+            </div>
+
+            <div class="result-buttons">
+              <button class="btn btn-primary" onclick="restartCurrentQuiz()">🔄 Play Again</button>
+              <button class="btn btn-secondary" onclick="showQuizSelection()">🎯 Choose Another Quiz</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 5: ROMAN NUMERALS & CAESAR CIPHER LAB -->
+    <!-- ========================================================================= -->
+    <section id="tab-cipher" class="tab-content">
+      <div class="section-header-box">
+        <h2>🔢 Roman Numerals & Caesar's Cipher Lab</h2>
+        <p>Master the ancient Roman math system and decode secret encrypted military dispatches!</p>
+      </div>
+
+      <div class="tools-split-grid">
+        
+        <!-- TOOL 1: ROMAN NUMERAL CONVERTER -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-icon">🏛️</span>
+            <h3>1. Interactive Roman Numeral Converter</h3>
+          </div>
+          <p>Roman numerals use 7 standard letters: <strong>I (1), V (5), X (10), L (50), C (100), D (500), M (1000)</strong>.</p>
+          
+          <div class="numeral-cheat-bar">
+            <span><strong>I</strong> = 1</span>
+            <span><strong>V</strong> = 5</span>
+            <span><strong>X</strong> = 10</span>
+            <span><strong>L</strong> = 50</span>
+            <span><strong>C</strong> = 100</span>
+            <span><strong>D</strong> = 500</span>
+            <span><strong>M</strong> = 1000</span>
+          </div>
+
+          <div class="converter-box">
+            <div class="input-row">
+              <div class="input-block">
+                <label for="arabic-input">Modern Arabic Number:</label>
+                <input type="number" id="arabic-input" min="1" max="3999" value="2026" oninput="convertArabicToRoman(this.value)">
+              </div>
+              <div class="swap-symbol">⮂</div>
+              <div class="input-block">
+                <label for="roman-input">Roman Numeral:</label>
+                <input type="text" id="roman-input" value="MMXXVI" oninput="convertRomanToArabic(this.value)">
+              </div>
+            </div>
+            <div id="numeral-breakdown" class="breakdown-box">
+              <strong>Breakdown:</strong> M (1000) + M (1000) + X (10) + X (10) + V (5) + I (1) = <strong>2026</strong>
+            </div>
+          </div>
+
+          <div class="subtraction-rule-callout">
+            <strong>⚠️ The Subtraction Rule:</strong> A smaller numeral placed *before* a larger one subtracts!
+            <br><code>IV = 4</code> &bull; <code>IX = 9</code> &bull; <code>XL = 40</code> &bull; <code>XC = 90</code> &bull; <code>CD = 400</code> &bull; <code>CM = 900</code>
+          </div>
+        </div>
+
+        <!-- TOOL 2: CAESAR CIPHER MILITARY DECODER -->
+        <div class="tool-card">
+          <div class="tool-header">
+            <span class="tool-icon">🕵️</span>
+            <h3>2. Caesar Cipher Military Spy Decoder</h3>
+          </div>
+          <p>Julius Caesar protected confidential military orders across Gaul by shifting each letter forward by 3 places (A $\rightarrow$ D, B $\rightarrow$ E)!</p>
+
+          <div class="cipher-wheel-container">
+            <div class="cipher-slider-row">
+              <label for="cipher-shift">Shift Key ($K$): <strong id="shift-value-display">3 (Caesar's Classic Shift)</strong></label>
+              <input type="range" id="cipher-shift" min="1" max="25" value="3" oninput="updateCipherShift(this.value)">
+            </div>
+
+            <!-- Active Dispatch Mission -->
+            <div class="dispatch-card">
+              <div class="dispatch-header">
+                <span class="dispatch-tag">Military Dispatch #<span id="dispatch-num">1</span></span>
+                <span class="dispatch-sender">From: Proconsul Julius Caesar</span>
+              </div>
+              
+              <div class="ciphertext-box">
+                <div class="label-tiny">ENCRYPTED CIPHERTEXT:</div>
+                <div id="dispatch-ciphertext" class="cipher-font">YHQL YLGL YLFL</div>
+              </div>
+
+              <div class="plaintext-input-row">
+                <input type="text" id="cipher-user-input" placeholder="TYPE DECODED MESSAGE..." autocomplete="off">
+                <button class="btn btn-primary" onclick="checkCipherAnswer()">Submit Decryption 🔓</button>
+              </div>
+
+              <div id="cipher-feedback" class="feedback-box hidden"></div>
+
+              <div class="dispatch-nav">
+                <button class="btn-sm btn-secondary" onclick="prevDispatch()">← Prev Dispatch</button>
+                <span id="dispatch-tracker">Mission 1 of 6</span>
+                <button class="btn-sm btn-secondary" onclick="nextDispatch()">Next Dispatch →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 6: TROPHY ROOM & BADGES -->
+    <!-- ========================================================================= -->
+    <section id="tab-trophies" class="tab-content">
+      <div class="section-header-box">
+        <h2>🏆 Sophia's Imperial Roman Trophy Room</h2>
+        <p>Earn badges and imperial honors as you conquer quests, solve ciphers, and ace quizzes!</p>
+      </div>
+
+      <div class="trophy-grid" id="trophy-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
