@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mama's Specialty Coffee Master Guide & Tasting Journal ☕✨</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 0.45in 0.5in;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1a1615;
+      background: #f8fafc;
+      line-height: 1.45;
+      padding: 20px;
+    }
+
+    .toolbar-header {
+      max-width: 8.5in;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-print {
+      background: #b45309;
+      color: #ffffff;
+    }
+    .btn-print:hover { background: #92400e; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #94a3b8;
+      color: #334155;
+    }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    .document-page {
+      max-width: 8.5in;
+      margin: 0 auto 30px;
+      background: #ffffff;
+      padding: 0.45in 0.5in;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      page-break-after: always;
+      position: relative;
+    }
+
+    .test-header {
+      border-bottom: 2px solid #000000;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .brand-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .curriculum-tag {
+      font-size: 0.78rem;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #000000;
+      border-bottom: 1.5px solid #000000;
+      padding-bottom: 3px;
+      margin: 14px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 3px solid #b45309;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+    }
+
+    .concept-box strong { color: #000000; }
+
+    /* Origin Comparison Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background: #f1f5f9;
+      font-weight: 800;
+      color: #000000;
+    }
+
+    /* Cupping Log Form Cards */
+    .cupping-log-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .cupping-card {
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      padding: 10px;
+      background: #ffffff;
+      page-break-inside: avoid;
+    }
+
+    .cupping-card-header {
+      font-size: 0.88rem;
+      font-weight: 800;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 4px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .log-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .log-line {
+      border-bottom: 1px dashed #64748b;
+      display: inline-block;
+      flex: 1;
+      margin-left: 6px;
+      height: 1.1em;
+    }
+
+    .radar-scores {
+      display: flex;
+      justify-content: space-between;
+      background: #f8fafc;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-top: 6px;
+      font-weight: 700;
+    }
+
+    .brew-compass-box {
+      border: 1px solid #000000;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      margin-top: 10px;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        font-size: 9pt;
+      }
+      .toolbar-header { display: none !important; }
+      .document-page {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 0 15px 0 !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="toolbar-header">
+    <div>
+      <h2 style="font-size:1.1rem; font-family:'Playfair Display', serif;">☕ Mama's Specialty Coffee Guide & Cupping Log</h2>
+      <p style="font-size:0.8rem; color:#64748b;">Specialty Coffee Association (SCA) Standard &bull; Printable PDF</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-outline" onclick="window.history.back()">← Return to Studio</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print Tasting Journal</button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 1: ORIGIN ATLAS & VARIETAL PROFILES -->
+  <!-- ========================================================================= -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">☕ MAMA'S SPECIALTY COFFEE MASTER GUIDE</div>
+        <div class="curriculum-tag">Single-Origin Terroirs &bull; Arabica Genetics &bull; Processing Methods</div>
+      </div>
+      <div class="curriculum-tag" style="font-size:0.85rem; font-weight:800;">PAGE 1 OF 2</div>
+    </div>
+
+    <!-- Section 1 -->
+    <h3 class="section-title">1. The World Coffee Atlas & Terroir Matrix (三大产区风土指南)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Continent</th>
+          <th>Famous Origins</th>
+          <th>Altitude</th>
+          <th>Signature Flavour Profile</th>
+          <th>Typical Processing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Africa (非洲)</strong></td>
+          <td>Ethiopia (Yirgacheffe, Guji), Kenya (Nyeri), Rwanda</td>
+          <td>1,700m - 2,200m</td>
+          <td>Jasmine floral, bergamot citrus, blackcurrant, peach tea, bright fruit acidity.</td>
+          <td>Washed (Clean tea) / Natural (Berry jam)</td>
+        </tr>
+        <tr>
+          <td><strong>Americas (美洲)</strong></td>
+          <td>Colombia (Huila), Guatemala (Antigua), Costa Rica, Panama</td>
+          <td>1,200m - 1,900m</td>
+          <td>Milk chocolate, roasted hazelnut, brown sugar caramel, crisp apple, honey.</td>
+          <td>Washed / Honey Process</td>
+        </tr>
+        <tr>
+          <td><strong>Asia (亚洲/海岛)</strong></td>
+          <td>Indonesia (Sumatra Mandheling), Yunnan (云南), Hawaii Kona</td>
+          <td>900m - 1,600m</td>
+          <td>Dark baker's cocoa, cedarwood, warm spices, low acidity, velvety syrup body.</td>
+          <td>Wet-Hulled (Giling Basah)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Section 2 -->
+    <h3 class="section-title">2. Green Bean Processing & Roasting Spectrum (处理法与烘焙度)</h3>
+    <div class="concept-box">
+      <strong>💧 Washed (水洗法):</strong> Pulp removed &rarr; Fermented in water tanks (12-36h) &rarr; Washed clean with mountain water &rarr; Dried. <em>Result:</em> Sparkling citric clarity, transparent florals, tea-like finish.
+      <br><strong>☀️ Natural (日晒法):</strong> Whole cherry dried in the sun for 25-30 days with sweet pulp intact. <em>Result:</em> Intense strawberry, blueberry jam, winey body, heavy sweetness.
+      <br><strong>🍯 Honey (蜜处理):</strong> Pulp peeled off, but sticky sugar mucilage remains during sun-drying. <em>Result:</em> Harmonious honey and apricot sweetness with soft acidity.
+    </div>
+
+    <!-- Section 3 -->
+    <h3 class="section-title">3. Mama's Golden Brewing Compass (手冲与萃取黄金法则)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Brewing Method</th>
+          <th>Dose & Ratio</th>
+          <th>Water Temp</th>
+          <th>Grind Size</th>
+          <th>Extraction Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>V60 / Pour-Over (手冲)</strong></td>
+          <td>15g coffee : 240g water (1:16)</td>
+          <td>91°C - 93°C</td>
+          <td>Medium-Fine (Sea salt)</td>
+          <td>2m 15s - 2m 30s (Bloom 45g for 35s)</td>
+        </tr>
+        <tr>
+          <td><strong>French Press (法压壶)</strong></td>
+          <td>20g coffee : 300g water (1:15)</td>
+          <td>92°C - 94°C</td>
+          <td>Coarse (Kosher salt)</td>
+          <td>4m 00s full immersion steep</td>
+        </tr>
+        <tr>
+          <td><strong>Cold Brew (冷萃冰滴)</strong></td>
+          <td>50g coffee : 500g water (1:10)</td>
+          <td>Cold / Chilled</td>
+          <td>Extra Coarse</td>
+          <td>14 - 18 hours in refrigerator</td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 2: MAMA'S CUPPING & TASTING JOURNAL LOG -->
+  <!-- ========================================================================= -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">☕ MAMA'S DAILY COFFEE TASTING LOG & CUPPING JOURNAL</div>
+        <div class="curriculum-tag">Record Origin, Roast, Sensory Notes & Score (SCA 100-Point System)</div>
+      </div>
+      <div class="curriculum-tag" style="font-size:0.85rem; font-weight:800;">PAGE 2 OF 2</div>
+    </div>
+
+    <div class="cupping-log-grid">
+      
+      <!-- Card 1 -->
+      <div class="cupping-card">
+        <div class="cupping-card-header">
+          <span>☕ TASTING LOG #1</span>
+          <span>Date: ____________</span>
+        </div>
+        <div class="log-row"><span>Bean / Origin:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Roaster / Lot:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Process / Varietal:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Brew Method / Temp:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Dry Fragrance (干香):</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Flavour Notes (风味):</span> <span class="log-line"></span></div>
+        <div class="radar-scores">
+          <span>Acidity: __/10</span>
+          <span>Sweetness: __/10</span>
+          <span>Body: __/10</span>
+          <span>Overall: __/100</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="cupping-card">
+        <div class="cupping-card-header">
+          <span>☕ TASTING LOG #2</span>
+          <span>Date: ____________</span>
+        </div>
+        <div class="log-row"><span>Bean / Origin:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Roaster / Lot:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Process / Varietal:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Brew Method / Temp:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Dry Fragrance (干香):</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Flavour Notes (风味):</span> <span class="log-line"></span></div>
+        <div class="radar-scores">
+          <span>Acidity: __/10</span>
+          <span>Sweetness: __/10</span>
+          <span>Body: __/10</span>
+          <span>Overall: __/100</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="cupping-card">
+        <div class="cupping-card-header">
+          <span>☕ TASTING LOG #3</span>
+          <span>Date: ____________</span>
+        </div>
+        <div class="log-row"><span>Bean / Origin:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Roaster / Lot:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Process / Varietal:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Brew Method / Temp:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Dry Fragrance (干香):</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Flavour Notes (风味):</span> <span class="log-line"></span></div>
+        <div class="radar-scores">
+          <span>Acidity: __/10</span>
+          <span>Sweetness: __/10</span>
+          <span>Body: __/10</span>
+          <span>Overall: __/100</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="cupping-card">
+        <div class="cupping-card-header">
+          <span>☕ TASTING LOG #4</span>
+          <span>Date: ____________</span>
+        </div>
+        <div class="log-row"><span>Bean / Origin:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Roaster / Lot:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Process / Varietal:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Brew Method / Temp:</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Dry Fragrance (干香):</span> <span class="log-line"></span></div>
+        <div class="log-row"><span>Flavour Notes (风味):</span> <span class="log-line"></span></div>
+        <div class="radar-scores">
+          <span>Acidity: __/10</span>
+          <span>Sweetness: __/10</span>
+          <span>Body: __/10</span>
+          <span>Overall: __/100</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SCA Flavour Wheel Reference Footer -->
+    <div class="brew-compass-box">
+      <strong>🎨 Quick Flavour Key:</strong>
+      🌸 <em>Floral</em> (Jasmine, Bergamot) &bull;
+      🍓 <em>Fruity</em> (Strawberry, Blueberry, Peach, Citrus) &bull;
+      🍯 <em>Sweet</em> (Caramel, Honey, Brown Sugar) &bull;
+      🍫 <em>Nutty</em> (Almond, Milk Chocolate, Hazelnut) &bull;
+      🌿 <em>Spices</em> (Cinnamon, Cedarwood, Clove)
+    </div>
+  </main>
+
+</body>
+</html>
