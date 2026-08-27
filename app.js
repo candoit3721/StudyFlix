@@ -110,7 +110,7 @@ const DEFAULT_PROFILES = [
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "2.4.0";
+const APP_VERSION = "2.5.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
@@ -298,6 +298,14 @@ function selectProfile(profileId, triggerConfetti = true) {
   // Populate Dashboard Billboard & Rows
   populateDashboard(profile);
 
+  // Update Profile-Scoped Search UI
+  const searchInput = document.getElementById('global-search-input');
+  if (searchInput) {
+    searchInput.placeholder = `Search ${profile.name}'s topics & labs... (/)`;
+    clearSearch();
+  }
+  renderQuickSearchTags(profileId);
+
   // Switch Views
   document.getElementById('profile-select-screen').classList.add('hidden');
   document.getElementById('dashboard-screen').classList.remove('hidden');
@@ -478,11 +486,58 @@ function showView(view) {
 }
 
 // =========================================================================
-// 5. Global Search Engine & Live Course Discovery
+// 5. Profile-Scoped Search Engine & Topic Discovery
 // =========================================================================
 let searchQuery = "";
-let searchFilter = "all"; // 'all' or 'current'
 let searchIndex = [];
+
+// Profile-Specific Popular Search Tags
+const PROFILE_QUICK_TAGS = {
+  sophia: [
+    { label: "🏛️ Ancient Rome", query: "Ancient Rome" },
+    { label: "🌉 Roman Arch & Keystones", query: "Arch" },
+    { label: "🕵️ Caesar Cipher", query: "Cipher" },
+    { label: "⚛️ Periodic Table", query: "Periodic" },
+    { label: "🏙️ Cell City Biology", query: "Cell" },
+    { label: "🥞 Matter & Reactions", query: "Matter" },
+    { label: "🎢 Roller Coaster Physics", query: "Physics" },
+    { label: "🍕 Fractions", query: "Fraction" },
+    { label: "📖 Rome Workbook", query: "Workbook" }
+  ],
+  olivia: [
+    { label: "⏰ Analog Clocks", query: "Clock" },
+    { label: "⏱️ Elapsed Time", query: "Elapsed" },
+    { label: "➕ Addition & Carrying", query: "Addition" },
+    { label: "➖ Subtraction Borrowing", query: "Subtraction" },
+    { label: "✖️ 12x12 Multiplication", query: "Multiplication" },
+    { label: "💰 Money & Coins", query: "Money" },
+    { label: "📏 2D & 3D Geometry", query: "Geometry" }
+  ],
+  yaya: [
+    { label: "📈 AP Calculus", query: "Calculus" },
+    { label: "📊 Statistics & Distribution", query: "Statistics" },
+    { label: "📐 Analytical Geometry", query: "Geometry" },
+    { label: "∫ Definite Integrals", query: "Integral" },
+    { label: "🎯 Probability Theory", query: "Probability" },
+    { label: "📝 Diagnostic Exam", query: "Diagnostic" }
+  ]
+};
+
+function renderQuickSearchTags(profileId) {
+  const container = document.getElementById('search-quick-tags-container');
+  if (!container) return;
+
+  const tags = PROFILE_QUICK_TAGS[profileId] || PROFILE_QUICK_TAGS.sophia;
+  container.innerHTML = `<span class="quick-tags-label">Popular in Curriculum:</span>`;
+
+  tags.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'quick-tag-btn';
+    btn.textContent = t.label;
+    btn.onclick = () => quickSearch(t.query);
+    container.appendChild(btn);
+  });
+}
 
 function buildSearchIndex() {
   searchIndex = [];
@@ -603,15 +658,6 @@ function quickSearch(tag) {
   }
 }
 
-function setSearchFilter(filterType) {
-  searchFilter = filterType;
-  const btnAll = document.getElementById('filter-btn-all');
-  const btnCurrent = document.getElementById('filter-btn-current');
-  if (btnAll) btnAll.classList.toggle('active', filterType === 'all');
-  if (btnCurrent) btnCurrent.classList.toggle('active', filterType === 'current');
-  renderSearchResults();
-}
-
 function highlightMatch(text, query) {
   if (!query) return text;
   const escaped = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -623,15 +669,18 @@ function renderSearchResults() {
   const grid = document.getElementById('search-results-grid');
   const countDisplay = document.getElementById('search-count-display');
   const queryDisplay = document.getElementById('search-query-display');
+  const profileNameDisplay = document.getElementById('search-profile-name');
 
+  const currentProfile = appProfiles.find(p => p.id === activeProfileId) || appProfiles[0];
+  if (profileNameDisplay) profileNameDisplay.textContent = currentProfile.name;
   if (queryDisplay) queryDisplay.textContent = searchQuery;
 
   const q = searchQuery.toLowerCase();
+  
+  // Scope search STRICTLY to the current active profile
   let results = searchIndex.filter(item => {
-    if (searchFilter === 'current' && item.profileId !== activeProfileId) {
-      return false;
-    }
-    const searchableText = `${item.title} ${item.desc} ${item.badge} ${item.profileName} ${item.profileGrade} ${item.category}`.toLowerCase();
+    if (item.profileId !== activeProfileId) return false;
+    const searchableText = `${item.title} ${item.desc} ${item.badge} ${item.category}`.toLowerCase();
     return searchableText.includes(q);
   });
 
@@ -645,7 +694,7 @@ function renderSearchResults() {
   });
 
   if (countDisplay) {
-    countDisplay.textContent = `Showing ${results.length} matching course${results.length === 1 ? '' : 's'} and topic${results.length === 1 ? '' : 's'}`;
+    countDisplay.textContent = `Found ${results.length} topic${results.length === 1 ? '' : 's'} in ${currentProfile.name}'s curriculum`;
   }
 
   if (!grid) return;
@@ -654,9 +703,9 @@ function renderSearchResults() {
   if (results.length === 0) {
     grid.innerHTML = `
       <div class="search-empty-box">
-        <h3>🔍 No matching courses found for "${searchQuery}"</h3>
-        <p>Try searching for <strong>Rome</strong>, <strong>Fractions</strong>, <strong>Clocks</strong>, <strong>Periodic Table</strong>, <strong>Calculus</strong>, or <strong>Physics</strong>!</p>
-        <button class="btn btn-primary" style="margin-top:14px;" onclick="clearSearch()">View All Courses</button>
+        <h3>🔍 No matching topics found in ${currentProfile.name}'s courses for "${searchQuery}"</h3>
+        <p>Try searching with another keyword above or explore ${currentProfile.name}'s full curriculum!</p>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="clearSearch()">View ${currentProfile.name}'s Full Dashboard</button>
       </div>
     `;
     return;
