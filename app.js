@@ -110,7 +110,7 @@ const DEFAULT_PROFILES = [
 ];
 
 // App Version Cache Buster (increments on new releases)
-const APP_VERSION = "2.3.0";
+const APP_VERSION = "2.4.0";
 if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
   localStorage.removeItem('studyflix_profiles');
   localStorage.setItem('studyflix_version', APP_VERSION);
@@ -188,6 +188,7 @@ function updateConfetti() {
 // Initialization
 function init() {
   localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
+  buildSearchIndex();
   renderProfileSelectScreen();
 
   // Check if there was an active profile previously selected
@@ -475,6 +476,233 @@ function showView(view) {
     alert(`🏆 ${profile.name}'s Stats:\n⭐ XP: ${document.getElementById('current-profile-xp').textContent}\n🔥 Streak: ${document.getElementById('current-profile-streak').textContent} Days`);
   }
 }
+
+// =========================================================================
+// 5. Global Search Engine & Live Course Discovery
+// =========================================================================
+let searchQuery = "";
+let searchFilter = "all"; // 'all' or 'current'
+let searchIndex = [];
+
+function buildSearchIndex() {
+  searchIndex = [];
+  appProfiles.forEach(p => {
+    // Featured
+    if (p.featured) {
+      searchIndex.push({
+        id: `${p.id}-featured`,
+        profileId: p.id,
+        profileName: p.name,
+        profileAvatar: p.avatar,
+        profileGrade: p.grade,
+        title: p.featured.title,
+        desc: p.featured.desc,
+        badge: p.featured.tag || "FEATURED",
+        icon: "🌟",
+        link: p.featured.link,
+        category: "Featured Quest",
+        bg: p.featured.bgGradient || "linear-gradient(135deg, #c8102e, #d4af37)"
+      });
+    }
+
+    // Subjects
+    if (p.subjects) {
+      p.subjects.forEach((s, idx) => {
+        searchIndex.push({
+          id: `${p.id}-subject-${idx}`,
+          profileId: p.id,
+          profileName: p.name,
+          profileAvatar: p.avatar,
+          profileGrade: p.grade,
+          title: s.title,
+          desc: s.desc,
+          badge: s.badge || "STUDIO",
+          icon: s.icon || "📐",
+          link: s.link,
+          category: "Core Subject",
+          bg: s.bg
+        });
+      });
+    }
+
+    // Topics
+    if (p.topics) {
+      p.topics.forEach((t, idx) => {
+        searchIndex.push({
+          id: `${p.id}-topic-${idx}`,
+          profileId: p.id,
+          profileName: p.name,
+          profileAvatar: p.avatar,
+          profileGrade: p.grade,
+          title: t.title,
+          desc: t.desc,
+          badge: t.badge || "TOPIC",
+          icon: t.icon || "🔥",
+          link: t.link,
+          category: "Deep-Dive Topic",
+          bg: t.bg
+        });
+      });
+    }
+
+    // Printable
+    if (p.printable) {
+      p.printable.forEach((w, idx) => {
+        searchIndex.push({
+          id: `${p.id}-print-${idx}`,
+          profileId: p.id,
+          profileName: p.name,
+          profileAvatar: p.avatar,
+          profileGrade: p.grade,
+          title: w.title,
+          desc: w.desc,
+          badge: w.badge || "WORKBOOK",
+          icon: w.icon || "📖",
+          link: w.link,
+          category: "Printable Worksheet",
+          bg: w.bg
+        });
+      });
+    }
+  });
+}
+
+function handleSearchInput(value) {
+  searchQuery = value.trim();
+  const clearBtn = document.getElementById('search-clear-btn');
+  const searchSection = document.getElementById('search-results-section');
+  const heroBillboard = document.getElementById('hero-billboard');
+  const contentRows = document.querySelector('.content-rows-container');
+
+  if (searchQuery.length > 0) {
+    if (clearBtn) clearBtn.classList.remove('hidden');
+    if (searchSection) searchSection.classList.remove('hidden');
+    if (heroBillboard) heroBillboard.classList.add('hidden');
+    if (contentRows) contentRows.classList.add('hidden');
+    renderSearchResults();
+  } else {
+    if (clearBtn) clearBtn.classList.add('hidden');
+    if (searchSection) searchSection.classList.add('hidden');
+    if (heroBillboard) heroBillboard.classList.remove('hidden');
+    if (contentRows) contentRows.classList.remove('hidden');
+  }
+}
+
+function clearSearch() {
+  const input = document.getElementById('global-search-input');
+  if (input) input.value = '';
+  handleSearchInput('');
+}
+
+function quickSearch(tag) {
+  const input = document.getElementById('global-search-input');
+  if (input) {
+    input.value = tag;
+    handleSearchInput(tag);
+    input.focus();
+  }
+}
+
+function setSearchFilter(filterType) {
+  searchFilter = filterType;
+  const btnAll = document.getElementById('filter-btn-all');
+  const btnCurrent = document.getElementById('filter-btn-current');
+  if (btnAll) btnAll.classList.toggle('active', filterType === 'all');
+  if (btnCurrent) btnCurrent.classList.toggle('active', filterType === 'current');
+  renderSearchResults();
+}
+
+function highlightMatch(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+  return text.replace(regex, `<span class="search-match-highlight">$1</span>`);
+}
+
+function renderSearchResults() {
+  const grid = document.getElementById('search-results-grid');
+  const countDisplay = document.getElementById('search-count-display');
+  const queryDisplay = document.getElementById('search-query-display');
+
+  if (queryDisplay) queryDisplay.textContent = searchQuery;
+
+  const q = searchQuery.toLowerCase();
+  let results = searchIndex.filter(item => {
+    if (searchFilter === 'current' && item.profileId !== activeProfileId) {
+      return false;
+    }
+    const searchableText = `${item.title} ${item.desc} ${item.badge} ${item.profileName} ${item.profileGrade} ${item.category}`.toLowerCase();
+    return searchableText.includes(q);
+  });
+
+  // Deduplicate results by link + title
+  const seen = new Set();
+  results = results.filter(item => {
+    const key = `${item.link}|${item.title}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  if (countDisplay) {
+    countDisplay.textContent = `Showing ${results.length} matching course${results.length === 1 ? '' : 's'} and topic${results.length === 1 ? '' : 's'}`;
+  }
+
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  if (results.length === 0) {
+    grid.innerHTML = `
+      <div class="search-empty-box">
+        <h3>🔍 No matching courses found for "${searchQuery}"</h3>
+        <p>Try searching for <strong>Rome</strong>, <strong>Fractions</strong>, <strong>Clocks</strong>, <strong>Periodic Table</strong>, <strong>Calculus</strong>, or <strong>Physics</strong>!</p>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="clearSearch()">View All Courses</button>
+      </div>
+    `;
+    return;
+  }
+
+  results.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'search-result-card';
+    card.innerHTML = `
+      <div class="result-card-banner" style="background:${item.bg}">
+        <span class="result-profile-badge">
+          <span>${item.profileAvatar}</span> ${item.profileName} &bull; ${item.profileGrade.split(' ')[0]}
+        </span>
+        <span class="result-type-badge">${item.badge}</span>
+      </div>
+      <div class="result-card-body">
+        <div class="result-card-title">${highlightMatch(item.title, searchQuery)}</div>
+        <div class="result-card-desc">${highlightMatch(item.desc, searchQuery)}</div>
+        <button class="result-card-action">
+          ▶ Launch Topic
+        </button>
+      </div>
+    `;
+    card.onclick = () => openStudio(item.link, item.title);
+    grid.appendChild(card);
+  });
+}
+
+// Global Keyboard Shortcuts (/ or Cmd+K / Ctrl+K to search, Esc to close)
+window.addEventListener('keydown', (e) => {
+  const searchInput = document.getElementById('global-search-input');
+  if (!searchInput) return;
+
+  if (e.key === '/' && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  } else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+    clearSearch();
+    searchInput.blur();
+  }
+});
 
 // Run on load
 window.addEventListener('DOMContentLoaded', init);
