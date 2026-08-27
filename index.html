@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=2.3.0">
+  <link rel="stylesheet" href="style.css?v=2.4.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -29,6 +29,12 @@
     </div>
 
     <div class="nav-right">
+      <!-- Search Input in Navbar -->
+      <div class="nav-search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="global-search-input" class="nav-search-input" placeholder="Search topics, courses, ciphers... (/)" autocomplete="off" oninput="handleSearchInput(this.value)">
+        <button id="search-clear-btn" class="search-clear-btn hidden" onclick="clearSearch()" title="Clear search">✖</button>
+      </div>
       <div class="xp-pill">
         <span class="xp-star">⭐</span>
         <span id="current-profile-xp">0</span> XP
@@ -85,6 +91,37 @@
   <!-- 2. MAIN DASHBOARD SCREEN (PER PROFILE) -->
   <!-- ========================================================================= -->
   <main id="dashboard-screen" class="dashboard-container hidden">
+
+    <!-- SEARCH RESULTS VIEW -->
+    <section id="search-results-section" class="search-results-section hidden">
+      <div class="search-results-header">
+        <div>
+          <h2 class="search-heading">🔍 Search: "<span id="search-query-display"></span>"</h2>
+          <p class="search-subheading" id="search-count-display">Showing 0 matching courses and topics</p>
+        </div>
+        <div class="search-filter-buttons">
+          <button class="search-filter-btn active" id="filter-btn-all" onclick="setSearchFilter('all')">🌐 All Kids</button>
+          <button class="search-filter-btn" id="filter-btn-current" onclick="setSearchFilter('current')">👤 Current Profile</button>
+          <button class="btn-clear-search" onclick="clearSearch()">✖ Close</button>
+        </div>
+      </div>
+
+      <div class="search-quick-tags">
+        <span class="quick-tags-label">Popular:</span>
+        <button class="quick-tag-btn" onclick="quickSearch('Ancient Rome')">🏛️ Ancient Rome</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Arch')">🌉 Roman Arch</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Cipher')">🕵️ Caesar Cipher</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Periodic Table')">⚛️ Periodic Table</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Cell')">🏙️ Cell City</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Fractions')">🍕 Fractions</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Clock')">⏰ Analog Clocks</button>
+        <button class="quick-tag-btn" onclick="quickSearch('Calculus')">📈 Calculus</button>
+      </div>
+
+      <div class="search-results-grid" id="search-results-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
 
     <!-- HERO BILLBOARD -->
     <section class="hero-billboard" id="hero-billboard">
@@ -204,6 +241,6 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="app.js?v=2.3.0"></script>
+  <script src="app.js?v=2.4.0"></script>
 </body>
 </html>
