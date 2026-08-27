@@ -107,6 +107,13 @@ const DEFAULT_PROFILES = [
   }
 ];
 
+// App Version Cache Buster (increments on new releases)
+const APP_VERSION = "2.2.0";
+if (localStorage.getItem('studyflix_version') !== APP_VERSION) {
+  localStorage.removeItem('studyflix_profiles');
+  localStorage.setItem('studyflix_version', APP_VERSION);
+}
+
 // App State
 let savedProfiles = JSON.parse(localStorage.getItem('studyflix_profiles') || 'null');
 let appProfiles = DEFAULT_PROFILES;
