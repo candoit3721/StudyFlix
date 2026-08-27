@@ -25,17 +25,17 @@ Since **StudyFlix** and all child projects are pure static web apps (HTML5, CSS,
    git add .
    git commit -m "Initial commit for StudyFlix Kids Learning Portal"
    ```
-2. Create a new repository on [github.com](https://github.com/new) named `kids-learning-hub` (Public).
+2. Create a new repository on [github.com](https://github.com/new) named `studyflix` (Public).
 3. Link and push your code:
    ```bash
-   git remote add origin https://github.com/<YOUR-GITHUB-USERNAME>/kids-learning-hub.git
+   git remote add origin https://github.com/<YOUR-GITHUB-USERNAME>/studyflix.git
    git branch -M main
    git push -u origin main
    ```
 4. On GitHub, go to **Settings** $\rightarrow$ **Pages** (in the left sidebar).
 5. Under **Build and deployment $\rightarrow$ Branch**, select `main` and `/ (root)`, then click **Save**.
 6. Your live site will be ready at:
-   `https://<YOUR-GITHUB-USERNAME>.github.io/kids-learning-hub/`
+   `https://<YOUR-GITHUB-USERNAME>.github.io/studyflix/`
 
 ---
 
@@ -48,7 +48,7 @@ cd /Users/henryw/project/workdir/kids
 npx vercel
 ```
 * Follow the interactive prompts (press Enter to accept defaults).
-* Done! Vercel will give you a live production URL like `https://kids-learning-hub.vercel.app`.
+* Done! Vercel will give you a live production URL like `https://studyflix.vercel.app`.
 
 ### Via Web:
 1. Push to GitHub.
