@@ -489,10 +489,74 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   overflow: hidden;
 }
 
+/* Two stacked art layers so a slide change dissolves rather than blanks. */
+.hero-art-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.1s ease;
+}
+
+.hero-art-layer.is-active { opacity: 1; }
+
 .billboard-backdrop .sf-keyart {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+/* Subject wash behind the top of the page. It carries the featured subject's
+   sky colour down past the hero and falls away before the content rows, so
+   the page takes the subject's tone without the rows losing their black. */
+.page-wash {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 780px;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    var(--wash-top, #1a1a1a) 0%,
+    var(--wash-bottom, #141414) 42%,
+    rgba(20, 20, 20, 0) 100%
+  );
+  opacity: 0.55;
+  transition: background 1.1s ease;
+}
+
+.dashboard-container { position: relative; }
+
+/* The hero and the rows sit above the wash. */
+.hero-billboard,
+.content-rows-container,
+.search-results-section { position: relative; z-index: 1; }
+
+/* One dot per spotlight slide. */
+.hero-dots {
+  display: flex;
+  gap: 9px;
+  margin-top: 26px;
+  align-items: center;
+}
+
+.hero-dot {
+  width: 26px;
+  height: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.hero-dot:hover { background: rgba(255, 255, 255, 0.6); }
+
+.hero-dot.is-active {
+  width: 42px;
+  background: var(--hero-accent, var(--nf-white));
 }
 
 /* Scrim so the headline stays legible, and the art dissolves into the page
@@ -1166,6 +1230,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   .media-card, .row-arrow, .row-slider-wrap::before, .row-slider-wrap::after { transition: none; }
   .media-card:hover, .media-card:focus-visible { transform: none; }
   .row-slider { scroll-behavior: auto; }
+  /* The hero still changes when a dot is picked; it just does not animate,
+     and app.js does not auto-rotate it. */
+  .hero-art-layer, .page-wash, .hero-dot { transition: none; }
 }
 
 /* =========================================================================
@@ -1642,6 +1709,7 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   .card-title { min-height: 0 !important; }
 
   .billboard-backdrop { display: none !important; }
+  .page-wash, .hero-dots { display: none !important; }
   .hero-billboard::after { display: none !important; }
 
   .card-title {

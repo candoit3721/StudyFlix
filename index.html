@@ -107,6 +107,11 @@
   <!-- ========================================================================= -->
   <main id="dashboard-screen" class="dashboard-container hidden">
 
+    <!-- Subject-tinted wash behind the top of the page. Repainted as the
+         hero rotates, so the page tone follows the featured subject and
+         then fades back to black before the content rows. -->
+    <div class="page-wash" id="page-wash" aria-hidden="true"></div>
+
     <!-- SEARCH RESULTS VIEW (SCOPED WITHIN PROFILE) -->
     <section id="search-results-section" class="search-results-section hidden">
       <div class="search-results-header">
@@ -132,7 +137,10 @@
 
     <!-- HERO BILLBOARD -->
     <section class="hero-billboard" id="hero-billboard">
-      <div class="billboard-backdrop" id="hero-backdrop"></div>
+      <div class="billboard-backdrop" id="hero-backdrop" aria-hidden="true">
+        <div class="hero-art-layer is-active"></div>
+        <div class="hero-art-layer"></div>
+      </div>
       <div class="billboard-content">
         <div class="billboard-tag" id="hero-tag">FEATURED LEARNING QUEST</div>
         <h2 class="billboard-title" id="hero-title">Sophia's Science & Chemistry Quest</h2>
@@ -147,6 +155,10 @@
             <span data-sf-icon="info" data-sf-size="19"></span><span>More Details</span>
           </button>
         </div>
+
+        <!-- One dot per spotlight slide: shows how many there are, which one is
+             showing, and lets you jump straight to it instead of waiting. -->
+        <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Featured subjects"></div>
       </div>
     </section>
 

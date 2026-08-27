@@ -390,6 +390,7 @@ function toggleManageMode() {
 }
 
 function showProfileSelect() {
+  stopHeroRotation();
   activeProfileId = null;
   localStorage.removeItem('studyflix_active_profile_id');
   document.getElementById('main-header').classList.add('hidden');
@@ -490,19 +491,197 @@ SFProgress.onChange((profileId) => {
   if (profileId === activeProfileId) renderProfileStats(profileId);
 });
 
-function populateDashboard(profile) {
-  // Hero Billboard — real key art for the featured quest, not an abstract
-  // gradient that says nothing about what the quest contains.
-  document.getElementById('hero-tag').textContent = profile.featured.tag;
-  document.getElementById('hero-title').textContent = profile.featured.title;
-  document.getElementById('hero-desc').textContent = profile.featured.desc;
-  const backdrop = document.getElementById('hero-backdrop');
-  if (backdrop) {
-    backdrop.innerHTML = SFKeyArt.art(profile.featured.art, profile.featured.family, 'quest');
+/* =========================================================================
+   HERO SPOTLIGHT
+   -------------------------------------------------------------------------
+   The billboard cycles through the profile's headline subjects rather than
+   sitting on one. Each slide brings its own key art AND its own subject
+   palette, so the top of the page takes on the tone of whatever is featured
+   and then washes back to black before the content rows.
+
+   Everything a slide needs already exists in the catalog (art, family,
+   title, desc, link), so a slide is just a catalog entry - no parallel
+   content to keep in sync.
+   ========================================================================= */
+const HERO_INTERVAL_MS = 8000;
+let heroSlides = [];
+let heroIndex = 0;
+let heroTimer = null;
+let heroArtLayer = 0;
+
+/** Auto-rotation is decoration; anyone who asked for less motion keeps a static hero. */
+function prefersReducedMotion() {
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Headline slides for a profile: the featured quest plus its core subjects.
+ *
+ * Deduped on link AND art, because a profile's featured quest is usually also
+ * its first subject and the same slide twice reads as a stutter. Keying on the
+ * link alone is wrong: several studios hold multiple topics behind one URL
+ * (all four of Yaya's subjects open yaya/index.html), and those are genuinely
+ * different slides - different title, different key art. Two entries are the
+ * same slide only when they would look the same AND go to the same place.
+ */
+function buildHeroSlides(profile) {
+  const pool = [];
+  if (profile.featured) {
+    pool.push({
+      tag: profile.featured.tag || 'FEATURED QUEST',
+      title: profile.featured.title,
+      desc: profile.featured.desc,
+      link: profile.featured.link,
+      family: profile.featured.family,
+      art: profile.featured.art
+    });
   }
+  (profile.subjects || []).forEach(s => {
+    pool.push({
+      tag: s.badge || 'FEATURED',
+      title: s.title,
+      desc: s.desc,
+      link: s.link,
+      family: s.family,
+      art: s.art
+    });
+  });
+
+  const seen = new Set();
+  return pool.filter(s => {
+    if (!s || !s.link) return false;
+    const key = s.link + '|' + (s.art || '');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+/** The slide the hero is actually showing - what Play and More Details act on. */
+function currentHeroSlide() {
+  return heroSlides[heroIndex] || null;
+}
+
+function renderHeroDots() {
+  const wrap = document.getElementById('hero-dots');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  // A single slide has nothing to rotate between, so the control would be noise.
+  if (heroSlides.length < 2) return;
+
+  heroSlides.forEach((slide, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'hero-dot' + (i === heroIndex ? ' is-active' : '');
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-selected', String(i === heroIndex));
+    dot.setAttribute('aria-label', slide.title);
+    dot.title = slide.title;
+    dot.onclick = () => {
+      showHeroSlide(i);
+      // A deliberate pick should get its full dwell, not the tail of the last tick.
+      restartHeroRotation();
+    };
+    wrap.appendChild(dot);
+  });
+}
+
+/** Paint a slide: text, cross-faded art, accent, and the page wash. */
+function showHeroSlide(index, immediate) {
+  if (!heroSlides.length) return;
+  heroIndex = ((index % heroSlides.length) + heroSlides.length) % heroSlides.length;
+  const slide = heroSlides[heroIndex];
+  const palette = SFKeyArt.palette(slide.family);
+
+  document.getElementById('hero-tag').textContent = slide.tag;
+  document.getElementById('hero-title').textContent = slide.title;
+  document.getElementById('hero-desc').textContent = slide.desc;
+
   const billboard = document.getElementById('hero-billboard');
-  billboard.style.setProperty('--hero-accent', SFKeyArt.palette(profile.featured.family).accent);
-  billboard.style.background = '';
+  if (billboard) {
+    billboard.style.setProperty('--hero-accent', palette.accent);
+    billboard.style.background = '';
+  }
+
+  // Two stacked layers so the art dissolves into the next one instead of
+  // blanking between slides.
+  const layers = document.querySelectorAll('#hero-backdrop .hero-art-layer');
+  if (layers.length === 2) {
+    const incoming = layers[heroArtLayer ^ 1];
+    incoming.innerHTML = SFKeyArt.art(slide.art, slide.family, 'quest');
+    if (immediate) {
+      layers.forEach(l => l.classList.remove('is-active'));
+      incoming.classList.add('is-active');
+    } else {
+      layers[heroArtLayer].classList.remove('is-active');
+      incoming.classList.add('is-active');
+    }
+    heroArtLayer ^= 1;
+  }
+
+  // The wash carries the subject's sky colour down behind the top of the
+  // page, then falls away so the rows below stay on the product's black.
+  const wash = document.getElementById('page-wash');
+  if (wash) {
+    wash.style.setProperty('--wash-top', palette.sky[0]);
+    wash.style.setProperty('--wash-bottom', palette.sky[1]);
+  }
+
+  renderHeroDots();
+}
+
+function advanceHero() {
+  showHeroSlide(heroIndex + 1);
+}
+
+function startHeroRotation() {
+  stopHeroRotation();
+  if (heroSlides.length < 2 || prefersReducedMotion()) return;
+  heroTimer = setInterval(advanceHero, HERO_INTERVAL_MS);
+}
+
+function stopHeroRotation() {
+  if (heroTimer) {
+    clearInterval(heroTimer);
+    heroTimer = null;
+  }
+}
+
+function restartHeroRotation() {
+  if (heroTimer) startHeroRotation();
+}
+
+/**
+ * Reading the blurb or reaching for Play should not be interrupted by the
+ * slide changing underneath, so pointer or keyboard focus inside the hero
+ * holds the rotation.
+ */
+function initHeroInteractionPauses() {
+  const billboard = document.getElementById('hero-billboard');
+  if (!billboard || billboard.dataset.heroPauseBound) return;
+  billboard.dataset.heroPauseBound = '1';
+
+  billboard.addEventListener('mouseenter', stopHeroRotation);
+  billboard.addEventListener('mouseleave', () => { if (!billboard.contains(document.activeElement)) startHeroRotation(); });
+  billboard.addEventListener('focusin', stopHeroRotation);
+  billboard.addEventListener('focusout', () => { if (!billboard.matches(':hover')) startHeroRotation(); });
+
+  // A hero rotating in a background tab is wasted work and lands the user on
+  // a different slide than the one they left.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopHeroRotation();
+    else if (!document.getElementById('dashboard-screen').classList.contains('hidden')) startHeroRotation();
+  });
+}
+
+function populateDashboard(profile) {
+  // Hero Billboard — real key art for the featured subject, not an abstract
+  // gradient that says nothing about what the quest contains.
+  heroSlides = buildHeroSlides(profile);
+  heroIndex = 0;
+  showHeroSlide(0, true);
+  initHeroInteractionPauses();
+  startHeroRotation();
 
   // Row 1: Core Subjects
   document.getElementById('row1-title').textContent = `${profile.name}'s Core Subjects & Studios`;
@@ -618,6 +797,14 @@ function initRowAffordances() {
 let currentStudioUrl = '';
 
 function launchFeaturedTopic() {
+  // The hero rotates, so Play has to follow what is on screen right now -
+  // opening the profile's static featured quest would contradict the slide
+  // the user is looking at.
+  const slide = currentHeroSlide();
+  if (slide) {
+    openStudio(slide.link, slide.title);
+    return;
+  }
   const profile = appProfiles.find(p => p.id === activeProfileId);
   if (profile && profile.featured) {
     openStudio(profile.featured.link, profile.featured.title);
@@ -629,12 +816,15 @@ function launchFeaturedTopic() {
 function showFeaturedDetails() {
   const profile = appProfiles.find(p => p.id === activeProfileId);
   if (!profile) return;
+  const slide = currentHeroSlide() || profile.featured;
   const modal = document.getElementById('featured-details-modal');
-  document.getElementById('featured-details-tag').textContent = profile.featured.tag;
-  document.getElementById('featured-details-title').textContent = profile.featured.title;
-  document.getElementById('featured-details-desc').textContent = profile.featured.desc;
+  document.getElementById('featured-details-tag').textContent = slide.tag;
+  document.getElementById('featured-details-title').textContent = slide.title;
+  document.getElementById('featured-details-desc').textContent = slide.desc;
   document.getElementById('featured-details-art').innerHTML =
-    SFKeyArt.art(profile.featured.art, profile.featured.family, 'quest');
+    SFKeyArt.art(slide.art, slide.family, 'quest');
+  // The hero must not rotate on behind an open panel describing one slide.
+  stopHeroRotation();
   modal.classList.remove('hidden');
   const closeBtn = modal.querySelector('.modal-close');
   if (closeBtn) closeBtn.focus();
@@ -642,6 +832,9 @@ function showFeaturedDetails() {
 
 function closeFeaturedDetails() {
   document.getElementById('featured-details-modal').classList.add('hidden');
+  if (!document.getElementById('dashboard-screen').classList.contains('hidden')) {
+    startHeroRotation();
+  }
 }
 
 function playFeaturedFromDetails() {
@@ -650,6 +843,7 @@ function playFeaturedFromDetails() {
 }
 
 function openStudio(link, title) {
+  stopHeroRotation();
   currentStudioUrl = link;
   document.getElementById('studio-viewer-title').textContent = title;
   document.getElementById('studio-iframe').src = link;
@@ -659,6 +853,9 @@ function openStudio(link, title) {
 function closeStudioViewer() {
   document.getElementById('studio-iframe').src = '';
   document.getElementById('studio-viewer').classList.add('hidden');
+  if (!document.getElementById('dashboard-screen').classList.contains('hidden')) {
+    startHeroRotation();
+  }
 }
 
 function openStudioInNewTab() {
