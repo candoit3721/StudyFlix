@@ -59,7 +59,13 @@ const QUESTS = [
   { id: "q5", glyph: "droplet", title: "Earth's 4 Spheres & Water", desc: "Explore the dinosaur water cycle and sphere interactions.", targetTab: "tab-learn", quizMode: "grade5" },
   { id: "q6", glyph: "cell", title: "Cell City Biology (Grade 6)", desc: "Nucleus Mayor, Mitochondria Powerhouse, and Plant Cell upgrades!", targetTab: "tab-learn", quizMode: "grade6" },
   { id: "q7", glyph: "chartLine", title: "Roller Coaster Physics (Grade 6)", desc: "Potential vs. Kinetic energy and Newton's 3 Laws of Motion.", targetTab: "tab-learn", quizMode: "grade6" },
-  { id: "q8", glyph: "lesson", title: "Scientific Method Detective", desc: "Master the I-D-C Variable rule and design fair science tests.", targetTab: "tab-learn", quizMode: "grade6" }
+  { id: "q8", glyph: "lesson", title: "Scientific Method Detective", desc: "Master the I-D-C Variable rule and design fair science tests.", targetTab: "tab-learn", quizMode: "grade6" },
+  // The four Ontario Grade 6 strands. Their tabs are mounted by
+  // sophia-science/modules/g6_core.js, so these cards simply switch to them.
+  { id: "q9", glyph: "species", title: "Biodiversity (Grade 6 Strand B)", desc: "Six kingdoms, dichotomous keys, and an invasive species loose in the Great Lakes.", targetTab: "tab-biodiversity" },
+  { id: "q10", glyph: "plane", title: "Flight & Aerodynamics (Strand D)", desc: "Balance lift, weight, thrust and drag, then reshape a wing until it stalls.", targetTab: "tab-flight" },
+  { id: "q11", glyph: "rocket", title: "Space Exploration (Strand E)", desc: "Run the solar system, tilt Earth's axis, and weigh yourself on nine worlds.", targetTab: "tab-space" },
+  { id: "q12", glyph: "bolt", title: "Electricity & Devices (Strand C)", desc: "Series against parallel, conductors against insulators, and a real Ontario energy bill.", targetTab: "tab-electricity" }
 ];
 
 // Decoder Words Database
@@ -83,14 +89,34 @@ const BADGES = [
   { id: "grade5_champ", glyph: "leaf", title: "Grade 5 Science Master", desc: "Mastered matter, ecosystems & Earth spheres!" },
   { id: "cell_mayor", glyph: "cell", title: "Cell City Mayor", desc: "Aced the cell biology & organelle questions!" },
   { id: "physics_wizard", glyph: "chartLine", title: "Physics Wizard", desc: "Conquered roller coaster physics & Newton's laws!" },
-  { id: "science_legend", glyph: "trophy", title: "Grand Science Legend", desc: "Accumulated over 500 total XP!" }
+  { id: "science_legend", glyph: "trophy", title: "Grand Science Legend", desc: "Accumulated over 500 total XP!" },
+  // Grade 6 Ontario strands. Each is unlocked from sophia-science/modules/,
+  // once all three arena tiers of that strand are cleared at 80% or better.
+  { id: "biodiversity_ranger", glyph: "species", title: "Biodiversity Ranger", desc: "Cleared all three Biodiversity tiers: kingdoms, keys and food webs!" },
+  { id: "flight_engineer", glyph: "plane", title: "Flight Engineer", desc: "Cleared all three Flight tiers: the four forces, Bernoulli and wing loading!" },
+  { id: "space_commander", glyph: "rocket", title: "Space Commander", desc: "Cleared all three Space tiers: the solar system, seasons and mass vs. weight!" },
+  { id: "circuit_master", glyph: "bolt", title: "Circuit Master", desc: "Cleared all three Electricity tiers: circuits, conductors and energy audits!" }
 ];
 
 // Sound Synthesizer via Web Audio API
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+//
+// Built lazily rather than at load time. Constructing an AudioContext up front
+// threw on any browser without Web Audio, and because this runs at the top
+// level that single failure aborted the rest of app.js and left the whole
+// studio blank. Sound is a nice-to-have; the science is not.
+let audioCtx = null;
+
+function ensureAudio() {
+  if (audioCtx) return true;
+  const Ctor = window.AudioContext || window.webkitAudioContext;
+  if (!Ctor) return false;
+  try { audioCtx = new Ctor(); } catch (e) { return false; }
+  return true;
+}
 
 function playSound(type) {
   if (!state.soundEnabled) return;
+  if (!ensureAudio()) return;
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
@@ -139,11 +165,13 @@ function playSound(type) {
 }
 
 // Confetti Particle System
+// Same rule as the audio above: no 2d context must never cost us the studio.
 const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = (canvas && canvas.getContext) ? canvas.getContext('2d') : null;
 let confettiParticles = [];
 
 function resizeCanvas() {
+  if (!canvas) return;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
@@ -151,6 +179,7 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function launchConfetti() {
+  if (!ctx) return;
   confettiParticles = [];
   const colors = ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#38bdf8', '#fbbf24'];
   for (let i = 0; i < 90; i++) {
@@ -170,6 +199,7 @@ function launchConfetti() {
 }
 
 function updateConfetti() {
+  if (!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   confettiParticles = confettiParticles.filter(p => p.life > 0);
 

@@ -9,6 +9,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
   <link rel="stylesheet" href="../assets/sf/shell.css?v=3.1.0">
   <link rel="stylesheet" href="style.css?v=3.1.0">
+  <link rel="stylesheet" href="modules/g6.css?v=1.0.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -26,7 +27,7 @@
         <span class="sf-shell-glyph" data-sf-icon="flask" data-sf-size="22"></span>
         <div>
           <h1 class="sf-shell-title">Science &amp; Chemistry Quest</h1>
-          <p class="sf-shell-sub">Chemistry &bull; Grade 5 Core &bull; Grade 6 Super-Prep</p>
+          <p class="sf-shell-sub">Chemistry &bull; Grade 5 Core &bull; All 4 Grade 6 Ontario Strands</p>
         </div>
       </div>
     </div>
@@ -42,7 +43,7 @@
       </span>
       <span class="sf-stat sf-stat--badges" title="Science badges unlocked">
         <span data-sf-icon="trophy" data-sf-size="15"></span>
-        <span id="sf-badge-count">0/8</span>
+        <span id="sf-badge-count">0/12</span>
       </span>
       <button id="sound-toggle-btn" class="sf-icon-btn" title="Toggle sound" aria-label="Toggle sound">
         <span data-sf-icon="volumeOn" data-sf-size="18"></span>
@@ -69,7 +70,7 @@
       <div class="welcome-banner">
         <div class="welcome-text">
           <h2>Welcome to Your Science Super-Lab, Sophia!</h2>
-          <p>Explore the secrets of the universe, unlock chemical superpowers, master the periodic table, and get ready to ace Grade 6 science!</p>
+          <p>Explore the secrets of the universe, unlock chemical superpowers, master the periodic table, and work through all four Ontario Grade 6 strands: Biodiversity, Flight, Space and Electricity.</p>
           <div class="welcome-buttons">
             <button class="sf-btn sf-btn--play" onclick="switchTab('tab-lab')"><span data-sf-icon="play" data-sf-size="18"></span><span>Launch Visual Lab</span></button>
             <button class="sf-btn sf-btn--explore" onclick="switchTab('tab-periodic')"><span data-sf-icon="atom" data-sf-size="18"></span><span>Explore Periodic Table</span></button>
@@ -156,7 +157,7 @@
         <button class="lab-tab-btn active" onclick="switchLabStation('atom')"><span data-sf-icon="atom" data-sf-size="16"></span><span>1. Bohr Atom Builder</span></button>
         <button class="lab-tab-btn" onclick="switchLabStation('reactions')"><span data-sf-icon="flask" data-sf-size="16"></span><span>2. Reaction Flask</span></button>
         <button class="lab-tab-btn" onclick="switchLabStation('cell')"><span data-sf-icon="cell" data-sf-size="16"></span><span>3. Cell City Micro-Map</span></button>
-        <button class="lab-tab-btn" onclick="switchLabStation(\'physics\')"><span data-sf-icon="chartLine" data-sf-size="16"></span><span>4. Roller Coaster Physics</span></button>
+        <button class="lab-tab-btn" onclick="switchLabStation('physics')"><span data-sf-icon="chartLine" data-sf-size="16"></span><span>4. Roller Coaster Physics</span></button>
       </div>
 
       <!-- STATION 1: BOHR RUTHERFORD ATOM BUILDER -->
@@ -898,6 +899,14 @@
   <script src="../assets/sf/keyart.js?v=3.1.0"></script>
   <script src="../assets/sf/progress.js?v=3.1.0"></script>
   <script src="../assets/sf/quest-bridge.js?v=3.1.0"></script>
-  <script src="app.js?v=2.0.0"></script>
+  <script src="app.js?v=2.1.0"></script>
+
+  <!-- Grade 6 Ontario strands. g6_core.js must load first: it owns the tab
+       mounting and the 3-tier arena that each strand module registers into. -->
+  <script src="modules/g6_core.js?v=1.0.0"></script>
+  <script src="modules/biodiversity_lab.js?v=1.0.0"></script>
+  <script src="modules/flight_lab.js?v=1.0.0"></script>
+  <script src="modules/space_lab.js?v=1.0.0"></script>
+  <script src="modules/electricity_lab.js?v=1.0.0"></script>
 </body>
 </html>

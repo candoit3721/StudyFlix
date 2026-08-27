@@ -244,6 +244,92 @@
       return s;
     },
 
+    /* ---------------- Science: Grade 6 Ontario strands ---------------- */
+    'sci-biodiversity': function (p) {
+      // A tree of life: one root splitting into four identified organisms,
+      // which is what a dichotomous key actually looks like.
+      var s = '<g stroke="' + p.stone + '" stroke-width="2.5" fill="none" opacity="0.7">';
+      s += '<path d="M160 152 V126 M160 126 H92 M160 126 H228 M92 126 V96 M228 126 V96"/>';
+      s += '<path d="M92 96 H56 M92 96 H128 M228 96 H192 M228 96 H264 M56 96 V72 M128 96 V72 M192 96 V72 M264 96 V72"/>';
+      s += '</g>';
+      // Four leaf nodes, two of them "identified" in the accent colour.
+      var nodes = [[56, 1], [128, 0], [192, 0], [264, 1]];
+      for (var i = 0; i < 4; i++) {
+        var x = nodes[i][0], lit = nodes[i][1];
+        s += '<circle cx="' + x + '" cy="58" r="15" fill="' + (lit ? p.accent : p.stone) + '" opacity="' + (lit ? 0.95 : 0.32) + '"/>';
+      }
+      // Leaf pair at the root, so the scene reads as living things.
+      s += '<path d="M160 152 c-16-6-24-20-22-34 14-2 26 6 30 18" fill="' + p.accent + '" opacity="0.85"/>';
+      s += '<path d="M160 152 c16-6 24-20 22-34-14-2-26 6-30 18" fill="' + p.stone + '" opacity="0.42"/>';
+      s += '<circle cx="160" cy="126" r="7" fill="' + p.stone + '" opacity="0.85"/>';
+      return s + ground(p);
+    },
+
+    'sci-flight': function (p) {
+      // Aerofoil in a wind tunnel: streamlines crowd over the curved upper
+      // surface, which is the whole of Bernoulli in one picture.
+      var s = '<g stroke="' + p.stone + '" stroke-width="2.2" fill="none" opacity="0.5" stroke-linecap="round">';
+      s += '<path d="M8 62 C 96 50, 150 44, 312 56"/>';
+      s += '<path d="M8 78 C 96 62, 150 56, 312 74"/>';
+      s += '<path d="M8 132 C 96 140, 150 144, 312 132"/>';
+      s += '<path d="M8 150 C 96 156, 150 158, 312 150"/>';
+      s += '</g>';
+      // The wing itself.
+      s += '<path d="M64 112 C 110 82, 196 80, 258 100 C 200 112, 132 120, 64 112 Z" fill="' + p.stone + '" opacity="0.92"/>';
+      s += '<path d="M64 112 C 132 120, 200 112, 258 100 C 196 110, 128 116, 64 112 Z" fill="' + p.shade + '" opacity="0.7"/>';
+      // Lift up, weight down.
+      s += '<g stroke="' + p.accent + '" stroke-width="4" stroke-linecap="round">';
+      s += '<path d="M160 92 V44"/><path d="M160 128 V172"/></g>';
+      s += '<g fill="' + p.accent + '">';
+      s += '<path d="M160 34 l9 15 h-18 z"/><path d="M160 182 l9-15 h-18 z"/></g>';
+      return s;
+    },
+
+    'sci-space': function (p) {
+      // Sun at the left limb with three orbits and a satellite trail.
+      var s = '';
+      for (var i = 0; i < 40; i++) {
+        var sx = (i * 97) % 320, sy = (i * 53) % 200;
+        s += '<circle cx="' + sx + '" cy="' + sy + '" r="' + (i % 3 === 0 ? 1.6 : 1) + '" fill="' + p.stone + '" opacity="0.45"/>';
+      }
+      s += '<circle cx="34" cy="100" r="46" fill="' + p.accent + '" opacity="0.2"/>';
+      s += '<circle cx="34" cy="100" r="27" fill="' + p.accent + '"/>';
+      s += '<g stroke="' + p.stone + '" stroke-width="2" fill="none" opacity="0.55">';
+      s += '<ellipse cx="34" cy="100" rx="96" ry="66"/>';
+      s += '<ellipse cx="34" cy="100" rx="150" ry="86"/>';
+      s += '<ellipse cx="34" cy="100" rx="206" ry="104"/></g>';
+      s += '<circle cx="126" cy="60" r="8" fill="' + p.stone + '" opacity="0.9"/>';
+      s += '<circle cx="176" cy="150" r="12" fill="' + p.accent + '" opacity="0.9"/>';
+      s += '<circle cx="180" cy="146" r="4.5" fill="' + p.ink + '" opacity="0.35"/>';
+      s += '<circle cx="238" cy="52" r="6" fill="' + p.stone + '" opacity="0.65"/>';
+      // Canadarm-style boom reaching in from the top right.
+      s += '<g stroke="' + p.stone + '" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.9">';
+      s += '<path d="M312 22 L276 54 L292 88"/></g>';
+      s += '<rect x="284" y="86" width="18" height="9" rx="3" fill="' + p.accent + '"/>';
+      return s;
+    },
+
+    'sci-electricity': function (p) {
+      // A closed loop with a cell and a lit lamp: the smallest complete circuit.
+      var s = '<rect x="46" y="46" width="228" height="108" rx="12" fill="none" stroke="' + p.stone + '" stroke-width="4" opacity="0.75"/>';
+      // Battery cell on the bottom rail.
+      s += '<rect x="118" y="140" width="34" height="28" rx="4" fill="' + p.ink + '" opacity="0.85"/>';
+      s += '<g stroke="' + p.stone + '" stroke-width="4" stroke-linecap="round">';
+      s += '<path d="M128 146 V162"/><path d="M142 150 V158"/></g>';
+      // Lamp on the top rail, glowing.
+      s += '<circle cx="160" cy="46" r="26" fill="' + p.accent + '" opacity="0.22"/>';
+      s += '<circle cx="160" cy="46" r="16" fill="' + p.accent + '"/>';
+      s += '<path d="M154 54 h12 M156 60 h8" stroke="' + p.ink + '" stroke-width="3" stroke-linecap="round" opacity="0.6"/>';
+      // Charge carriers travelling the rails.
+      s += '<g fill="' + p.stone + '">';
+      s += '<circle cx="46" cy="86" r="5"/><circle cx="46" cy="120" r="5"/>';
+      s += '<circle cx="274" cy="80" r="5"/><circle cx="274" cy="116" r="5"/>';
+      s += '<circle cx="216" cy="154" r="5"/><circle cx="80" cy="154" r="5"/></g>';
+      // Discharge bolt across the gap, for the static half of the strand.
+      s += '<path d="M252 26 L232 62 h14 l-8 30 24-40 h-14 z" fill="' + p.accent + '" opacity="0.9"/>';
+      return s;
+    },
+
     /* ---------------- Math (Grade 5/6) ---------------- */
     'math-fractions': function (p) {
       // Three pies at halves / thirds / quarters.
