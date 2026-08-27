@@ -53,6 +53,11 @@
     printable: 'M6 3.5h8L18 7.5v13H6zM14 3.5v4h4M9 12.5h6M9 16h4',
     formatVertical: 'M7 6h10M7 12h10M7 18h10',
     formatHorizontal: 'M7 5v14M12 5v14M17 5v14',
+    // Column-count marks: one page outline divided into N columns, so the
+    // icon shows the actual layout rather than an abstract grid.
+    columns1: 'M4 5h16v14H4z',
+    columns2: 'M4 5h16v14H4zM12 5v14',
+    columns3: 'M4 5h16v14H4zM9.3 5v14M14.7 5v14',
 
     /* ---- subject glyphs ---- */
     temple: 'M3.5 8.5 12 3.5l8.5 5M4.5 8.5h15M6.5 11v6.5M10 11v6.5M14 11v6.5M17.5 11v6.5M4 20h16M4.5 17.5h15',

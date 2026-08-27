@@ -63,7 +63,7 @@
             </button>
             <button class="preset-btn" data-preset="g5_6_assessment" style="grid-column: span 2;">
               <span><span class="preset-glyph" data-sf-icon="trophy" data-sf-size="17"></span>5th/6th Grade Assessment</span>
-              <span class="badge">Comprehensive 20 Questions</span>
+              <span class="badge">Comprehensive &middot; 3 Full Pages</span>
             </button>
           </div>
         </div>
@@ -103,43 +103,38 @@
 
         <!-- Layout & Sheet Customization -->
         <div class="control-group">
-          <h3>Worksheet Setup</h3>
+          <h3>Smart Layout</h3>
+
           <div class="form-field">
-            <label for="question-count">Total Questions:</label>
-            <select id="question-count" class="form-select">
-              <option value="5">5 Questions</option>
-              <option value="6">6 Questions</option>
-              <option value="8">8 Questions</option>
-              <option value="10">10 Questions (Short Quiz)</option>
-              <option value="12">12 Questions</option>
-              <option value="15">15 Questions</option>
-              <option value="16">16 Questions (2 Full Pages)</option>
-              <option value="20" selected>20 Questions (Standard Drill)</option>
-              <option value="24">24 Questions (3 Full Pages)</option>
-              <option value="30">30 Questions</option>
-              <option value="40">40 Questions (Speed Sprint)</option>
+            <label for="page-count-select">Pages of Questions:</label>
+            <select id="page-count-select" class="form-select">
+              <option value="1">1 Page</option>
+              <option value="2" selected>2 Pages (Double-Sided + Answer Key)</option>
+              <option value="3">3 Pages</option>
+              <option value="4">4 Pages</option>
+              <option value="5">5 Pages</option>
+              <option value="6">6 Pages</option>
             </select>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Question count fills in automatically - each page is packed full based on Layout Columns.</div>
           </div>
 
           <div class="form-field">
-            <label for="grid-cols-select">Layout Columns:</label>
-            <select id="grid-cols-select" class="form-select">
-              <option value="1">1 Column (Spacious for Word Problems)</option>
-              <option value="2" selected>2 Columns (Standard Clean)</option>
-              <option value="3">3 Columns (High Density)</option>
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="per-page-select">Questions Per Page:</label>
-            <select id="per-page-select" class="form-select">
-              <option value="auto" selected>Auto-Fit (Recommended)</option>
-              <option value="4">4 per page (Spacious)</option>
-              <option value="6">6 per page</option>
-              <option value="8">8 per page (Standard 2-Col)</option>
-              <option value="10">10 per page</option>
-              <option value="12">12 per page (Dense 3-Col)</option>
-            </select>
+            <label>Layout Columns:</label>
+            <div class="radio-group">
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="1">
+                <span><span class="btn-glyph" data-sf-icon="columns1" data-sf-size="15"></span>1 Column</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="2">
+                <span><span class="btn-glyph" data-sf-icon="columns2" data-sf-size="15"></span>2 Columns</span>
+              </label>
+              <label class="custom-chip">
+                <input type="radio" name="gridCols" value="3" checked>
+                <span><span class="btn-glyph" data-sf-icon="columns3" data-sf-size="15"></span>3 Columns</span>
+              </label>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Defaults smartly per topic (e.g. Word Problems → 1 column) - pick your own anytime.</div>
           </div>
 
           <div class="form-field">
