@@ -206,15 +206,16 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 .profile-mini-avatar {
   display: grid;
   place-items: center;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 900;
   color: #fff;
   width: 34px;
   height: 34px;
-  border-radius: 6px;
-  font-size: 1.05rem;
+  border-radius: 9px;
+  line-height: 0;
   background: #333;
+  overflow: hidden;
 }
+
+.profile-mini-avatar .sf-avatar { display: block; }
 
 .profile-mini-name {
   font-weight: 700;
@@ -335,62 +336,79 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   transition: all 0.2s ease;
 }
 
-.profile-card:hover .profile-avatar-box {
-  border-color: var(--nf-white);
+/* Scale is on the box; the white selection ring is on the artwork itself
+   (below), so the two do not stack into a doubled halo. */
+.profile-card:hover .profile-avatar-box,
+.profile-card:focus-visible .profile-avatar-box {
   transform: scale(1.06);
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.35);
 }
 
 .profile-card:hover .profile-name {
   color: var(--nf-white);
 }
 
+/* The picture itself is a drawn character (assets/sf/avatars.js), so the box
+   only owns the frame: sizing, the selection ring, and the pencil affordance. */
 .profile-avatar-box {
   width: 140px;
   height: 140px;
-  border-radius: 8px;
+  border-radius: 12px;
   display: grid;
   place-items: center;
-  border: 4px solid transparent;
   transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              border-color 0.25s ease, box-shadow 0.25s ease;
+              box-shadow 0.25s ease;
   position: relative;
-  overflow: hidden;
 }
 
-/* Every profile is marked the same way: a monogram plus a small subject glyph.
-   Previously three profiles used a person emoji and one used a coffee cup,
-   which briefly read as a broken avatar rather than a person. */
-.profile-monogram {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 3.8rem;
-  font-weight: 900;
-  color: #fff;
-  line-height: 1;
-  letter-spacing: -2px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+.profile-avatar-box .sf-avatar {
+  display: block;
+  border-radius: 16px;
 }
 
-.profile-glyph {
+.profile-card:hover .profile-avatar-box .sf-avatar {
+  box-shadow: 0 0 0 4px var(--nf-white);
+}
+
+/* Changing your picture must be reachable without first finding a settings
+   toggle, so the pencil lives on the picture and is always in the DOM. */
+.avatar-edit-badge {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 34px;
-  height: 34px;
+  right: -8px;
+  bottom: -8px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
   display: grid;
   place-items: center;
-  border-radius: 9px;
-  background: rgba(0, 0, 0, 0.42);
-  backdrop-filter: blur(4px);
+  border: 3px solid #141414;
+  background: var(--nf-red);
   color: #fff;
+  cursor: pointer;
+  opacity: 0.92;
+  transform: scale(0.9);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease, background 0.2s ease;
+  padding: 0;
 }
 
-/* Two stops, one angle, for all four. A third stop was landing a contrasting
-   colour in the tile corners, which read as a stray border rather than art. */
-.profile-avatar-box.theme-olivia { background: linear-gradient(145deg, #a855f7 0%, #ec4899 100%); }
-.profile-avatar-box.theme-sophia { background: linear-gradient(145deg, #06b6d4 0%, #10b981 100%); }
-.profile-avatar-box.theme-yaya   { background: linear-gradient(145deg, #1e40af 0%, #3b82f6 100%); }
-.profile-avatar-box.theme-mama   { background: linear-gradient(145deg, #b45309 0%, #d49a37 100%); }
+.profile-card:hover .avatar-edit-badge,
+.avatar-edit-badge:focus-visible {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.avatar-edit-badge:hover { background: #f6121d; }
+
+.profile-picture-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -18px 0 34px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.profile-picture-hint .sf-icon { color: var(--nf-red); }
 
 .profile-avatar-box.theme-add {
   background: #262626;
@@ -1257,6 +1275,40 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   padding: 24px;
 }
 
+/* The Picture Studio holds a live preview, 18 characters, and 10 backdrops:
+   it needs room, and its body scrolls rather than pushing Save off-screen. */
+.modal-card--studio {
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  max-height: min(92vh, 930px);
+}
+
+.modal-card--studio .modal-header h3 {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.modal-card--studio .modal-body {
+  overflow-y: auto;
+  margin: 0 -6px;
+  padding: 0 6px 10px;
+}
+
+/* A sticky fade at the foot of the scroller: without it the studio looks like
+   it ends at the colour swatches and the name field is never discovered. */
+.modal-card--studio .modal-body::after {
+  content: '';
+  display: block;
+  position: sticky;
+  bottom: -1px;
+  height: 22px;
+  margin-top: -22px;
+  pointer-events: none;
+  background: linear-gradient(to top, #222 10%, rgba(34, 34, 34, 0));
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -1275,32 +1327,148 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   cursor: pointer;
 }
 
-.avatar-picker-row {
-  margin-bottom: 20px;
+/* -------------------------------------------------------------------------
+   PICTURE STUDIO (profile avatar picker)
+   ------------------------------------------------------------------------- */
+
+/* The result of the choice, shown at the size it will actually be used. */
+.avatar-studio-preview {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px;
+  margin-bottom: 22px;
+  border-radius: var(--radius-md, 12px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
+.avatar-preview-stage .sf-avatar {
+  display: block;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.avatar-preview-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.avatar-preview-caption {
+  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: var(--nf-white);
+  margin: 4px 0 12px;
+  line-height: 1.2;
+}
+
+.btn-surprise {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nf-white);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.btn-surprise:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-surprise .sf-icon { color: #fbbf24; }
+
+.avatar-picker-row {
+  margin-bottom: 22px;
+}
+
+.avatar-picker-row > label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+/* A grid, not a wrapping flex row: 18 characters need even columns or the
+   last row reads as leftovers. */
 .avatar-options {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
   gap: 10px;
-  margin-top: 8px;
-  flex-wrap: wrap;
 }
 
 .avatar-option-btn {
-  display: grid;
-  place-items: center;
-  color: var(--nf-light-gray);
-  font-size: 1.8rem;
-  background: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: #2a2a2a;
   border: 2px solid transparent;
-  padding: 8px 12px;
+  padding: 10px 6px 8px;
   border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              background 0.18s ease, border-color 0.18s ease;
+}
+
+.avatar-option-btn .sf-avatar { display: block; }
+
+.avatar-option-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.avatar-option-btn:hover {
+  background: #383838;
+  transform: translateY(-2px);
 }
 
 .avatar-option-btn.selected {
   border-color: var(--nf-red);
-  background: #444;
+  background: #3d2226;
+}
+
+.avatar-option-btn.selected .avatar-option-name { color: var(--nf-white); }
+
+.backdrop-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.backdrop-swatch {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  border: 3px solid transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.18s ease;
+}
+
+.backdrop-swatch:hover { transform: scale(1.1); }
+
+.backdrop-swatch.selected {
+  border-color: var(--nf-white);
+  transform: scale(1.1);
 }
 
 .form-group {
@@ -1521,24 +1689,20 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 
 .search-result-card:hover { border-color: var(--card-accent, rgba(255, 255, 255, 0.4)); }
 
-/* Profile monogram chips in the switch-profile dropdown. */
+/* Profile picture chips in the switch-profile dropdown. The character art
+   carries its own colour, so the chip only reserves the slot. */
 .dropdown-avatar {
   width: 32px;
   height: 32px;
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  border-radius: 7px;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 900;
-  font-size: 0.95rem;
+  border-radius: 8px;
   color: #fff;
+  line-height: 0;
 }
 
-.dropdown-avatar.theme-olivia, .profile-mini-avatar.theme-olivia { background: linear-gradient(145deg, #a855f7 0%, #ec4899 100%); }
-.dropdown-avatar.theme-sophia, .profile-mini-avatar.theme-sophia { background: linear-gradient(145deg, #06b6d4 0%, #10b981 100%); }
-.dropdown-avatar.theme-yaya,   .profile-mini-avatar.theme-yaya   { background: linear-gradient(145deg, #1e40af 0%, #3b82f6 100%); }
-.dropdown-avatar.theme-mama,   .profile-mini-avatar.theme-mama   { background: linear-gradient(145deg, #b45309 0%, #d49a37 100%); }
+.dropdown-avatar .sf-avatar { display: block; border-radius: 8px; }
 .dropdown-avatar--action      { background: rgba(255, 255, 255, 0.1); color: var(--nf-light-gray); }
 
 /* Buttons that now hold an icon plus a label. */
@@ -1597,6 +1761,18 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 
 @media (max-width: 640px) {
   .modal-card--wide .featured-details-art { height: 140px; }
+
+  /* On a phone the preview row has no room to sit beside its caption, and a
+     140px picture is most of the screen width. Stack and step both down. */
+  .avatar-studio-preview {
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+  .avatar-preview-stage .sf-avatar { width: 96px; height: 96px; }
+  .avatar-preview-caption { font-size: 1.2rem; }
+  .avatar-options { grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); }
+  .avatar-option-btn .sf-avatar { width: 48px; height: 48px; }
 }
 
 /* -------------------------------------------------------------------------
@@ -1612,6 +1788,8 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 .search-clear-btn:focus-visible,
 .quick-tag-btn:focus-visible,
 .avatar-option-btn:focus-visible,
+.backdrop-swatch:focus-visible,
+.avatar-edit-badge:focus-visible,
 .dropdown-item:focus-visible,
 .profile-card:focus-visible {
   outline: 2px solid var(--nf-white);

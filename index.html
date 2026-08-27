@@ -7,8 +7,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/sf/shell.css?v=3.0.0">
-  <link rel="stylesheet" href="style.css?v=3.0.0">
+  <link rel="stylesheet" href="assets/sf/shell.css?v=3.1.0">
+  <link rel="stylesheet" href="style.css?v=3.1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
@@ -66,6 +66,10 @@
             <!-- Injected via JS -->
           </div>
           <div class="dropdown-divider"></div>
+          <button class="dropdown-item" onclick="editActiveProfile()">
+            <span class="dropdown-avatar dropdown-avatar--action" data-sf-icon="pencil" data-sf-size="16"></span>
+            <span>Change My Picture</span>
+          </button>
           <button class="dropdown-item" onclick="showProfileSelect()">
             <span class="dropdown-avatar dropdown-avatar--action" data-sf-icon="users" data-sf-size="16"></span>
             <span>Manage / Choose Profiles</span>
@@ -88,6 +92,11 @@
       <div class="profiles-row" id="profiles-container">
         <!-- Injected via JS -->
       </div>
+
+      <p class="profile-picture-hint">
+        <span data-sf-icon="pencil" data-sf-size="15"></span>
+        <span>Tap the pencil on a picture to pick a new character.</span>
+      </p>
 
       <div class="profile-actions">
         <button class="btn btn-outline" id="manage-profiles-btn" onclick="toggleManageMode()">
@@ -235,19 +244,40 @@
   <!-- ========================================================================= -->
   <!-- 4. PROFILE EDIT MODAL -->
   <!-- ========================================================================= -->
-  <div id="profile-edit-modal" class="modal-backdrop hidden">
-    <div class="modal-card">
+  <div id="profile-edit-modal" class="modal-backdrop hidden" onclick="if(event.target===this)closeProfileModal()">
+    <div class="modal-card modal-card--studio" role="dialog" aria-modal="true" aria-labelledby="avatar-modal-title">
       <div class="modal-header">
-        <h3>Edit Profile</h3>
+        <h3 id="avatar-modal-title">Picture Studio</h3>
         <button class="modal-close" onclick="closeProfileModal()" aria-label="Close"><span data-sf-icon="close" data-sf-size="18"></span></button>
       </div>
       <div class="modal-body">
-        <div class="avatar-picker-row">
-          <label>Pick a glyph:</label>
-          <div class="avatar-options" id="avatar-options-grid">
-            <!-- Avatars injected via JS -->
+
+        <!-- Live preview: the picture the kid is actually choosing, full size -->
+        <div class="avatar-studio-preview">
+          <div class="avatar-preview-stage" id="avatar-preview-stage"></div>
+          <div class="avatar-preview-meta">
+            <div class="avatar-preview-eyebrow">Your picture</div>
+            <div class="avatar-preview-caption" id="avatar-preview-caption"></div>
+            <button type="button" class="btn-surprise" onclick="surpriseMeAvatar()">
+              <span data-sf-icon="sparkle" data-sf-size="16"></span><span>Surprise me!</span>
+            </button>
           </div>
         </div>
+
+        <div class="avatar-picker-row">
+          <label>Pick your character</label>
+          <div class="avatar-options" id="avatar-options-grid">
+            <!-- Character tiles injected via JS -->
+          </div>
+        </div>
+
+        <div class="avatar-picker-row">
+          <label>Pick a background colour</label>
+          <div class="backdrop-row" id="avatar-backdrop-row">
+            <!-- Backdrop swatches injected via JS -->
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="edit-profile-name">Name:</label>
           <input type="text" id="edit-profile-name" class="form-control" maxlength="15">
@@ -259,7 +289,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeProfileModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
+        <button class="btn btn-primary" onclick="saveProfileChanges()">Save My Picture</button>
       </div>
     </div>
   </div>
@@ -294,9 +324,10 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="assets/sf/icons.js?v=3.0.0"></script>
-  <script src="assets/sf/keyart.js?v=3.0.0"></script>
-  <script src="assets/sf/progress.js?v=3.0.0"></script>
-  <script src="app.js?v=3.0.0"></script>
+  <script src="assets/sf/icons.js?v=3.1.0"></script>
+  <script src="assets/sf/avatars.js?v=3.1.0"></script>
+  <script src="assets/sf/keyart.js?v=3.1.0"></script>
+  <script src="assets/sf/progress.js?v=3.1.0"></script>
+  <script src="app.js?v=3.1.0"></script>
 </body>
 </html>
