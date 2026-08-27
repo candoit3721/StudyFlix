@@ -235,7 +235,19 @@ function initUI() {
       checkDecoderAnswer();
     }
   });
+
+  handleHashNavigation();
 }
+
+function handleHashNavigation() {
+  const hash = window.location.hash.replace('#', '');
+  if (!hash) return;
+
+  if (document.getElementById(hash)) {
+    switchTab(hash);
+  }
+}
+window.addEventListener('hashchange', handleHashNavigation);
 
 function switchTab(tabId) {
   document.querySelectorAll('.nav-tab').forEach(tab => {
