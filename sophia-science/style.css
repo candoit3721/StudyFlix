@@ -1077,47 +1077,793 @@ h1, h2, h3, h4, .logo-title, .nav-tab, .btn {
   }
 
   .main-container {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
+/* =============================================================================
+   VISUAL SUPER-LAB & INTERACTIVE GRAPHICS STYLING
+   ============================================================================= */
+.lab-super-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: var(--radius-full, 50px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
 
-  .tab-content {
-    display: none !important;
-  }
+.lab-station-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
 
-  .tab-content.active {
-    display: block !important;
-  }
+.lab-tab-btn {
+  background: #ffffff;
+  border: 2px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 18px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-  .lesson-card {
-    page-break-inside: avoid;
-    break-inside: avoid;
-    border: 1px solid #94a3b8 !important;
-    margin-bottom: 12px !important;
-    background: #ffffff !important;
-  }
+.lab-tab-btn:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
 
-  .lesson-content {
-    display: block !important;
-    padding: 10px !important;
-  }
+.lab-tab-btn.active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  border-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
 
-  .toggle-arrow {
-    display: none !important;
-  }
+.lab-station-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  margin-bottom: 30px;
+  animation: fadeIn 0.3s ease;
+}
 
-  h1, h2, h3, h4, strong {
-    color: #000000 !important;
-    -webkit-text-fill-color: #000000 !important;
-  }
+.station-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 20px;
+  border-bottom: 2px dashed #f1f5f9;
+  padding-bottom: 16px;
+  flex-wrap: wrap;
+}
 
-  p, li, span, small {
-    color: #1e293b !important;
+.station-header h3 {
+  font-size: 1.4rem;
+  color: var(--primary-color);
+  margin-bottom: 4px;
+}
+
+.station-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.station-tag {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+/* 1. Atom Builder Styles */
+.atom-element-selector {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.atom-chip {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.atom-chip:hover {
+  border-color: var(--primary-color);
+  background: #f0fdf4;
+}
+
+.atom-chip.active {
+  background: #6366f1;
+  border-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.atom-builder-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .atom-builder-layout {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Mobile Responsiveness */
+.atom-canvas-box {
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bohr-atom-svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  display: block;
+}
+
+.atom-canvas-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot-proton {
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.dot-neutron {
+  width: 10px;
+  height: 10px;
+  background: #94a3b8;
+  border-radius: 50%;
+}
+
+.dot-electron {
+  width: 10px;
+  height: 10px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.atom-stats-panel {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.atom-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.atom-big-symbol {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+}
+
+.atom-title-row h4 {
+  font-size: 1.4rem;
+  color: #0f172a;
+}
+
+.atom-title-row p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.atom-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 500px) {
+  .atom-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+.stat-num {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.stat-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.shell-breakdown-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+
+.shell-breakdown-box h5 {
+  font-size: 0.88rem;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.shells-display {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.shell-pill {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  border: 1px solid #bae6fd;
+}
+
+.valence-highlight {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.superpower-callout-box {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.superpower-callout-box h5 {
+  color: #92400e;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.superpower-callout-box p {
+  color: #78350f;
+  font-size: 0.85rem;
+}
+
+/* Modal Atom Preview Box */
+.modal-atom-preview-box {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-electron-config {
+  color: #38bdf8;
+  font-size: 0.82rem;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+/* 2. Reaction Flask Simulator */
+.reaction-selector-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.reaction-tab-btn {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  color: #334155;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.reaction-tab-btn.active {
+  background: #ec4899;
+  border-color: #db2777;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.35);
+}
+
+.reaction-lab-stage {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 24px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .reaction-lab-stage {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flask-stage-box {
+  background: #f1f5f9;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flask-visual-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.reaction-balloon {
+  font-size: 2.8rem;
+  transform: scale(0.6);
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-bottom: -10px;
+  z-index: 5;
+}
+
+.reaction-balloon.inflated {
+  transform: scale(1.4) translateY(-8px);
+}
+
+.flask-glass {
+  width: 140px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 4px solid #64748b;
+  border-top: 5px solid #475569;
+  clip-path: polygon(35% 0%, 65% 0%, 65% 30%, 100% 100%, 0% 100%, 35% 30%);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.flask-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, #ec4899 0%, #db2777 100%);
+  transition: background 0.6s, height 0.6s;
+  overflow: hidden;
+}
+
+.bubbles-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bubble {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: bubbleRise 1.5s infinite linear;
+}
+
+.bubble.b1 { width: 8px; height: 8px; left: 20%; animation-delay: 0.1s; }
+.bubble.b2 { width: 12px; height: 12px; left: 50%; animation-delay: 0.4s; }
+.bubble.b3 { width: 6px; height: 6px; left: 75%; animation-delay: 0.7s; }
+.bubble.b4 { width: 10px; height: 10px; left: 35%; animation-delay: 1.0s; }
+.bubble.b5 { width: 7px; height: 7px; left: 65%; animation-delay: 0.3s; }
+
+@keyframes bubbleRise {
+  0% { bottom: -10px; opacity: 0; }
+  50% { opacity: 0.9; }
+  100% { bottom: 100%; opacity: 0; }
+}
+
+.scale-base {
+  background: #334155;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 6px 16px;
+  border-radius: 8px;
+  margin-top: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.reaction-details-panel {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.reaction-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.rx-type-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.rx-type-badge.chemical {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+.rx-type-badge.physical {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.rx-formula {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.evidence-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 14px 0;
+}
+
+.evidence-box h5 {
+  font-size: 0.9rem;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.evidence-box ul {
+  padding-left: 20px;
+  font-size: 0.88rem;
+  color: #475569;
+}
+
+.evidence-box li {
+  margin-bottom: 6px;
+}
+
+.experiment-tip-box {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  color: #166534;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+/* 3. Cell City Micro-Map */
+.cell-toggle-group {
+  display: flex;
+  gap: 6px;
+}
+
+.cell-city-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .cell-city-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cell-canvas-box {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.cell-city-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.cell-organelle-node {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cell-organelle-node:hover {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+}
+
+.cell-legend-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: #64748b;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge-plant-special {
+  background: #dcfce7;
+  color: #15803d;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.organelle-dossier-card {
+  background: #f8fafc;
+  border: 1.5px solid var(--primary-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.dossier-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.dossier-icon {
+  font-size: 2.2rem;
+}
+
+.dossier-header h4 {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+}
+
+.dossier-role {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ec4899;
+}
+
+.dossier-desc {
+  font-size: 0.9rem;
+  color: #334155;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.dossier-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dossier-fact {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.dossier-fact strong {
+  display: block;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+/* 4. Roller Coaster Physics */
+.physics-sim-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .physics-sim-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coaster-canvas-box {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  padding: 12px;
+}
+
+.coaster-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.coaster-controls-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.energy-meters-panel {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.energy-meters-panel h4 {
+  font-size: 1.15rem;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.meter-row {
+  margin-bottom: 14px;
+}
+
+.meter-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 4px;
+}
+
+.meter-track {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+.pe-fill {
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+}
+
+.ke-fill {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+}
+
+.total-fill {
+  background: linear-gradient(90deg, #8b5cf6 0%, #a855f7 100%);
+}
+
+.meter-row small {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+/* Lesson Visual Banners */
+.lesson-visual-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+  border: 1.5px dashed var(--primary-color);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 14px 0;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.banner-badge {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+.lesson-lab-btn {
+  font-size: 0.82rem !important;
+  padding: 6px 14px !important;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
 @media (max-width: 768px) {
   .app-header {
     flex-direction: column;

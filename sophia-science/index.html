@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2.0.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -46,6 +46,7 @@
   <nav class="nav-bar">
     <button class="nav-tab active" data-tab="tab-map">🗺️ Adventure Map</button>
     <button class="nav-tab" data-tab="tab-periodic">🧪 Periodic Table Explorer</button>
+    <button class="nav-tab" data-tab="tab-lab">🔬 Visual Super-Lab</button>
     <button class="nav-tab" data-tab="tab-learn">📖 Story & Learning Hub</button>
     <button class="nav-tab" data-tab="tab-quiz">🎯 Interactive Quiz Arena</button>
     <button class="nav-tab" data-tab="tab-decoder">🕵️ Secret Word Decoder</button>
@@ -62,8 +63,8 @@
           <h2>Welcome to Your Science Super-Lab, Sophia! 🚀</h2>
           <p>Explore the secrets of the universe, unlock chemical superpowers, master the periodic table, and get ready to ace Grade 6 science!</p>
           <div class="welcome-buttons">
-            <button class="btn btn-primary" onclick="switchTab('tab-periodic')">⚡ Explore Periodic Table</button>
-            <button class="btn btn-secondary" onclick="switchTab('tab-quiz')">🎮 Start a Quiz Challenge</button>
+            <button class="btn btn-primary" onclick="switchTab('tab-lab')">🔬 Launch Visual Lab</button>
+            <button class="btn btn-secondary" onclick="switchTab('tab-periodic')">⚡ Explore Periodic Table</button>
             <button class="btn btn-accent" onclick="window.open('workbook.html', '_blank')">🖨️ Print Clean Worksheets</button>
           </div>
         </div>
@@ -106,6 +107,11 @@
           <button class="close-btn" onclick="closeElementModal()">✖</button>
         </div>
         <div class="detail-body">
+          <!-- Live Animated Bohr Rutherford Atom Model Preview -->
+          <div class="modal-atom-preview-box">
+            <div class="atom-svg-container" id="modal-atom-svg-wrap"></div>
+            <div class="modal-electron-config" id="modal-electron-config">Electron Shells: K=1</div>
+          </div>
           <div class="detail-hero">
             <span class="hero-emoji" id="modal-emoji">🚀</span>
             <div class="hero-text">
@@ -127,7 +133,377 @@
       </div>
     </section>
 
-    <!-- TAB 3: STORY & LEARNING HUB -->
+    <!-- ========================================================================= -->
+    <!-- TAB 3: VISUAL SUPER-LAB (INTERACTIVE SIMULATORS & GRAPHICS) -->
+    <!-- ========================================================================= -->
+    <section id="tab-lab" class="tab-content">
+      <div class="section-header-box">
+        <span class="lab-super-badge">✨ HANDS-ON GRAPHICAL LAB</span>
+        <h2>🔬 Sophia's Interactive Science Super-Lab</h2>
+        <p>Experiment with visual atom orbits, trigger colorful chemical reactions, explore cell cities, and test roller coaster physics!</p>
+      </div>
+
+      <!-- Lab Station Switcher Tabs -->
+      <div class="lab-station-nav">
+        <button class="lab-tab-btn active" onclick="switchLabStation('atom')">⚛️ 1. Bohr Atom Builder</button>
+        <button class="lab-tab-btn" onclick="switchLabStation('reactions')">🧪 2. Reaction Flask</button>
+        <button class="lab-tab-btn" onclick="switchLabStation('cell')">🏙️ 3. Cell City Micro-Map</button>
+        <button class="lab-tab-btn" onclick="switchLabStation('physics')">🎢 4. Roller Coaster Physics</button>
+      </div>
+
+      <!-- STATION 1: BOHR RUTHERFORD ATOM BUILDER -->
+      <div id="station-atom" class="lab-station-card active">
+        <div class="station-header">
+          <div>
+            <h3>⚛️ Station 1: Interactive Bohr Rutherford Atom Builder</h3>
+            <p>Pick an element below to see its nucleus protons (p<sup>+</sup>), neutrons (n<sup>0</sup>), and orbiting electron shells (K, L, M)!</p>
+          </div>
+          <span class="station-tag">CHEMISTRY &bull; ATOMIC STRUCTURE</span>
+        </div>
+
+        <!-- Quick Element Buttons -->
+        <div class="atom-element-selector" id="atom-element-selector">
+          <button class="atom-chip active" onclick="loadLabAtom(1)">🚀 H (#1)</button>
+          <button class="atom-chip" onclick="loadLabAtom(2)">🎈 He (#2)</button>
+          <button class="atom-chip" onclick="loadLabAtom(6)">💎 C (#6)</button>
+          <button class="atom-chip" onclick="loadLabAtom(7)">💨 N (#7)</button>
+          <button class="atom-chip" onclick="loadLabAtom(8)">🫁 O (#8)</button>
+          <button class="atom-chip" onclick="loadLabAtom(10)">🏮 Ne (#10)</button>
+          <button class="atom-chip" onclick="loadLabAtom(11)">🧂 Na (#11)</button>
+          <button class="atom-chip" onclick="loadLabAtom(14)">💻 Si (#14)</button>
+          <button class="atom-chip" onclick="loadLabAtom(17)">🏊 Cl (#17)</button>
+          <button class="atom-chip" onclick="loadLabAtom(20)">🦴 Ca (#20)</button>
+        </div>
+
+        <div class="atom-builder-layout">
+          <!-- Interactive Animated SVG Canvas -->
+          <div class="atom-canvas-box">
+            <svg id="bohr-atom-svg" viewBox="0 0 400 400" class="bohr-atom-svg">
+              <!-- Rendered via JavaScript -->
+            </svg>
+            <div class="atom-canvas-legend">
+              <span class="legend-item"><span class="dot-proton"></span> Protons (p<sup>+</sup>)</span>
+              <span class="legend-item"><span class="dot-neutron"></span> Neutrons (n<sup>0</sup>)</span>
+              <span class="legend-item"><span class="dot-electron"></span> Electrons (e<sup>-</sup>)</span>
+            </div>
+          </div>
+
+          <!-- Atom Stats & Identity Panel -->
+          <div class="atom-stats-panel">
+            <div class="atom-title-row">
+              <span class="atom-big-symbol" id="lab-atom-symbol">H</span>
+              <div>
+                <h4 id="lab-atom-name">Hydrogen</h4>
+                <p id="lab-atom-subtitle">The Universe's #1 Element</p>
+              </div>
+            </div>
+
+            <div class="atom-stats-grid">
+              <div class="stat-card">
+                <span class="stat-num" id="lab-atom-protons">1</span>
+                <span class="stat-name">Protons (p<sup>+</sup>)</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num" id="lab-atom-neutrons">0</span>
+                <span class="stat-name">Neutrons (n<sup>0</sup>)</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num" id="lab-atom-electrons">1</span>
+                <span class="stat-name">Electrons (e<sup>-</sup>)</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-num" id="lab-atom-mass">1</span>
+                <span class="stat-name">Atomic Mass</span>
+              </div>
+            </div>
+
+            <!-- Electron Shell Breakdown -->
+            <div class="shell-breakdown-box">
+              <h5>⚡ Electron Orbit Shells:</h5>
+              <div class="shells-display" id="lab-atom-shells-display">
+                <span class="shell-pill">K-Shell: 1 / 2</span>
+              </div>
+              <p class="valence-highlight" id="lab-atom-valence-text">
+                💡 <strong>Valence Electrons:</strong> 1 outer electron. Wants to form bonds!
+              </p>
+            </div>
+
+            <!-- Secret Superpower Box -->
+            <div class="superpower-callout-box">
+              <h5>🌟 Real-World Superpower:</h5>
+              <p id="lab-atom-superpower-desc">Hydrogen is the rocket fuel that propels NASA spacecraft into orbit and fuses inside the Sun to shine light!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATION 2: KITCHEN CHEMISTRY & MOLECULAR REACTION FLASK -->
+      <div id="station-reactions" class="lab-station-card hidden">
+        <div class="station-header">
+          <div>
+            <h3>🧪 Station 2: Kitchen Chemistry & Molecular Reaction Flask</h3>
+            <p>Trigger real chemical and physical reactions! Watch the bubbling flask, balloon inflation, and mass scale!</p>
+          </div>
+          <span class="station-tag">MATTER & REACTION LAB</span>
+        </div>
+
+        <div class="reaction-selector-row">
+          <button class="reaction-tab-btn active" onclick="triggerLabReaction('baking_soda')">🌋 1. Baking Soda + Vinegar</button>
+          <button class="reaction-tab-btn" onclick="triggerLabReaction('ice_melt')">🧊 2. Ice Melting & Boiling</button>
+          <button class="reaction-tab-btn" onclick="triggerLabReaction('cabbage_ph')">🍋 3. Magic pH Color Shift</button>
+          <button class="reaction-tab-btn" onclick="triggerLabReaction('mentos')">💥 4. Mentos Geyser Blast</button>
+          <button class="reaction-tab-btn" onclick="triggerLabReaction('rust')">🦀 5. Rusting Iron Nail</button>
+        </div>
+
+        <div class="reaction-lab-stage">
+          <!-- Animated Visual Flask Stage -->
+          <div class="flask-stage-box">
+            <div class="flask-visual-container" id="flask-visual-container">
+              <!-- Balloon on Top -->
+              <div class="reaction-balloon" id="reaction-balloon">🎈</div>
+              <!-- Glass Flask Container -->
+              <div class="flask-glass" id="flask-glass">
+                <div class="flask-liquid" id="flask-liquid">
+                  <div class="bubbles-wrap" id="bubbles-wrap">
+                    <span class="bubble b1"></span>
+                    <span class="bubble b2"></span>
+                    <span class="bubble b3"></span>
+                    <span class="bubble b4"></span>
+                    <span class="bubble b5"></span>
+                  </div>
+                </div>
+              </div>
+              <!-- Mass Scale Base -->
+              <div class="scale-base">
+                <span class="scale-screen" id="scale-screen">⚖️ 110.0 g</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-spark-reaction" onclick="replayCurrentReaction()">
+              ⚡ Spark Reaction Again!
+            </button>
+          </div>
+
+          <!-- Reaction Explanation & Evidence Card -->
+          <div class="reaction-details-panel">
+            <div class="reaction-badge-row">
+              <span class="rx-type-badge chemical" id="rx-type-badge">🔥 Chemical Change</span>
+              <span class="rx-formula" id="rx-formula">NaHCO₃ + CH₃COOH → CO₂↑ + H₂O</span>
+            </div>
+            <h4 id="rx-title">Baking Soda + Vinegar (小苏打与白醋反应)</h4>
+            <p id="rx-desc">When solid baking soda mixes with acidic vinegar, bonds break and reform instantly to create water, sodium acetate, and fizzy Carbon Dioxide gas (CO₂)!</p>
+
+            <div class="evidence-box">
+              <h5>🔍 4 Clues / Evidence of Change:</h5>
+              <ul id="rx-evidence-list">
+                <li>🫧 <strong>Gas Production:</strong> Rapid foaming bubbles fill the flask and inflate the balloon!</li>
+                <li>🌡️ <strong>Temperature Drop:</strong> Endothermic reaction absorbs heat (feels icy cold!).</li>
+                <li>⚖️ <strong>Conservation of Mass:</strong> Total mass before mixing (110g) = Total mass after mixing (110g)!</li>
+              </ul>
+            </div>
+
+            <div class="experiment-tip-box" id="rx-tip-box">
+              💡 <strong>Try This at Home:</strong> Put 2 spoons of baking soda inside a deflated balloon, fit it over a water bottle with vinegar, and lift the balloon to watch it self-inflate!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATION 3: CELL CITY MICRO-MAP (PLANT VS ANIMAL CELL) -->
+      <div id="station-cell" class="lab-station-card hidden">
+        <div class="station-header">
+          <div>
+            <h3>🏙️ Station 3: Cell City Interactive Organelle Micro-Map</h3>
+            <p>Every living cell is a thriving miniature metropolis! Click organelles to see their city roles and compare Plant vs. Animal cells!</p>
+          </div>
+          <div class="cell-toggle-group">
+            <button class="toggle-btn active" id="btn-cell-plant" onclick="switchCellType('plant')">🌿 Plant Cell (Has Superpowers!)</button>
+            <button class="toggle-btn" id="btn-cell-animal" onclick="switchCellType('animal')">🐾 Animal Cell</button>
+          </div>
+        </div>
+
+        <div class="cell-city-layout">
+          <!-- Interactive Cell Graphic Diagram -->
+          <div class="cell-canvas-box">
+            <div class="cell-illustration-wrap" id="cell-illustration-wrap">
+              <!-- SVG Cell City Graphic -->
+              <svg viewBox="0 0 500 360" class="cell-city-svg" id="cell-city-svg">
+                <!-- Outer Cell Wall / Membrane -->
+                <rect x="30" y="20" width="440" height="320" rx="35" id="svg-cell-wall" fill="#15803d" stroke="#22c55e" stroke-width="8" opacity="0.9" />
+                <rect x="42" y="32" width="416" height="296" rx="26" id="svg-cell-membrane" fill="#ecfdf5" stroke="#10b981" stroke-width="4" />
+                
+                <!-- Cytoplasm Gel Background -->
+                <rect x="46" y="36" width="408" height="288" rx="22" fill="#d1fae5" opacity="0.6" />
+
+                <!-- 1. Nucleus (City Hall) -->
+                <g class="cell-organelle-node active" id="node-nucleus" onclick="inspectOrganelle('nucleus')">
+                  <circle cx="160" cy="180" r="55" fill="#a855f7" stroke="#7e22ce" stroke-width="3" />
+                  <circle cx="160" cy="180" r="22" fill="#581c87" />
+                  <text x="160" y="185" fill="#ffffff" font-weight="800" font-size="12" text-anchor="middle">🏛️ NUCLEUS</text>
+                </g>
+
+                <!-- 2. Mitochondria (Power Plant) -->
+                <g class="cell-organelle-node" id="node-mitochondria" onclick="inspectOrganelle('mitochondria')">
+                  <ellipse cx="360" cy="90" rx="40" ry="22" fill="#f97316" stroke="#c2410c" stroke-width="3" transform="rotate(-15 360 90)" />
+                  <path d="M 335 90 Q 360 75 385 90 Q 360 105 335 90" fill="none" stroke="#fff" stroke-width="2" />
+                  <text x="360" y="94" fill="#ffffff" font-weight="800" font-size="10" text-anchor="middle">⚡ MITO</text>
+                </g>
+
+                <!-- 3. Chloroplasts (Solar Food Farm - Plants only!) -->
+                <g class="cell-organelle-node plant-only" id="node-chloroplast" onclick="inspectOrganelle('chloroplast')">
+                  <ellipse cx="370" cy="270" rx="44" ry="25" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+                  <circle cx="350" cy="270" r="6" fill="#166534" />
+                  <circle cx="370" cy="270" r="6" fill="#166534" />
+                  <circle cx="390" cy="270" r="6" fill="#166534" />
+                  <text x="370" y="274" fill="#ffffff" font-weight="800" font-size="10" text-anchor="middle">☀️ CHLORO</text>
+                </g>
+
+                <!-- 4. Central Vacuole (Water Reservoir) -->
+                <g class="cell-organelle-node" id="node-vacuole" onclick="inspectOrganelle('vacuole')">
+                  <ellipse cx="270" cy="180" rx="50" ry="60" fill="#38bdf8" stroke="#0284c7" stroke-width="3" opacity="0.8" />
+                  <text x="270" y="185" fill="#0369a1" font-weight="800" font-size="11" text-anchor="middle">💧 VACUOLE</text>
+                </g>
+
+                <!-- 5. Ribosomes / ER (Factories) -->
+                <g class="cell-organelle-node" id="node-ribosome" onclick="inspectOrganelle('ribosome')">
+                  <circle cx="120" cy="80" r="16" fill="#ec4899" stroke="#be185d" stroke-width="2" />
+                  <text x="120" y="84" fill="#ffffff" font-weight="800" font-size="8" text-anchor="middle">🏭 RIBO</text>
+                </g>
+              </svg>
+            </div>
+            <div class="cell-legend-bar">
+              <span>💡 Click any organelle to inspect its city job!</span>
+              <span class="badge-plant-special" id="plant-badge-notice">🌿 Plant Superpowers Active: Cell Wall + Chloroplasts</span>
+            </div>
+          </div>
+
+          <!-- Organelle Job Dossier Panel -->
+          <div class="organelle-dossier-card" id="organelle-dossier-card">
+            <div class="dossier-header">
+              <span class="dossier-icon" id="dossier-icon">🏛️</span>
+              <div>
+                <h4 id="dossier-name">Nucleus (细胞核)</h4>
+                <span class="dossier-role" id="dossier-role">City Job: City Hall & Blueprint Archive</span>
+              </div>
+            </div>
+            <p class="dossier-desc" id="dossier-desc">
+              The control center of the entire cell! Contains DNA instructions for making proteins and running all cellular operations.
+            </p>
+            <div class="dossier-facts">
+              <div class="dossier-fact">
+                <strong>⚡ City Counterpart:</strong>
+                <span id="dossier-city">Mayor's Office & Supreme Court</span>
+              </div>
+              <div class="dossier-fact">
+                <strong>🌱 Found In:</strong>
+                <span id="dossier-presence">Both Plants & Animals</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STATION 4: ROLLER COASTER PHYSICS SIMULATOR -->
+      <div id="station-physics" class="lab-station-card hidden">
+        <div class="station-header">
+          <div>
+            <h3>🎢 Station 4: Roller Coaster Mechanical Energy Simulator</h3>
+            <p>Watch kinetic energy (KE) and potential energy (PE) trade places in real time as the coaster cart swoops down the track!</p>
+          </div>
+          <span class="station-tag">GRADE 6 PREP &bull; ENERGY CONSERVATION</span>
+        </div>
+
+        <div class="physics-sim-layout">
+          <!-- Animated Roller Coaster Canvas -->
+          <div class="coaster-canvas-box">
+            <svg viewBox="0 0 600 300" class="coaster-svg" id="coaster-svg">
+              <defs>
+                <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#bae6fd" />
+                </linearGradient>
+              </defs>
+              <rect width="600" height="300" fill="url(#sky-grad)" rx="12" />
+              
+              <!-- Roller Coaster Steel Structure Grid -->
+              <line x1="120" y1="60" x2="120" y2="280" stroke="#64748b" stroke-width="3" stroke-dasharray="4,4" />
+              <line x1="280" y1="240" x2="280" y2="280" stroke="#64748b" stroke-width="3" stroke-dasharray="4,4" />
+              <line x1="440" y1="130" x2="440" y2="280" stroke="#64748b" stroke-width="3" stroke-dasharray="4,4" />
+
+              <!-- Coaster Track Path -->
+              <path id="coaster-track-path" d="M 30 240 C 80 240 100 60 140 60 C 190 60 220 250 280 250 C 340 250 380 130 440 130 C 500 130 540 240 580 240" fill="none" stroke="#dc2626" stroke-width="6" stroke-linecap="round" />
+
+              <!-- Track Rails Decor -->
+              <path d="M 30 246 C 80 246 100 66 140 66 C 190 66 220 256 280 256 C 340 256 380 136 440 136 C 500 136 540 246 580 246" fill="none" stroke="#991b1b" stroke-width="2" />
+
+              <!-- Track Checkpoint Markers -->
+              <circle cx="140" cy="60" r="7" fill="#f59e0b" stroke="#fff" stroke-width="2" />
+              <text x="140" y="45" fill="#78350f" font-weight="800" font-size="11" text-anchor="middle">🏔️ Hill Peak (Max PE)</text>
+
+              <circle cx="280" cy="250" r="7" fill="#10b981" stroke="#fff" stroke-width="2" />
+              <text x="280" y="275" fill="#065f46" font-weight="800" font-size="11" text-anchor="middle">🏎️ Bottom Valley (Max KE)</text>
+
+              <!-- Moving Coaster Cart -->
+              <g id="coaster-cart" transform="translate(140, 60)">
+                <rect x="-18" y="-14" width="36" height="18" rx="5" fill="#2563eb" stroke="#1e3a8a" stroke-width="2" />
+                <circle cx="-10" cy="6" r="4" fill="#0f172a" />
+                <circle cx="10" cy="6" r="4" fill="#0f172a" />
+                <text x="0" y="-1" fill="#ffffff" font-size="10" font-weight="800" text-anchor="middle">🎢</text>
+              </g>
+            </svg>
+
+            <!-- Coaster Control Buttons -->
+            <div class="coaster-controls-bar">
+              <button class="btn btn-primary" id="btn-coaster-play" onclick="toggleCoasterAnimation()">▶️ Start Coaster Run</button>
+              <button class="btn btn-secondary" onclick="jumpCoasterPosition('top')">🏔️ Jump to Top Peak</button>
+              <button class="btn btn-secondary" onclick="jumpCoasterPosition('bottom')">🏎️ Jump to Bottom Loop</button>
+            </div>
+          </div>
+
+          <!-- Real-Time Live Energy Meters -->
+          <div class="energy-meters-panel">
+            <h4>⚡ Real-Time Energy Dashboard</h4>
+            
+            <!-- Potential Energy Meter -->
+            <div class="meter-row">
+              <div class="meter-label-row">
+                <span>🟢 Potential Energy (PE 势能):</span>
+                <strong id="meter-pe-val">95%</strong>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill pe-fill" id="meter-pe-fill" style="width: 95%;"></div>
+              </div>
+              <small>PE = Stored height energy. Max at highest peak!</small>
+            </div>
+
+            <!-- Kinetic Energy Meter -->
+            <div class="meter-row">
+              <div class="meter-label-row">
+                <span>🔴 Kinetic Energy (KE 动能):</span>
+                <strong id="meter-ke-val">5%</strong>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill ke-fill" id="meter-ke-fill" style="width: 5%;"></div>
+              </div>
+              <small>KE = Motion speed energy. Max at lowest bottom!</small>
+            </div>
+
+            <!-- Total Mechanical Energy Meter -->
+            <div class="meter-row">
+              <div class="meter-label-row">
+                <span>🟣 Total Energy (PE + KE 机械能总和):</span>
+                <strong id="meter-total-val">100% (Constant)</strong>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill total-fill" id="meter-total-fill" style="width: 100%;"></div>
+              </div>
+              <small>⚖️ <strong>Law of Conservation of Energy:</strong> Energy is NEVER lost, only transformed between PE and KE!</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: STORY & LEARNING HUB -->
     <section id="tab-learn" class="tab-content">
       <div class="section-header-box">
         <h2>📖 Interactive Story & Learning Hub</h2>
@@ -151,6 +527,14 @@
           <div class="lesson-content">
             <div class="lesson-body">
               <p>Imagine breaking a chocolate chip cookie into smaller and smaller crumbs. The smallest piece that still acts like that substance is an <strong>Atom</strong>!</p>
+              
+              <div class="lesson-visual-banner">
+                <div class="banner-badge">🔬 Interactive Graphic Simulator Available</div>
+                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('atom', 6)">
+                  ⚛️ Launch Carbon (#6) Atom Builder in Super-Lab ➔
+                </button>
+              </div>
+
               <div class="concept-callout">
                 <h4>🔴 Inside Every Atom:</h4>
                 <ul>
@@ -183,6 +567,14 @@
           <div class="lesson-content">
             <div class="lesson-body">
               <p>Every Saturday morning breakfast is a science lab! Let's understand the two major types of changes:</p>
+              
+              <div class="lesson-visual-banner">
+                <div class="banner-badge">🧪 Visual Reaction Simulator Available</div>
+                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('reactions', 'baking_soda')">
+                  🌋 Trigger Baking Soda + Vinegar Flask in Super-Lab ➔
+                </button>
+              </div>
+
               <div class="comparison-grid">
                 <div class="compare-card physical">
                   <h4>🧊 Physical Change</h4>
@@ -248,6 +640,14 @@
           <div class="lesson-content">
             <div class="lesson-body">
               <p>Your body has 37 trillion cells! Think of each cell as a thriving miniature city:</p>
+              
+              <div class="lesson-visual-banner">
+                <div class="banner-badge">🏙️ Micro-Map Visualizer Available</div>
+                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('cell', 'plant')">
+                  🌿 Inspect Plant & Animal Cell Micro-Map in Super-Lab ➔
+                </button>
+              </div>
+
               <div class="cell-grid">
                 <div class="cell-part">🏛️ <strong>Nucleus:</strong> City Hall (holds DNA blueprints)</div>
                 <div class="cell-part">⚡ <strong>Mitochondria:</strong> Power Plant (makes ATP energy)</div>
@@ -274,6 +674,13 @@
           </div>
           <div class="lesson-content">
             <div class="lesson-body">
+              <div class="lesson-visual-banner">
+                <div class="banner-badge">🎢 Kinetic Simulator Available</div>
+                <button class="btn btn-sm btn-accent lesson-lab-btn" onclick="openLabFromLesson('physics', 'top')">
+                  🎢 Run Roller Coaster Energy Simulator in Super-Lab ➔
+                </button>
+              </div>
+
               <div class="concept-callout">
                 <h4>🎢 The Roller Coaster Secret:</h4>
                 <ul>
@@ -474,6 +881,6 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2.0.0"></script>
 </body>
 </html>

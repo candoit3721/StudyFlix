@@ -49,6 +49,7 @@ const ELEMENTS = [
 
 // Quests Definition for Map
 const QUESTS = [
+  { id: "q0", icon: "🔬", title: "Visual Science Super-Lab", desc: "Build spinning Bohr atoms, trigger reaction flasks, explore cell cities, and run roller coasters!", targetTab: "tab-lab" },
   { id: "q1", icon: "🧪", title: "Periodic Table Superheroes", desc: "Master the first 20 elements, symbols, and real-world superpowers.", targetTab: "tab-periodic", quizMode: "periodic" },
   { id: "q2", icon: "🕶️", title: "Secret Chemical Decoder", desc: "Crack hidden words built from chemical element symbols!", targetTab: "tab-decoder" },
   { id: "q3", icon: "🥞", title: "Matter & Kitchen Chemistry", desc: "Physical vs. Chemical changes, lemonade solutions, and conservation of mass.", targetTab: "tab-learn", quizMode: "grade5" },
@@ -207,6 +208,11 @@ function initUI() {
   // Render Trophies
   renderTrophies();
 
+  // Initialize Lab Simulators
+  loadLabAtom(1);
+  triggerLabReaction('baking_soda');
+  switchCellType('plant');
+
   // Tab click listeners
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -360,6 +366,12 @@ function showElementDetail(el) {
   document.getElementById('modal-real-life').textContent = el.real;
   document.getElementById('modal-mnemonic').textContent = el.mnemonic;
 
+  // Render Live Animated Bohr Atom in Modal
+  renderBohrAtomSVG('modal-atom-svg-wrap', el.num, 160);
+  const data = BOHR_DATA[el.num] || BOHR_DATA[1];
+  const configText = data.shells.map((c, i) => `${['K','L','M','N'][i]}=${c}`).join(', ');
+  document.getElementById('modal-electron-config').textContent = `Electrons (${el.num}): ${configText}`;
+
   const card = document.getElementById('element-detail-card');
   card.classList.remove('hidden');
   card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -367,6 +379,489 @@ function showElementDetail(el) {
 
 function closeElementModal() {
   document.getElementById('element-detail-card').classList.add('hidden');
+}
+
+// =============================================================================
+// VISUAL SUPER-LAB ENGINE & SIMULATORS
+// =============================================================================
+
+// Bohr Rutherford Atomic Models Dictionary
+const BOHR_DATA = {
+  1: { sym: "H", name: "Hydrogen", sub: "The Rocket Launcher", p: 1, n: 0, shells: [1], val: 1, valDesc: "1 outer electron. Super eager to bond!", power: "Rocket fuel & solar fusion powerhouse." },
+  2: { sym: "He", name: "Helium", sub: "The High-Pitch Floater", p: 2, n: 2, shells: [2], val: 2, valDesc: "Full K-shell (2/2). Super stable Noble Gas!", power: "Lighter than air; party balloons and cooling MRI magnets." },
+  3: { sym: "Li", name: "Lithium", sub: "The Battery Boss", p: 3, n: 4, shells: [2, 1], val: 1, valDesc: "1 valence electron. Super reactive alkali metal!", power: "Lightest solid metal; stores power in Tesla & iPad batteries." },
+  4: { sym: "Be", name: "Beryllium", sub: "The Space Shield", p: 4, n: 5, shells: [2, 2], val: 2, valDesc: "2 valence electrons in L-shell.", power: "Lightweight space-telescope mirrors & emerald crystals." },
+  5: { sym: "B", name: "Boron", sub: "The Heatproof Glassmaker", p: 5, n: 6, shells: [2, 3], val: 3, valDesc: "3 valence electrons in L-shell.", power: "Pyrex heatproof kitchen glass & silly putty." },
+  6: { sym: "C", name: "Carbon", sub: "The Shape-Shifting King", p: 6, n: 6, shells: [2, 4], val: 4, valDesc: "4 valence electrons. The #1 Lego brick of all organic life!", power: "Forms diamonds, pencil graphite, and every cell in human bodies." },
+  7: { sym: "N", name: "Nitrogen", sub: "The Silent Giant", p: 7, n: 7, shells: [2, 5], val: 5, valDesc: "5 valence electrons (needs 3 to fill octet).", power: "Makes up 78% of Earth's atmosphere & keeps chip bags crispy." },
+  8: { sym: "O", name: "Oxygen", sub: "The Life Giver", p: 8, n: 8, shells: [2, 6], val: 6, valDesc: "6 valence electrons (needs 2 to fill octet).", power: "We breathe it to produce ATP energy; pairs with H for water (H2O)." },
+  9: { sym: "F", name: "Fluorine", sub: "The Cavity Crusher", p: 9, n: 10, shells: [2, 7], val: 7, valDesc: "7 valence electrons. Super reactive halogen!", power: "Strengthens tooth enamel against cavities & Teflon coatings." },
+  10: { sym: "Ne", name: "Neon", sub: "The Night Glow", p: 10, n: 10, shells: [2, 8], val: 8, valDesc: "Full outer shell (8/8 Octet). Totally unreactive Noble Gas!", power: "Glows brilliant red-orange with electricity in signs." },
+  11: { sym: "Na", name: "Sodium", sub: "The Fiery Salt Partner", p: 11, n: 12, shells: [2, 8, 1], val: 1, valDesc: "1 valence electron. Eager to give 1 electron to Chlorine!", power: "Soft metal that pops in water, but makes delicious table salt (NaCl)!" },
+  12: { sym: "Mg", name: "Magnesium", sub: "The Flashbang Sparkler", p: 12, n: 12, shells: [2, 8, 2], val: 2, valDesc: "2 valence electrons.", power: "Burns with blinding white light; central to plant photosynthesis." },
+  13: { sym: "Al", name: "Aluminum", sub: "The Lightweight Armor", p: 13, n: 14, shells: [2, 8, 3], val: 3, valDesc: "3 valence electrons.", power: "Doesn't rust, ultra-light, 100% recyclable for soda cans & planes." },
+  14: { sym: "Si", name: "Silicon", sub: "The Computer Brain", p: 14, n: 14, shells: [2, 8, 4], val: 4, valDesc: "4 valence electrons. Semiconductor master!", power: "Found in beach sand; powers all computer processors & solar cells." },
+  15: { sym: "P", name: "Phosphorus", sub: "The Matchbox Igniter", p: 15, n: 16, shells: [2, 8, 5], val: 5, valDesc: "5 valence electrons.", power: "Friction igniter on matchsticks; builds DNA backbone & bones." },
+  16: { sym: "S", name: "Sulfur", sub: "The Stinky Yellow Mineral", p: 16, n: 16, shells: [2, 8, 6], val: 6, valDesc: "6 valence electrons.", power: "Yellow volcanic crystal; creates onion tears and hot spring scents." },
+  17: { sym: "Cl", name: "Chlorine", sub: "The Pool Cleaner", p: 17, n: 18, shells: [2, 8, 7], val: 7, valDesc: "7 valence electrons. Wants 1 electron from Sodium!", power: "Purifies swimming pools & pairs with Sodium to make NaCl table salt." },
+  18: { sym: "Ar", name: "Argon", sub: "The Bulb Protector", p: 18, n: 22, shells: [2, 8, 8], val: 8, valDesc: "Full octet (8/8). Noble Gas shield!", power: "Protects incandescent light bulb filaments from burning up." },
+  19: { sym: "K", name: "Potassium", sub: "The Banana King", p: 19, n: 20, shells: [2, 8, 8, 1], val: 1, valDesc: "1 valence electron in N-shell.", power: "Stops muscle cramps in bananas and powers heartbeat rhythms." },
+  20: { sym: "Ca", name: "Calcium", sub: "The Bone Fortress", p: 20, n: 20, shells: [2, 8, 8, 2], val: 2, valDesc: "2 valence electrons in N-shell.", power: "Builds rock-hard bones, teeth, seashell armor, and limestone caves." }
+};
+
+let currentLabAtomNum = 1;
+
+function switchLabStation(stationKey) {
+  document.querySelectorAll('.lab-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.lab-station-card').forEach(card => card.classList.add('hidden'));
+
+  const btn = document.querySelector(`.lab-tab-btn[onclick*="${stationKey}"]`);
+  const card = document.getElementById(`station-${stationKey}`);
+  if (btn) btn.classList.add('active');
+  if (card) {
+    card.classList.remove('hidden');
+    card.classList.add('active');
+  }
+
+  if (stationKey === 'atom') {
+    loadLabAtom(currentLabAtomNum);
+  } else if (stationKey === 'reactions') {
+    triggerLabReaction(currentReactionKey);
+  }
+}
+
+function openLabFromLesson(stationKey, param) {
+  switchTab('tab-lab');
+  switchLabStation(stationKey);
+  if (stationKey === 'atom' && typeof param === 'number') {
+    loadLabAtom(param);
+  } else if (stationKey === 'reactions' && typeof param === 'string') {
+    triggerLabReaction(param);
+  } else if (stationKey === 'cell' && typeof param === 'string') {
+    switchCellType(param);
+  } else if (stationKey === 'physics' && typeof param === 'string') {
+    jumpCoasterPosition(param);
+  }
+}
+
+function renderBohrAtomSVG(targetContainerOrId, atomicNum, size = 380) {
+  const container = typeof targetContainerOrId === 'string' ? document.getElementById(targetContainerOrId) : targetContainerOrId;
+  if (!container) return;
+
+  const data = BOHR_DATA[atomicNum] || BOHR_DATA[1];
+  const center = size / 2;
+  const maxShells = data.shells.length;
+  const shellRadii = [45, 80, 115, 150].slice(0, maxShells).map(r => r * (size / 380));
+
+  let svgHtml = `
+    <defs>
+      <radialGradient id="nucGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f87171" />
+        <stop offset="70%" stop-color="#dc2626" />
+        <stop offset="100%" stop-color="#991b1b" />
+      </radialGradient>
+      <filter id="atomGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+  `;
+
+  // 1. Draw Orbit Shell Circles
+  shellRadii.forEach((radius, i) => {
+    svgHtml += `
+      <circle cx="${center}" cy="${center}" r="${radius}" 
+              fill="none" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.5" stroke-dasharray="4, 4" />
+      <text x="${center + radius - 4}" y="${center - 6}" fill="rgba(56, 189, 248, 0.6)" font-size="9" font-weight="700">
+        ${['K','L','M','N'][i]}
+      </text>
+    `;
+  });
+
+  // 2. Draw Center Nucleus Cluster
+  const nucleusRadius = 24 * (size / 380);
+  svgHtml += `
+    <circle cx="${center}" cy="${center}" r="${nucleusRadius}" fill="url(#nucGrad)" filter="url(#atomGlow)" />
+    <text x="${center}" y="${center - 3}" fill="#ffffff" font-size="${11 * (size / 380)}" font-weight="800" text-anchor="middle">
+      ${data.p}p⁺
+    </text>
+    <text x="${center}" y="${center + 10}" fill="#fecaca" font-size="${9 * (size / 380)}" font-weight="700" text-anchor="middle">
+      ${data.n}n⁰
+    </text>
+  `;
+
+  // 3. Draw Revolving Electrons along each Shell
+  data.shells.forEach((count, sIndex) => {
+    const radius = shellRadii[sIndex];
+    const duration = 8 + sIndex * 4; // Inner shells rotate faster
+
+    for (let e = 0; e < count; e++) {
+      const angle = (360 / count) * e;
+      svgHtml += `
+        <g transform="rotate(${angle} ${center} ${center})">
+          <g>
+            <animateTransform attributeName="transform" type="rotate" from="0 ${center} ${center}" to="360 ${center} ${center}" dur="${duration}s" repeatCount="indefinite" />
+            <circle cx="${center + radius}" cy="${center}" r="${6 * (size / 380)}" fill="#38bdf8" stroke="#0284c7" stroke-width="1.5" filter="url(#atomGlow)" />
+            <text x="${center + radius}" y="${center + 3 * (size / 380)}" fill="#082f49" font-size="${7 * (size / 380)}" font-weight="900" text-anchor="middle">e⁻</text>
+          </g>
+        </g>
+      `;
+    }
+  });
+
+  if (container.tagName === 'svg' || container.id === 'bohr-atom-svg') {
+    container.innerHTML = svgHtml;
+  } else {
+    container.innerHTML = `<svg viewBox="0 0 ${size} ${size}" style="width:100%; height:auto; max-width:${size}px;">${svgHtml}</svg>`;
+  }
+}
+
+function loadLabAtom(num) {
+  currentLabAtomNum = num;
+  const data = BOHR_DATA[num] || BOHR_DATA[1];
+
+  // Highlight button chip
+  document.querySelectorAll('.atom-chip').forEach(c => c.classList.remove('active'));
+  const activeBtn = document.querySelector(`.atom-chip[onclick*="loadLabAtom(${num})"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Render SVG Canvas
+  renderBohrAtomSVG('bohr-atom-svg', num, 400);
+
+  // Update Data Panel
+  document.getElementById('lab-atom-symbol').textContent = data.sym;
+  document.getElementById('lab-atom-name').textContent = `${data.name} (#${num})`;
+  document.getElementById('lab-atom-subtitle').textContent = data.sub;
+  document.getElementById('lab-atom-protons').textContent = data.p;
+  document.getElementById('lab-atom-neutrons').textContent = data.n;
+  document.getElementById('lab-atom-electrons').textContent = num;
+  document.getElementById('lab-atom-mass').textContent = data.p + data.n;
+
+  // Shell breakdown
+  const shellNames = ['K', 'L', 'M', 'N'];
+  const maxCaps = [2, 8, 8, 2];
+  const shellsWrap = document.getElementById('lab-atom-shells-display');
+  shellsWrap.innerHTML = '';
+  data.shells.forEach((count, i) => {
+    const pill = document.createElement('span');
+    pill.className = 'shell-pill';
+    pill.textContent = `${shellNames[i]}-Shell: ${count} / ${maxCaps[i]}`;
+    shellsWrap.appendChild(pill);
+  });
+
+  document.getElementById('lab-atom-valence-text').innerHTML = `💡 <strong>Valence Electrons:</strong> ${data.val} in outer shell. ${data.valDesc}`;
+  document.getElementById('lab-atom-superpower-desc').textContent = data.power;
+
+  playSound('pop');
+}
+
+// 2. Kitchen Chemistry Reaction Simulator Logic
+const LAB_REACTIONS = {
+  baking_soda: {
+    type: "chemical",
+    typeLabel: "🔥 Chemical Change",
+    formula: "NaHCO₃ + CH₃COOH → CO₂↑ + H₂O + NaCH₃COO",
+    title: "Baking Soda + Vinegar (小苏打与白醋反应)",
+    desc: "When solid sodium bicarbonate mixes with acidic acetic acid, chemical bonds rearrange instantly to produce water, sodium acetate, and fizzy Carbon Dioxide gas (CO₂)!",
+    color: "linear-gradient(180deg, #ec4899 0%, #db2777 100%)",
+    balloon: true,
+    scale: "⚖️ 110.0 g",
+    evidence: [
+      "🫧 Gas Production: Rapid foaming CO₂ bubbles expand and inflate the balloon!",
+      "🌡️ Temperature Drop: Endothermic reaction absorbs heat (feels noticeably cold to touch!).",
+      "⚖️ Law of Conservation of Mass: Scale reads 110.0g before and exactly 110.0g after!"
+    ],
+    tip: "Put 2 spoonfuls of baking soda inside a balloon, fit it over a bottle of vinegar, and lift it to watch it inflate hands-free!"
+  },
+  ice_melt: {
+    type: "physical",
+    typeLabel: "🧊 Physical Change",
+    formula: "H₂O (solid ice) ➔ H₂O (liquid) ➔ H₂O (steam gas)",
+    title: "Ice Melting & Boiling (水的三态物理变化)",
+    desc: "Heating ice cubes speeds up the H₂O molecules, breaking the rigid crystal lattice into liquid water and then steam. NO new substance is formed — every molecule remains pure H₂O!",
+    color: "linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)",
+    balloon: false,
+    scale: "⚖️ 50.0 g",
+    evidence: [
+      "🧊 State Change Only: Solid ice → Liquid water → Gas vapor.",
+      "🔄 100% Reversible: Cool the steam down or freeze the water to get ice cubes back!",
+      "🧪 Same Substance: Chemical identity remains H₂O throughout all 3 states."
+    ],
+    tip: "Water expands when it freezes into ice, which is why ice cubes float in your drink and icebergs float in oceans!"
+  },
+  cabbage_ph: {
+    type: "chemical",
+    typeLabel: "🔥 Chemical Change (pH Indicator)",
+    formula: "Anthocyanin (Purple) + Acid (H⁺) ➔ Bright Red / Pink",
+    title: "Magic Red Cabbage pH Indicator (紫甘蓝变色指示剂)",
+    desc: "Boiled red cabbage juice contains 'Anthocyanin' dye molecules that shift color like a chameleon depending on whether a solution is an Acid or a Base!",
+    color: "linear-gradient(180deg, #a855f7 0%, #ec4899 100%)",
+    balloon: false,
+    scale: "⚖️ 125.0 g",
+    evidence: [
+      "🎨 Dramatic Color Shift: Purple liquid turns vivid magenta-pink with lemon juice (Acid, pH 2)!",
+      "🌿 Base Reaction: Turns emerald blue-green when mixed with baking soda (Base, pH 9).",
+      "🧪 Chemical Rearrangement: Hydrogen ions (H⁺) alter the pigment's light absorption."
+    ],
+    tip: "Boil chopped purple cabbage leaves in water for 10 minutes to make your own secret home pH detector!"
+  },
+  mentos: {
+    type: "physical",
+    typeLabel: "⚡ Physical Nucleation Blast",
+    formula: "Diet Coke (CO₂ dissolved) + Mentos (Pitted surface) ➔ Foam Geyser",
+    title: "Diet Coke + Mentos Geyser Blast (可乐曼妥思喷泉)",
+    desc: "Each Mentos candy has millions of microscopic pits (nucleation sites). Dropping it into soda causes dissolved CO₂ gas to rapidly escape in an explosive 2.5-meter foam fountain!",
+    color: "linear-gradient(180deg, #78350f 0%, #451a03 100%)",
+    balloon: true,
+    scale: "⚖️ 250.0 g",
+    evidence: [
+      "💥 Rapid Nucleation: Physical surface roughness triggers instant gas bubble formation.",
+      "🚀 Height Meter: Foam erupts up to 2.5 meters high!",
+      "💡 Note: This is a Physical release of trapped gas, not a new chemical bond creation."
+    ],
+    tip: "Always do the Mentos geyser experiment outside on the grass to avoid sweet soda spray on ceilings!"
+  },
+  rust: {
+    type: "chemical",
+    typeLabel: "🔥 Chemical Change (Oxidation)",
+    formula: "4Fe + 3O₂ + 6H₂O ➔ 2Fe₂O₃·3H₂O (Rust)",
+    title: "Rusting Iron Nail in Moisture (铁钉氧化生锈)",
+    desc: "Shiny iron metal slowly reacts with oxygen gas dissolved in water to form iron oxide (rust) — a crumbly, flaky, reddish-brown new chemical substance!",
+    color: "linear-gradient(180deg, #ea580c 0%, #9a3412 100%)",
+    balloon: false,
+    scale: "⚖️ 28.5 g (+0.5g O₂ absorbed)",
+    evidence: [
+      "🎨 Permanent Color Change: Shiny gray metal turns flaky reddish-orange.",
+      "🦀 New Substance: Rust is brittle, non-magnetic, and cannot conduct electricity like iron.",
+      "⚖️ Mass Increase: Nail gains weight because it bonds with oxygen atoms from the air!"
+    ],
+    tip: "Painting bicycles and coating cars in zinc prevents oxygen and water from touching the iron underneath!"
+  }
+};
+
+let currentReactionKey = 'baking_soda';
+
+function triggerLabReaction(rxKey) {
+  currentReactionKey = rxKey;
+  const rx = LAB_REACTIONS[rxKey] || LAB_REACTIONS.baking_soda;
+
+  // Highlight Button
+  document.querySelectorAll('.reaction-tab-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`.reaction-tab-btn[onclick*="${rxKey}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Update Visual Flask
+  const liquid = document.getElementById('flask-liquid');
+  const balloon = document.getElementById('reaction-balloon');
+  const scale = document.getElementById('scale-screen');
+
+  if (liquid) liquid.style.background = rx.color;
+  if (scale) scale.textContent = rx.scale;
+
+  if (balloon) {
+    if (rx.balloon) {
+      balloon.classList.add('inflated');
+    } else {
+      balloon.classList.remove('inflated');
+    }
+  }
+
+  // Update Panel Text
+  const typeBadge = document.getElementById('rx-type-badge');
+  typeBadge.className = `rx-type-badge ${rx.type}`;
+  typeBadge.textContent = rx.typeLabel;
+
+  document.getElementById('rx-formula').textContent = rx.formula;
+  document.getElementById('rx-title').textContent = rx.title;
+  document.getElementById('rx-desc').textContent = rx.desc;
+
+  const evList = document.getElementById('rx-evidence-list');
+  evList.innerHTML = '';
+  rx.evidence.forEach(e => {
+    const li = document.createElement('li');
+    li.innerHTML = e;
+    evList.appendChild(li);
+  });
+
+  document.getElementById('rx-tip-box').innerHTML = `💡 <strong>Try This at Home:</strong> ${rx.tip}`;
+
+  playSound(rx.type === 'chemical' ? 'magic' : 'pop');
+}
+
+function replayCurrentReaction() {
+  const liquid = document.getElementById('flask-liquid');
+  const balloon = document.getElementById('reaction-balloon');
+  
+  if (liquid) {
+    liquid.style.height = '10%';
+    setTimeout(() => { liquid.style.height = '55%'; }, 150);
+  }
+  if (balloon) {
+    balloon.classList.remove('inflated');
+    setTimeout(() => { triggerLabReaction(currentReactionKey); }, 250);
+  } else {
+    triggerLabReaction(currentReactionKey);
+  }
+}
+
+// 3. Cell City Organelle Visualizer Logic
+const ORGANELLES_DATA = {
+  nucleus: {
+    name: "Nucleus (细胞核)",
+    icon: "🏛️",
+    role: "City Job: City Hall & DNA Blueprint Vault",
+    desc: "The control headquarters of the cell! Holds the master DNA instruction manual for building proteins and directing cellular life.",
+    city: "Mayor's Office & City Archives",
+    presence: "Found in Both Plant & Animal Cells"
+  },
+  mitochondria: {
+    name: "Mitochondria (线粒体)",
+    icon: "⚡",
+    role: "City Job: The Power Plant (ATP Energy Factory)",
+    desc: "Uses oxygen and glucose food to generate high-energy ATP fuel packs through cellular respiration. Muscle cells have thousands of them!",
+    city: "Electric Power Generation Station",
+    presence: "Found in Both Plant & Animal Cells"
+  },
+  chloroplast: {
+    name: "Chloroplasts (叶绿体) 🌿",
+    icon: "☀️",
+    role: "City Job: Solar Power Food Farm (Plant Superpower!)",
+    desc: "Packed with green chlorophyll pigment. Captures sunlight to convert CO₂ and water into glucose sugar food via Photosynthesis!",
+    city: "Solar Hydroponic Greenhouse Farm",
+    presence: "PLANT CELLS ONLY! (Animals eat food instead)"
+  },
+  vacuole: {
+    name: "Central Vacuole (液泡)",
+    icon: "💧",
+    role: "City Job: High-Capacity Water Tower & Waste Storage",
+    desc: "Massive water reservoir in plant cells. When full of water, it pushes outward against the cell wall (turgor pressure) to keep flowers standing tall!",
+    city: "Municipal Water Reservoir & Storage Silos",
+    presence: "Huge in Plants (90% volume), Tiny in Animals"
+  },
+  ribosome: {
+    name: "Ribosomes & ER (核糖体与内质网)",
+    icon: "🏭",
+    role: "City Job: 3D Protein Manufacturing Factories",
+    desc: "Reads RNA codes from the Nucleus and snaps amino acid building blocks together to manufacture enzymes, muscle fibers, and antibodies!",
+    city: "Automated Industrial Assembly Lines",
+    presence: "Found in Both Plant & Animal Cells"
+  }
+};
+
+function switchCellType(type) {
+  document.querySelectorAll('.cell-toggle-group .toggle-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`btn-cell-${type}`);
+  if (btn) btn.classList.add('active');
+
+  const wall = document.getElementById('svg-cell-wall');
+  const chloroplast = document.getElementById('node-chloroplast');
+  const notice = document.getElementById('plant-badge-notice');
+
+  if (type === 'plant') {
+    if (wall) wall.setAttribute('opacity', '0.9');
+    if (chloroplast) chloroplast.style.display = 'block';
+    if (notice) notice.textContent = '🌿 Plant Superpowers Active: Cell Wall + Chloroplasts';
+    inspectOrganelle('chloroplast');
+  } else {
+    if (wall) wall.setAttribute('opacity', '0.05');
+    if (chloroplast) chloroplast.style.display = 'none';
+    if (notice) notice.textContent = '🐾 Animal Cell: Flexible Membrane & Small Vacuoles';
+    inspectOrganelle('nucleus');
+  }
+}
+
+function inspectOrganelle(key) {
+  const organelle = ORGANELLES_DATA[key] || ORGANELLES_DATA.nucleus;
+
+  // Highlight SVG Node
+  document.querySelectorAll('.cell-organelle-node').forEach(n => n.classList.remove('active'));
+  const node = document.getElementById(`node-${key}`);
+  if (node) node.classList.add('active');
+
+  // Update Dossier
+  document.getElementById('dossier-icon').textContent = organelle.icon;
+  document.getElementById('dossier-name').textContent = organelle.name;
+  document.getElementById('dossier-role').textContent = organelle.role;
+  document.getElementById('dossier-desc').textContent = organelle.desc;
+  document.getElementById('dossier-city').textContent = organelle.city;
+  document.getElementById('dossier-presence').textContent = organelle.presence;
+
+  playSound('click');
+}
+
+// 4. Roller Coaster Physics Simulator Logic
+let coasterAnimating = false;
+let coasterProgress = 0.2; // 0 to 1 along track
+let coasterInterval = null;
+
+function toggleCoasterAnimation() {
+  coasterAnimating = !coasterAnimating;
+  const btn = document.getElementById('btn-coaster-play');
+
+  if (coasterAnimating) {
+    btn.textContent = '⏸️ Pause Coaster';
+    btn.className = 'btn btn-secondary';
+    coasterInterval = setInterval(runCoasterStep, 40);
+  } else {
+    btn.textContent = '▶️ Start Coaster Run';
+    btn.className = 'btn btn-primary';
+    clearInterval(coasterInterval);
+  }
+}
+
+function runCoasterStep() {
+  coasterProgress += 0.008;
+  if (coasterProgress > 0.95) coasterProgress = 0.05;
+
+  const path = document.getElementById('coaster-track-path');
+  if (!path) return;
+
+  const pathLength = path.getTotalLength();
+  const point = path.getPointAtLength(coasterProgress * pathLength);
+
+  // Position Cart
+  const cart = document.getElementById('coaster-cart');
+  if (cart) {
+    cart.setAttribute('transform', `translate(${point.x}, ${point.y})`);
+  }
+
+  // Calculate PE and KE based on Y coordinate (Y: 60 = Top hill, Y: 250 = Bottom valley)
+  const normalizedHeight = (250 - point.y) / 190; // 1.0 at peak, 0.0 at bottom
+  const pePercent = Math.max(2, Math.min(98, Math.round(normalizedHeight * 100)));
+  const kePercent = 100 - pePercent;
+
+  document.getElementById('meter-pe-val').textContent = `${pePercent}%`;
+  document.getElementById('meter-pe-fill').style.width = `${pePercent}%`;
+
+  document.getElementById('meter-ke-val').textContent = `${kePercent}%`;
+  document.getElementById('meter-ke-fill').style.width = `${kePercent}%`;
+}
+
+function jumpCoasterPosition(pos) {
+  if (coasterAnimating) toggleCoasterAnimation();
+
+  const path = document.getElementById('coaster-track-path');
+  if (!path) return;
+
+  coasterProgress = pos === 'top' ? 0.23 : 0.49;
+  const pathLength = path.getTotalLength();
+  const point = path.getPointAtLength(coasterProgress * pathLength);
+
+  const cart = document.getElementById('coaster-cart');
+  if (cart) {
+    cart.setAttribute('transform', `translate(${point.x}, ${point.y})`);
+  }
+
+  const pe = pos === 'top' ? 95 : 5;
+  const ke = 100 - pe;
+
+  document.getElementById('meter-pe-val').textContent = `${pe}%`;
+  document.getElementById('meter-pe-fill').style.width = `${pe}%`;
+
+  document.getElementById('meter-ke-val').textContent = `${ke}%`;
+  document.getElementById('meter-ke-fill').style.width = `${ke}%`;
+
+  playSound('chime');
 }
 
 // Lesson Accordion Toggle
