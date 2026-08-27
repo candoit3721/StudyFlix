@@ -12,11 +12,11 @@ const DEFAULT_PROFILES = [
     grade: "Grade 5 & 6 Champion",
     themeClass: "theme-sophia",
     featured: {
-      tag: "🧪 CHEMISTRY & SCIENCE QUEST",
-      title: "Sophia's Science & Chemistry Quest",
-      desc: "Master the Periodic Table, discover element superpowers, decode secret chemical words, explore Cell City, and master roller coaster physics!",
-      link: "sophia-science/index.html",
-      bgGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.85) 50%, rgba(16,185,129,0.9) 100%)"
+      tag: "🏛️ ANCIENT ROME & CIVILIZATION QUEST",
+      title: "Sophia's Ancient Rome & Engineering Quest",
+      desc: "Step back 2,000 years! Master Roman semi-circular arch keystones, aqueduct gravity hydraulics, the Colosseum hypogeum, Caesar's military ciphers, and Senate law!",
+      link: "sophia-rome/index.html",
+      bgGradient: "linear-gradient(135deg, rgba(200,16,46,0.9) 0%, rgba(212,175,55,0.85) 50%, rgba(26,26,36,0.95) 100%)"
     },
     subjects: [
       { title: "🏛️ Ancient Rome & Civilization Quest", icon: "🏛️", badge: "NEW & FEATURED", desc: "Engineering, Arches, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", bg: "linear-gradient(135deg, #c8102e, #d4af37)" },
@@ -178,6 +178,7 @@ function updateConfetti() {
 
 // Initialization
 function init() {
+  localStorage.setItem('studyflix_profiles', JSON.stringify(appProfiles));
   renderProfileSelectScreen();
 
   // Check if there was an active profile previously selected
