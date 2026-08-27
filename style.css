@@ -90,6 +90,10 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
   background: none;
   border: none;
   color: var(--nf-light-gray);
@@ -129,8 +133,8 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .search-icon {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  color: #94a3b8;
+  opacity: 0.9;
 }
 
 .nav-search-input {
@@ -155,12 +159,13 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .search-clear-btn {
+  display: grid;
+  place-items: center;
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 0.75rem;
   cursor: pointer;
-  padding: 2px 4px;
+  padding: 2px;
   border-radius: 50%;
   line-height: 1;
 }
@@ -170,6 +175,10 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .xp-pill, .streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   padding: 6px 14px;
@@ -177,9 +186,6 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   font-size: 0.9rem;
   font-weight: 700;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .profile-menu-trigger {
@@ -198,13 +204,15 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .profile-mini-avatar {
+  display: grid;
+  place-items: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  color: #fff;
   width: 34px;
   height: 34px;
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   background: #333;
 }
 
@@ -214,8 +222,8 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .dropdown-caret {
-  font-size: 0.7rem;
   color: var(--nf-light-gray);
+  display: inline-flex;
 }
 
 /* Profile Dropdown */
@@ -243,14 +251,14 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   background: transparent;
   border: none;
   color: var(--nf-light-gray);
   padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-weight: 600;
@@ -341,31 +349,48 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   width: 140px;
   height: 140px;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4.5rem;
+  display: grid;
+  place-items: center;
   border: 4px solid transparent;
-  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              border-color 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   overflow: hidden;
 }
 
-.profile-avatar-box.theme-olivia {
-  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+/* Every profile is marked the same way: a monogram plus a small subject glyph.
+   Previously three profiles used a person emoji and one used a coffee cup,
+   which briefly read as a broken avatar rather than a person. */
+.profile-monogram {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.8rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -2px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
 }
 
-.profile-avatar-box.theme-sophia {
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 50%, #10b981 100%);
+.profile-glyph {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(4px);
+  color: #fff;
 }
 
-.profile-avatar-box.theme-yaya {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #f59e0b 100%);
-}
-
-.profile-avatar-box.theme-mama {
-  background: linear-gradient(135deg, #b45309 0%, #d49a37 50%, #7c2d12 100%);
-}
+/* Two stops, one angle, for all four. A third stop was landing a contrasting
+   colour in the tile corners, which read as a stray border rather than art. */
+.profile-avatar-box.theme-olivia { background: linear-gradient(145deg, #a855f7 0%, #ec4899 100%); }
+.profile-avatar-box.theme-sophia { background: linear-gradient(145deg, #06b6d4 0%, #10b981 100%); }
+.profile-avatar-box.theme-yaya   { background: linear-gradient(145deg, #1e40af 0%, #3b82f6 100%); }
+.profile-avatar-box.theme-mama   { background: linear-gradient(145deg, #b45309 0%, #d49a37 100%); }
 
 .profile-avatar-box.theme-add {
   background: #262626;
@@ -391,6 +416,14 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   color: #94a3b8;
   font-weight: 600;
   margin-top: -6px;
+  /* Reserve two lines for every profile so a longer label cannot make the
+     row look raggedy against its one-line neighbours. */
+  min-height: 2.4em;
+  line-height: 1.2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: center;
 }
 
 .profile-actions {
@@ -413,20 +446,46 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   align-items: center;
   padding: 0 4%;
   margin-bottom: 20px;
-  background: linear-gradient(180deg, rgba(20,20,20,0) 0%, rgba(20,20,20,0.8) 80%, var(--nf-black) 100%),
-              radial-gradient(circle at 70% 30%, rgba(99, 102, 241, 0.4) 0%, rgba(20,20,20,0.95) 70%);
+  background: var(--nf-black);
+  overflow: hidden;
 }
 
+/* The hero carries real key art for the featured quest, composed as a poster
+   panel on the right rather than a full-bleed stretch that crops the scene. */
 .billboard-backdrop {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0.3;
+  left: 38%;
   z-index: 1;
+  overflow: hidden;
+}
+
+.billboard-backdrop .sf-keyart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Scrim so the headline stays legible, and the art dissolves into the page
+   instead of stopping at a hard edge. */
+.hero-billboard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--nf-black) 30%, rgba(20, 20, 20, 0.75) 48%, rgba(20, 20, 20, 0) 72%),
+    linear-gradient(180deg, rgba(20, 20, 20, 0.7) 0%, rgba(20, 20, 20, 0) 26%, rgba(20, 20, 20, 0.45) 76%, var(--nf-black) 100%);
+}
+
+@media (max-width: 900px) {
+  .billboard-backdrop { left: 0; opacity: 0.4; }
+  .hero-billboard::after {
+    background: linear-gradient(180deg, rgba(20, 20, 20, 0.7) 0%, rgba(20, 20, 20, 0.55) 40%, var(--nf-black) 100%);
+  }
 }
 
 .billboard-content {
@@ -437,7 +496,7 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 
 .billboard-tag {
   display: inline-block;
-  background: rgba(229, 9, 20, 0.9);
+  background: var(--hero-accent, rgba(229, 9, 20, 0.9));
   color: var(--nf-white);
   font-weight: 900;
   font-size: 0.8rem;
@@ -546,6 +605,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .search-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   font-size: 1.5rem;
   font-weight: 800;
   color: var(--nf-white);
@@ -587,6 +649,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .btn-clear-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   background: transparent;
   border: 1px solid #555555;
   color: #cccccc;
@@ -665,7 +730,11 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
 }
 
+/* Search results reuse the catalog's key art and type marks, so a result
+   looks like the tile it corresponds to. */
 .result-card-banner {
+  position: relative;
+  overflow: hidden;
   padding: 12px 14px;
   display: flex;
   justify-content: space-between;
@@ -720,6 +789,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .result-card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   background: var(--nf-red);
   color: #ffffff;
   border: none;
@@ -803,105 +875,270 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   font-weight: 500;
 }
 
+/* -------------------------------------------------------------------------
+   ROWS: a hard crop at the right edge reads as unfinished. Every row fades
+   under a mask and exposes real arrow controls, both only when there is
+   actually more to scroll to.
+   ------------------------------------------------------------------------- */
+.row-slider-wrap {
+  position: relative;
+}
+
 .row-slider {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  padding: 12px 4px 20px;
+  /* Vertical padding leaves room for the hover lift without clipping it. */
+  padding: 14px 4px 22px;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
-.row-slider::-webkit-scrollbar {
-  height: 6px;
-}
-.row-slider::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-.row-slider::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+.row-slider::-webkit-scrollbar { display: none; }
+
+/* Edge fades, painted only on the side that has content beyond the edge. */
+.row-slider-wrap::before,
+.row-slider-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
-/* Studio & Topic Cards */
+.row-slider-wrap::before {
+  left: -4px;
+  background: linear-gradient(90deg, var(--nf-black) 12%, rgba(20, 20, 20, 0));
+}
+
+.row-slider-wrap::after {
+  right: -4px;
+  background: linear-gradient(270deg, var(--nf-black) 12%, rgba(20, 20, 20, 0));
+}
+
+.row-slider-wrap.can-scroll-left::before,
+.row-slider-wrap.can-scroll-right::after { opacity: 1; }
+
+.row-arrow {
+  position: absolute;
+  top: 14px;
+  bottom: 22px;
+  width: 56px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--radius-md);
+  background: rgba(10, 10, 10, 0.72);
+  color: var(--nf-white);
+  cursor: pointer;
+  z-index: 6;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.row-arrow--prev { left: -4px; }
+.row-arrow--next { right: -4px; }
+
+/* Visible whenever there is more to see, not only on hover: a row that can
+   scroll should say so without the learner having to discover it. */
+.row-slider-wrap.can-scroll-left .row-arrow--prev,
+.row-slider-wrap.can-scroll-right .row-arrow--next {
+  visibility: visible;
+  opacity: 0.6;
+}
+
+.content-row:hover .row-slider-wrap.can-scroll-left .row-arrow--prev,
+.content-row:hover .row-slider-wrap.can-scroll-right .row-arrow--next,
+.row-arrow:hover,
+.row-arrow:focus-visible { opacity: 1; }
+
+.row-arrow:hover { background: rgba(10, 10, 10, 0.9); }
+
+.row-arrow:focus-visible {
+  outline: 2px solid var(--nf-white);
+  outline-offset: -2px;
+}
+
+/* -------------------------------------------------------------------------
+   CATALOG CARDS
+   Each tile is drawn key art on its subject's palette, with a content-type
+   mark so the icon (not just the label) says what you are about to open.
+   ------------------------------------------------------------------------- */
 .media-card {
   flex: 0 0 280px;
-  height: 180px;
+  height: 232px;
   border-radius: var(--radius-md);
   background-color: var(--nf-dark);
   border: 1px solid var(--nf-border);
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 16px;
+  transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.media-card:hover {
-  transform: scale(1.08) translateY(-6px);
+.media-card:hover,
+.media-card:focus-visible {
+  transform: scale(1.06) translateY(-5px);
   z-index: 10;
   box-shadow: var(--shadow-card);
-  border-color: rgba(255, 255, 255, 0.4);
+  border-color: var(--card-accent, rgba(255, 255, 255, 0.5));
 }
 
-.card-bg-gradient {
+.media-card:focus-visible {
+  outline: 2px solid var(--nf-white);
+  outline-offset: 2px;
+}
+
+/* Art gets its own band. Overlaying the title on the scene was hiding the
+   very thing the key art exists to show. */
+.card-art {
+  position: relative;
+  display: block;
+  height: 128px;
+  flex: 0 0 128px;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.card-art .sf-keyart { width: 100%; height: 100%; }
+
+/* Just enough shading at the top for the two chips to sit on. */
+.card-scrim {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  opacity: 0.85;
-  transition: opacity 0.2s;
-}
-
-.media-card:hover .card-bg-gradient {
-  opacity: 1;
-}
-
-.card-icon {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  font-size: 2.2rem;
-  z-index: 2;
+  height: 62px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+  pointer-events: none;
+  z-index: 1;
 }
 
 .card-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  top: 10px;
+  left: 10px;
   padding: 3px 8px;
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.5px;
+  color: var(--nf-white);
   z-index: 2;
+  max-width: 58%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.card-content {
-  position: relative;
+/* One mark per content type, product-wide. */
+.card-type {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px 3px 7px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(4px);
+  color: var(--nf-white);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  white-space: nowrap;
+}
+
+.card-type[data-kind="quest"]     { border-color: var(--card-accent, #fff); }
+.card-type[data-kind="lesson"]    { color: #e5e7eb; }
+.card-type[data-kind="printable"] { color: #fcd34d; border-color: rgba(217, 119, 6, 0.8); }
+
+.card-content {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 11px 14px 12px;
+  background: var(--nf-dark);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .card-title {
-  font-size: 1.15rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
   font-weight: 800;
+  line-height: 1.25;
+  /* Reserve both lines so one-line and two-line titles keep their
+     descriptions on the same baseline across a row. */
+  min-height: 2.5em;
   margin-bottom: 4px;
   color: var(--nf-white);
 }
 
 .card-desc {
-  font-size: 0.8rem;
-  color: #e2e8f0;
-  line-height: 1.3;
+  font-size: 0.75rem;
+  color: #a8b0bd;
+  line-height: 1.35;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.media-card:hover .card-title,
+.media-card:focus-visible .card-title { color: var(--card-accent, var(--nf-white)); }
+
+/* A quest is the headline act: its accent divides art from label. */
+.media-card--quest .card-content {
+  border-top: 2px solid var(--card-accent, var(--nf-red));
+}
+
+/* A printable is paper: the art band carries a perforated paper edge. */
+.media-card--printable .card-art { padding-left: 9px; background: #cfcac1; }
+
+.media-card--printable .card-art::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 9px;
+  z-index: 3;
+  background: repeating-linear-gradient(180deg, #e8e5df 0 9px, #b9b3a8 9px 11px);
+}
+
+.media-card--printable .card-content { border-top-color: rgba(217, 119, 6, 0.55); }
+
+/* A lesson sits quietly between the two. */
+.media-card--lesson { border-color: rgba(255, 255, 255, 0.12); }
+
+@media (prefers-reduced-motion: reduce) {
+  .media-card, .row-arrow, .row-slider-wrap::before, .row-slider-wrap::after { transition: none; }
+  .media-card:hover, .media-card:focus-visible { transform: none; }
+  .row-slider { scroll-behavior: auto; }
 }
 
 /* =========================================================================
@@ -931,6 +1168,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .btn-back-hub {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   background: var(--nf-red);
   color: var(--nf-white);
   border: none;
@@ -958,6 +1198,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .btn-viewer-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   background: #2a2a2a;
   color: #ccc;
   border: 1px solid #444;
@@ -1022,6 +1265,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .modal-close {
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
   background: none;
   border: none;
   color: #999;
@@ -1041,6 +1287,9 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .avatar-option-btn {
+  display: grid;
+  place-items: center;
+  color: var(--nf-light-gray);
   font-size: 1.8rem;
   background: #333;
   border: 2px solid transparent;
@@ -1123,7 +1372,13 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 
   .top-nav, .billboard-actions, .btn, #confetti-canvas,
   .studio-viewer, #profile-select-screen, .profile-actions,
-  .row-subtitle {
+  .row-subtitle, .row-arrow, .modal-backdrop {
+    display: none !important;
+  }
+
+  /* Fades are painted with pseudo-elements that would print as grey bands. */
+  .row-slider-wrap::before,
+  .row-slider-wrap::after {
     display: none !important;
   }
 
@@ -1190,9 +1445,27 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
     break-inside: avoid;
   }
 
-  .card-bg-gradient {
+  /* Key art is on-screen decoration; on paper the label is what matters. */
+  .card-art,
+  .card-scrim,
+  .card-type {
     display: none !important;
   }
+
+  .card-content {
+    position: static !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-top: none !important;
+  }
+
+  .media-card--quest .card-content,
+  .media-card--printable .card-content { border-top: none !important; }
+
+  .card-title { min-height: 0 !important; }
+
+  .billboard-backdrop { display: none !important; }
+  .hero-billboard::after { display: none !important; }
 
   .card-title {
     color: #000000 !important;
@@ -1214,3 +1487,159 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   }
 }
 
+
+/* =========================================================================
+   ADDITIONS FOR THE SHARED ICON / KEY-ART SYSTEM
+   ========================================================================= */
+
+/* Search-result key art sits behind the badges in the card banner. */
+.result-card-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  line-height: 0;
+}
+
+.result-card-art .sf-keyart { width: 100%; height: 100%; }
+
+.result-card-banner > .result-profile-badge,
+.result-card-banner > .result-type-badge,
+.result-card-banner > .card-type { position: relative; z-index: 2; }
+
+.result-profile-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-card-banner > .card-type {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  top: auto;
+}
+
+.search-result-card:hover { border-color: var(--card-accent, rgba(255, 255, 255, 0.4)); }
+
+/* Profile monogram chips in the switch-profile dropdown. */
+.dropdown-avatar {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.dropdown-avatar.theme-olivia, .profile-mini-avatar.theme-olivia { background: linear-gradient(145deg, #a855f7 0%, #ec4899 100%); }
+.dropdown-avatar.theme-sophia, .profile-mini-avatar.theme-sophia { background: linear-gradient(145deg, #06b6d4 0%, #10b981 100%); }
+.dropdown-avatar.theme-yaya,   .profile-mini-avatar.theme-yaya   { background: linear-gradient(145deg, #1e40af 0%, #3b82f6 100%); }
+.dropdown-avatar.theme-mama,   .profile-mini-avatar.theme-mama   { background: linear-gradient(145deg, #b45309 0%, #d49a37 100%); }
+.dropdown-avatar--action      { background: rgba(255, 255, 255, 0.1); color: var(--nf-light-gray); }
+
+/* Buttons that now hold an icon plus a label. */
+.btn { line-height: 1.2; }
+.btn .sf-icon { flex: 0 0 auto; }
+
+/* -------------------------------------------------------------------------
+   FEATURED DETAILS MODAL (replaced a native alert)
+   ------------------------------------------------------------------------- */
+.modal-card--wide {
+  max-width: 620px;
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+}
+
+.modal-card--wide .modal-header,
+.modal-card--wide .modal-body,
+.modal-card--wide .modal-footer { padding-left: 24px; padding-right: 24px; }
+
+.modal-card--wide .modal-header {
+  align-items: flex-start;
+  padding-top: 18px;
+  border-bottom: none;
+}
+
+.modal-card--wide .modal-header h3 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+  margin-top: 8px;
+}
+
+.featured-details-art {
+  height: 190px;
+  line-height: 0;
+  position: relative;
+}
+
+.featured-details-art .sf-keyart { width: 100%; height: 100%; display: block; }
+
+.featured-details-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0) 45%, rgba(24, 24, 24, 0.95) 100%);
+}
+
+.featured-details-desc {
+  color: var(--nf-light-gray);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.modal-card--wide .modal-footer { padding-bottom: 20px; }
+
+@media (max-width: 640px) {
+  .modal-card--wide .featured-details-art { height: 140px; }
+}
+
+/* -------------------------------------------------------------------------
+   FOCUS: one visible, on-brand focus ring. The browser default was drawing a
+   blue box over the details modal's close button.
+   ------------------------------------------------------------------------- */
+.modal-close:focus-visible,
+.nav-link:focus-visible,
+.btn:focus-visible,
+.btn-back-hub:focus-visible,
+.btn-viewer-action:focus-visible,
+.btn-clear-search:focus-visible,
+.search-clear-btn:focus-visible,
+.quick-tag-btn:focus-visible,
+.avatar-option-btn:focus-visible,
+.dropdown-item:focus-visible,
+.profile-card:focus-visible {
+  outline: 2px solid var(--nf-white);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------------------
+   NAVBAR: keep the chrome on one line down to tablet widths, then shed the
+   least essential pieces rather than wrapping into a ragged two-row bar.
+   ------------------------------------------------------------------------- */
+.nav-links { flex-wrap: nowrap; }
+
+@media (max-width: 1450px) {
+  .nav-search-input { width: 180px; }
+}
+
+@media (max-width: 1280px) {
+  .nav-link { padding-left: 8px; padding-right: 8px; }
+  .nav-search-box { display: none; }
+}
+
+@media (max-width: 1080px) {
+  .nav-link span:last-child { display: none; }
+  .nav-link { gap: 0; }
+  .streak-pill { display: none; }
+}
+
+@media (max-width: 820px) {
+  .profile-mini-name, .dropdown-caret { display: none; }
+  .xp-pill { display: none; }
+}

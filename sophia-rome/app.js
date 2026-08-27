@@ -5,8 +5,11 @@
 
 // Global State
 const state = {
-  xp: parseInt(localStorage.getItem('sophia_rome_xp') || '0'),
-  streak: parseInt(localStorage.getItem('sophia_rome_streak') || '0'),
+  // Roman XP is this studio's subtotal of the shared, profile-wide record.
+  xp: 0,
+  // This is a CORRECT-ANSWER run, not the hub's day streak. Two different
+  // things were previously both labelled "Streak" in the same kind of pill.
+  answerRun: 0,
   soundEnabled: true,
   badges: JSON.parse(localStorage.getItem('sophia_rome_badges') || '[]'),
   completedQuests: JSON.parse(localStorage.getItem('sophia_rome_completed_quests') || '[]'),
@@ -22,12 +25,12 @@ const state = {
 
 // Quests Database
 const QUESTS = [
-  { id: "q1", icon: "⚖️", title: "The Roman Republic & Senate", desc: "Patricians vs. Plebeians, Twelve Tables, and the Rule of Law.", targetTab: "tab-learn", quizMode: "republic" },
-  { id: "q2", icon: "🌉", title: "Mastering the Roman Arch", desc: "Discover keystone compression forces and build stable bridges.", targetTab: "tab-engineering", quizMode: "engineering" },
-  { id: "q3", icon: "💧", title: "Aqueducts & Hydraulic STEM", desc: "Calculate gravity flow slopes to transport water across valleys.", targetTab: "tab-engineering", quizMode: "engineering" },
-  { id: "q4", icon: "👑", title: "Julius Caesar & The Imperial Era", desc: "Cross the Rubicon, the Ides of March, and Caesar Augustus's Pax Romana.", targetTab: "tab-learn", quizMode: "republic" },
-  { id: "q5", icon: "🕵️", title: "Caesar's Secret Military Cipher", desc: "Decode top-secret battlefield messages sent from Gaul.", targetTab: "tab-cipher" },
-  { id: "q6", icon: "🌋", title: "Daily Life, Gladiators & Pompeii", desc: "Explore Thermae baths, hypocaust heating, and Mount Vesuvius (79 CE).", targetTab: "tab-learn", quizMode: "daily_life" }
+  { id: "q1", glyph: "temple", title: "The Roman Republic & Senate", desc: "Patricians vs. Plebeians, Twelve Tables, and the Rule of Law.", targetTab: "tab-learn", quizMode: "republic" },
+  { id: "q2", glyph: "ruler", title: "Mastering the Roman Arch", desc: "Discover keystone compression forces and build stable bridges.", targetTab: "tab-engineering", quizMode: "engineering" },
+  { id: "q3", glyph: "globe", title: "Aqueducts & Hydraulic STEM", desc: "Calculate gravity flow slopes to transport water across valleys.", targetTab: "tab-engineering", quizMode: "engineering" },
+  { id: "q4", glyph: "person", title: "Julius Caesar & The Imperial Era", desc: "Cross the Rubicon, the Ides of March, and Caesar Augustus's Pax Romana.", targetTab: "tab-learn", quizMode: "republic" },
+  { id: "q5", glyph: "cipher", title: "Caesar's Secret Military Cipher", desc: "Decode top-secret battlefield messages sent from Gaul.", targetTab: "tab-cipher" },
+  { id: "q6", glyph: "flask", title: "Daily Life, Gladiators & Pompeii", desc: "Explore Thermae baths, hypocaust heating, and Mount Vesuvius (79 CE).", targetTab: "tab-learn", quizMode: "daily_life" }
 ];
 
 // Caesar Military Dispatches Database
@@ -84,14 +87,14 @@ const DISPATCH_DATA = [
 
 // Badges Database
 const BADGES = [
-  { id: "recruit", icon: "🌱", title: "Legionary Recruit", desc: "Began your very first Roman quest!" },
-  { id: "streak_3", icon: "🔥", title: "Centurion Streak", desc: "Answered 3 questions correctly in a row!" },
-  { id: "republic_senator", icon: "⚖️", title: "Senate Orator", desc: "Scored 100% on the Roman Republic & Law Quiz!" },
-  { id: "keystone_architect", icon: "🏛️", title: "Master Architect", desc: "Mastered arch compression and aqueduct gravity flow!" },
-  { id: "caesar_decoder", icon: "🕵️", title: "Imperial Codebreaker", desc: "Decrypted Caesar's secret military dispatches!" },
-  { id: "pompeii_historian", icon: "🏺", title: "Pompeii Archaeologist", desc: "Mastered Roman daily life, thermae baths, and Vesuvius!" },
-  { id: "math_imperator", icon: "🔢", title: "Roman Numeral Champion", desc: "Converted ancient numerals and modern dates!" },
-  { id: "triumph_maximus", icon: "👑", title: "Triumph Imperator", desc: "Accumulated over 300 total Roman XP!" }
+  { id: "recruit", glyph: "person", title: "Legionary Recruit", desc: "Began your very first Roman quest!" },
+  { id: "streak_3", glyph: "flame", title: "Centurion Streak", desc: "Answered 3 questions correctly in a row!" },
+  { id: "republic_senator", glyph: "lesson", title: "Senate Orator", desc: "Scored 100% on the Roman Republic & Law Quiz!" },
+  { id: "keystone_architect", glyph: "temple", title: "Master Architect", desc: "Mastered arch compression and aqueduct gravity flow!" },
+  { id: "caesar_decoder", glyph: "cipher", title: "Imperial Codebreaker", desc: "Decrypted Caesar's secret military dispatches!" },
+  { id: "pompeii_historian", glyph: "globe", title: "Pompeii Archaeologist", desc: "Mastered Roman daily life, thermae baths, and Vesuvius!" },
+  { id: "math_imperator", glyph: "ruler", title: "Roman Numeral Champion", desc: "Converted ancient numerals and modern dates!" },
+  { id: "triumph_maximus", glyph: "trophy", title: "Triumph Imperator", desc: "Accumulated over 300 total Roman XP!" }
 ];
 
 // Comprehensive Quiz Question Bank
@@ -385,7 +388,10 @@ function playSound(type) {
 
 function toggleSound() {
   state.soundEnabled = !state.soundEnabled;
-  document.getElementById('sound-toggle-btn').textContent = state.soundEnabled ? '🔊' : '🔇';
+  // One icon set, so the muted state cannot render as a different
+  // picture on a different platform.
+  document.getElementById('sound-toggle-btn').innerHTML =
+    SFIcons.icon(state.soundEnabled ? 'volumeOn' : 'volumeOff', { size: 18 });
 }
 
 // Confetti Particle System
@@ -442,6 +448,7 @@ function updateConfetti() {
 // Initialization & Navigation
 // =============================================================================
 function init() {
+  SFQuest.init({ module: 'rome', profileId: 'sophia', badgeTotal: BADGES.length });
   updateUIStats();
   renderQuestCards();
   renderTrophies();
@@ -473,19 +480,20 @@ function handleHashNavigation() {
 window.addEventListener('hashchange', handleHashNavigation);
 
 function updateUIStats() {
-  document.getElementById('xp-count').textContent = state.xp;
-  document.getElementById('streak-count').textContent = state.streak;
-  document.getElementById('badge-count').textContent = `${state.badges.length}/${BADGES.length}`;
+  // The shell pills show the profile-wide totals, identical to the hub.
+  state.xp = SFQuest.moduleXp();
+  SFQuest.renderStats(state.badges.length);
 
-  // Persist
-  localStorage.setItem('sophia_rome_xp', state.xp);
-  localStorage.setItem('sophia_rome_streak', state.streak);
+  const runEl = document.getElementById('answer-run-count');
+  if (runEl) runEl.textContent = state.answerRun;
+
+  // Studio-local state that the shared record does not own.
   localStorage.setItem('sophia_rome_badges', JSON.stringify(state.badges));
   localStorage.setItem('sophia_rome_completed_quests', JSON.stringify(state.completedQuests));
 }
 
 function addXP(amount) {
-  state.xp += amount;
+  SFQuest.award(amount);
   updateUIStats();
   if (state.xp >= 300) {
     awardBadge('triumph_maximus');
@@ -495,6 +503,7 @@ function addXP(amount) {
 function awardBadge(badgeId) {
   if (!state.badges.includes(badgeId)) {
     state.badges.push(badgeId);
+    SFQuest.unlockBadge(badgeId);
     updateUIStats();
     renderTrophies();
     playSound('triumph');
@@ -503,7 +512,7 @@ function awardBadge(badgeId) {
 }
 
 function setupNavTabs() {
-  document.querySelectorAll('.nav-tab').forEach(tab => {
+  document.querySelectorAll('.sf-shell-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const target = tab.getAttribute('data-tab');
       switchTab(target);
@@ -512,10 +521,10 @@ function setupNavTabs() {
 }
 
 function switchTab(tabId) {
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sf-shell-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-  const activeTabBtn = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+  const activeTabBtn = document.querySelector(`.sf-shell-tab[data-tab="${tabId}"]`);
   const activeContent = document.getElementById(tabId);
 
   if (activeTabBtn) activeTabBtn.classList.add('active');
@@ -538,15 +547,16 @@ function renderQuestCards() {
     card.innerHTML = `
       <div>
         <div class="quest-card-top">
-          <div class="quest-icon-badge">${q.icon}</div>
+          <div class="quest-icon-badge">${SFIcons.icon(q.glyph, { size: 22 })}</div>
           <div>
             <h4 class="quest-card-title">${q.title}</h4>
             <p class="quest-card-desc">${q.desc}</p>
           </div>
         </div>
       </div>
-      <button class="btn ${isCompleted ? 'btn-secondary' : 'btn-primary'} quest-card-btn">
-        ${isCompleted ? '✅ Review Quest' : '🚀 Launch Quest'}
+      <button class="sf-btn ${isCompleted ? 'sf-btn--explore' : 'sf-btn--play'} quest-card-btn">
+        ${SFIcons.icon(isCompleted ? 'check' : 'play', { size: 17 })}
+        <span>${isCompleted ? 'Review Quest' : 'Launch Quest'}</span>
       </button>
     `;
     card.onclick = () => {
@@ -762,18 +772,18 @@ function selectQuizAnswer(selectedIndex) {
 
   if (isCorrect) {
     state.quizScore++;
-    state.streak++;
+    state.answerRun++;
     addXP(10);
     playSound('correct');
     feedbackIcon.textContent = '🎉';
     feedbackTitle.textContent = 'Optime! (Excellent!) Correct!';
     feedbackTitle.style.color = '#10b981';
 
-    if (state.streak >= 3) {
+    if (state.answerRun >= 3) {
       awardBadge('streak_3');
     }
   } else {
-    state.streak = 0;
+    state.answerRun = 0;
     playSound('wrong');
     feedbackIcon.textContent = '🤔';
     feedbackTitle.textContent = 'Not quite! Review the insight:';
@@ -981,10 +991,10 @@ function renderTrophies() {
     const card = document.createElement('div');
     card.className = `trophy-card ${isUnlocked ? 'unlocked' : 'locked'}`;
     card.innerHTML = `
-      <div class="trophy-icon-circle">${b.icon}</div>
+      <div class="trophy-icon-circle">${SFIcons.icon(b.glyph, { size: 26 })}</div>
       <h4>${b.title}</h4>
       <p>${b.desc}</p>
-      <span class="trophy-status-pill">${isUnlocked ? '🌟 UNLOCKED' : '🔒 LOCKED'}</span>
+      <span class="trophy-status-pill">${isUnlocked ? 'UNLOCKED' : 'LOCKED'}</span>
     `;
     container.appendChild(card);
   });

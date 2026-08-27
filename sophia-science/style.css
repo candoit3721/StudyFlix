@@ -1897,6 +1897,7 @@ h1, h2, h3, h4, .logo-title, .nav-tab, .btn {
     font-size: 10pt;
   }
 
+  .sf-shell-header, .sf-shell-tabs, .sf-btn, .sf-icon-btn, .sf-back-hub,
   .app-header, .nav-bar, .welcome-buttons, .filter-bar, #confetti-canvas, .icon-btn,
   .quiz-screen, #element-detail-card, .decoder-container, .trophy-grid,
   .quest-grid, input, button, .lab-station-nav, .cell-toggle-group, .coaster-controls-bar {
@@ -1960,4 +1961,87 @@ h1, h2, h3, h4, .logo-title, .nav-tab, .btn {
   .detail-facts, .comparison-grid, .cell-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* =========================================================================
+   SHARED SHELL ADJUSTMENTS
+   The header, tab bar and action buttons now come from assets/sf/shell.css,
+   so this studio's chrome matches the hub and every other studio. What stays
+   here is the bright Grade 5/6 content styling that sits on top of it.
+   ========================================================================= */
+
+/* Correct-answer run, shown next to the quiz where it means something,
+   instead of a header pill labelled "Streak" beside XP. */
+.quiz-run-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.28);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-main);
+  white-space: nowrap;
+}
+
+.quiz-run-counter .sf-icon { color: #f43f5e; }
+
+.quiz-header { flex-wrap: wrap; gap: 12px; }
+
+/* Icon glyphs replaced emoji in these badges, so they need a colour and a
+   box rather than inheriting a font size meant for emoji. */
+.quest-icon,
+.trophy-icon {
+  display: grid;
+  place-items: center;
+  color: var(--primary-color);
+}
+
+.trophy-card.unlocked .trophy-icon { color: var(--success-color); }
+
+.quest-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* The welcome medallion holds a glyph from the shared icon set, so it renders
+   identically on every platform instead of an OS-specific emoji. */
+.welcome-avatar .avatar-circle {
+  color: #ffffff;
+  line-height: 0;
+}
+
+/* Content panels fade in on tab change. Honour a reduced-motion preference:
+   the panel should appear immediately rather than animate from opacity 0. */
+@media (prefers-reduced-motion: reduce) {
+  .tab-content,
+  .tab-content.active {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Controls that swapped emoji for shared glyphs need to lay them out. */
+.filter-btn,
+.lab-tab-btn,
+.toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.close-btn {
+  display: grid;
+  place-items: center;
 }

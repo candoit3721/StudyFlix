@@ -6,14 +6,14 @@
 // 1. State Management & Constants
 // =============================================================================
 const BADGES = [
-  { id: 'first_sip', name: 'First Sip', icon: '☕', desc: 'Began the Specialty Coffee Journey' },
-  { id: 'origin_explorer', name: 'Origin Explorer', icon: '🌍', desc: 'Mastered the 3 Global Terroirs' },
-  { id: 'bean_botanist', name: 'Bean Botanist', icon: '🌿', desc: 'Explored Arabica Varietals & Anatomy' },
-  { id: 'roast_artisan', name: 'Roast Artisan', icon: '🔥', desc: 'Navigated the Roast Spectrum' },
-  { id: 'flavour_sommelier', name: 'Flavour Sommelier', icon: '🎨', desc: 'Explored the SCA Flavour Wheel' },
-  { id: 'golden_ratio', name: 'Golden Brewer', icon: '⚖️', desc: 'Calculated a Mama Matchmaker Recipe' },
-  { id: 'cupping_master', name: 'Cupping Ace', icon: '👃', desc: 'Scored 50+ XP in the Tasting Quiz' },
-  { id: 'grand_connoisseur', name: 'Grand Connoisseur', icon: '👑', desc: 'Earned 200+ Coffee XP' }
+  { id: 'first_sip', name: 'First Sip', glyph: 'coffee', desc: 'Began the Specialty Coffee Journey' },
+  { id: 'origin_explorer', name: 'Origin Explorer', glyph: 'globe', desc: 'Mastered the 3 Global Terroirs' },
+  { id: 'bean_botanist', name: 'Bean Botanist', glyph: 'leaf', desc: 'Explored Arabica Varietals & Anatomy' },
+  { id: 'roast_artisan', name: 'Roast Artisan', glyph: 'flame', desc: 'Navigated the Roast Spectrum' },
+  { id: 'flavour_sommelier', name: 'Flavour Sommelier', glyph: 'star', desc: 'Explored the SCA Flavour Wheel' },
+  { id: 'golden_ratio', name: 'Golden Brewer', glyph: 'droplet', desc: 'Calculated a Mama Matchmaker Recipe' },
+  { id: 'cupping_master', name: 'Cupping Ace', glyph: 'medal', desc: 'Scored 50+ XP in the Tasting Quiz' },
+  { id: 'grand_connoisseur', name: 'Grand Connoisseur', glyph: 'trophy', desc: 'Earned 200+ Coffee XP' }
 ];
 
 const MAP_ORIGINS_DATA = {
@@ -366,7 +366,8 @@ const QUIZ_QUESTIONS = [
 
 // App State
 let state = {
-  xp: parseInt(localStorage.getItem('mama_coffee_xp') || '0', 10),
+  // Coffee XP is this studio's subtotal of the shared, profile-wide record.
+  xp: 0,
   badges: JSON.parse(localStorage.getItem('mama_coffee_badges') || '["first_sip"]'),
   soundEnabled: true,
   currentQuizIndex: 0,
@@ -442,7 +443,10 @@ function playSound(type) {
 
 function toggleSound() {
   state.soundEnabled = !state.soundEnabled;
-  document.getElementById('sound-toggle-btn').textContent = state.soundEnabled ? '🔊' : '🔇';
+  // One icon set, so the muted state cannot render as a different
+  // picture on a different platform.
+  document.getElementById('sound-toggle-btn').innerHTML =
+    SFIcons.icon(state.soundEnabled ? 'volumeOn' : 'volumeOff', { size: 18 });
 }
 
 // =============================================================================
@@ -453,6 +457,7 @@ let leafletMarkers = {};
 let currentMapView = 'leaflet';
 
 function init() {
+  SFQuest.init({ module: 'coffee', profileId: 'mama', badgeTotal: BADGES.length });
   updateUIStats();
   setupNavTabs();
   initLeafletMap();
@@ -468,15 +473,15 @@ function init() {
 }
 
 function updateUIStats() {
-  document.getElementById('xp-count').textContent = state.xp;
-  document.getElementById('badge-count').textContent = `${state.badges.length}/${BADGES.length}`;
+  // The shell pills show the profile-wide totals, identical to the hub.
+  state.xp = SFQuest.moduleXp();
+  SFQuest.renderStats(state.badges.length);
 
-  localStorage.setItem('mama_coffee_xp', state.xp);
   localStorage.setItem('mama_coffee_badges', JSON.stringify(state.badges));
 }
 
 function addXP(amount) {
-  state.xp += amount;
+  SFQuest.award(amount);
   updateUIStats();
   if (state.xp >= 50) awardBadge('cupping_master');
   if (state.xp >= 200) awardBadge('grand_connoisseur');
@@ -485,6 +490,7 @@ function addXP(amount) {
 function awardBadge(badgeId) {
   if (!state.badges.includes(badgeId)) {
     state.badges.push(badgeId);
+    SFQuest.unlockBadge(badgeId);
     updateUIStats();
     renderTrophies();
     playSound('triumph');
@@ -493,7 +499,7 @@ function awardBadge(badgeId) {
 }
 
 function setupNavTabs() {
-  document.querySelectorAll('.nav-tab').forEach(tab => {
+  document.querySelectorAll('.sf-shell-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const tabId = tab.getAttribute('data-tab');
       switchTab(tabId);
@@ -505,10 +511,10 @@ function setupNavTabs() {
 }
 
 function switchTab(tabId) {
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sf-shell-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-  const activeTabBtn = document.querySelector(`.nav-tab[data-tab="${tabId}"]`);
+  const activeTabBtn = document.querySelector(`.sf-shell-tab[data-tab="${tabId}"]`);
   const activeContent = document.getElementById(tabId);
 
   if (activeTabBtn) activeTabBtn.classList.add('active');
@@ -979,7 +985,7 @@ function renderTrophies() {
     const card = document.createElement('div');
     card.className = `trophy-badge-card ${isUnlocked ? 'unlocked' : ''}`;
     card.innerHTML = `
-      <div class="trophy-icon">${b.icon}</div>
+      <div class="trophy-icon">${SFIcons.icon(b.glyph, { size: 24 })}</div>
       <div class="trophy-name">${b.name}</div>
     `;
     card.title = `${b.name}: ${b.desc}`;

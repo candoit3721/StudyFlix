@@ -7,49 +7,57 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.0.0">
+  <link rel="stylesheet" href="style.css?v=3.0.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Cinzel:wght@600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="sf-subject-rome">
 
-  <!-- Top Navbar -->
-  <header class="app-header">
-    <div class="logo-container">
-      <span class="logo-icon">🏛️</span>
-      <div>
-        <h1 class="logo-title">Sophia's Ancient Rome Quest!</h1>
-        <p class="logo-subtitle">Republic to Empire &bull; Engineering & STEM &bull; Latin & Cryptography</p>
+  <!-- Shared StudyFlix quest shell: identical structure in every studio,
+       only the accent colour and the glyph change. -->
+  <header class="sf-shell-header">
+    <div class="sf-shell-left">
+      <button class="sf-back-hub" type="button" onclick="SFQuest.backToHub()">
+        <span data-sf-icon="arrowLeft" data-sf-size="16"></span><span>StudyFlix Hub</span>
+      </button>
+      <div class="sf-shell-mark">
+        <span class="sf-shell-glyph" data-sf-icon="temple" data-sf-size="22"></span>
+        <div>
+          <h1 class="sf-shell-title">Ancient Rome Quest</h1>
+          <p class="sf-shell-sub">Republic to Empire &bull; Engineering &amp; STEM &bull; Latin &amp; Cryptography</p>
+        </div>
       </div>
     </div>
-    
-    <!-- User Stats / XP Bar -->
-    <div class="header-stats">
-      <div class="stat-pill">
-        <span class="stat-label">🌟 XP:</span>
-        <span id="xp-count" class="stat-value">0</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">🔥 Streak:</span>
-        <span id="streak-count" class="stat-value">0</span>
-      </div>
-      <div class="stat-pill">
-        <span class="stat-label">🏆 Badges:</span>
-        <span id="badge-count" class="stat-value">0/8</span>
-      </div>
-      <button id="sound-toggle-btn" class="icon-btn" title="Toggle Sound" onclick="toggleSound()">🔊</button>
+
+    <div class="sf-shell-right">
+      <span class="sf-stat sf-stat--xp" title="Total XP across every StudyFlix studio">
+        <span data-sf-icon="star" data-sf-size="15"></span>
+        <span id="sf-xp-count">0</span><span class="sf-stat-label">XP</span>
+      </span>
+      <span class="sf-stat sf-stat--streak" title="Consecutive days studied">
+        <span data-sf-icon="flame" data-sf-size="15"></span>
+        <span id="sf-streak-count">0</span><span class="sf-stat-label">day streak</span>
+      </span>
+      <span class="sf-stat sf-stat--badges" title="Roman badges unlocked">
+        <span data-sf-icon="trophy" data-sf-size="15"></span>
+        <span id="sf-badge-count">0/8</span>
+      </span>
+      <button id="sound-toggle-btn" class="sf-icon-btn" title="Toggle sound" aria-label="Toggle sound" onclick="toggleSound()">
+        <span data-sf-icon="volumeOn" data-sf-size="18"></span>
+      </button>
     </div>
   </header>
 
   <!-- Navigation Tabs -->
-  <nav class="nav-bar">
-    <button class="nav-tab active" data-tab="tab-map">🗺️ Empire Map</button>
-    <button class="nav-tab" data-tab="tab-engineering">🏛️ Engineering & Wonders</button>
-    <button class="nav-tab" data-tab="tab-learn">📖 Story & Inquiry Hub</button>
-    <button class="nav-tab" data-tab="tab-quiz">🎯 Roman Quiz Arena</button>
-    <button class="nav-tab" data-tab="tab-cipher">🔢 Numerals & Caesar Cipher</button>
-    <button class="nav-tab" data-tab="tab-trophies">🏆 Trophy Room</button>
+  <nav class="sf-shell-tabs">
+    <button class="sf-shell-tab active" data-tab="tab-map"><span data-sf-icon="map" data-sf-size="17"></span><span>Empire Map</span></button>
+    <button class="sf-shell-tab" data-tab="tab-engineering"><span data-sf-icon="temple" data-sf-size="17"></span><span>Engineering &amp; Wonders</span></button>
+    <button class="sf-shell-tab" data-tab="tab-learn"><span data-sf-icon="lesson" data-sf-size="17"></span><span>Story &amp; Inquiry Hub</span></button>
+    <button class="sf-shell-tab" data-tab="tab-quiz"><span data-sf-icon="quest" data-sf-size="17"></span><span>Roman Quiz Arena</span></button>
+    <button class="sf-shell-tab" data-tab="tab-cipher"><span data-sf-icon="cipher" data-sf-size="17"></span><span>Numerals &amp; Caesar Cipher</span></button>
+    <button class="sf-shell-tab" data-tab="tab-trophies"><span data-sf-icon="trophy" data-sf-size="17"></span><span>Trophy Room</span></button>
   </nav>
 
   <!-- Main Content Container -->
@@ -61,16 +69,22 @@
     <section id="tab-map" class="tab-content active">
       <div class="welcome-banner">
         <div class="welcome-text">
-          <h2>Salve, Sophia! Welcome to Ancient Rome 🏛️✨</h2>
+          <h2>Salve, Sophia! Welcome to Ancient Rome</h2>
           <p>Step back in time over 2,000 years to explore the heart of the Roman Republic and Empire! Master Roman engineering, unlock the physics of arches and aqueducts, decode Caesar's secret military ciphers, and discover how Roman law shaped modern Canada!</p>
           <div class="welcome-buttons">
-            <button class="btn btn-primary" onclick="switchTab('tab-engineering')">⚡ Roman Engineering Lab</button>
-            <button class="btn btn-secondary" onclick="switchTab('tab-cipher')">🕵️ Caesar's Cipher Decoder</button>
-            <button class="btn btn-accent" onclick="window.open('workbook.html', '_blank')">🖨️ Print Master Workbook</button>
+            <button class="sf-btn sf-btn--play" onclick="switchTab('tab-engineering')">
+              <span data-sf-icon="play" data-sf-size="18"></span><span>Roman Engineering Lab</span>
+            </button>
+            <button class="sf-btn sf-btn--explore" onclick="switchTab('tab-cipher')">
+              <span data-sf-icon="cipher" data-sf-size="18"></span><span>Caesar's Cipher Decoder</span>
+            </button>
+            <button class="sf-btn sf-btn--print" onclick="window.open('workbook.html', '_blank')">
+              <span data-sf-icon="printer" data-sf-size="18"></span><span>Print Master Workbook</span>
+            </button>
           </div>
         </div>
         <div class="welcome-avatar">
-          <div class="avatar-circle">🏛️</div>
+          <div class="avatar-circle" data-sf-icon="temple" data-sf-size="46"></div>
           <span class="avatar-tag">Civis Romanus</span>
         </div>
       </div>
@@ -81,7 +95,7 @@
         <span class="laurel-leaf">🌿</span>
       </div>
 
-      <h3 class="section-heading">🌟 Your 6 Imperial Quests</h3>
+      <h3 class="section-heading">Your 6 Imperial Quests</h3>
       <div class="quest-grid" id="quest-cards-grid">
         <!-- Injected via JavaScript -->
       </div>
@@ -92,7 +106,7 @@
     <!-- ========================================================================= -->
     <section id="tab-engineering" class="tab-content">
       <div class="section-header-box">
-        <h2>🏛️ Roman Engineering & STEM Lab</h2>
+        <h2>Roman Engineering & STEM Lab</h2>
         <p>Explore the brilliant architectural and scientific marvels that allowed Rome to stand for centuries!</p>
       </div>
 
@@ -101,7 +115,7 @@
         <!-- INTERACTIVE LAB 1: KEYSTONE ARCH BUILDER -->
         <div class="eng-card">
           <div class="eng-card-header">
-            <span class="eng-icon">🌉</span>
+            <span class="eng-icon" data-sf-icon="arch" data-sf-size="22"></span>
             <div>
               <h3>1. The Roman True Arch & Keystone Physics</h3>
               <p class="eng-subtitle">Learn how compression forces distribute weight sideways into ground abutments!</p>
@@ -143,7 +157,7 @@
             </div>
 
             <div class="arch-controls">
-              <button id="keystone-btn" class="btn btn-sm btn-primary" onclick="toggleKeystone()">👑 Insert / Remove Keystone</button>
+              <button id="keystone-btn" class="sf-btn sf-btn--play sf-btn--sm" onclick="toggleKeystone()">Insert / Remove Keystone</button>
               <div id="arch-status" class="status-callout success">
                 <strong>Status:</strong> Keystone locked! Arch holds over 5,000 kg of load! 🛡️
               </div>
@@ -154,7 +168,7 @@
         <!-- INTERACTIVE LAB 2: AQUEDUCT SLOPE SIMULATOR -->
         <div class="eng-card">
           <div class="eng-card-header">
-            <span class="eng-icon">💧</span>
+            <span class="eng-icon" data-sf-icon="droplet" data-sf-size="22"></span>
             <div>
               <h3>2. Aqueduct Gravity Flow Simulator</h3>
               <p class="eng-subtitle">Adjust the gradient to transport mountain spring water without stagnation or overflow!</p>
@@ -185,7 +199,7 @@
         <!-- INTERACTIVE LAB 3: THE COLOSSEUM & HYPOGEUM -->
         <div class="eng-card">
           <div class="eng-card-header">
-            <span class="eng-icon">🏟️</span>
+            <span class="eng-icon" data-sf-icon="amphitheatre" data-sf-size="22"></span>
             <div>
               <h3>3. The Colosseum (Flavian Amphitheatre)</h3>
               <p class="eng-subtitle">Explore crowd control, retractable awnings, and underground lift systems.</p>
@@ -194,28 +208,28 @@
           <div class="eng-card-body">
             <div class="interactive-monument-grid">
               <div class="monument-feature" onclick="inspectMonumentFeature('velarium')">
-                <span class="feat-icon">🎪</span>
+                <span class="feat-icon" data-sf-icon="temple" data-sf-size="22"></span>
                 <h4>Velarium</h4>
                 <p>Giant retractable canvas sail operated by Roman sailors to shade 50,000 spectators!</p>
               </div>
               <div class="monument-feature" onclick="inspectMonumentFeature('vomitoria')">
-                <span class="feat-icon">🚪</span>
+                <span class="feat-icon" data-sf-icon="temple" data-sf-size="22"></span>
                 <h4>Vomitoria (Exits)</h4>
                 <p>76 numbered arched entrance gates allowing 50,000 citizens to exit in under 15 minutes!</p>
               </div>
               <div class="monument-feature" onclick="inspectMonumentFeature('hypogeum')">
-                <span class="feat-icon">⚙️</span>
+                <span class="feat-icon" data-sf-icon="settings" data-sf-size="22"></span>
                 <h4>Hypogeum</h4>
                 <p>2-story subterranean labyrinth with 28 pulley elevators lifting lions and gladiators directly onto the arena floor!</p>
               </div>
               <div class="monument-feature" onclick="inspectMonumentFeature('arena')">
-                <span class="feat-icon">🪵</span>
+                <span class="feat-icon" data-sf-icon="lesson" data-sf-size="22"></span>
                 <h4>Arena Floor</h4>
                 <p>Wooden floor covered in sand (*harena* in Latin) to absorb moisture, with trapdoors everywhere!</p>
               </div>
             </div>
             <div id="monument-detail-box" class="monument-detail-box">
-              <h4 id="monument-detail-title">💡 Click any feature above to inspect details!</h4>
+              <h4 id="monument-detail-title">Click any feature above to inspect details!</h4>
               <p id="monument-detail-desc">Discover how Roman architects solved modern stadium challenges 2,000 years ago.</p>
             </div>
           </div>
@@ -224,7 +238,7 @@
         <!-- INTERACTIVE LAB 4: PANTHEON DOME & ROMAN CONCRETE -->
         <div class="eng-card">
           <div class="eng-card-header">
-            <span class="eng-icon">🏛️</span>
+            <span class="eng-icon" data-sf-icon="dome" data-sf-size="22"></span>
             <div>
               <h3>4. The Pantheon & Opus Caementicium</h3>
               <p class="eng-subtitle">The world's largest unreinforced concrete dome (43.3m diameter) still standing today!</p>
@@ -259,7 +273,7 @@
         <!-- INTERACTIVE LAB 5: ROMAN ROAD CROSS-SECTION -->
         <div class="eng-card full-width">
           <div class="eng-card-header">
-            <span class="eng-icon">🛣️</span>
+            <span class="eng-icon" data-sf-icon="map" data-sf-size="22"></span>
             <div>
               <h3>5. Layered Roman Highway Engineering ("All Roads Lead to Rome")</h3>
               <p class="eng-subtitle">Over 80,000 kilometres of paved military highways built with multi-layered drainage.</p>
@@ -295,7 +309,7 @@
     <!-- ========================================================================= -->
     <section id="tab-learn" class="tab-content">
       <div class="section-header-box">
-        <h2>📖 Interactive Story & Inquiry Hub</h2>
+        <h2>Interactive Story & Inquiry Hub</h2>
         <p>Explore the six essential chapters of Roman civilization, complete with Canadian connections and Latin roots!</p>
       </div>
 
@@ -305,7 +319,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🐺</span>
+              <span class="lesson-icon" data-sf-icon="person" data-sf-size="22"></span>
               <div>
                 <h3>1. The Birth of Rome & The Seven Hills</h3>
                 <p>Legend of Romulus & Remus, Tiber River geography, and the Etruscan kings</p>
@@ -318,7 +332,7 @@
               <p>According to legend, Rome was founded in <strong>753 BCE</strong> by twin brothers <strong>Romulus and Remus</strong>, rescued by a she-wolf (*Lupa*) on the banks of the <strong>Tiber River</strong>.</p>
               
               <div class="concept-callout">
-                <h4>🏔️ Why Geography Was Rome's Secret Superpower:</h4>
+                <h4>Why Geography Was Rome's Secret Superpower:</h4>
                 <ul>
                   <li><strong>7 Defensible Hills</strong> (Palatine, Capitoline, Aventine, etc.) protected early settlers from enemy raids and seasonal river floods.</li>
                   <li><strong>Tiber River Crossing</strong>: Easy access to trade routes and salt beds, but far enough inland (25 km from the sea) to be protected from pirate fleets!</li>
@@ -326,7 +340,7 @@
               </div>
 
               <div class="latin-box">
-                <h4>🏛️ Latin Root Decoder:</h4>
+                <h4>Latin Root Decoder:</h4>
                 <p><strong>Civis</strong> = Citizen &rarr; <em>Civics, Civilian, Civilization</em>.</p>
                 <p><strong>Urbs</strong> = City &rarr; <em>Urban, Suburb, Urbanization</em>.</p>
               </div>
@@ -344,7 +358,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">⚖️</span>
+              <span class="lesson-icon" data-sf-icon="lesson" data-sf-size="22"></span>
               <div>
                 <h3>2. The Roman Republic & The Rule of Law</h3>
                 <p>Senate, Consuls, Patricians vs. Plebeians, and the Twelve Tables</p>
@@ -358,22 +372,22 @@
 
               <div class="comparison-grid">
                 <div class="compare-card patrician">
-                  <h4>🏛️ Patricians (Nobles)</h4>
+                  <h4>Patricians (Nobles)</h4>
                   <p>Wealthy land-owning aristocratic families who held Senate seats and religious priesthoods.</p>
                 </div>
                 <div class="compare-card plebeian">
-                  <h4>🌾 Plebeians (Common Citizens)</h4>
+                  <h4>Plebeians (Common Citizens)</h4>
                   <p>Farmers, merchants, craftspeople, and soldiers. They went on strike (*Secessio Plebis*) to win equal rights and elected <strong>Tribunes</strong> with veto power!</p>
                 </div>
               </div>
 
               <div class="concept-callout">
-                <h4>📜 The Twelve Tables (450 BCE) & Modern Canada:</h4>
+                <h4>The Twelve Tables (450 BCE) & Modern Canada:</h4>
                 <p>Written laws carved into bronze tablets and posted in the Roman Forum so judges could not change rules unfairly. This gave birth to the <strong>Rule of Law</strong>, which forms the bedrock of Canada's legal system today: <em>“All people are equal before the law, and innocent until proven guilty.”</em></p>
               </div>
 
               <div class="latin-box">
-                <h4>🏛️ Latin Root Decoder:</h4>
+                <h4>Latin Root Decoder:</h4>
                 <p><strong>Senex</strong> = Elder/Old Man &rarr; <em>Senate, Senator, Senior</em>.</p>
                 <p><strong>Veto</strong> = "I forbid" &rarr; <em>Presidential/Mayoral Veto</em>.</p>
               </div>
@@ -385,7 +399,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">👑</span>
+              <span class="lesson-icon" data-sf-icon="trophy" data-sf-size="22"></span>
               <div>
                 <h3>3. Julius Caesar, The Rubicon & The Imperial Era</h3>
                 <p>Crossing the Rubicon, the Ides of March (44 BCE), and Caesar Augustus</p>
@@ -398,12 +412,12 @@
               <p>In 49 BCE, general <strong>Julius Caesar</strong> conquered Gaul (modern France) and famously marched his legion across the <strong>Rubicon River</strong> into Italy, uttering: <em>"Alea iacta est" (The die is cast)</em> — meaning there was no turning back!</p>
 
               <div class="concept-callout">
-                <h4>🌟 Caesar Augustus & The Pax Romana:</h4>
+                <h4>Caesar Augustus & The Pax Romana:</h4>
                 <p>After Caesar's assassination on the <strong>Ides of March (March 15, 44 BCE)</strong>, his adopted nephew <strong>Octavian</strong> became Rome's first Emperor, taking the title <strong>Caesar Augustus</strong>. He established the <strong>Pax Romana (Roman Peace)</strong>, a 200-year golden era of stability, booming trade, and cultural flourish!</p>
               </div>
 
               <div class="latin-box">
-                <h4>🏛️ Latin Root Decoder:</h4>
+                <h4>Latin Root Decoder:</h4>
                 <p><strong>Imperium</strong> = Supreme command/power &rarr; <em>Empire, Imperial, Emperor</em>.</p>
                 <p><strong>Pax</strong> = Peace &rarr; <em>Pacific, Pacifist, Pax Romana</em>.</p>
               </div>
@@ -415,7 +429,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">⚔️</span>
+              <span class="lesson-icon" data-sf-icon="quest" data-sf-size="22"></span>
               <div>
                 <h3>4. The Roman Legion & Military Might</h3>
                 <p>Century & Legion structure, gladius sword, scutum shield, and the Testudo (Tortoise)</p>
@@ -441,7 +455,7 @@
         <article class="lesson-card">
           <div class="lesson-header" onclick="toggleLesson(this)">
             <div class="lesson-title-group">
-              <span class="lesson-icon">🏺</span>
+              <span class="lesson-icon" data-sf-icon="globe" data-sf-size="22"></span>
               <div>
                 <h3>5. Daily Life, The Forum & Pompeii (79 CE)</h3>
                 <p>Thermae public baths, Circus Maximus chariot races, togas, and Mount Vesuvius</p>
@@ -454,7 +468,7 @@
               <p>What was a day in the life of a Roman kid like? Wealthy families lived in a *domus* (townhouse) or *villa*, while most citizens lived in multi-story apartment buildings called *insulae*.</p>
 
               <div class="concept-callout">
-                <h4>♨️ The Roman Bath Experience (Thermae):</h4>
+                <h4>The Roman Bath Experience (Thermae):</h4>
                 <ol>
                   <li><strong>Apodyterium:</strong> Changing room with cubbies.</li>
                   <li><strong>Tepidarium:</strong> Warm room for relaxing.</li>
@@ -464,7 +478,7 @@
               </div>
 
               <div class="volcano-box">
-                <h4>🌋 Pompeii & Mount Vesuvius (79 CE):</h4>
+                <h4>Pompeii & Mount Vesuvius (79 CE):</h4>
                 <p>On August 24, 79 CE, Mount Vesuvius erupted, burying the vibrant seaside city of Pompeii under metres of volcanic ash and pumice. Because ash sealed everything in an airtight layer, modern archaeologists discovered preserved bread loaves, colorful frescoes, graffiti, and mosaics!</p>
               </div>
             </div>
@@ -489,19 +503,19 @@
 
               <div class="legacy-grid">
                 <div class="legacy-card">
-                  <h4>🗣️ Romance Languages</h4>
+                  <h4>Romance Languages</h4>
                   <p>Latin evolved into French (one of Canada's official languages!), Spanish, Italian, and Portuguese. Over 60% of English words have Latin roots!</p>
                 </div>
                 <div class="legacy-card">
-                  <h4>📅 The Solar Calendar</h4>
+                  <h4>The Solar Calendar</h4>
                   <p>Our 12-month calendar comes from Julius Caesar. <strong>July</strong> is named after Julius Caesar, <strong>August</strong> after Caesar Augustus!</p>
                 </div>
                 <div class="legacy-card">
-                  <h4>🧪 Chemical Element Symbols</h4>
+                  <h4>Chemical Element Symbols</h4>
                   <p>From Sophia's chemistry quest: Gold is <strong>Au</strong> (*Aurum*), Iron is <strong>Fe</strong> (*Ferrum*), Lead is <strong>Pb</strong> (*Plumbum* - origin of "plumbing"!), Silver is <strong>Ag</strong> (*Argentum*).</p>
                 </div>
                 <div class="legacy-card">
-                  <h4>🏛️ Neoclassical Architecture</h4>
+                  <h4>Neoclassical Architecture</h4>
                   <p>Canada's Supreme Court building, Parliament Hill arches, and Ontario bank columns are inspired by Roman architecture!</p>
                 </div>
               </div>
@@ -521,37 +535,37 @@
         <!-- Quiz Selection Screen -->
         <div id="quiz-selection-screen" class="quiz-screen">
           <div class="section-header-box">
-            <h2>🎯 Sophia's Roman Quiz Arena</h2>
+            <h2>Sophia's Roman Quiz Arena</h2>
             <p>Test your historical knowledge, earn XP, build your winning streak, and claim imperial laurels!</p>
           </div>
           
           <div class="quiz-modes-grid">
             <div class="quiz-mode-card" onclick="startQuiz('republic')">
-              <span class="mode-icon">⚖️</span>
+              <span class="mode-icon" data-sf-icon="lesson" data-sf-size="22"></span>
               <h3>Roman Republic & Senate</h3>
               <p>10 Questions on Romulus, Patricians vs. Plebeians, Twelve Tables, and Julius Caesar!</p>
-              <button class="btn btn-primary">Start Republic Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Republic Quiz</button>
             </div>
             
             <div class="quiz-mode-card" onclick="startQuiz('engineering')">
-              <span class="mode-icon">🏛️</span>
+              <span class="mode-icon" data-sf-icon="temple" data-sf-size="22"></span>
               <h3>Engineering & Marvels</h3>
               <p>10 Questions on Arch keystones, Aqueduct gravity flow, Pantheon concrete & Roads!</p>
-              <button class="btn btn-primary">Start Engineering Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Engineering Quiz</button>
             </div>
 
             <div class="quiz-mode-card" onclick="startQuiz('daily_life')">
-              <span class="mode-icon">🏺</span>
+              <span class="mode-icon" data-sf-icon="globe" data-sf-size="22"></span>
               <h3>Daily Life & Gladiator Arena</h3>
               <p>10 Questions on Roman baths, Circus Maximus, Pompeii 79 CE, and Latin roots!</p>
-              <button class="btn btn-primary">Start Daily Life Quiz</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Daily Life Quiz</button>
             </div>
 
             <div class="quiz-mode-card" onclick="startQuiz('triumph')">
-              <span class="mode-icon">👑</span>
+              <span class="mode-icon" data-sf-icon="trophy" data-sf-size="22"></span>
               <h3>Grand Roman Triumph Marathon</h3>
               <p>The ultimate 15-question mixed challenge across all Roman topics!</p>
-              <button class="btn btn-accent">Start Imperial Marathon</button>
+              <button class="sf-btn sf-btn--play sf-btn--sm">Start Imperial Marathon</button>
             </div>
           </div>
         </div>
@@ -559,11 +573,15 @@
         <!-- Active Quiz Play Screen -->
         <div id="quiz-play-screen" class="quiz-screen hidden">
           <div class="quiz-header">
-            <button class="btn-sm btn-secondary" onclick="quitQuiz()">← Back to Menu</button>
+            <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="quitQuiz()"><span data-sf-icon="arrowLeft" data-sf-size="15"></span><span>Back to Menu</span></button>
             <div class="quiz-progress-bar-container">
               <div id="quiz-progress-fill" class="quiz-progress-fill" style="width: 0%;"></div>
             </div>
             <span id="quiz-step-counter" class="quiz-counter">Q 1/10</span>
+            <span class="quiz-run-counter" title="Correct answers in a row">
+              <span data-sf-icon="flame" data-sf-size="15"></span>
+              <span id="answer-run-count">0</span> in a row
+            </span>
           </div>
 
           <div class="quiz-question-card">
@@ -584,8 +602,8 @@
             </div>
 
             <div class="quiz-action-footer">
-              <button id="quiz-hint-btn" class="btn btn-secondary" onclick="showHint()">💡 Need a Hint?</button>
-              <button id="quiz-next-btn" class="btn btn-primary hidden" onclick="nextQuestion()">Next Question ➔</button>
+              <button id="quiz-hint-btn" class="sf-btn sf-btn--explore" onclick="showHint()"><span data-sf-icon="lightbulb" data-sf-size="17"></span><span>Need a Hint?</span></button>
+              <button id="quiz-next-btn" class="sf-btn sf-btn--play hidden" onclick="nextQuestion()"><span>Next Question</span><span data-sf-icon="chevronRight" data-sf-size="17"></span></button>
             </div>
           </div>
         </div>
@@ -594,7 +612,7 @@
         <div id="quiz-result-screen" class="quiz-screen hidden">
           <div class="result-card">
             <div class="result-trophy">👑</div>
-            <h2>Triumphus! Quest Conquered! 🏛️</h2>
+            <h2>Triumphus! Quest Conquered!</h2>
             <p class="result-sub">You have mastered Roman history and engineering like a true Scholar!</p>
             
             <div class="score-display">
@@ -609,8 +627,8 @@
             </div>
 
             <div class="result-buttons">
-              <button class="btn btn-primary" onclick="restartCurrentQuiz()">🔄 Play Again</button>
-              <button class="btn btn-secondary" onclick="showQuizSelection()">🎯 Choose Another Quiz</button>
+              <button class="sf-btn sf-btn--play" onclick="restartCurrentQuiz()"><span data-sf-icon="refresh" data-sf-size="17"></span><span>Play Again</span></button>
+              <button class="sf-btn sf-btn--explore" onclick="showQuizSelection()"><span data-sf-icon="quest" data-sf-size="17"></span><span>Choose Another Quiz</span></button>
             </div>
           </div>
         </div>
@@ -623,7 +641,7 @@
     <!-- ========================================================================= -->
     <section id="tab-cipher" class="tab-content">
       <div class="section-header-box">
-        <h2>🔢 Roman Numerals & Caesar's Cipher Lab</h2>
+        <h2>Roman Numerals & Caesar's Cipher Lab</h2>
         <p>Master the ancient Roman math system and decode secret encrypted military dispatches!</p>
       </div>
 
@@ -632,7 +650,7 @@
         <!-- TOOL 1: ROMAN NUMERAL CONVERTER -->
         <div class="tool-card">
           <div class="tool-header">
-            <span class="tool-icon">🏛️</span>
+            <span class="tool-icon" data-sf-icon="temple" data-sf-size="22"></span>
             <h3>1. Interactive Roman Numeral Converter</h3>
           </div>
           <p>Roman numerals use 7 standard letters: <strong>I (1), V (5), X (10), L (50), C (100), D (500), M (1000)</strong>.</p>
@@ -673,7 +691,7 @@
         <!-- TOOL 2: CAESAR CIPHER MILITARY DECODER -->
         <div class="tool-card">
           <div class="tool-header">
-            <span class="tool-icon">🕵️</span>
+            <span class="tool-icon" data-sf-icon="cipher" data-sf-size="22"></span>
             <h3>2. Caesar Cipher Military Spy Decoder</h3>
           </div>
           <p>Julius Caesar protected confidential military orders across Gaul by shifting each letter forward by 3 places (A &rarr; D, B &rarr; E)!</p>
@@ -698,15 +716,15 @@
 
               <div class="plaintext-input-row">
                 <input type="text" id="cipher-user-input" placeholder="TYPE DECODED MESSAGE..." autocomplete="off">
-                <button class="btn btn-primary" onclick="checkCipherAnswer()">Submit Decryption 🔓</button>
+                <button class="sf-btn sf-btn--play" onclick="checkCipherAnswer()"><span data-sf-icon="check" data-sf-size="17"></span><span>Submit Decryption</span></button>
               </div>
 
               <div id="cipher-feedback" class="feedback-box hidden"></div>
 
               <div class="dispatch-nav">
-                <button class="btn-sm btn-secondary" onclick="prevDispatch()">← Prev Dispatch</button>
+                <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="prevDispatch()"><span data-sf-icon="chevronLeft" data-sf-size="15"></span><span>Prev Dispatch</span></button>
                 <span id="dispatch-tracker">Mission 1 of 6</span>
-                <button class="btn-sm btn-secondary" onclick="nextDispatch()">Next Dispatch →</button>
+                <button class="sf-btn sf-btn--explore sf-btn--sm" onclick="nextDispatch()"><span>Next Dispatch</span><span data-sf-icon="chevronRight" data-sf-size="15"></span></button>
               </div>
             </div>
           </div>
@@ -720,7 +738,7 @@
     <!-- ========================================================================= -->
     <section id="tab-trophies" class="tab-content">
       <div class="section-header-box">
-        <h2>🏆 Sophia's Imperial Roman Trophy Room</h2>
+        <h2>Sophia's Imperial Roman Trophy Room</h2>
         <p>Earn badges and imperial honors as you conquer quests, solve ciphers, and ace quizzes!</p>
       </div>
 
@@ -734,6 +752,10 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
+  <script src="../assets/sf/icons.js?v=3.0.0"></script>
+  <script src="../assets/sf/keyart.js?v=3.0.0"></script>
+  <script src="../assets/sf/progress.js?v=3.0.0"></script>
+  <script src="../assets/sf/quest-bridge.js?v=3.0.0"></script>
   <script src="app.js"></script>
 </body>
 </html>

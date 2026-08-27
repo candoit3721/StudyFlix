@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.0.0">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,49 +20,49 @@
     <!-- Sidebar Controls -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1><span>📐</span> Sophia's Math Studio</h1>
+        <h1>Sophia's Math Studio</h1>
         <p>Grade 5 &amp; 6 Custom Worksheet &amp; Interactive Practice</p>
       </div>
 
       <div class="sidebar-content">
         <!-- Quick Presets -->
         <div class="control-group">
-          <h3>⚡ Quick Presets</h3>
+          <h3>Quick Presets</h3>
           <div class="preset-grid">
             <button class="preset-btn" data-preset="g5_fractions">
-              <span>🍕 Fraction Mastery</span>
+              <span><span class="preset-glyph" data-sf-icon="ruler" data-sf-size="17"></span>Fraction Mastery</span>
               <span class="badge">Grade 5 (+, −, ×, ÷)</span>
             </button>
             <button class="preset-btn" data-preset="g5_decimals">
-              <span>🔢 Decimal Operations</span>
+              <span><span class="preset-glyph" data-sf-icon="ruler" data-sf-size="17"></span>Decimal Operations</span>
               <span class="badge">Grade 5 Long Div &amp; Mult</span>
             </button>
             <button class="preset-btn" data-preset="g5_pemdas">
-              <span>🧩 PEMDAS Expressions</span>
+              <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>PEMDAS Expressions</span>
               <span class="badge">Grade 5 Order of Ops</span>
             </button>
             <button class="preset-btn" data-preset="g6_ratios">
-              <span>⚖️ Ratios &amp; Proportions</span>
+              <span><span class="preset-glyph" data-sf-icon="chartLine" data-sf-size="17"></span>Ratios &amp; Proportions</span>
               <span class="badge">Grade 6 Rates &amp; Scales</span>
             </button>
             <button class="preset-btn" data-preset="g6_percentages">
-              <span>🏷️ Percentages &amp; Sales</span>
+              <span><span class="preset-glyph" data-sf-icon="chartLine" data-sf-size="17"></span>Percentages &amp; Sales</span>
               <span class="badge">Grade 6 Discounts &amp; Tax</span>
             </button>
             <button class="preset-btn" data-preset="g6_equations">
-              <span>💡 Pre-Algebra Equations</span>
+              <span><span class="preset-glyph" data-sf-icon="lightbulb" data-sf-size="17"></span>Pre-Algebra Equations</span>
               <span class="badge">Grade 6 (1 &amp; 2-Step)</span>
             </button>
             <button class="preset-btn" data-preset="g6_integers">
-              <span>❄️ Negative Integers</span>
+              <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>Negative Integers</span>
               <span class="badge">Grade 6 Sprint Drill</span>
             </button>
             <button class="preset-btn" data-preset="g5_6_word_problems">
-              <span>📖 Multi-Step Stories</span>
+              <span><span class="preset-glyph" data-sf-icon="lesson" data-sf-size="17"></span>Multi-Step Stories</span>
               <span class="badge">Grade 5/6 Word Problems</span>
             </button>
             <button class="preset-btn" data-preset="g5_6_assessment" style="grid-column: span 2;">
-              <span>🏆 5th/6th Grade Assessment</span>
+              <span><span class="preset-glyph" data-sf-icon="trophy" data-sf-size="17"></span>5th/6th Grade Assessment</span>
               <span class="badge">Comprehensive 20 Questions</span>
             </button>
           </div>
@@ -69,32 +70,32 @@
 
         <!-- Topic Selection -->
         <div class="control-group">
-          <h3>📚 Math Topic &amp; Skill</h3>
+          <h3>Math Topic &amp; Skill</h3>
           <div class="form-field">
             <label for="topic-select">Category:</label>
             <select id="topic-select" class="form-select">
               <optgroup label="Grade 5 Topics">
-                <option value="fractions">🍕 Fractions (Add, Sub, Mult, Div)</option>
-                <option value="fractions_add_sub">➕ Fraction Addition &amp; Subtraction</option>
-                <option value="fractions_mult">✖️ Fraction Multiplication</option>
-                <option value="fractions_div">➗ Fraction Division (Keep-Change-Flip)</option>
-                <option value="decimals">🔢 Decimals (+, −, ×, Long Division)</option>
-                <option value="pemdas">🧩 Order of Operations (PEMDAS)</option>
-                <option value="geometry">📐 Geometry &amp; Volume (Prisms, Triangles)</option>
-                <option value="grade5_mixed">🌟 Grade 5 Mixed Skills</option>
+                <option value="fractions">Fractions (Add, Sub, Mult, Div)</option>
+                <option value="fractions_add_sub">Fraction Addition &amp; Subtraction</option>
+                <option value="fractions_mult">Fraction Multiplication</option>
+                <option value="fractions_div">Fraction Division (Keep-Change-Flip)</option>
+                <option value="decimals">Decimals (+, −, ×, Long Division)</option>
+                <option value="pemdas">Order of Operations (PEMDAS)</option>
+                <option value="geometry">Geometry &amp; Volume (Prisms, Triangles)</option>
+                <option value="grade5_mixed">Grade 5 Mixed Skills</option>
               </optgroup>
               <optgroup label="Grade 6 Topics">
-                <option value="ratios">⚖️ Ratios, Rates &amp; Proportions</option>
-                <option value="percentages">🏷️ Percentages, Discounts &amp; Tax</option>
-                <option value="algebra">💡 Pre-Algebra &amp; Equations (Solve for x)</option>
-                <option value="integers">❄️ Integers &amp; Negative Numbers</option>
-                <option value="exponents">🚀 Exponents, GCF &amp; LCM</option>
-                <option value="statistics">📊 Statistics (Mean, Median, Mode, Range)</option>
-                <option value="grade6_mixed">🌟 Grade 6 Mixed Skills</option>
+                <option value="ratios">Ratios, Rates &amp; Proportions</option>
+                <option value="percentages">Percentages, Discounts &amp; Tax</option>
+                <option value="algebra">Pre-Algebra &amp; Equations (Solve for x)</option>
+                <option value="integers">Integers &amp; Negative Numbers</option>
+                <option value="exponents">Exponents, GCF &amp; LCM</option>
+                <option value="statistics">Statistics (Mean, Median, Mode, Range)</option>
+                <option value="grade6_mixed">Grade 6 Mixed Skills</option>
               </optgroup>
               <optgroup label="Multi-Step &amp; Assessment">
-                <option value="word_problems">📖 Grade 5/6 Multi-Step Word Problems</option>
-                <option value="all_mixed" selected>🎲 Comprehensive All-Topics Sprint</option>
+                <option value="word_problems">Grade 5/6 Multi-Step Word Problems</option>
+                <option value="all_mixed" selected>Comprehensive All-Topics Sprint</option>
               </optgroup>
             </select>
           </div>
@@ -102,7 +103,7 @@
 
         <!-- Layout & Sheet Customization -->
         <div class="control-group">
-          <h3>📋 Worksheet Setup</h3>
+          <h3>Worksheet Setup</h3>
           <div class="form-field">
             <label for="question-count">Total Questions:</label>
             <select id="question-count" class="form-select">
@@ -154,14 +155,14 @@
           <div class="form-field">
             <label class="custom-chip">
               <input type="checkbox" id="include-workspace-check" checked>
-              <span>✏️ Include Calculation Workspaces</span>
+              <span><span class="btn-glyph" data-sf-icon="lesson" data-sf-size="16"></span>Include Calculation Workspaces</span>
             </label>
           </div>
 
           <div class="form-field">
             <label class="custom-chip">
               <input type="checkbox" id="include-answer-key-check" checked>
-              <span>🔑 Include Paper-Saver Answer Key</span>
+              <span><span class="btn-glyph" data-sf-icon="printable" data-sf-size="16"></span>Include Paper-Saver Answer Key</span>
             </label>
           </div>
         </div>
@@ -169,10 +170,10 @@
 
       <div class="sidebar-footer">
         <button id="btn-generate" class="btn-primary">
-          <span>🔄 Generate New Questions</span>
+          <span><span class="btn-glyph" data-sf-icon="refresh" data-sf-size="16"></span>Generate New Questions</span>
         </button>
         <button id="btn-print-sidebar" class="btn-secondary">
-          <span>🖨️ Print Worksheet</span>
+          <span><span class="btn-glyph" data-sf-icon="printer" data-sf-size="16"></span>Print Worksheet</span>
         </button>
       </div>
     </aside>
@@ -183,16 +184,16 @@
       <div class="top-bar">
         <div class="mode-toggle-group">
           <button id="mode-print-btn" class="mode-btn active">
-            <span>🖨️ Printable Worksheet</span>
+            <span><span class="btn-glyph" data-sf-icon="printer" data-sf-size="16"></span>Printable Worksheet</span>
           </button>
           <button id="mode-interactive-btn" class="mode-btn">
-            <span>💻 Practice Online</span>
+            <span><span class="btn-glyph" data-sf-icon="play" data-sf-size="16"></span>Practice Online</span>
           </button>
         </div>
 
         <div class="top-actions">
           <button id="btn-print-top" class="action-btn primary">
-            <span>🖨️ Print Worksheet</span>
+            <span><span class="btn-glyph" data-sf-icon="printer" data-sf-size="16"></span>Print Worksheet</span>
           </button>
         </div>
       </div>
@@ -213,10 +214,10 @@
           </div>
           <div style="display: flex; gap: 8px;">
             <button id="btn-check-answers" class="action-btn primary">
-              <span>✅ Check Answers</span>
+              <span><span class="btn-glyph" data-sf-icon="check" data-sf-size="16"></span>Check Answers</span>
             </button>
             <button id="btn-reset-interactive" class="action-btn">
-              <span>🔄 Reset</span>
+              <span><span class="btn-glyph" data-sf-icon="refresh" data-sf-size="16"></span>Reset</span>
             </button>
           </div>
         </div>
@@ -230,6 +231,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="../assets/sf/icons.js?v=3.0.0"></script>
   <script src="js/math-engine.js"></script>
   <script src="js/word-problems.js"></script>
   <script src="js/app.js"></script>

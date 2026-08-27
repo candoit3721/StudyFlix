@@ -625,7 +625,7 @@ const MathEngine = (function () {
         category: 'Percentages',
         topic: isDiscount ? 'Discounts & Sale Price' : 'Sales Tax & Total Price',
         prompt: `An item costs \$${originalPrice}. If there is a ${percent}% ${isDiscount ? 'discount' : 'sales tax'}, what is the final price?`,
-        htmlQuestion: `<div class="math-expr">Original: <span class="whole-num">\$${originalPrice}</span> with <span class="whole-num">${percent}% ${isDiscount ? 'OFF' : 'tax'}</span> = <span class="math-var">\$?</span></div>`,
+        htmlQuestion: `<div class="math-expr">Original: <span class="whole-num">\$${originalPrice}</span> with <span class="whole-num">${percent}% ${isDiscount ? 'OFF' : 'tax'}</span> = <span class="math-blank">\$?</span></div>`,
         answer: `\$${finalPrice}`,
         altAnswers: [`\$${finalPrice}`, `${finalPrice}`, `${finalPrice.toFixed(2)}`, `\$${finalPrice.toFixed(2)}`],
         steps,
@@ -1131,7 +1131,7 @@ const MathEngine = (function () {
         category: 'Geometry',
         topic: 'Area of a Triangle',
         prompt: `Find the area of a triangle with base = ${b} cm and height = ${h} cm.`,
-        htmlQuestion: `<div class="math-expr">Triangle: <span class="whole-num">b = ${b} cm</span>, <span class="whole-num">h = ${h} cm</span> &nbsp;➔ Area = <span class="math-var">? cm²</span></div>`,
+        htmlQuestion: `<div class="math-expr">Triangle: <span class="whole-num">b = ${b} cm</span>, <span class="whole-num">h = ${h} cm</span> &nbsp;➔ Area = <span class="math-blank">? cm²</span></div>`,
         answer: area.toString(),
         altAnswers: [area.toString(), `${area} cm^2`, `${area} cm²`, `${area} sq cm`],
         steps: [
@@ -1150,7 +1150,7 @@ const MathEngine = (function () {
         category: 'Geometry',
         topic: 'Volume of Rectangular Prism',
         prompt: `Find the volume of a rectangular prism with length = ${l} m, width = ${w} m, and height = ${h} m.`,
-        htmlQuestion: `<div class="math-expr">Box: <span class="whole-num">${l} × ${w} × ${h} m</span> &nbsp;➔ Volume = <span class="math-var">? m³</span></div>`,
+        htmlQuestion: `<div class="math-expr">Box: <span class="whole-num">${l} × ${w} × ${h} m</span> &nbsp;➔ Volume = <span class="math-blank">? m³</span></div>`,
         answer: vol.toString(),
         altAnswers: [vol.toString(), `${vol} m^3`, `${vol} m³`, `${vol} cubic m`],
         steps: [
@@ -1187,7 +1187,7 @@ const MathEngine = (function () {
         category: 'Geometry',
         topic: 'Surface Area of Rectangular Prism',
         prompt: `Find the total surface area of a box with dimensions ${l} cm × ${w} cm × ${h} cm.`,
-        htmlQuestion: `<div class="math-expr">Prism: <span class="whole-num">${l} cm × ${w} cm × ${h} cm</span> &nbsp;➔ Surface Area = <span class="math-var">? cm²</span></div>`,
+        htmlQuestion: `<div class="math-expr">Prism: <span class="whole-num">${l} cm × ${w} cm × ${h} cm</span> &nbsp;➔ Surface Area = <span class="math-blank">? cm²</span></div>`,
         answer: sa.toString(),
         altAnswers: [sa.toString(), `${sa} cm²`, `${sa} sq cm`],
         steps: [
@@ -1210,7 +1210,7 @@ const MathEngine = (function () {
           category: 'Geometry',
           topic: 'Area of a Trapezoid',
           prompt: `Find the area of a trapezoid with parallel bases ${b1} in and ${b2} in, and height ${h} in.`,
-          htmlQuestion: `<div class="math-expr">Trapezoid: <span class="whole-num">b₁ = ${b1}</span>, <span class="whole-num">b₂ = ${b2}</span>, <span class="whole-num">h = ${h}</span> &nbsp;➔ Area = <span class="math-var">? in²</span></div>`,
+          htmlQuestion: `<div class="math-expr">Trapezoid: <span class="whole-num">b₁ = ${b1}</span>, <span class="whole-num">b₂ = ${b2}</span>, <span class="whole-num">h = ${h}</span> &nbsp;➔ Area = <span class="math-blank">? in²</span></div>`,
           answer: area.toString(),
           altAnswers: [area.toString(), `${area} in²`, `${area} sq in`],
           steps: [
@@ -1229,7 +1229,7 @@ const MathEngine = (function () {
           category: 'Geometry',
           topic: 'Area of a Parallelogram',
           prompt: `Find the area of a parallelogram with base = ${b} m and height = ${h} m.`,
-          htmlQuestion: `<div class="math-expr">Parallelogram: <span class="whole-num">b = ${b} m</span>, <span class="whole-num">h = ${h} m</span> &nbsp;➔ Area = <span class="math-var">? m²</span></div>`,
+          htmlQuestion: `<div class="math-expr">Parallelogram: <span class="whole-num">b = ${b} m</span>, <span class="whole-num">h = ${h} m</span> &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
           answer: area.toString(),
           altAnswers: [area.toString(), `${area} m²`],
           steps: [`Formula: A = base × height`, `Calculate: ${b} × ${h} = ${area} m².`],
