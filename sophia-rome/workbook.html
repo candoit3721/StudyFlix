@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia's Ancient Rome Master Study Guide & Worksheet 🏛️</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 0.45in 0.5in;
+    }
+
+    :root {
+      --primary: #8b0000;
+      --gold: #d4af37;
+      --text: #1a1a24;
+      --border: #d1d5db;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: #f8fafc;
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .toolbar-header {
+      max-width: 8.5in;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-print {
+      background: #c8102e;
+      color: #ffffff;
+    }
+    .btn-print:hover { background: #8b0000; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #94a3b8;
+      color: #334155;
+    }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    /* Worksheet Document Canvas */
+    .document-page {
+      max-width: 8.5in;
+      margin: 0 auto 30px;
+      background: #ffffff;
+      padding: 0.45in 0.5in;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      page-break-after: always;
+      position: relative;
+    }
+
+    .test-header {
+      border-bottom: 2px solid #000000;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .curriculum-tag {
+      font-size: 0.78rem;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .student-fields {
+      display: flex;
+      gap: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .field-line {
+      border-bottom: 1px solid #000000;
+      display: inline-block;
+      min-width: 100px;
+    }
+
+    /* Section Styles */
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #000000;
+      border-bottom: 1.5px solid #000000;
+      padding-bottom: 4px;
+      margin: 16px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 3px solid #000000;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+    }
+
+    .concept-box strong { color: #000000; }
+
+    /* Questions Grid */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .q-item {
+      font-size: 0.88rem;
+      line-height: 1.45;
+      page-break-inside: avoid;
+    }
+
+    .q-num {
+      font-weight: 800;
+      color: #000000;
+    }
+
+    .ans-blank {
+      border-bottom: 1px dashed #64748b;
+      display: inline-block;
+      min-width: 140px;
+      height: 1.1em;
+      vertical-align: bottom;
+    }
+
+    .ans-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .writing-line {
+      border-bottom: 1px solid #94a3b8;
+      height: 16px;
+      width: 100%;
+    }
+
+    /* Diagram Art */
+    .ascii-diagram {
+      font-family: 'Courier New', monospace;
+      font-size: 0.75rem;
+      line-height: 1.15;
+      background: #ffffff;
+      border: 1px solid #94a3b8;
+      padding: 6px 10px;
+      border-radius: 4px;
+      margin: 6px 0;
+      white-space: pre;
+    }
+
+    /* Answer Key */
+    .answer-key-box {
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      padding: 10px 14px;
+      margin-top: 20px;
+      font-size: 0.8rem;
+      page-break-inside: avoid;
+    }
+
+    .answer-key-box h4 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      color: #000000;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 14px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        font-size: 9.5pt;
+      }
+
+      .toolbar-header {
+        display: none !important;
+      }
+
+      .document-page {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 0 15px 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+
+      .concept-box {
+        background: #ffffff !important;
+        border: 1px solid #666666 !important;
+      }
+
+      .writing-line {
+        border-bottom-color: #666666 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Toolbar -->
+  <header class="toolbar-header">
+    <div>
+      <h2 style="font-size:1.1rem; font-family:'Cinzel', serif;">🏛️ Sophia's Ancient Rome Master Workbook</h2>
+      <p style="font-size:0.8rem; color:#64748b;">Ontario Grade 5 & 6 Enriched &bull; Paper-Saving Printable PDF</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-outline" onclick="window.history.back()">← Return to Studio</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print Now (Letter/A4)</button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 1: REPUBLIC, LAW & STEM ARCHITECTURE -->
+  <!-- ========================================================================= -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">🏛️ STUDYFLIX &bull; ANCIENT ROME MASTER WORKBOOK</div>
+        <div class="curriculum-tag">Ontario Grade 5/6 Social Studies, STEM Engineering & Cryptography</div>
+      </div>
+      <div class="student-fields">
+        <span>Name: <span class="field-line" style="min-width:140px;"></span></span>
+        <span>Date: <span class="field-line" style="min-width:80px;"></span></span>
+        <span>Score: _____ / 50</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <h3 class="section-title">Module 1: The Roman Republic & The Rule of Law</h3>
+    <div class="concept-box">
+      <strong>Key Concept:</strong> In 509 BCE, Rome created a <em>Republic</em> (Res Publica). Common citizens (<em>Plebeians</em>) won equal rights against wealthy nobles (<em>Patricians</em>). In 450 BCE, the <strong>Twelve Tables</strong> established the <strong>Rule of Law</strong>: all citizens are equal before written laws.
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">1.</span> Identify the two major social classes of Rome:
+        <br>&bull; Wealthy aristocrats and Senators: <span class="ans-blank" style="min-width:180px;"></span>
+        <br>&bull; Common working-class citizens (farmers, soldiers): <span class="ans-blank" style="min-width:180px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">2.</span> What Latin word meaning <em>"I forbid"</em> was shouted by Plebeian Tribunes to block unfair laws? <span class="ans-blank" style="min-width:120px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">3.</span> How does the Roman concept of the <em>Twelve Tables</em> connect directly to Canada's Charter of Rights today?
+        <div class="ans-lines">
+          <div class="writing-line"></div>
+          <div class="writing-line"></div>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">4.</span> Decode the modern English words derived from these Latin roots:
+        <br>&bull; <em>Civis</em> (Citizen) &rarr; <span class="ans-blank" style="min-width:120px;"></span>, <span class="ans-blank" style="min-width:120px;"></span>
+        &bull; <em>Senex</em> (Elder) &rarr; <span class="ans-blank" style="min-width:120px;"></span>, <span class="ans-blank" style="min-width:120px;"></span>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <h3 class="section-title" style="margin-top:16px;">Module 2: Roman STEM & Arch Physics</h3>
+    <div class="concept-box">
+      <strong>Key Concept:</strong> Flat stone beams break under bending (tension). The Roman <strong>Semi-Circular Arch</strong> redirects downward vertical gravity sideways into <strong>lateral compression</strong>, locking voussoirs tightly against the apex <strong>Keystone</strong> and ground abutments.
+    </div>
+
+    <div class="ascii-diagram">
+                       👑 KEYSTONE (Wedge Stone)
+                         /       \
+               Voussoir /         \ Voussoir
+                       │   SPAN    │
+                       ▼           ▼
+                   [ABUTMENT]  [ABUTMENT] (Pushes down & outward into bedrock)
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">5.</span> Why is stone much stronger in a Roman semi-circular arch than in a flat horizontal Greek beam?
+        <div class="ans-lines">
+          <div class="writing-line"></div>
+          <div class="writing-line"></div>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">6.</span> <strong>Aqueduct Hydraulic Math:</strong> An aqueduct runs $25\text{ km}$ from the mountains to Rome. Surveyors maintain a gradient slope of $0.4\%$ ($4\text{ metres}$ drop per $1\text{ km}$). What is the total elevation drop?
+        <br><em>Calculation:</em> <span class="ans-blank" style="min-width:240px;"></span> &bull; <em>Total Drop:</em> <span class="ans-blank" style="min-width:80px;"></span> metres
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">7.</span> What volcanic ash ingredient in <em>Opus Caementicium</em> (concrete) allowed Roman bridges to cure underwater? <span class="ans-blank" style="min-width:220px;"></span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 2: NUMERALS, CAESAR CIPHER & WATERLOO CHALLENGE -->
+  <!-- ========================================================================= -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">🏛️ MODULE 3 & 4: CIPHERS & WATERLOO CONTEST ARENA</div>
+        <div class="curriculum-tag">Student: ____________________ Date: ____________________</div>
+      </div>
+      <div class="curriculum-tag" style="font-size:0.85rem; font-weight:800;">PAGE 2 OF 2</div>
+    </div>
+
+    <!-- Section 3 -->
+    <h3 class="section-title">Module 3: Roman Numerals & Caesar's Military Cryptography</h3>
+    <div class="concept-box">
+      <strong>Key Concept:</strong> Roman numerals use 7 standard letters: $\text{I}=1, \text{V}=5, \text{X}=10, \text{L}=50, \text{C}=100, \text{D}=500, \text{M}=1000$. A smaller numeral placed <em>before</em> a larger numeral subtracts ($\text{IV}=4, \text{IX}=9, \text{XL}=40, \text{XC}=90, \text{CD}=400, \text{CM}=900$). Julius Caesar shifted letters forward by 3 places ($K=3$).
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">8.</span> Convert the following Arabic numbers to Roman Numerals:
+        <br>&bull; a) $48$ = <span class="ans-blank" style="min-width:100px;"></span>
+        &bull; b) $96$ = <span class="ans-blank" style="min-width:100px;"></span>
+        &bull; c) $753$ (Rome Founded) = <span class="ans-blank" style="min-width:120px;"></span>
+        &bull; d) $2026$ (Current Year) = <span class="ans-blank" style="min-width:120px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">9.</span> Convert the Roman Numerals to Arabic Numbers:
+        <br>&bull; a) $\text{LXXIV}$ = <span class="ans-blank" style="min-width:80px;"></span>
+        &bull; b) $\text{CDXCV}$ = <span class="ans-blank" style="min-width:80px;"></span>
+        &bull; c) $\text{MMXXIV}$ = <span class="ans-blank" style="min-width:80px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">10.</span> <strong>Caesar Cipher Decryption ($K=3$):</strong> Decrypt Caesar's famous military victory message:
+        <br>&bull; <em>Ciphertext:</em> <strong><code>YHQL YLGL YLFL</code></strong>
+        <br>&bull; <em>Decrypted Plaintext:</em> <span class="ans-blank" style="min-width:280px;"></span>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <h3 class="section-title" style="margin-top:16px;">Module 4: Waterloo CEMC & Logic Challenge Arena</h3>
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">11.</span> <strong>Aqueduct Daily Flow Rate:</strong> An aqueduct transports mountain water into Rome at a continuous speed of $2\text{ m}^3$ per second. How many total cubic metres of drinking water does it deliver over a full 24-hour day? ($1\text{ day} = 86,400\text{ seconds}$).
+        <br><em>Calculation:</em> <span class="ans-blank" style="min-width:240px;"></span> &bull; <em>Answer:</em> <span class="ans-blank" style="min-width:140px;"></span> $\text{m}^3\text{/day}$
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">12.</span> <strong>Legion Supply Logistics:</strong> A Roman legion of $5,000$ soldiers marches $20\text{ km}$ per day. Each soldier needs $1.2\text{ kg}$ of grain per day. A pack mule carries up to $100\text{ kg}$. How many mules are needed to carry grain for a 10-day campaign?
+        <br><em>Calculation:</em> <span class="ans-blank" style="min-width:240px;"></span> &bull; <em>Answer:</em> <span class="ans-blank" style="min-width:100px;"></span> mules
+      </div>
+    </div>
+
+    <!-- Paper-Saving Answer Key -->
+    <div class="answer-key-box">
+      <h4>🔑 Compact Teacher & Parent Solutions Key (Fold or Detach)</h4>
+      <div class="answer-grid">
+        <div><strong>1.</strong> Patricians / Plebeians</div>
+        <div><strong>2.</strong> VETO</div>
+        <div><strong>3.</strong> Rule of Law: All citizens equal under written laws</div>
+        <div><strong>4.</strong> Civics, Civilian / Senate, Senator</div>
+        <div><strong>5.</strong> Converts tension into lateral compression</div>
+        <div><strong>6.</strong> $25 \times 4 = 100\text{ metres}$</div>
+        <div><strong>7.</strong> Volcanic ash (Pozzolana)</div>
+        <div><strong>8.</strong> a) XLVIII, b) XCVI, c) DCCLIII, d) MMXXVI</div>
+        <div><strong>9.</strong> a) 74, b) 495, c) 2024</div>
+        <div><strong>10.</strong> VENI VIDI VICI ("I came, I saw, I conquered")</div>
+        <div><strong>11.</strong> $2 \times 86,400 = 172,800\text{ m}^3\text{/day}$</div>
+        <div><strong>12.</strong> $5,000 \times 1.2 \times 10 = 60,000\text{ kg} \div 100 = 600\text{ mules}$</div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

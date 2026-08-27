@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia's Complete Science & Chemistry Master Workbook 🧪</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: letter portrait;
+      margin: 0.45in 0.5in;
+    }
+
+    :root {
+      --primary: #0284c7;
+      --emerald: #059669;
+      --text: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: #f8fafc;
+      line-height: 1.45;
+      padding: 20px;
+    }
+
+    .toolbar-header {
+      max-width: 8.5in;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 12px 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 8px 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-print {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-print:hover { background: #0369a1; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #94a3b8;
+      color: #334155;
+    }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    .document-page {
+      max-width: 8.5in;
+      margin: 0 auto 30px;
+      background: #ffffff;
+      padding: 0.45in 0.5in;
+      border-radius: 4px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      page-break-after: always;
+      position: relative;
+    }
+
+    .test-header {
+      border-bottom: 2px solid #000000;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .brand-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .curriculum-tag {
+      font-size: 0.78rem;
+      color: #475569;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .student-fields {
+      display: flex;
+      gap: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .field-line {
+      border-bottom: 1px solid #000000;
+      display: inline-block;
+      min-width: 90px;
+    }
+
+    .section-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #000000;
+      border-bottom: 1.5px solid #000000;
+      padding-bottom: 3px;
+      margin: 14px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .concept-box {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 3px solid #0284c7;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+      font-size: 0.86rem;
+    }
+
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .q-item {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      page-break-inside: avoid;
+    }
+
+    .q-num {
+      font-weight: 800;
+      color: #000000;
+    }
+
+    .ans-blank {
+      border-bottom: 1px dashed #64748b;
+      display: inline-block;
+      min-width: 130px;
+      height: 1.1em;
+      vertical-align: bottom;
+    }
+
+    .ans-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 5px;
+    }
+
+    .writing-line {
+      border-bottom: 1px solid #94a3b8;
+      height: 15px;
+      width: 100%;
+    }
+
+    .answer-key-box {
+      background: #f1f5f9;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-top: 16px;
+      font-size: 0.8rem;
+      page-break-inside: avoid;
+    }
+
+    .answer-key-box h4 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+      color: #000000;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px 12px;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        font-size: 9.5pt;
+      }
+      .toolbar-header { display: none !important; }
+      .document-page {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 0 15px 0 !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="toolbar-header">
+    <div>
+      <h2 style="font-size:1.1rem; font-family:'Fredoka', sans-serif;">🧪 Sophia's Complete Science & Chemistry Master Workbook</h2>
+      <p style="font-size:0.8rem; color:#64748b;">Ontario Grade 5 & 6 Prep &bull; Paper-Ready Printable PDF</p>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn btn-outline" onclick="window.history.back()">← Return to Studio</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Print Now (Letter/A4)</button>
+    </div>
+  </header>
+
+  <!-- PAGE 1 -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">🧪 STUDYFLIX &bull; SCIENCE & CHEMISTRY MASTER WORKBOOK</div>
+        <div class="curriculum-tag">Ontario Grade 5 Core &bull; Grade 6 Readiness &bull; Periodic Table</div>
+      </div>
+      <div class="student-fields">
+        <span>Name: <span class="field-line" style="min-width:130px;"></span></span>
+        <span>Date: <span class="field-line" style="min-width:80px;"></span></span>
+        <span>Score: _____ / 50</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <h3 class="section-title">Unit 1: The Periodic Table & Atomic Structure</h3>
+    <div class="concept-box">
+      <strong>Atoms & Particles:</strong> Inside every atom are 3 particles: <strong>Protons ($p^+$)</strong> (determines Atomic Number), <strong>Neutrons ($n^0$)</strong> in the nucleus, and orbiting <strong>Electrons ($e^-$)</strong>.
+      <br><em>Mnemonic:</em> "<strong>H</strong>appy <strong>He</strong>nry <strong>Li</strong>kes <strong>Be</strong>rries, <strong>B</strong>ut <strong>C</strong>an <strong>N</strong>ot <strong>O</strong>ffer <strong>F</strong>our <strong>N</strong>uts" (Elements 1-10).
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">1.</span> Which subatomic particle defines an element's identity (Atomic Number)? <span class="ans-blank" style="min-width:180px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">2.</span> Fill in the chemical symbols and names for these first 5 elements:
+        <br>&bull; #1: <span class="ans-blank" style="min-width:40px;"></span> (<span class="ans-blank" style="min-width:110px;"></span>)
+        &bull; #2: <span class="ans-blank" style="min-width:40px;"></span> (<span class="ans-blank" style="min-width:110px;"></span>)
+        &bull; #3: <span class="ans-blank" style="min-width:40px;"></span> (<span class="ans-blank" style="min-width:110px;"></span>)
+        &bull; #6: <span class="ans-blank" style="min-width:40px;"></span> (<span class="ans-blank" style="min-width:110px;"></span>)
+        &bull; #8: <span class="ans-blank" style="min-width:40px;"></span> (<span class="ans-blank" style="min-width:110px;"></span>)
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">3.</span> <strong>Chemical Secret Decoder:</strong> Combine element symbols to spell the secret word:
+        <br>&bull; Carbon ($C$) + Argon ($Ar$) = <span class="ans-blank" style="min-width:120px;"></span> *(Hint: 4-wheel vehicle!)*
+        <br>&bull; Sodium ($Na$) + Phosphorus ($P$) = <span class="ans-blank" style="min-width:120px;"></span> *(Hint: Afternoon rest!)*
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <h3 class="section-title">Unit 2: Matter & Kitchen Chemistry (Grade 5 Core)</h3>
+    <div class="concept-box">
+      <strong>Physical vs. Chemical Change:</strong> Physical changes alter size/state with <em>no new substance</em> (melting ice, dissolving). Chemical changes rearrange bonds to form <em>brand new substances</em> (bubbles 🫧, color change 🎨, heat 🔥, odor 🍞). <strong>Conservation of Mass:</strong> Total mass before = total mass after!
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">4.</span> Classify each as a <strong>Physical (P)</strong> or <strong>Chemical (C)</strong> change:
+        <br>&bull; a) Baking chocolate chip cookies: `[   ]` &nbsp;&nbsp;&bull; b) Melting an ice cube on a counter: `[   ]`
+        <br>&bull; c) Rusting iron garden gate: `[   ]` &nbsp;&nbsp;&bull; d) Dissolving salt into warm soup: `[   ]`
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">5.</span> <strong>Conservation of Mass:</strong> You mix $15\text{ g}$ of baking soda into $100\text{ g}$ of vinegar inside a sealed ziplock bag. What is the total mass of the sealed bag after the fizzing stops? <span class="ans-blank" style="min-width:100px;"></span> grams. Explain why:
+        <div class="ans-lines"><div class="writing-line"></div></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PAGE 2 -->
+  <main class="document-page">
+    <div class="test-header">
+      <div>
+        <div class="brand-title">🧪 MODULE 3 & 4: CELL BIOLOGY & PHYSICS (GRADE 6 PREP)</div>
+        <div class="curriculum-tag">Student: ____________________ Date: ____________________</div>
+      </div>
+      <div class="curriculum-tag" style="font-size:0.85rem; font-weight:800;">PAGE 2 OF 2</div>
+    </div>
+
+    <!-- Section 3 -->
+    <h3 class="section-title">Unit 3: Cell City Organelles (Grade 6 Readiness)</h3>
+    <div class="concept-box">
+      <strong>Cell City Analogy:</strong> Nucleus = City Hall (DNA blueprints), Mitochondria = Power Plant (ATP energy), Cell Membrane = Border Security. <em>Plant Cells have 2 extra superpowers:</em> Rigid <strong>Cell Wall</strong> and solar food <strong>Chloroplasts</strong>!
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">6.</span> Match each cell organelle with its city role:
+        <br>&bull; 1. Nucleus `[   ]` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A. Power plant producing cellular ATP energy
+        <br>&bull; 2. Mitochondria `[   ]` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B. City Hall holding master DNA blueprints
+        <br>&bull; 3. Chloroplast `[   ]` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; C. Border patrol controlling what enters and leaves
+        <br>&bull; 4. Cell Membrane `[   ]` &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D. Solar food factory found only in green plants
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">7.</span> What two structures are present in plant cells but <strong>NEVER</strong> in animal cells?
+        <br>1) <span class="ans-blank" style="min-width:160px;"></span> &nbsp;&nbsp; 2) <span class="ans-blank" style="min-width:160px;"></span>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <h3 class="section-title" style="margin-top:14px;">Unit 4: Roller Coaster Physics & Scientific Method</h3>
+    <div class="concept-box">
+      <strong>Energy & Variables:</strong> <em>Potential Energy (PE)</em> is stored energy (highest at top of hill). <em>Kinetic Energy (KE)</em> is motion energy (maximum at lowest, fastest point). <strong>I-D-C Variable Rule:</strong> Independent = "I" change; Dependent = Measure; Controlled = Keep SAME!
+    </div>
+
+    <div class="questions-list">
+      <div class="q-item">
+        <span class="q-num">8.</span> On a giant roller coaster in Canada's Wonderland, at which point is <strong>Kinetic Energy (KE)</strong> at its absolute maximum? <span class="ans-blank" style="min-width:240px;"></span>
+      </div>
+
+      <div class="q-item">
+        <span class="q-num">9.</span> <strong>Fair Test Investigation:</strong> Sophia tests whether plant height is affected by music. She places 3 identical tomato plants in the same soil, gives each $100\text{ mL}$ water daily, but plays classical music to Plant A, rock music to Plant B, and silence to Plant C.
+        <br>&bull; <strong>Independent Variable:</strong> <span class="ans-blank" style="min-width:220px;"></span>
+        <br>&bull; <strong>Dependent Variable:</strong> <span class="ans-blank" style="min-width:220px;"></span>
+        <br>&bull; <strong>Controlled Variables (2):</strong> <span class="ans-blank" style="min-width:160px;"></span>, <span class="ans-blank" style="min-width:160px;"></span>
+      </div>
+    </div>
+
+    <!-- Paper-Saving Answer Key -->
+    <div class="answer-key-box">
+      <h4>🔑 Compact Teacher & Parent Solutions Key (Fold or Detach)</h4>
+      <div class="answer-grid">
+        <div><strong>1.</strong> Protons (Atomic Number)</div>
+        <div><strong>2.</strong> H (Hydrogen), He (Helium), Li (Lithium), C (Carbon), O (Oxygen)</div>
+        <div><strong>3.</strong> CAR / NAP</div>
+        <div><strong>4.</strong> a) C, b) P, c) C, d) P</div>
+        <div><strong>5.</strong> 115g (Conservation of Mass: matter cannot be created or destroyed)</div>
+        <div><strong>6.</strong> 1-B, 2-A, 3-D, 4-C</div>
+        <div><strong>7.</strong> Cell Wall, Chloroplasts</div>
+        <div><strong>8.</strong> At the very bottom of the first big drop (highest speed)</div>
+        <div><strong>9.</strong> IV: Type of music; DV: Plant height/growth; CV: Soil type, water amount ($100\text{mL}$), sunlight</div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
