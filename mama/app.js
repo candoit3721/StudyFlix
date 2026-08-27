@@ -18,6 +18,8 @@ const BADGES = [
 
 const MAP_ORIGINS_DATA = {
   ethiopia: {
+    lat: 9.02,
+    lng: 38.74,
     region: "africa",
     flag: "🇪🇹",
     title: "Ethiopia • Yirgacheffe & Guji (埃塞俄比亚 • 耶加雪菲)",
@@ -32,6 +34,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "high"
   },
   kenya: {
+    lat: -0.42,
+    lng: 36.95,
     region: "africa",
     flag: "🇰🇪",
     title: "Kenya • Mount Kenya & Nyeri (肯尼亚 • 涅里 AA)",
@@ -46,6 +50,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "high"
   },
   yemen: {
+    lat: 15.35,
+    lng: 44.20,
     region: "africa",
     flag: "🇾🇪",
     title: "Yemen • Port of Al-Makha & Haraz (也门 • 摩卡港古树)",
@@ -60,6 +66,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "low"
   },
   panama: {
+    lat: 8.78,
+    lng: -82.43,
     region: "americas",
     flag: "🇵🇦",
     title: "Panama • Boquete & Volcán Barú (巴拿马 • 翡翠瑰夏)",
@@ -74,6 +82,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "high"
   },
   colombia: {
+    lat: 2.92,
+    lng: -75.28,
     region: "americas",
     flag: "🇨🇴",
     title: "Colombia • Huila & Nariño (哥伦比亚 • 慧兰/娜玲珑)",
@@ -88,6 +98,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "medium"
   },
   guatemala: {
+    lat: 14.56,
+    lng: -90.73,
     region: "americas",
     flag: "🇬🇹",
     title: "Guatemala • Antigua & Huehuetenango (危地马拉 • 安提瓜)",
@@ -102,6 +114,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "medium"
   },
   costarica: {
+    lat: 9.66,
+    lng: -84.02,
     region: "americas",
     flag: "🇨🇷",
     title: "Costa Rica • Tarrazú & Canet (哥斯达黎加 • 塔拉珠)",
@@ -116,6 +130,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "medium"
   },
   brazil: {
+    lat: -18.91,
+    lng: -48.27,
     region: "americas",
     flag: "🇧🇷",
     title: "Brazil • Cerrado Mineiro & Sul de Minas (巴西 • 喜拉多)",
@@ -130,6 +146,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "low"
   },
   indonesia: {
+    lat: 2.68,
+    lng: 98.88,
     region: "asia",
     flag: "🇮🇩",
     title: "Indonesia • Sumatra Lake Toba & Gayo (印尼 • 曼特宁)",
@@ -144,6 +162,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "low"
   },
   yunnan: {
+    lat: 25.11,
+    lng: 99.16,
     region: "asia",
     flag: "🇨🇳",
     title: "China • Yunnan Baoshan & Pu'er (中国 • 云南保山/普洱)",
@@ -158,6 +178,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "medium"
   },
   hawaii: {
+    lat: 19.53,
+    lng: -155.92,
     region: "asia",
     flag: "🇺🇸",
     title: "Hawaii, USA • Kona Coast (美国夏威夷 • 科纳)",
@@ -172,6 +194,8 @@ const MAP_ORIGINS_DATA = {
     acidMatch: "medium"
   },
   jamaica: {
+    lat: 18.04,
+    lng: -76.65,
     region: "americas",
     flag: "🇯🇲",
     title: "Jamaica • Blue Mountain (牙买加 • 蓝山)",
@@ -424,9 +448,14 @@ function toggleSound() {
 // =============================================================================
 // 3. UI Navigation & Stats
 // =============================================================================
+let leafletMap = null;
+let leafletMarkers = {};
+let currentMapView = 'leaflet';
+
 function init() {
   updateUIStats();
   setupNavTabs();
+  initLeafletMap();
   selectMapOrigin('ethiopia');
   filterFlavourCategory('floral');
   updateRoastSimulator(1);
@@ -466,7 +495,11 @@ function awardBadge(badgeId) {
 function setupNavTabs() {
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      switchTab(tab.getAttribute('data-tab'));
+      const tabId = tab.getAttribute('data-tab');
+      switchTab(tabId);
+      if (tabId === 'tab-origins' && leafletMap) {
+        setTimeout(() => leafletMap.invalidateSize(), 200);
+      }
     });
   });
 }
@@ -493,19 +526,129 @@ function handleHashNavigation() {
 window.addEventListener('hashchange', handleHashNavigation);
 
 // =============================================================================
-// Map Functions: Select Origin, Filter Region & Brew Spotlight
+// Map Functions: Leaflet Real-World Map Engine & Origin Selection
 // =============================================================================
-function selectMapOrigin(originId) {
+function initLeafletMap() {
+  const mapContainer = document.getElementById('coffee-leaflet-map');
+  if (!mapContainer || typeof L === 'undefined') return;
+
+  try {
+    // 1. Initialize Leaflet Map Centered on Coffee Belt
+    leafletMap = L.map('coffee-leaflet-map', {
+      center: [12, 10],
+      zoom: 2.3,
+      minZoom: 2,
+      maxZoom: 9,
+      zoomControl: true,
+      attributionControl: false
+    });
+
+    // 2. Add CartoDB Dark Matter / Luxury Cafe Base Tiles
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(leafletMap);
+
+    // 3. Highlight The Coffee Belt (25°N to 25°S Translucent Golden Ribbon)
+    const beltBounds = [[25, -180], [-25, 180]];
+    L.rectangle(beltBounds, {
+      color: '#e5a93c',
+      weight: 1.5,
+      dashArray: '6, 6',
+      fillColor: '#e5a93c',
+      fillOpacity: 0.12
+    }).addTo(leafletMap);
+
+    // 4. Add Interactive Custom Gold Coffee Markers for each Origin
+    Object.entries(MAP_ORIGINS_DATA).forEach(([id, data]) => {
+      const customIcon = L.divIcon({
+        className: 'custom-coffee-pin',
+        html: `
+          <div class="marker-pin-wrapper" id="marker-${id}">
+            <div class="marker-flag-badge">
+              <span>${data.flag}</span> <span>${data.title.split(' ')[0]}</span>
+            </div>
+            <div class="marker-dot-core"></div>
+          </div>
+        `,
+        iconSize: [80, 40],
+        iconAnchor: [40, 36]
+      });
+
+      const marker = L.marker([data.lat, data.lng], { icon: customIcon }).addTo(leafletMap);
+      
+      // Popup
+      marker.bindPopup(`
+        <div class="popup-coffee-card">
+          <h5>${data.flag} ${data.title}</h5>
+          <p>${data.alt} &bull; ${data.var}</p>
+          <button class="popup-btn" onclick="selectMapOrigin('${id}')">Inspect Terroir 🔍</button>
+        </div>
+      `);
+
+      marker.on('click', () => {
+        selectMapOrigin(id, true);
+      });
+
+      leafletMarkers[id] = marker;
+    });
+
+  } catch (err) {
+    console.warn("Leaflet Map init fallback to SVG:", err);
+    switchMapView('svg');
+  }
+}
+
+function switchMapView(mode) {
+  currentMapView = mode;
+  const leafletWrap = document.getElementById('coffee-leaflet-wrapper');
+  const svgWrap = document.getElementById('coffee-svg-wrapper');
+  const btnLeaflet = document.getElementById('btn-view-leaflet');
+  const btnSvg = document.getElementById('btn-view-svg');
+
+  if (mode === 'leaflet') {
+    if (leafletWrap) leafletWrap.classList.remove('hidden');
+    if (svgWrap) svgWrap.classList.add('hidden');
+    if (btnLeaflet) btnLeaflet.classList.add('active');
+    if (btnSvg) btnSvg.classList.remove('active');
+    if (leafletMap) setTimeout(() => leafletMap.invalidateSize(), 150);
+  } else {
+    if (leafletWrap) leafletWrap.classList.add('hidden');
+    if (svgWrap) svgWrap.classList.remove('hidden');
+    if (btnLeaflet) btnLeaflet.classList.remove('active');
+    if (btnSvg) btnSvg.classList.add('active');
+  }
+}
+
+function selectMapOrigin(originId, skipFly) {
   const origin = MAP_ORIGINS_DATA[originId];
   if (!origin) return;
   currentSelectedOriginId = originId;
 
-  // Highlight Pin
+  // 1. Highlight SVG Pins
   document.querySelectorAll('.map-pin-item').forEach(p => p.classList.remove('active'));
-  const pin = document.querySelector(`.map-pin-item[data-id="${originId}"]`);
-  if (pin) pin.classList.add('active');
+  const svgPin = document.querySelector(`.map-pin-item[data-id="${originId}"]`);
+  if (svgPin) svgPin.classList.add('active');
 
-  // Update Spotlight UI
+  // 2. Highlight Leaflet Markers
+  document.querySelectorAll('.marker-pin-wrapper').forEach(m => m.classList.remove('active'));
+  const markerEl = document.getElementById(`marker-${originId}`);
+  if (markerEl) markerEl.classList.add('active');
+
+  // 3. Highlight Quick Carousel Chip
+  document.querySelectorAll('.quick-origin-chip').forEach(c => c.classList.remove('active'));
+  const chip = document.querySelector(`.quick-origin-chip[data-id="${originId}"]`);
+  if (chip) {
+    chip.classList.add('active');
+    chip.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+  }
+
+  // 4. Smooth Map FlyTo (if leaflet is active and not already centered)
+  if (leafletMap && !skipFly && currentMapView === 'leaflet') {
+    leafletMap.flyTo([origin.lat, origin.lng], 4.5, { duration: 1.2 });
+  }
+
+  // 5. Update Spotlight UI Card
   const flagElem = document.getElementById('spotlight-flag');
   const titleElem = document.getElementById('spotlight-title');
   const subElem = document.getElementById('spotlight-sub');
@@ -540,12 +683,12 @@ function selectMapOrigin(originId) {
 
 function filterMapRegion(region) {
   document.querySelectorAll('.map-pill').forEach(p => p.classList.remove('active'));
-  if (event && event.target && event.target.classList) {
-    event.target.classList.add('active');
-  }
+  const activeBtn = document.getElementById(`btn-reg-${region}`) || event.target;
+  if (activeBtn) activeBtn.classList.add('active');
 
-  const pins = document.querySelectorAll('.map-pin-item');
-  pins.forEach(pin => {
+  // Filter SVG Pins
+  const svgPins = document.querySelectorAll('.map-pin-item');
+  svgPins.forEach(pin => {
     const pinId = pin.getAttribute('data-id');
     const data = MAP_ORIGINS_DATA[pinId];
     if (region === 'all' || (data && data.region === region)) {
@@ -555,10 +698,23 @@ function filterMapRegion(region) {
     }
   });
 
+  // Filter Leaflet Markers & Zoom
+  if (leafletMap) {
+    if (region === 'all') {
+      leafletMap.flyTo([12, 10], 2.3, { duration: 1.2 });
+    } else if (region === 'africa') {
+      leafletMap.flyTo([6, 38], 4.2, { duration: 1.2 });
+    } else if (region === 'americas') {
+      leafletMap.flyTo([4, -75], 3.8, { duration: 1.2 });
+    } else if (region === 'asia') {
+      leafletMap.flyTo([10, 105], 3.8, { duration: 1.2 });
+    }
+  }
+
   // Select first visible origin in this region
   for (const [id, d] of Object.entries(MAP_ORIGINS_DATA)) {
     if (region === 'all' || d.region === region) {
-      selectMapOrigin(id);
+      selectMapOrigin(id, true);
       break;
     }
   }
