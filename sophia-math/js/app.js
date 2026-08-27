@@ -10,9 +10,8 @@
   const state = {
     config: {
       category: 'grade5_mixed',
-      count: 20,
-      gridCols: 2,
-      questionsPerPage: 'auto',
+      pageCount: 2,
+      gridCols: getSmartDefaultCols('grade5_mixed'),
       studentName: 'Sophia',
       worksheetTitle: 'Grade 5 & 6 Math Challenge',
       showHints: true,
@@ -29,73 +28,64 @@
   const presets = {
     g5_fractions: {
       category: 'fractions',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 5: Fraction Mastery (Add, Sub, Mult, Div)',
       includeWorkSpace: true
     },
     g5_decimals: {
       category: 'decimals',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 5: Decimal Operations & Long Division',
       includeWorkSpace: true
     },
     g5_pemdas: {
       category: 'pemdas',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 5: Order of Operations (PEMDAS)',
       includeWorkSpace: true
     },
     g6_ratios: {
       category: 'ratios',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 6: Ratios, Rates & Proportions',
       includeWorkSpace: true
     },
     g6_percentages: {
       category: 'percentages',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 6: Percentages, Discounts & Sales Tax',
       includeWorkSpace: true
     },
     g6_equations: {
       category: 'algebra',
-      count: 16,
+      pageCount: 2,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 6: One-Step & Two-Step Equations',
       includeWorkSpace: true
     },
     g6_integers: {
       category: 'integers',
-      count: 24,
+      pageCount: 2,
       gridCols: 3,
-      questionsPerPage: '12',
       worksheetTitle: 'Grade 6: Positive & Negative Integers Sprint',
       includeWorkSpace: false
     },
     g5_6_word_problems: {
       category: 'word_problems',
-      count: 8,
+      pageCount: 2,
       gridCols: 1,
-      questionsPerPage: '4',
       worksheetTitle: 'Grade 5/6: Multi-Step Real World Word Problems',
       includeWorkSpace: true
     },
     g5_6_assessment: {
       category: 'all_mixed',
-      count: 20,
+      pageCount: 3,
       gridCols: 2,
-      questionsPerPage: '8',
       worksheetTitle: 'Grade 5 & 6 Comprehensive Math Assessment',
       includeWorkSpace: true
     }
@@ -104,9 +94,7 @@
   // DOM Elements
   const els = {
     topicSelect: document.getElementById('topic-select'),
-    questionCount: document.getElementById('question-count'),
-    gridColsSelect: document.getElementById('grid-cols-select'),
-    perPageSelect: document.getElementById('per-page-select'),
+    pageCountSelect: document.getElementById('page-count-select'),
     studentNameInput: document.getElementById('student-name-input'),
     worksheetTitleInput: document.getElementById('worksheet-title-input'),
     includeAnswerKeyCheck: document.getElementById('include-answer-key-check'),
@@ -200,10 +188,23 @@
     return false;
   }
 
+  // Smart default column count based on the kind of question - word
+  // problems need room to breathe (1 column), a few topics with longer
+  // prompts or multi-line work (geometry, statistics, algebra, exponents)
+  // get a bit more room (2), everything else defaults dense (3). The user
+  // can always override with the Layout Columns chips.
+  function getSmartDefaultCols(category) {
+    if (category === 'word_problems') return 1;
+    const spacious = ['geometry', 'statistics', 'algebra', 'exponents'];
+    return spacious.includes(category) ? 2 : 3;
+  }
+
   // Generate problems set
   function generateProblems() {
     const problems = [];
-    const count = parseInt(state.config.count, 10) || 20;
+    const cap = getMaxDensityCap();
+    const count = Math.max(cap, (parseInt(state.config.pageCount, 10) || 2) * cap);
+    state.config.count = count;
     const cat = state.config.category;
 
     for (let i = 0; i < count; i++) {
@@ -221,22 +222,42 @@
     renderWorksheet();
   }
 
-  // Calculate items per page based on layout and settings
-  function getEffectiveQuestionsPerPage() {
-    if (state.config.questionsPerPage !== 'auto') {
-      return parseInt(state.config.questionsPerPage, 10) || 8;
-    }
+  // Maximum questions that physically fit on one printed page for the
+  // current layout (columns + workspace). This is a density ceiling, not
+  // the number actually used per page - see getEffectiveQuestionsPerPage.
+  // Smart Layout derives the total question count from this (pageCount *
+  // cap), so every page comes out completely full.
+  function getMaxDensityCap() {
     const cols = parseInt(state.config.gridCols, 10) || 2;
-    const isWordProblem = state.config.category === 'word_problems';
+    const ws = state.config.includeWorkSpace;
 
-    if (cols === 1 || isWordProblem) {
-      return state.config.includeWorkSpace ? 4 : 5;
-    } else if (cols === 2) {
-      return state.config.includeWorkSpace ? 8 : 10;
+    // The cap is always cols * rows, so a page can never end on a part-empty
+    // row. Word problems used to return a flat 4 whatever the column count,
+    // which at 3 columns rendered one full row plus a single lonely card and
+    // left two thirds of the sheet blank. Measured natural card heights
+    // against the 10.1in print box show word-problem cards fit the same row
+    // counts as arithmetic ones (199px at 3 cols, 4 rows available), so they
+    // no longer need a special case - only the row counts below.
+    let rows;
+    if (cols <= 2) {
+      rows = ws ? 4 : 5;
     } else {
-      // 3 columns
-      return state.config.includeWorkSpace ? 9 : 12;
+      rows = ws ? 3 : 4;
     }
+    return cols * rows;
+  }
+
+  // Smart pagination: find the fewest pages that satisfy the density cap,
+  // then spread the questions evenly across exactly that many pages.
+  // Simply filling every page to the cap can leave a nearly-empty trailing
+  // page (e.g. 20 questions at a cap of 9 -> 9 + 9 + 2); spreading them
+  // instead (9 + 9 + 2 -> 7 + 7 + 6) keeps every page evenly full.
+  function getEffectiveQuestionsPerPage() {
+    const cap = getMaxDensityCap();
+    const total = state.problems.length;
+    if (!total) return cap;
+    const pageCount = Math.max(1, Math.ceil(total / cap));
+    return Math.ceil(total / pageCount);
   }
 
   // Create single problem card element
@@ -665,17 +686,16 @@
         if (presets[presetKey]) {
           const p = presets[presetKey];
           state.config.category = p.category;
-          state.config.count = p.count;
+          state.config.pageCount = p.pageCount;
           state.config.gridCols = p.gridCols;
-          state.config.questionsPerPage = p.questionsPerPage || 'auto';
           state.config.worksheetTitle = p.worksheetTitle;
           state.config.includeWorkSpace = p.includeWorkSpace;
 
           // Sync sidebar UI
           if (els.topicSelect) els.topicSelect.value = p.category;
-          if (els.questionCount) els.questionCount.value = p.count;
-          if (els.gridColsSelect) els.gridColsSelect.value = p.gridCols;
-          if (els.perPageSelect) els.perPageSelect.value = p.questionsPerPage || 'auto';
+          if (els.pageCountSelect) els.pageCountSelect.value = p.pageCount;
+          const colsRadio = document.querySelector(`input[name="gridCols"][value="${p.gridCols}"]`);
+          if (colsRadio) colsRadio.checked = true;
           if (els.worksheetTitleInput) els.worksheetTitleInput.value = p.worksheetTitle;
           if (els.includeWorkSpaceCheck) els.includeWorkSpaceCheck.checked = p.includeWorkSpace;
 
@@ -688,26 +708,25 @@
     if (els.topicSelect) {
       els.topicSelect.addEventListener('change', e => {
         state.config.category = e.target.value;
+        const smartCols = getSmartDefaultCols(state.config.category);
+        state.config.gridCols = smartCols;
+        const radio = document.querySelector(`input[name="gridCols"][value="${smartCols}"]`);
+        if (radio) radio.checked = true;
+        generateProblems();
       });
     }
 
-    if (els.questionCount) {
-      els.questionCount.addEventListener('change', e => {
-        state.config.count = parseInt(e.target.value, 10);
-      });
-    }
-
-    if (els.gridColsSelect) {
-      els.gridColsSelect.addEventListener('change', e => {
+    document.querySelectorAll('input[name="gridCols"]').forEach(radio => {
+      radio.addEventListener('change', e => {
         state.config.gridCols = parseInt(e.target.value, 10);
-        renderWorksheet();
+        generateProblems();
       });
-    }
+    });
 
-    if (els.perPageSelect) {
-      els.perPageSelect.addEventListener('change', e => {
-        state.config.questionsPerPage = e.target.value;
-        renderWorksheet();
+    if (els.pageCountSelect) {
+      els.pageCountSelect.addEventListener('change', e => {
+        state.config.pageCount = parseInt(e.target.value, 10) || 2;
+        generateProblems();
       });
     }
 
