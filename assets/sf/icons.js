@@ -84,18 +84,28 @@
     person: 'M12 12.5a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5M4.5 20.5a7.5 7.5 0 0 1 15 0',
     leaf: 'M4.5 19.5C3 15 4.5 9.5 9 6.5c3.6-2.4 8-2.2 11-2 .2 3 .4 7.4-2 11-3 4.5-8.5 6-13 4.5M11.5 12.5 4.5 19.5',
     droplet: 'M12 3.2s6.5 6.4 6.5 10.7A6.5 6.5 0 0 1 5.5 13.9C5.5 9.6 12 3.2 12 3.2M9.2 15.4a2.9 2.9 0 0 0 2.8 2.4',
-    cell: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M13.4 12.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M8 15.6h.01M16.4 15.9h.01M7.6 8.6h.01'
+    cell: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M13.4 12.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M8 15.6h.01M16.4 15.9h.01M7.6 8.6h.01',
+
+    /* Grade 6 Ontario strands */
+    species: 'M7.5 21c-2 0-3.5-1.6-3.5-3.6 0-3 2.6-4.6 3.5-7.4M16.5 21c2 0 3.5-1.6 3.5-3.6 0-3-2.6-4.6-3.5-7.4M7.5 21h9M6 8.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M18 8.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M12 6.6a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4',
+    plane: 'M10.4 3.3a1.6 1.6 0 0 1 3.2 0V9l7.9 4.6v2.6l-7.9-2.4v4.1l2.6 1.9v1.9L12 20.6l-4.2 1.1v-1.9l2.6-1.9v-4.1L2.5 16.2v-2.6L10.4 9Z',
+    rocket: 'M12 2.5c3.2 2.4 5 6 5 10l-1.9 3.4H8.9L7 12.5c0-4 1.8-7.6 5-10M12 11.4a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8M8.9 15.9 6.4 18l1.2 3.5L12 19.4l4.4 2.1 1.2-3.5-2.5-2.1M7 12.5 3.9 14.7l.7 3.6M17 12.5l3.1 2.2-.7 3.6',
+    bolt: 'M13.6 2.5 5 13.4h5.4l-.9 8.1L18.5 10.6h-5.4z',
+    circuit: 'M4.5 12H8m8 0h3.5M4.5 12v5.5h6M19.5 12V6.5h-6M12 14.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M10.5 17.5h3M10.5 6.5h3',
+    telescope: 'M3.4 13.6 6 6.9l4.7 1.8-2.6 6.7zM10.7 8.7 15.4 5l3.4 4.6-4.7 3.7zM8.1 15.4l2.4 6M8.1 15.4 5 21M6.6 17.5h5.3'
   };
 
   // Glyphs whose silhouette needs a fill to read at small sizes.
-  var FILLED = { play: true, star: true, flame: true, sparkle: true };
+  var FILLED = { play: true, star: true, flame: true, sparkle: true, bolt: true, plane: true };
 
   var ALIASES = {
     worksheets: 'printer', print: 'printer', trophies: 'trophy',
     allSubjects: 'grid', profile: 'person', science: 'flask',
     chemistry: 'flask', history: 'temple', rome: 'temple',
     math: 'ruler', calculus: 'sigma', statistics: 'chartLine',
-    time: 'clock', biology: 'cell', ecology: 'leaf', water: 'droplet'
+    time: 'clock', biology: 'cell', ecology: 'leaf', water: 'droplet',
+    biodiversity: 'species', flight: 'plane', space: 'rocket',
+    electricity: 'bolt', physics: 'chartLine'
   };
 
   function resolve(name) {

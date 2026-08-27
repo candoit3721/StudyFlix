@@ -35,9 +35,14 @@ const DEFAULT_PROFILES = [
     subjects: [
       { title: "Ancient Rome Quest & Studio", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", kind: "quest", family: "rome", art: "rome-forum" },
       { title: "Science & Chemistry Quest", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", kind: "quest", family: "science", art: "sci-atom" },
-      { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" }
+      { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" },
+      { title: "Grade 6 Ontario Science Strands", badge: "NEW & COMPLETE", desc: "All 4 strands: Biodiversity, Flight, Space & Electricity with live labs", link: "sophia-science/index.html#tab-biodiversity", kind: "quest", family: "science", art: "sci-space" }
     ],
     topics: [
+      { title: "Biodiversity & Six Kingdoms", badge: "GRADE 6 STRAND B", desc: "Kingdom sorter, dichotomous key & Great Lakes food web collapse", link: "sophia-science/index.html#tab-biodiversity", kind: "lesson", family: "science", art: "sci-biodiversity" },
+      { title: "Flight & the Four Forces", badge: "GRADE 6 STRAND D", desc: "Lift, weight, thrust, drag, Bernoulli's principle & wing loading", link: "sophia-science/index.html#tab-flight", kind: "lesson", family: "science", art: "sci-flight" },
+      { title: "Space & the Solar System", badge: "GRADE 6 STRAND E", desc: "Orbit simulator, axial tilt seasons & mass vs. weight on 9 worlds", link: "sophia-science/index.html#tab-space", kind: "lesson", family: "science", art: "sci-space" },
+      { title: "Electricity & Circuits", badge: "GRADE 6 STRAND C", desc: "Series vs. parallel builder, conductor bench & Ontario energy audit", link: "sophia-science/index.html#tab-electricity", kind: "lesson", family: "science", art: "sci-electricity" },
       { title: "Roman Arch & Keystone Lab", badge: "ENGINEERING", desc: "Interactive keystone insertion, compression forces & abutments", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-arch" },
       { title: "Aqueduct Hydraulic Flow", badge: "HYDRAULICS", desc: "Adjust gravity slopes (0.2%-0.5%) to transport mountain water", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-aqueduct" },
       { title: "Caesar's Military Cipher", badge: "CRYPTOGRAPHY", desc: "Decode top-secret battlefield messages sent across Gaul", link: "sophia-rome/index.html#tab-cipher", kind: "lesson", family: "rome", art: "rome-cipher" },
@@ -208,11 +213,15 @@ let isManageMode = false;
 let editingProfileId = null;
 
 // Confetti System
+// Guarded: this runs at the top level, so a missing 2d context here would
+// abort the rest of app.js and leave the hub with no profiles at all.
+// Celebration is optional; the catalog is not.
 const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = (canvas && canvas.getContext) ? canvas.getContext('2d') : null;
 let confetti = [];
 
 function resizeCanvas() {
+  if (!canvas) return;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
@@ -220,6 +229,7 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function launchConfetti() {
+  if (!ctx) return;
   confetti = [];
   const colors = ['#E50914', '#f59e0b', '#06b6d4', '#10b981', '#a855f7', '#ffffff'];
   for (let i = 0; i < 80; i++) {
@@ -239,6 +249,7 @@ function launchConfetti() {
 }
 
 function updateConfetti() {
+  if (!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   confetti = confetti.filter(p => p.life > 0);
   confetti.forEach(p => {
