@@ -155,10 +155,10 @@
       <div id="station-atom" class="lab-station-card active">
         <div class="station-header">
           <div>
+            <span class="station-tag">ATOMIC STRUCTURE LAB</span>
             <h3>⚛️ Station 1: Interactive Bohr Rutherford Atom Builder</h3>
-            <p>Pick an element below to see its nucleus protons (p<sup>+</sup>), neutrons (n<sup>0</sup>), and orbiting electron shells (K, L, M)!</p>
+            <p>Select any element below to observe its nucleus protons (p<sup>+</sup>), neutrons (n<sup>0</sup>), and revolving electron energy levels (K, L, M, N).</p>
           </div>
-          <span class="station-tag">CHEMISTRY &bull; ATOMIC STRUCTURE</span>
         </div>
 
         <!-- Quick Element Buttons -->
@@ -241,10 +241,10 @@
       <div id="station-reactions" class="lab-station-card hidden">
         <div class="station-header">
           <div>
-            <h3>🧪 Station 2: Kitchen Chemistry & Molecular Reaction Flask</h3>
-            <p>Trigger real chemical and physical reactions! Watch the bubbling flask, balloon inflation, and mass scale!</p>
+            <span class="station-tag">MOLECULAR REACTION FLASK</span>
+            <h3>🧪 Station 2: Kitchen Chemistry & Molecular Reaction Simulator</h3>
+            <p>Trigger real physical and chemical changes! Observe gas production, temperature shifts, and the Law of Conservation of Mass.</p>
           </div>
-          <span class="station-tag">MATTER & REACTION LAB</span>
         </div>
 
         <div class="reaction-selector-row">
@@ -289,7 +289,7 @@
               <span class="rx-type-badge chemical" id="rx-type-badge">🔥 Chemical Change</span>
               <span class="rx-formula" id="rx-formula">NaHCO₃ + CH₃COOH → CO₂↑ + H₂O</span>
             </div>
-            <h4 id="rx-title">Baking Soda + Vinegar (小苏打与白醋反应)</h4>
+            <h4 id="rx-title">Baking Soda + Vinegar Reaction</h4>
             <p id="rx-desc">When solid baking soda mixes with acidic vinegar, bonds break and reform instantly to create water, sodium acetate, and fizzy Carbon Dioxide gas (CO₂)!</p>
 
             <div class="evidence-box">
@@ -312,11 +312,12 @@
       <div id="station-cell" class="lab-station-card hidden">
         <div class="station-header">
           <div>
-            <h3>🏙️ Station 3: Cell City Interactive Organelle Micro-Map</h3>
-            <p>Every living cell is a thriving miniature metropolis! Click organelles to see their city roles and compare Plant vs. Animal cells!</p>
+            <span class="station-tag">CELL BIOLOGY MICRO-MAP</span>
+            <h3>🏙️ Station 3: Cell City Organelle Visualizer</h3>
+            <p>Every living cell functions like a thriving miniature metropolis. Click any organelle to inspect its city role and compare Plant vs. Animal cells!</p>
           </div>
           <div class="cell-toggle-group">
-            <button class="toggle-btn active" id="btn-cell-plant" onclick="switchCellType('plant')">🌿 Plant Cell (Has Superpowers!)</button>
+            <button class="toggle-btn active" id="btn-cell-plant" onclick="switchCellType('plant')">🌿 Plant Cell (With Superpowers!)</button>
             <button class="toggle-btn" id="btn-cell-animal" onclick="switchCellType('animal')">🐾 Animal Cell</button>
           </div>
         </div>
@@ -371,7 +372,7 @@
               </svg>
             </div>
             <div class="cell-legend-bar">
-              <span>💡 Click any organelle to inspect its city job!</span>
+              <span>💡 Click any organelle to inspect its city role!</span>
               <span class="badge-plant-special" id="plant-badge-notice">🌿 Plant Superpowers Active: Cell Wall + Chloroplasts</span>
             </div>
           </div>
@@ -381,12 +382,12 @@
             <div class="dossier-header">
               <span class="dossier-icon" id="dossier-icon">🏛️</span>
               <div>
-                <h4 id="dossier-name">Nucleus (细胞核)</h4>
+                <h4 id="dossier-name">Nucleus</h4>
                 <span class="dossier-role" id="dossier-role">City Job: City Hall & Blueprint Archive</span>
               </div>
             </div>
             <p class="dossier-desc" id="dossier-desc">
-              The control center of the entire cell! Contains DNA instructions for making proteins and running all cellular operations.
+              The control center of the entire cell! Contains master DNA blueprints for building proteins and directing cellular operations.
             </p>
             <div class="dossier-facts">
               <div class="dossier-fact">
@@ -406,10 +407,10 @@
       <div id="station-physics" class="lab-station-card hidden">
         <div class="station-header">
           <div>
+            <span class="station-tag">PHYSICS & MOTION LAB</span>
             <h3>🎢 Station 4: Roller Coaster Mechanical Energy Simulator</h3>
-            <p>Watch kinetic energy (KE) and potential energy (PE) trade places in real time as the coaster cart swoops down the track!</p>
+            <p>Observe how Potential Energy (height) and Kinetic Energy (speed) continuously trade places while Total Mechanical Energy remains 100% constant!</p>
           </div>
-          <span class="station-tag">GRADE 6 PREP &bull; ENERGY CONSERVATION</span>
         </div>
 
         <div class="physics-sim-layout">
@@ -455,7 +456,7 @@
             <div class="coaster-controls-bar">
               <button class="btn btn-primary" id="btn-coaster-play" onclick="toggleCoasterAnimation()">▶️ Start Coaster Run</button>
               <button class="btn btn-secondary" onclick="jumpCoasterPosition('top')">🏔️ Jump to Top Peak</button>
-              <button class="btn btn-secondary" onclick="jumpCoasterPosition('bottom')">🏎️ Jump to Bottom Loop</button>
+              <button class="btn btn-secondary" onclick="jumpCoasterPosition('bottom')">🏎️ Jump to Bottom Valley</button>
             </div>
           </div>
 
@@ -466,31 +467,31 @@
             <!-- Potential Energy Meter -->
             <div class="meter-row">
               <div class="meter-label-row">
-                <span>🟢 Potential Energy (PE 势能):</span>
+                <span>🟢 Potential Energy (PE - Stored Energy):</span>
                 <strong id="meter-pe-val">95%</strong>
               </div>
               <div class="meter-track">
                 <div class="meter-fill pe-fill" id="meter-pe-fill" style="width: 95%;"></div>
               </div>
-              <small>PE = Stored height energy. Max at highest peak!</small>
+              <small>PE = Stored gravitational height energy. Maximum at the highest peak!</small>
             </div>
 
             <!-- Kinetic Energy Meter -->
             <div class="meter-row">
               <div class="meter-label-row">
-                <span>🔴 Kinetic Energy (KE 动能):</span>
+                <span>🔴 Kinetic Energy (KE - Motion Energy):</span>
                 <strong id="meter-ke-val">5%</strong>
               </div>
               <div class="meter-track">
                 <div class="meter-fill ke-fill" id="meter-ke-fill" style="width: 5%;"></div>
               </div>
-              <small>KE = Motion speed energy. Max at lowest bottom!</small>
+              <small>KE = Motion speed energy. Maximum at the lowest bottom valley!</small>
             </div>
 
             <!-- Total Mechanical Energy Meter -->
             <div class="meter-row">
               <div class="meter-label-row">
-                <span>🟣 Total Energy (PE + KE 机械能总和):</span>
+                <span>🟣 Total Mechanical Energy (PE + KE):</span>
                 <strong id="meter-total-val">100% (Constant)</strong>
               </div>
               <div class="meter-track">

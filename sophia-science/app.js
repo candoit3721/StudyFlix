@@ -561,7 +561,7 @@ const LAB_REACTIONS = {
     type: "chemical",
     typeLabel: "🔥 Chemical Change",
     formula: "NaHCO₃ + CH₃COOH → CO₂↑ + H₂O + NaCH₃COO",
-    title: "Baking Soda + Vinegar (小苏打与白醋反应)",
+    title: "Baking Soda + Vinegar Reaction",
     desc: "When solid sodium bicarbonate mixes with acidic acetic acid, chemical bonds rearrange instantly to produce water, sodium acetate, and fizzy Carbon Dioxide gas (CO₂)!",
     color: "linear-gradient(180deg, #ec4899 0%, #db2777 100%)",
     balloon: true,
@@ -577,7 +577,7 @@ const LAB_REACTIONS = {
     type: "physical",
     typeLabel: "🧊 Physical Change",
     formula: "H₂O (solid ice) ➔ H₂O (liquid) ➔ H₂O (steam gas)",
-    title: "Ice Melting & Boiling (水的三态物理变化)",
+    title: "Ice Melting & Boiling (3 States of Water)",
     desc: "Heating ice cubes speeds up the H₂O molecules, breaking the rigid crystal lattice into liquid water and then steam. NO new substance is formed — every molecule remains pure H₂O!",
     color: "linear-gradient(180deg, #38bdf8 0%, #0284c7 100%)",
     balloon: false,
@@ -593,7 +593,7 @@ const LAB_REACTIONS = {
     type: "chemical",
     typeLabel: "🔥 Chemical Change (pH Indicator)",
     formula: "Anthocyanin (Purple) + Acid (H⁺) ➔ Bright Red / Pink",
-    title: "Magic Red Cabbage pH Indicator (紫甘蓝变色指示剂)",
+    title: "Magic Red Cabbage pH Indicator",
     desc: "Boiled red cabbage juice contains 'Anthocyanin' dye molecules that shift color like a chameleon depending on whether a solution is an Acid or a Base!",
     color: "linear-gradient(180deg, #a855f7 0%, #ec4899 100%)",
     balloon: false,
@@ -609,7 +609,7 @@ const LAB_REACTIONS = {
     type: "physical",
     typeLabel: "⚡ Physical Nucleation Blast",
     formula: "Diet Coke (CO₂ dissolved) + Mentos (Pitted surface) ➔ Foam Geyser",
-    title: "Diet Coke + Mentos Geyser Blast (可乐曼妥思喷泉)",
+    title: "Diet Coke + Mentos Geyser Blast",
     desc: "Each Mentos candy has millions of microscopic pits (nucleation sites). Dropping it into soda causes dissolved CO₂ gas to rapidly escape in an explosive 2.5-meter foam fountain!",
     color: "linear-gradient(180deg, #78350f 0%, #451a03 100%)",
     balloon: true,
@@ -625,7 +625,7 @@ const LAB_REACTIONS = {
     type: "chemical",
     typeLabel: "🔥 Chemical Change (Oxidation)",
     formula: "4Fe + 3O₂ + 6H₂O ➔ 2Fe₂O₃·3H₂O (Rust)",
-    title: "Rusting Iron Nail in Moisture (铁钉氧化生锈)",
+    title: "Rusting Iron Nail in Moisture",
     desc: "Shiny iron metal slowly reacts with oxygen gas dissolved in water to form iron oxide (rust) — a crumbly, flaky, reddish-brown new chemical substance!",
     color: "linear-gradient(180deg, #ea580c 0%, #9a3412 100%)",
     balloon: false,
@@ -707,7 +707,7 @@ function replayCurrentReaction() {
 // 3. Cell City Organelle Visualizer Logic
 const ORGANELLES_DATA = {
   nucleus: {
-    name: "Nucleus (细胞核)",
+    name: "Nucleus",
     icon: "🏛️",
     role: "City Job: City Hall & DNA Blueprint Vault",
     desc: "The control headquarters of the cell! Holds the master DNA instruction manual for building proteins and directing cellular life.",
@@ -715,7 +715,7 @@ const ORGANELLES_DATA = {
     presence: "Found in Both Plant & Animal Cells"
   },
   mitochondria: {
-    name: "Mitochondria (线粒体)",
+    name: "Mitochondria",
     icon: "⚡",
     role: "City Job: The Power Plant (ATP Energy Factory)",
     desc: "Uses oxygen and glucose food to generate high-energy ATP fuel packs through cellular respiration. Muscle cells have thousands of them!",
@@ -723,7 +723,7 @@ const ORGANELLES_DATA = {
     presence: "Found in Both Plant & Animal Cells"
   },
   chloroplast: {
-    name: "Chloroplasts (叶绿体) 🌿",
+    name: "Chloroplasts 🌿",
     icon: "☀️",
     role: "City Job: Solar Power Food Farm (Plant Superpower!)",
     desc: "Packed with green chlorophyll pigment. Captures sunlight to convert CO₂ and water into glucose sugar food via Photosynthesis!",
@@ -731,7 +731,7 @@ const ORGANELLES_DATA = {
     presence: "PLANT CELLS ONLY! (Animals eat food instead)"
   },
   vacuole: {
-    name: "Central Vacuole (液泡)",
+    name: "Central Vacuole",
     icon: "💧",
     role: "City Job: High-Capacity Water Tower & Waste Storage",
     desc: "Massive water reservoir in plant cells. When full of water, it pushes outward against the cell wall (turgor pressure) to keep flowers standing tall!",
@@ -739,7 +739,7 @@ const ORGANELLES_DATA = {
     presence: "Huge in Plants (90% volume), Tiny in Animals"
   },
   ribosome: {
-    name: "Ribosomes & ER (核糖体与内质网)",
+    name: "Ribosomes & ER",
     icon: "🏭",
     role: "City Job: 3D Protein Manufacturing Factories",
     desc: "Reads RNA codes from the Nucleus and snaps amino acid building blocks together to manufacture enzymes, muscle fibers, and antibodies!",
