@@ -102,7 +102,242 @@
         </div>
       </div>
 
-      <h3 class="section-heading">🌍 The 3 Great Global Terroirs (全球三大咖啡产区图鉴)</h3>
+      <!-- ========================================================================= -->
+      <!-- INTERACTIVE WORLD COFFEE MAP & BEAN BELT ATLAS -->
+      <!-- ========================================================================= -->
+      <div class="map-section-card">
+        <div class="map-header-row">
+          <div>
+            <span class="map-badge">INTERACTIVE ATLAS</span>
+            <h3 class="map-title">🗺️ The Global Coffee Belt & Famous Terroirs (世界咖啡产区地图)</h3>
+            <p class="map-subtitle">Click any glowing coffee bean pin below to inspect its mountain terroir, altitude, varietals, and flavour notes!</p>
+          </div>
+          <div class="map-filter-pills">
+            <button class="map-pill active" onclick="filterMapRegion('all')">🌍 All (全部)</button>
+            <button class="map-pill" onclick="filterMapRegion('africa')">🌸 Africa (非洲)</button>
+            <button class="map-pill" onclick="filterMapRegion('americas')">🍫 Americas (美洲)</button>
+            <button class="map-pill" onclick="filterMapRegion('asia')">🌿 Asia/Islands (亚洲/海岛)</button>
+          </div>
+        </div>
+
+        <div class="world-map-wrapper">
+          <svg viewBox="0 0 1000 500" class="coffee-world-svg" id="coffee-world-svg" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Grid Pattern -->
+              <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(229,169,60,0.06)" stroke-width="1"/>
+              </pattern>
+              <!-- Glowing Pin Filter -->
+              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+              <!-- Coffee Belt Gradient -->
+              <linearGradient id="belt-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(229,169,60,0.02)"/>
+                <stop offset="30%" stop-color="rgba(229,169,60,0.14)"/>
+                <stop offset="50%" stop-color="rgba(229,169,60,0.2)"/>
+                <stop offset="70%" stop-color="rgba(229,169,60,0.14)"/>
+                <stop offset="100%" stop-color="rgba(229,169,60,0.02)"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Map Ocean Background & Grid -->
+            <rect width="1000" height="500" fill="#140f0e" />
+            <rect width="1000" height="500" fill="url(#grid-pattern)" />
+
+            <!-- ================= COFFEE BELT OVERLAY (25°N to 25°S) ================= -->
+            <rect x="0" y="170" width="1000" height="160" fill="url(#belt-grad)" />
+            <!-- Tropic of Cancer (23.5° N) -->
+            <line x1="0" y1="175" x2="1000" y2="175" stroke="#e5a93c" stroke-width="1.5" stroke-dasharray="6,6" opacity="0.6"/>
+            <text x="18" y="170" fill="#e5a93c" font-size="11" font-weight="700" opacity="0.8">TROPIC OF CANCER (北回归线 23.5°N) ───────────</text>
+            
+            <!-- Equator (0°) -->
+            <line x1="0" y1="250" x2="1000" y2="250" stroke="rgba(255,255,255,0.25)" stroke-width="1" stroke-dasharray="4,8" />
+            <text x="18" y="246" fill="rgba(255,255,255,0.4)" font-size="10">EQUATOR (赤道 0°)</text>
+
+            <!-- Tropic of Capricorn (23.5° S) -->
+            <line x1="0" y1="325" x2="1000" y2="325" stroke="#e5a93c" stroke-width="1.5" stroke-dasharray="6,6" opacity="0.6"/>
+            <text x="18" y="340" fill="#e5a93c" font-size="11" font-weight="700" opacity="0.8">TROPIC OF CAPRICORN (南回归线 23.5°S) ────────</text>
+
+            <!-- Coffee Belt Center Label -->
+            <rect x="830" y="238" width="150" height="24" rx="12" fill="rgba(229,169,60,0.25)" stroke="#e5a93c" stroke-width="1"/>
+            <text x="905" y="254" fill="#ffd27d" font-size="10.5" font-weight="800" text-anchor="middle">☕ THE BEAN BELT</text>
+
+            <!-- ================= CONTINENT LANDMASSES (WARM DARK VECTOR) ================= -->
+            <g class="continents-group" fill="#251e1a" stroke="#3d312a" stroke-width="1.2">
+              <!-- North & Central America -->
+              <path d="M 80 50 L 150 40 L 220 55 L 260 90 L 240 140 L 210 160 L 250 200 L 220 230 L 245 255 L 265 275 L 280 280 L 265 290 L 230 260 L 180 220 L 140 170 L 110 120 Z" />
+              <!-- Caribbean Islands -->
+              <circle cx="275" cy="240" r="6" />
+              <circle cx="295" cy="245" r="4" />
+              
+              <!-- South America -->
+              <path d="M 270 285 L 320 280 L 370 310 L 400 340 L 370 410 L 330 460 L 290 430 L 270 370 L 260 320 Z" />
+
+              <!-- Europe -->
+              <path d="M 470 70 L 540 65 L 560 110 L 520 130 L 480 120 L 460 90 Z" />
+
+              <!-- Africa & Middle East -->
+              <path d="M 460 140 L 530 140 L 590 180 L 620 240 L 590 280 L 580 340 L 550 420 L 490 390 L 460 300 L 430 230 L 440 170 Z" />
+              <!-- Madagascar -->
+              <path d="M 605 350 L 615 340 L 625 380 L 610 395 Z" />
+
+              <!-- Asia -->
+              <path d="M 570 100 L 680 70 L 820 80 L 890 140 L 840 210 L 780 210 L 750 240 L 710 260 L 660 210 L 600 170 Z" />
+              <!-- India -->
+              <path d="M 670 200 L 710 230 L 700 280 L 670 250 Z" />
+              <!-- Southeast Asia & Indonesia -->
+              <path d="M 740 230 L 770 250 L 760 290 L 735 270 Z" />
+              <path d="M 745 295 L 810 295 L 830 315 L 760 315 Z" />
+              <path d="M 820 290 L 860 300 L 870 325 L 835 320 Z" />
+
+              <!-- Australia -->
+              <path d="M 810 360 L 890 350 L 920 400 L 880 440 L 810 420 Z" />
+            </g>
+
+            <!-- ================= INTERACTIVE COFFEE ORIGIN PINS ================= -->
+            <g class="coffee-pins-group">
+              
+              <!-- 1. ETHIOPIA -->
+              <g class="map-pin-item pin-africa" data-id="ethiopia" onclick="selectMapOrigin('ethiopia')">
+                <circle cx="575" cy="265" r="14" class="pin-pulse" />
+                <circle cx="575" cy="265" r="7" class="pin-core" />
+                <text x="575" y="250" class="pin-label">🇪🇹 Ethiopia</text>
+              </g>
+
+              <!-- 2. KENYA -->
+              <g class="map-pin-item pin-africa" data-id="kenya" onclick="selectMapOrigin('kenya')">
+                <circle cx="570" cy="290" r="14" class="pin-pulse" />
+                <circle cx="570" cy="290" r="7" class="pin-core" />
+                <text x="570" y="310" class="pin-label">🇰🇪 Kenya</text>
+              </g>
+
+              <!-- 3. YEMEN -->
+              <g class="map-pin-item pin-africa" data-id="yemen" onclick="selectMapOrigin('yemen')">
+                <circle cx="605" cy="235" r="14" class="pin-pulse" />
+                <circle cx="605" cy="235" r="7" class="pin-core" />
+                <text x="605" y="222" class="pin-label">🇾🇪 Yemen</text>
+              </g>
+
+              <!-- 4. PANAMA -->
+              <g class="map-pin-item pin-americas" data-id="panama" onclick="selectMapOrigin('panama')">
+                <circle cx="265" cy="272" r="14" class="pin-pulse" />
+                <circle cx="265" cy="272" r="7" class="pin-core" />
+                <text x="235" y="292" class="pin-label">🇵🇦 Panama</text>
+              </g>
+
+              <!-- 5. COLOMBIA -->
+              <g class="map-pin-item pin-americas" data-id="colombia" onclick="selectMapOrigin('colombia')">
+                <circle cx="285" cy="295" r="14" class="pin-pulse" />
+                <circle cx="285" cy="295" r="7" class="pin-core" />
+                <text x="325" y="298" class="pin-label">🇨🇴 Colombia</text>
+              </g>
+
+              <!-- 6. GUATEMALA -->
+              <g class="map-pin-item pin-americas" data-id="guatemala" onclick="selectMapOrigin('guatemala')">
+                <circle cx="240" cy="250" r="14" class="pin-pulse" />
+                <circle cx="240" cy="250" r="7" class="pin-core" />
+                <text x="195" y="250" class="pin-label">🇬🇹 Guatemala</text>
+              </g>
+
+              <!-- 7. COSTA RICA -->
+              <g class="map-pin-item pin-americas" data-id="costarica" onclick="selectMapOrigin('costarica')">
+                <circle cx="255" cy="265" r="14" class="pin-pulse" />
+                <circle cx="255" cy="265" r="7" class="pin-core" />
+                <text x="210" y="270" class="pin-label">🇨🇷 Costa Rica</text>
+              </g>
+
+              <!-- 8. BRAZIL -->
+              <g class="map-pin-item pin-americas" data-id="brazil" onclick="selectMapOrigin('brazil')">
+                <circle cx="360" cy="340" r="14" class="pin-pulse" />
+                <circle cx="360" cy="340" r="7" class="pin-core" />
+                <text x="395" y="345" class="pin-label">🇧🇷 Brazil</text>
+              </g>
+
+              <!-- 9. INDONESIA (SUMATRA) -->
+              <g class="map-pin-item pin-asia" data-id="indonesia" onclick="selectMapOrigin('indonesia')">
+                <circle cx="770" cy="295" r="14" class="pin-pulse" />
+                <circle cx="770" cy="295" r="7" class="pin-core" />
+                <text x="770" y="320" class="pin-label">🇮🇩 Sumatra</text>
+              </g>
+
+              <!-- 10. CHINA (YUNNAN) -->
+              <g class="map-pin-item pin-asia" data-id="yunnan" onclick="selectMapOrigin('yunnan')">
+                <circle cx="745" cy="225" r="14" class="pin-pulse" />
+                <circle cx="745" cy="225" r="7" class="pin-core" />
+                <text x="785" y="225" class="pin-label">🇨🇳 Yunnan</text>
+              </g>
+
+              <!-- 11. HAWAII (USA) -->
+              <g class="map-pin-item pin-asia" data-id="hawaii" onclick="selectMapOrigin('hawaii')">
+                <circle cx="95" cy="245" r="14" class="pin-pulse" />
+                <circle cx="95" cy="245" r="7" class="pin-core" />
+                <text x="95" y="230" class="pin-label">🇺🇸 Hawaii Kona</text>
+              </g>
+
+              <!-- 12. JAMAICA -->
+              <g class="map-pin-item pin-americas" data-id="jamaica" onclick="selectMapOrigin('jamaica')">
+                <circle cx="275" cy="238" r="14" class="pin-pulse" />
+                <circle cx="275" cy="238" r="7" class="pin-core" />
+                <text x="325" y="235" class="pin-label">🇯🇲 Jamaica</text>
+              </g>
+
+            </g>
+          </svg>
+        </div>
+
+        <!-- Terroir Spotlight Detail Card -->
+        <div class="origin-spotlight-box" id="origin-spotlight-box">
+          <div class="spotlight-header">
+            <div class="spotlight-title-group">
+              <span class="spotlight-flag" id="spotlight-flag">🇪🇹</span>
+              <div>
+                <h4 id="spotlight-title">Ethiopia &bull; Yirgacheffe & Guji (埃塞俄比亚 &bull; 耶加雪菲)</h4>
+                <p id="spotlight-sub">The Ancestral Homeland of Arabica &bull; Great Rift Valley Highlands</p>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-brew-spotlight" onclick="brewSpotlightOrigin()">
+              ✨ Match in Brewing Compass ➔
+            </button>
+          </div>
+
+          <div class="spotlight-grid">
+            <div class="spotlight-stat">
+              <span class="stat-lbl">⛰️ Altitude:</span>
+              <strong id="spotlight-alt">1,800m - 2,200m (High Mountain)</strong>
+            </div>
+            <div class="spotlight-stat">
+              <span class="stat-lbl">🌿 Varietals:</span>
+              <strong id="spotlight-var">Indigenous Heirloom (原生树种)</strong>
+            </div>
+            <div class="spotlight-stat">
+              <span class="stat-lbl">☀️ Processing:</span>
+              <strong id="spotlight-proc">Washed (Floral Tea) & Natural (Berry Jam)</strong>
+            </div>
+            <div class="spotlight-stat">
+              <span class="stat-lbl">📅 Harvest:</span>
+              <strong id="spotlight-harvest">October - January</strong>
+            </div>
+          </div>
+
+          <div class="spotlight-notes-row">
+            <span class="notes-lbl">🎨 Signature Cupping Notes:</span>
+            <div id="spotlight-tags" class="spotlight-tags">
+              <span>Jasmine Blossom</span>
+              <span>Bergamot Citrus</span>
+              <span>White Peach</span>
+              <span>Earl Grey Tea</span>
+            </div>
+          </div>
+
+          <p class="spotlight-story" id="spotlight-story">
+            Grown under the natural forest canopy in high-altitude volcanic soils, Ethiopian coffees are celebrated as the "Champagne of Coffee". Washed Yirgacheffe delivers crisp, tea-like jasmine and citrus elegance, while natural Guji explodes with sun-drenched blueberries and floral honey!
+          </p>
+        </div>
+      </div>
+
+      <h3 class="section-heading" style="margin-top:28px;">🌍 The 3 Great Global Terroirs (全球三大咖啡产区图鉴)</h3>
       <div class="origins-grid">
         
         <!-- Region 1: Africa -->
