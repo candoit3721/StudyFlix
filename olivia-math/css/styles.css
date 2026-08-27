@@ -188,7 +188,13 @@ body {
   opacity: 0;
 }
 
-.custom-chip span {
+/* Direct child only: a chip's label may now contain a nested .btn-glyph span,
+   and an unscoped descendant selector gave that glyph its own bordered white
+   box - which on a selected (purple) chip rendered as a blank white slab,
+   because the glyph strokes in currentColor (white) on a white background. */
+.custom-chip > span {
+  display: inline-flex;
+  align-items: center;
   padding: 6px 12px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
@@ -205,14 +211,59 @@ body {
   font-weight: 600;
 }
 
+/* Full-width toggle row for a single standalone checkbox option - roomier
+   than a chip, and doesn't wrap awkwardly with a longer label. */
+.toggle-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  cursor: pointer;
+}
+
+.toggle-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  accent-color: var(--primary);
+  flex-shrink: 0;
+}
+
+.toggle-row span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+.toggle-row span small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* Subtle separator before a standalone option that follows a run of
+   radio-chip groups, so it doesn't feel crammed against them. */
+.field-divider {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-color);
+}
+
 .times-table-selector {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 4px;
 }
 
-.times-table-selector .custom-chip span {
+.times-table-selector .custom-chip > span {
   width: 100%;
+  display: block;
   text-align: center;
   padding: 6px 0;
 }
@@ -632,6 +683,41 @@ body {
   font-style: italic;
   font-weight: 600;
   color: #4f46e5;
+}
+
+/* Compact header used on page 2+ of a multi-page worksheet */
+.ws-header-compact {
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.ws-header-compact .ws-title-row {
+  margin-bottom: 4px;
+}
+
+/* Wrapper the JS appends generated .worksheet-page sheets into; keeps
+   .document-viewport's flex/gap acting directly on the sheets. */
+#pages-container {
+  display: contents;
+}
+
+/* Practice Online mode: NOT a simulated paper page (no fixed 11in
+   min-height, no page-break chrome) - it's a plain scrolling practice
+   sheet, so the grid always sizes to its real content instead of being
+   squeezed into a fixed page box (which was clipping/overlapping rows
+   whenever a page needed more than 11in of vertical space). */
+.practice-container {
+  width: 100%;
+  max-width: 8.5in;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5in 0.55in;
+  box-sizing: border-box;
+}
+
+.practice-container .problems-container {
+  flex: none;
 }
 
 /* Interactive Practice Mode Styles */

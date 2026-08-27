@@ -17,6 +17,7 @@
       count: 20,
       layoutFormat: 'vertical', // 'vertical' or 'horizontal'
       gridCols: 3,
+      pageCount: 2,
       studentName: 'Olivia',
       worksheetTitle: 'Grade 3 Math Practice',
       includeAnswerKey: true
@@ -43,7 +44,7 @@
     multRangeSelect: document.getElementById('mult-range-select'),
     divRangeSelect: document.getElementById('div-range-select'),
     missingOpCheckbox: document.getElementById('missing-operand-checkbox'),
-    questionCount: document.getElementById('question-count'),
+    pageCountSelect: document.getElementById('page-count-select'),
     studentName: document.getElementById('student-name'),
     worksheetTitle: document.getElementById('worksheet-title'),
     includeAnswerKey: document.getElementById('include-answer-key'),
@@ -59,17 +60,7 @@
     btnResetInteractive: document.getElementById('btn-reset-interactive'),
 
     // Render Targets
-    problemsContainer: document.getElementById('problems-container'),
-    answersContainer: document.getElementById('answers-container'),
-    worksheetPage: document.getElementById('worksheet-page'),
-    answerKeyPage: document.getElementById('answer-key-page'),
-    renderedWsTitle: document.getElementById('rendered-ws-title'),
-    renderedWsSubtitle: document.getElementById('rendered-ws-subtitle'),
-    renderedStudentName: document.getElementById('rendered-student-name'),
-    renderedKeyStudent: document.getElementById('rendered-key-student'),
-    renderedKeyTitle: document.getElementById('rendered-key-title'),
-    renderedKeyCount: document.getElementById('rendered-key-count'),
-    keyDateStamp: document.getElementById('key-date-stamp'),
+    pagesContainer: document.getElementById('pages-container'),
 
     // Interactive
     interactiveToolbar: document.getElementById('interactive-toolbar'),
@@ -83,7 +74,7 @@
     mult_core: {
       type: 'multiplication',
       tableRange: '0-10',
-      count: 20,
+      pageCount: 2,
       layoutFormat: 'vertical',
       gridCols: 3,
       missingOperand: false,
@@ -93,7 +84,7 @@
       type: 'addition',
       digitRange: '3digit',
       regrouping: 'force',
-      count: 20,
+      pageCount: 2,
       layoutFormat: 'vertical',
       gridCols: 3,
       missingOperand: false,
@@ -103,7 +94,7 @@
       type: 'subtraction',
       digitRange: '3digit',
       borrowing: 'force',
-      count: 20,
+      pageCount: 2,
       layoutFormat: 'vertical',
       gridCols: 3,
       missingOperand: false,
@@ -111,7 +102,7 @@
     },
     all_mixed: {
       type: 'all_mixed',
-      count: 25,
+      pageCount: 1,
       layoutFormat: 'horizontal',
       gridCols: 3,
       missingOperand: false,
@@ -121,14 +112,14 @@
       type: 'add_sub_mixed',
       digitRange: '2digit',
       missingOperand: true,
-      count: 20,
+      pageCount: 1,
       layoutFormat: 'horizontal',
       gridCols: 2,
       worksheetTitle: 'Missing Numbers & Fact Families'
     },
     word_problems: {
       type: 'word_problems',
-      count: 5,
+      pageCount: 1,
       gridCols: 2,
       missingOperand: false,
       worksheetTitle: 'Grade 3 Math Word Problems'
@@ -191,7 +182,7 @@
     const tableRange = els.multRangeSelect.value;
     const maxDivisor = parseInt(els.divRangeSelect.value, 10) || 10;
     const missingOperand = els.missingOpCheckbox.checked;
-    const count = parseInt(els.questionCount.value, 10) || 20;
+    const pageCount = parseInt(els.pageCountSelect.value, 10) || 2;
     const layoutFormat = document.querySelector('input[name="layoutFormat"]:checked')?.value || 'vertical';
     const gridCols = parseInt(document.querySelector('input[name="gridCols"]:checked')?.value, 10) || 3;
     const studentName = els.studentName.value.trim() || 'Olivia';
@@ -210,7 +201,8 @@
       customTables,
       maxDivisor,
       missingOperand,
-      count,
+      count: state.currentConfig.count,
+      pageCount,
       layoutFormat,
       gridCols,
       studentName,
@@ -241,7 +233,7 @@
     }
     if (p.tableRange) els.multRangeSelect.value = p.tableRange;
     if (p.missingOperand !== undefined) els.missingOpCheckbox.checked = p.missingOperand;
-    if (p.count) els.questionCount.value = p.count;
+    if (p.pageCount) els.pageCountSelect.value = p.pageCount;
     if (p.layoutFormat) {
       const radio = document.querySelector(`input[name="layoutFormat"][value="${p.layoutFormat}"]`);
       if (radio) radio.checked = true;
@@ -259,32 +251,68 @@
   /**
    * Generate Problem Set and Render to DOM
    */
+  function buildSubtitle(config) {
+    if (config.type === 'addition') return `Addition Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
+    if (config.type === 'subtraction') return `Subtraction Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
+    if (config.type === 'add_sub_mixed') return 'Addition & Subtraction Mixed';
+    if (config.type === 'multiplication') return `Multiplication Facts (${config.tableRange})`;
+    if (config.type === 'division') return `Division Facts (÷ up to ${config.maxDivisor})`;
+    if (config.type === 'mult_div_mixed') return 'Multiplication & Division Mixed';
+    if (config.type === 'all_mixed') return 'Mixed 4 Operations Review';
+    if (config.type === 'comparison') return 'Compare Expressions (<, >, =)';
+    if (config.type === 'word_problems') return 'Grade 3 Story Problems';
+    return '';
+  }
+
+  function getMaxDensityCap(config) {
+    if (config.type === 'word_problems') return 4;
+    const cols = config.gridCols || 3;
+
+    // Comparison problems are their own card shape: they always render a
+    // .comparison-box, ignoring the vertical/horizontal switch (which is why
+    // syncFormFields hides that control for them). They also get TALLER as the
+    // columns narrow, because the two expressions wrap - measured against the
+    // same printable box as below: 82px at 2 cols, 94px at 3, 118px at 4,
+    // leaving room for 8, 7 and 6 rows. Without this branch a 4-column sheet
+    // was packed to 7 rows and spilled onto an extra physical page.
+    if (config.type === 'comparison') {
+      const rows = cols >= 4 ? 6 : (cols === 3 ? 7 : 8);
+      return cols * rows;
+    }
+
+    // Measured directly off the rendered DOM (with the on-screen 11in
+    // stretch neutralized, since a flexed grid otherwise inflates card
+    // height when a page has few rows) against the real printed content
+    // box - 11in page minus the 0.4in @page margin and the sheet's own
+    // 0.3in padding, minus header+footer, leaves ~814px: a vertical
+    // arithmetic card row measures ~192px (4 rows fit), a single-line
+    // horizontal-equation row ~102px (7 rows fit). This is the "fit"
+    // Smart Layout packs every page to, exactly, with no manual override.
+    return config.layoutFormat === 'horizontal' ? cols * 7 : cols * 4;
+  }
+
+  /**
+   * Smart Layout: the user picks how many PAGES of questions they want
+   * (for double-sided printing + one answer sheet); the question count is
+   * derived so every page comes out completely full - pageCount * cap -
+   * rather than the user picking a count and hoping it divides evenly.
+   */
+  function getEffectiveQuestionsPerPage(config, total) {
+    const cap = getMaxDensityCap(config);
+    if (!total) return cap;
+    const pageCount = Math.max(1, Math.ceil(total / cap));
+    return Math.ceil(total / pageCount);
+  }
+
+  /**
+   * Generate Problem Set and Render to DOM
+   */
   function generateAndRender() {
     readConfigFromUI();
     const config = state.currentConfig;
+    const cap = getMaxDensityCap(config);
+    config.count = Math.max(cap, (config.pageCount || 2) * cap);
 
-    // Subtitle helper text
-    let subtitle = '';
-    if (config.type === 'addition') subtitle = `Addition Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
-    else if (config.type === 'subtraction') subtitle = `Subtraction Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
-    else if (config.type === 'add_sub_mixed') subtitle = 'Addition & Subtraction Mixed';
-    else if (config.type === 'multiplication') subtitle = `Multiplication Facts (${config.tableRange})`;
-    else if (config.type === 'division') subtitle = `Division Facts (÷ up to ${config.maxDivisor})`;
-    else if (config.type === 'mult_div_mixed') subtitle = 'Multiplication & Division Mixed';
-    else if (config.type === 'all_mixed') subtitle = 'Mixed 4 Operations Review';
-    else if (config.type === 'comparison') subtitle = 'Compare Expressions (<, >, =)';
-    else if (config.type === 'word_problems') subtitle = 'Grade 3 Story Problems';
-
-    // Update Header Text
-    els.renderedWsTitle.textContent = config.worksheetTitle;
-    els.renderedWsSubtitle.textContent = subtitle;
-    els.renderedStudentName.textContent = config.studentName;
-    els.renderedKeyStudent.textContent = config.studentName;
-    els.renderedKeyTitle.textContent = config.worksheetTitle;
-    els.renderedKeyCount.textContent = config.count;
-    els.keyDateStamp.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-
-    // Generate Problems
     if (config.type === 'word_problems') {
       state.problems = WordProblems.generateWordProblemsList(config.count);
     } else {
@@ -292,36 +320,109 @@
     }
 
     renderWorksheet();
-    renderAnswerKey();
+    if (state.mode !== 'interactive') renderAnswerKey();
 
     if (state.mode === 'interactive') {
       resetInteractiveState();
     }
   }
 
+  function buildPageHeader(config, subtitle, pageNum, totalPages) {
+    const header = document.createElement('div');
+    if (pageNum === 1) {
+      header.className = 'ws-header';
+      header.innerHTML = `
+        <div class="ws-title-row">
+          <h2 class="ws-title">${config.worksheetTitle}</h2>
+          <span class="ws-subtitle">${subtitle}${totalPages > 1 ? ` • Page ${pageNum} of ${totalPages}` : ''}</span>
+        </div>
+        <div class="ws-meta-row">
+          <div class="meta-field"><span>Name:</span><span class="meta-line" style="padding-left: 6px;">${config.studentName}</span></div>
+          <div class="meta-field"><span>Date:</span><span class="meta-line"></span></div>
+          <div class="meta-field"><span>Score:</span><span class="meta-line" style="min-width: 80px;"></span></div>
+          <div class="meta-field"><span>Time:</span><span class="meta-line" style="min-width: 80px;"></span></div>
+        </div>
+      `;
+    } else {
+      header.className = 'ws-header ws-header-compact';
+      header.innerHTML = `
+        <div class="ws-title-row">
+          <h2 class="ws-title" style="font-size: 1.15rem;">${config.worksheetTitle} <span style="font-size:0.78rem; color:#4f46e5; font-weight:600;">(Page ${pageNum} of ${totalPages})</span></h2>
+        </div>
+        <div class="ws-meta-row" style="font-size: 0.82rem;">
+          <span>Name: <strong>${config.studentName}</strong></span>
+        </div>
+      `;
+    }
+    return header;
+  }
+
+  function buildPageFooter() {
+    const footer = document.createElement('div');
+    footer.className = 'ws-footer';
+    footer.innerHTML = `
+      <span>Olivia's Math Studio • Grade 3 Curricula</span>
+      <span class="ws-footer-quote">⭐ Great job! Keep up the fantastic effort! ⭐</span>
+    `;
+    return footer;
+  }
+
+  function buildProblemCard(p, idx, isAnswerKey) {
+    const config = state.currentConfig;
+    if (p.type === 'word_problem') return renderWordProblemCard(p, idx, isAnswerKey);
+    if (p.type === 'comparison') return renderComparisonCard(p, idx, isAnswerKey);
+    if (config.layoutFormat === 'vertical' && !p.missingPos) return renderVerticalCard(p, idx, isAnswerKey);
+    return renderHorizontalCard(p, idx, isAnswerKey);
+  }
+
   /**
-   * Render Worksheet Problems Grid
+   * Render the worksheet as one or more physical pages, splitting the
+   * question set intelligently (see getEffectiveQuestionsPerPage) instead
+   * of dumping everything into a single ever-growing container.
    */
   function renderWorksheet() {
     const config = state.currentConfig;
     const isWordProblem = config.type === 'word_problems';
+    const total = state.problems.length;
+    const subtitle = buildSubtitle(config);
+    const gridClass = `problems-container grid-cols-${isWordProblem ? '1' : config.gridCols}`;
 
-    // Set grid columns class
-    els.problemsContainer.className = `problems-container grid-cols-${isWordProblem ? '1' : config.gridCols}`;
-    els.problemsContainer.innerHTML = '';
+    els.pagesContainer.innerHTML = '';
 
-    state.problems.forEach((p, idx) => {
-      let card;
-      if (p.type === 'word_problem') {
-        card = renderWordProblemCard(p, idx, false);
-      } else if (p.type === 'comparison') {
-        card = renderComparisonCard(p, idx, false);
-      } else if (config.layoutFormat === 'vertical' && !p.missingPos) {
-        card = renderVerticalCard(p, idx, false);
-      } else {
-        card = renderHorizontalCard(p, idx, false);
-      }
-      els.problemsContainer.appendChild(card);
+    if (state.mode === 'interactive') {
+      // Not a simulated paper page: a plain practice sheet that sizes to
+      // its real content instead of a fixed 11in page box.
+      const page = document.createElement('div');
+      page.className = 'practice-container';
+      page.appendChild(buildPageHeader(config, subtitle, 1, 1));
+      const grid = document.createElement('div');
+      grid.className = gridClass;
+      state.problems.forEach((p, idx) => grid.appendChild(buildProblemCard(p, idx, false)));
+      page.appendChild(grid);
+      page.appendChild(buildPageFooter());
+      els.pagesContainer.appendChild(page);
+      return;
+    }
+
+    const perPage = getEffectiveQuestionsPerPage(config, total);
+    const chunks = [];
+    for (let i = 0; i < total; i += perPage) chunks.push(state.problems.slice(i, i + perPage));
+    const totalPages = chunks.length || 1;
+
+    let globalIdx = 0;
+    chunks.forEach((chunk, chunkIdx) => {
+      const page = document.createElement('div');
+      page.className = 'worksheet-page';
+      page.appendChild(buildPageHeader(config, subtitle, chunkIdx + 1, totalPages));
+      const grid = document.createElement('div');
+      grid.className = gridClass;
+      chunk.forEach((p) => {
+        grid.appendChild(buildProblemCard(p, globalIdx, false));
+        globalIdx++;
+      });
+      page.appendChild(grid);
+      page.appendChild(buildPageFooter());
+      els.pagesContainer.appendChild(page);
     });
   }
 
@@ -330,11 +431,7 @@
    */
   function renderAnswerKey() {
     const config = state.currentConfig;
-    if (!config.includeAnswerKey) {
-      els.answerKeyPage.style.display = 'none';
-      return;
-    }
-    els.answerKeyPage.style.display = 'flex';
+    if (!config.includeAnswerKey || !state.problems.length) return;
 
     const isWordProblem = config.type === 'word_problems';
     let cols = 5;
@@ -348,8 +445,24 @@
       cols = 5;
     }
 
-    els.answersContainer.className = `compact-answers-container grid-cols-${cols}`;
-    els.answersContainer.innerHTML = '';
+    const page = document.createElement('div');
+    page.className = 'worksheet-page answer-key-page';
+    page.innerHTML = `
+      <div class="ws-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+        <div class="ws-title-row" style="margin-bottom: 6px;">
+          <h2 class="ws-title" style="font-size: 1.3rem;">Answer Key</h2>
+          <span class="answer-key-badge">PARENT / TEACHER QUICK KEY (PAPER SAVER)</span>
+        </div>
+        <div class="ws-meta-row" style="font-size: 0.85rem;">
+          <div class="meta-field"><span>Student:</span><span style="font-weight: 700; color: #1e293b;">${config.studentName}</span></div>
+          <div class="meta-field"><span>Subject:</span><span style="font-weight: 700; color: #1e293b;">${config.worksheetTitle}</span></div>
+          <div class="meta-field"><span>Total Questions:</span><span style="font-weight: 700; color: #1e293b;">${config.count}</span></div>
+        </div>
+      </div>
+    `;
+
+    const grid = document.createElement('div');
+    grid.className = `compact-answers-container grid-cols-${cols}`;
 
     state.problems.forEach((p) => {
       const item = document.createElement('div');
@@ -374,8 +487,21 @@
       }
       item.appendChild(ansSpan);
 
-      els.answersContainer.appendChild(item);
+      grid.appendChild(item);
     });
+    page.appendChild(grid);
+
+    const footer = document.createElement('div');
+    footer.className = 'ws-footer';
+    footer.style.marginTop = '14px';
+    footer.style.paddingTop = '6px';
+    footer.innerHTML = `
+      <span>Olivia's Math Studio • Quick Answer Key</span>
+      <span>Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+    `;
+    page.appendChild(footer);
+
+    els.pagesContainer.appendChild(page);
   }
 
   /**
@@ -608,6 +734,7 @@
       stopTimer();
     }
     renderWorksheet();
+    if (newMode !== 'interactive') renderAnswerKey();
   }
 
   /**
@@ -653,7 +780,7 @@
    */
   function checkInteractiveAnswers() {
     stopTimer();
-    const inputs = document.querySelectorAll('#problems-container .interactive-input');
+    const inputs = document.querySelectorAll('#pages-container .interactive-input');
     let correctCount = 0;
     let totalCount = inputs.length;
 
@@ -765,15 +892,17 @@
       });
     });
 
-    els.questionCount.addEventListener('change', generateAndRender);
     els.divRangeSelect.addEventListener('change', generateAndRender);
+    els.pageCountSelect.addEventListener('change', generateAndRender);
     els.studentName.addEventListener('input', () => {
-      els.renderedStudentName.textContent = els.studentName.value.trim() || 'Olivia';
-      els.renderedKeyStudent.textContent = els.studentName.value.trim() || 'Olivia';
+      readConfigFromUI();
+      renderWorksheet();
+      if (state.mode !== 'interactive') renderAnswerKey();
     });
     els.worksheetTitle.addEventListener('input', () => {
-      els.renderedWsTitle.textContent = els.worksheetTitle.value.trim() || 'Grade 3 Math Practice';
-      els.renderedKeyTitle.textContent = els.worksheetTitle.value.trim() || 'Grade 3 Math Practice';
+      readConfigFromUI();
+      renderWorksheet();
+      if (state.mode !== 'interactive') renderAnswerKey();
     });
 
     // Preset Buttons
@@ -793,6 +922,7 @@
       state.showAnswers = !state.showAnswers;
       els.btnToggleAnswers.textContent = state.showAnswers ? '🙈 Hide Answers' : '👁️ Show Answers';
       renderWorksheet();
+      if (state.mode !== 'interactive') renderAnswerKey();
     });
 
     // Mode Buttons

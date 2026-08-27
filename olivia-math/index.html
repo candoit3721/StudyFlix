@@ -20,9 +20,9 @@
       <div class="sidebar-header">
         <h1>Olivia's Math Studio</h1>
         <p>Grade 3 Custom Worksheet &amp; Drill Generator</p>
-        <div style="margin-top: 10px; display: flex; gap: 6px;">
-          <a href="../index.html" style="background:#181818; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;"><span data-sf-icon="arrowLeft" data-sf-size="14"></span><span>StudyFlix Hub</span></a>
-          <a href="clock-time.html" style="background:#8b5cf6; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none;"><span data-sf-icon="clock" data-sf-size="14"></span><span>Clock &amp; Elapsed Time</span></a>
+        <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
+          <a href="../index.html" style="background:#181818; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;"><span data-sf-icon="arrowLeft" data-sf-size="14"></span><span>StudyFlix Hub</span></a>
+          <a href="clock-time.html" style="background:#8b5cf6; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;"><span data-sf-icon="clock" data-sf-size="14"></span><span>Clock &amp; Elapsed Time</span></a>
         </div>
       </div>
 
@@ -80,7 +80,7 @@
         <!-- Operation Specific Options -->
         <div class="control-group" id="operation-options-box">
           <h3>Difficulty &amp; Rules</h3>
-          
+
           <!-- Addition / Subtraction Digits -->
           <div class="form-field" id="field-digit-range">
             <label>Digit Range:</label>
@@ -179,40 +179,41 @@
           </div>
 
           <!-- Missing Operand / Algebra Drill -->
-          <div class="form-field" id="field-missing-operand">
-            <label class="custom-chip">
+          <div class="form-field field-divider" id="field-missing-operand">
+            <label class="toggle-row">
               <input type="checkbox" id="missing-operand-checkbox">
-              <span><span class="btn-glyph" data-sf-icon="lightbulb" data-sf-size="16"></span>Missing Numbers Mode (e.g. 45 + ___ = 82)</span>
+              <span><span class="btn-glyph" data-sf-icon="lightbulb" data-sf-size="16"></span>Missing Numbers Mode<br><small>e.g. 45 + ___ = 82</small></span>
             </label>
           </div>
         </div>
 
         <!-- Layout & Sheet Options -->
         <div class="control-group">
-          <h3>Layout &amp; Sheet Setup</h3>
-          
+          <h3>Smart Layout</h3>
+
           <div class="form-field">
-            <label for="question-count">Number of Questions:</label>
-            <select id="question-count" class="form-select">
-              <option value="10">10 Questions (Quick Check)</option>
-              <option value="15">15 Questions</option>
-              <option value="20" selected>20 Questions (Standard Drill)</option>
-              <option value="25">25 Questions</option>
-              <option value="30">30 Questions</option>
-              <option value="40">40 Questions (Speed Drill)</option>
+            <label for="page-count-select">Pages of Questions:</label>
+            <select id="page-count-select" class="form-select">
+              <option value="1">1 Page</option>
+              <option value="2" selected>2 Pages (Double-Sided + Answer Key)</option>
+              <option value="3">3 Pages</option>
+              <option value="4">4 Pages</option>
+              <option value="5">5 Pages</option>
+              <option value="6">6 Pages</option>
             </select>
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Question count fills in automatically - each page is packed full based on Columns per Page.</div>
           </div>
 
-          <div class="form-field" id="field-layout-format">
+          <div class="form-field field-divider" id="field-layout-format">
             <label>Problem Format:</label>
             <div class="radio-group">
               <label class="custom-chip">
                 <input type="radio" name="layoutFormat" value="vertical" checked>
-                <span>Vertical Column</span>
+                <span><span class="btn-glyph" data-sf-icon="formatVertical" data-sf-size="15"></span>Vertical Column</span>
               </label>
               <label class="custom-chip">
                 <input type="radio" name="layoutFormat" value="horizontal">
-                <span>Horizontal Equation</span>
+                <span><span class="btn-glyph" data-sf-icon="formatHorizontal" data-sf-size="15"></span>Horizontal Equation</span>
               </label>
             </div>
           </div>
@@ -222,18 +223,23 @@
             <div class="radio-group">
               <label class="custom-chip">
                 <input type="radio" name="gridCols" value="2">
-                <span>2 Columns</span>
+                <span><span class="btn-glyph" data-sf-icon="grid" data-sf-size="15"></span>2 Columns</span>
               </label>
               <label class="custom-chip">
                 <input type="radio" name="gridCols" value="3" checked>
-                <span>3 Columns</span>
+                <span><span class="btn-glyph" data-sf-icon="grid" data-sf-size="15"></span>3 Columns</span>
               </label>
               <label class="custom-chip">
                 <input type="radio" name="gridCols" value="4">
-                <span>4 Columns</span>
+                <span><span class="btn-glyph" data-sf-icon="grid" data-sf-size="15"></span>4 Columns</span>
               </label>
             </div>
           </div>
+        </div>
+
+        <!-- Worksheet Details -->
+        <div class="control-group">
+          <h3>Worksheet Details</h3>
 
           <div class="form-field">
             <label for="student-name">Student Name:</label>
@@ -246,9 +252,9 @@
           </div>
 
           <div class="form-field">
-            <label class="custom-chip">
+            <label class="toggle-row">
               <input type="checkbox" id="include-answer-key" checked>
-              <span><span class="btn-glyph" data-sf-icon="printable" data-sf-size="16"></span>Include Answer Key (Compact Paper-Saver)</span>
+              <span><span class="btn-glyph" data-sf-icon="printable" data-sf-size="16"></span>Include Answer Key<br><small>Compact paper-saver format</small></span>
             </label>
           </div>
         </div>
@@ -291,78 +297,10 @@
 
       <!-- Scrollable Printable Area -->
       <div class="document-viewport" id="document-viewport">
-        <!-- Main Worksheet Page -->
-        <div class="worksheet-page" id="worksheet-page">
-          <!-- Header Area -->
-          <div class="ws-header">
-            <div class="ws-title-row">
-              <h2 class="ws-title" id="rendered-ws-title">Grade 3 Math Practice</h2>
-              <span class="ws-subtitle" id="rendered-ws-subtitle">Multiplication Facts</span>
-            </div>
-            <div class="ws-meta-row">
-              <div class="meta-field">
-                <span>Name:</span>
-                <span class="meta-line" id="rendered-student-name" style="padding-left: 6px;">Olivia</span>
-              </div>
-              <div class="meta-field">
-                <span>Date:</span>
-                <span class="meta-line"></span>
-              </div>
-              <div class="meta-field">
-                <span>Score:</span>
-                <span class="meta-line" style="min-width: 80px;"></span>
-              </div>
-              <div class="meta-field">
-                <span>Time:</span>
-                <span class="meta-line" style="min-width: 80px;"></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Problem Cards Grid -->
-          <div class="problems-container grid-cols-3" id="problems-container">
-            <!-- Dynamically populated via JS -->
-          </div>
-
-          <!-- Footer -->
-          <div class="ws-footer">
-            <span>Olivia's Math Studio • Grade 3 Curricula</span>
-            <span class="ws-footer-quote">⭐ Great job! Keep up the fantastic effort! ⭐</span>
-          </div>
-        </div>
-
-        <!-- Optional Compact Paper-Saving Answer Key Page -->
-        <div class="worksheet-page answer-key-page" id="answer-key-page">
-          <div class="ws-header" style="margin-bottom: 12px; padding-bottom: 8px;">
-            <div class="ws-title-row" style="margin-bottom: 6px;">
-              <h2 class="ws-title" style="font-size: 1.3rem;">Answer Key</h2>
-              <span class="answer-key-badge">PARENT / TEACHER QUICK KEY (PAPER SAVER)</span>
-            </div>
-            <div class="ws-meta-row" style="font-size: 0.85rem;">
-              <div class="meta-field">
-                <span>Student:</span>
-                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-student">Olivia</span>
-              </div>
-              <div class="meta-field">
-                <span>Subject:</span>
-                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-title">Grade 3 Math Practice</span>
-              </div>
-              <div class="meta-field">
-                <span>Total Questions:</span>
-                <span style="font-weight: 700; color: #1e293b;" id="rendered-key-count">20</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="compact-answers-container grid-cols-5" id="answers-container">
-            <!-- Dynamically populated simplified Q-ID and Answer items -->
-          </div>
-
-          <div class="ws-footer" style="margin-top: 14px; padding-top: 6px;">
-            <span>Olivia's Math Studio • Quick Answer Key</span>
-            <span>Generated on <span id="key-date-stamp"></span></span>
-          </div>
-        </div>
+        <!-- Worksheet & answer-key pages are built dynamically by app.js,
+             one .worksheet-page per physical sheet, sized to the question
+             count and layout so nothing overlaps or overflows. -->
+        <div id="pages-container"></div>
       </div>
 
       <!-- Interactive Mode Bottom Toolbar -->
