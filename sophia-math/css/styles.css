@@ -196,8 +196,12 @@ body {
   height: 0;
 }
 
-.custom-chip span {
-  display: inline-block;
+/* Direct child only: a chip's label may contain a nested .btn-glyph span, and
+   an unscoped descendant selector gave that glyph its own bordered white box,
+   which reads as a stray button sitting inside the chip. */
+.custom-chip > span {
+  display: inline-flex;
+  align-items: center;
   padding: 7px 11px;
   background: #fff;
   border: 1px solid var(--border-color);
@@ -209,7 +213,7 @@ body {
   user-select: none;
 }
 
-.custom-chip:hover span {
+.custom-chip:hover > span {
   border-color: #cbd5e1;
   background: #f1f5f9;
 }
