@@ -51,13 +51,19 @@
     quest: 'M4.5 6.2 9.5 4l5 2.2L19.5 4v13.8l-5 2.2-5-2.2-5 2.2zM9.5 4v13.8M14.5 6.2V20',
     lesson: 'M4 5.2A1.2 1.2 0 0 1 5.2 4H10a2.5 2.5 0 0 1 2 1v14a2.5 2.5 0 0 0-2-1H5.2A1.2 1.2 0 0 1 4 16.8zM20 5.2A1.2 1.2 0 0 0 18.8 4H14a2.5 2.5 0 0 0-2 1v14a2.5 2.5 0 0 1 2-1h4.8a1.2 1.2 0 0 0 1.2-1.2z',
     printable: 'M6 3.5h8L18 7.5v13H6zM14 3.5v4h4M9 12.5h6M9 16h4',
-    formatVertical: 'M7 6h10M7 12h10M7 18h10',
-    formatHorizontal: 'M7 5v14M12 5v14M17 5v14',
+    // Problem-format marks. These draw the arrangement they actually produce:
+    // a stacked column sum (operands stacked, rule, answer line) versus a
+    // single-line equation. Three plain strokes cannot say which is which -
+    // horizontal strokes read as "rows" and vertical strokes as "columns",
+    // which is the opposite of the format each one names.
+    formatVertical: 'M10.5 5.5h8M10.5 10h8M4 13.5h16M10.5 17.5h8',
+    formatHorizontal: 'M3 12h4.5M10 12h4.5M17 9.5h4v5h-4z',
     // Column-count marks: one page outline divided into N columns, so the
     // icon shows the actual layout rather than an abstract grid.
     columns1: 'M4 5h16v14H4z',
     columns2: 'M4 5h16v14H4zM12 5v14',
     columns3: 'M4 5h16v14H4zM9.3 5v14M14.7 5v14',
+    columns4: 'M4 5h16v14H4zM8 5v14M12 5v14M16 5v14',
 
     /* ---- subject glyphs ---- */
     temple: 'M3.5 8.5 12 3.5l8.5 5M4.5 8.5h15M6.5 11v6.5M10 11v6.5M14 11v6.5M17.5 11v6.5M4 20h16M4.5 17.5h15',
