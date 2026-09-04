@@ -8,11 +8,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
   <style>
     @page {
       size: letter portrait;
       margin: 0.45in 0.5in;
     }
+
+    /* The shared print geometry (assets/sf/print.css) describes this page.
+       These must agree with the @page rule above: the sheet IS the printable
+       box, i.e. the paper minus its margins, so it carries no padding of its
+       own. tests/print/css-contract.spec.ts asserts the two stay in step. */
+    :root {
+      --sf-page-w: 8.5in;
+      --sf-page-h: 11in;
+      --sf-page-margin-y: 0.45in;
+      --sf-page-margin-x: 0.5in;
+      --sf-sheet-pad-y: 0in;
+      --sf-sheet-pad-x: 0in;
+    }
+
 
     :root {
       --primary: #0284c7;
@@ -73,14 +90,17 @@
     }
     .btn-outline:hover { background: #f1f5f9; }
 
+    /* Hand-authored page. Box model and page breaks come from .sf-sheet in
+       assets/sf/print.css, which also supplies the `:last-of-type` reset that
+       stops a blank sheet being emitted after the final page. Because that box
+       is now a FIXED height in both media, content pasted in beyond what fits
+       visibly overhangs instead of silently reflowing -- and
+       tests/print/all-printables.spec.ts fails with the offending page index. */
     .document-page {
-      max-width: 8.5in;
       margin: 0 auto 30px;
       background: #ffffff;
-      padding: 0.45in 0.5in;
       border-radius: 4px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      page-break-after: always;
       position: relative;
     }
 
@@ -214,15 +234,6 @@
         font-size: 9.5pt;
       }
       .toolbar-header { display: none !important; }
-      .document-page {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 0 15px 0 !important;
-        box-shadow: none !important;
-      }
-      /* Zero paper waste (style guide section 7.1): the break after the LAST
-         sheet was emitting an extra blank page on every print. */
-      .document-page:last-of-type { page-break-after: auto; }
     }
   </style>
 </head>
@@ -240,7 +251,7 @@
   </header>
 
   <!-- PAGE 1 -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🧪 STUDYFLIX &bull; SCIENCE & CHEMISTRY MASTER WORKBOOK</div>
@@ -302,7 +313,7 @@
   </main>
 
   <!-- PAGE 2 -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🧪 MODULE 3 & 4: CELL BIOLOGY & PHYSICS (GRADE 6 PREP)</div>
@@ -369,7 +380,7 @@
   </main>
 
   <!-- PAGE 3: GRADE 6 ONTARIO STRANDS B AND D -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🍁 GRADE 6 ONTARIO: BIODIVERSITY &amp; FLIGHT</div>
@@ -439,7 +450,7 @@
   </main>
 
   <!-- PAGE 4: GRADE 6 ONTARIO STRANDS E AND C -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🍁 GRADE 6 ONTARIO: SPACE &amp; ELECTRICITY</div>
@@ -509,7 +520,7 @@
   </main>
 
   <!-- PAGE 5: DEDICATED ANSWER KEY FOR THE GRADE 6 STRANDS -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🔑 GRADE 6 ONTARIO STRANDS: SOLUTIONS KEY</div>

@@ -7,8 +7,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.1.0">
-  <link rel="stylesheet" href="css/styles.css?v=3.1.0">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
+  <link rel="stylesheet" href="css/styles.css?v=3.2.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
@@ -25,6 +28,16 @@
       </div>
 
       <div class="sidebar-content">
+        <!-- Interactive Lab Feature Banner -->
+        <div class="control-group" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid var(--border-focus); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">✨ NEW INTERACTIVE STUDIO</div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 6px;">Geometry &amp; Area Masterclass</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">Visual shearing proofs, dynamic SVG mutators, and 3-Tier Gauss Arena.</p>
+          <a href="geometry.html" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 8px 12px; font-size: 0.82rem; font-weight: 800; text-decoration: none; width: 100%;">
+            <span>📐 Launch Interactive Geometry Lab →</span>
+          </a>
+        </div>
+
         <!-- Quick Presets -->
         <div class="control-group">
           <h3>Quick Presets</h3>
@@ -40,6 +53,14 @@
             <button class="preset-btn" data-preset="g5_pemdas">
               <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>PEMDAS Expressions</span>
               <span class="badge">Grade 5 Order of Ops</span>
+            </button>
+            <button class="preset-btn" data-preset="g5_6_geometry_area">
+              <span><span class="preset-glyph" data-sf-icon="ruler" data-sf-size="17"></span>Area Masterclass</span>
+              <span class="badge">Grade 5/6 Polygons &amp; Circles</span>
+            </button>
+            <button class="preset-btn" data-preset="g6_composite_shapes">
+              <span><span class="preset-glyph" data-sf-icon="lightbulb" data-sf-size="17"></span>Composite Shapes</span>
+              <span class="badge">Grade 6 Shaded Area Puzzles</span>
             </button>
             <button class="preset-btn" data-preset="g6_ratios">
               <span><span class="preset-glyph" data-sf-icon="chartLine" data-sf-size="17"></span>Ratios &amp; Proportions</span>
@@ -74,6 +95,15 @@
           <div class="form-field">
             <label for="topic-select">Category:</label>
             <select id="topic-select" class="form-select">
+              <optgroup label="Geometry &amp; Spatial Sense (Ontario Strand E)">
+                <option value="geometry_area">Area of 2D Shapes (All Polygons &amp; Circles)</option>
+                <option value="geometry_triangles">Triangle Areas (Right, Acute, Obtuse)</option>
+                <option value="geometry_quadrilaterals">Parallelograms, Trapezoids &amp; Rhombuses</option>
+                <option value="geometry_circles">Circles &amp; Annulus Ring Areas</option>
+                <option value="geometry_composite">Composite Figures &amp; Shaded Regions</option>
+                <option value="geometry_missing">Reverse Area &amp; Missing Heights</option>
+                <option value="geometry">General Geometry &amp; 3D Prisms</option>
+              </optgroup>
               <optgroup label="Grade 5 Topics">
                 <option value="fractions">Fractions (Add, Sub, Mult, Div)</option>
                 <option value="fractions_add_sub">Fraction Addition &amp; Subtraction</option>
@@ -81,7 +111,6 @@
                 <option value="fractions_div">Fraction Division (Keep-Change-Flip)</option>
                 <option value="decimals">Decimals (+, −, ×, Long Division)</option>
                 <option value="pemdas">Order of Operations (PEMDAS)</option>
-                <option value="geometry">Geometry &amp; Volume (Prisms, Triangles)</option>
                 <option value="grade5_mixed">Grade 5 Mixed Skills</option>
               </optgroup>
               <optgroup label="Grade 6 Topics">
@@ -226,9 +255,14 @@
   </div>
 
   <!-- Scripts -->
-  <script src="../assets/sf/icons.js?v=3.1.0"></script>
-  <script src="js/math-engine.js?v=3.1.0"></script>
-  <script src="js/word-problems.js?v=3.1.0"></script>
-  <script src="js/app.js?v=3.1.0"></script>
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <!-- Shared print machinery. paginate.js measures the real cards in the real
+       print box and decides page breaks; urlconfig.js makes every layout
+       combination addressable so the print test matrix can reach it. -->
+  <script src="../assets/sf/urlconfig.js?v=3.2.0"></script>
+  <script src="../assets/sf/paginate.js?v=3.2.0"></script>
+  <script src="js/math-engine.js?v=3.2.0"></script>
+  <script src="js/word-problems.js?v=3.2.0"></script>
+  <script src="js/app.js?v=3.2.0"></script>
 </body>
 </html>

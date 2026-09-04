@@ -13,14 +13,25 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
   
-  <!-- KaTeX for Beautiful Math Typesetting -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <!-- KaTeX for Beautiful Math Typesetting.
+       Served from the repo, not a CDN: pagination measures real rendered
+       heights, and an unrendered formula is a completely different height
+       from a typeset one. Loading over the network made the printed page
+       depend on having a connection. See assets/vendor/katex/README.md.
+       Not `defer`: the paginator must be able to typeset before it measures. -->
+  <link rel="stylesheet" href="../assets/vendor/katex/katex.min.css">
+  <script src="../assets/vendor/katex/katex.min.js"></script>
+  <script src="../assets/vendor/katex/auto-render.min.js"></script>
 
   <!-- Main Styles -->
-  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.1.0">
-  <link rel="stylesheet" href="css/styles.css?v=3.1.0">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
+  <link rel="stylesheet" href="css/styles.css?v=3.2.0">
+  <!-- Shared print machinery: measured page breaks and URL-addressable layout. -->
+  <script src="../assets/sf/urlconfig.js?v=3.2.0"></script>
+  <script src="../assets/sf/paginate.js?v=3.2.0"></script>
 </head>
 <body>
   <!-- Confetti Celebration Canvas -->
@@ -266,9 +277,9 @@
   </div>
 
   <!-- Scripts -->
-  <script src="../assets/sf/icons.js?v=3.1.0"></script>
-  <script src="js/math-engine.js?v=3.1.0"></script>
-  <script src="js/stats-calculus-problems.js?v=3.1.0"></script>
-  <script src="js/app.js?v=3.1.0"></script>
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <script src="js/math-engine.js?v=3.2.0"></script>
+  <script src="js/stats-calculus-problems.js?v=3.2.0"></script>
+  <script src="js/app.js?v=3.2.0"></script>
 </body>
 </html>

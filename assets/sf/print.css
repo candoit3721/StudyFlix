@@ -1,0 +1,330 @@
+/* =========================================================================
+   StudyFlix shared print contract
+   =========================================================================
+
+   Every printable sheet on the site -- worksheet pages, answer keys, exam
+   papers, clock sheets, hand-authored workbook pages -- carries the
+   `.sf-sheet` class and gets its box model and page-break behaviour from
+   here. Studios keep only their own paint (colours, borders, typography).
+
+   THE CENTRAL RULE: a sheet is a FIXED-HEIGHT box, identical on screen and
+   in print.
+
+   This is not a style preference, it is what makes the system correct.
+
+     * The on-screen preview becomes genuinely WYSIWYG. Previously the sheet
+       was `min-height: 11in` with `grid-auto-rows: 1fr` on screen and
+       `height: auto` with `grid-auto-rows: auto` in print, so cards stretched
+       on screen and collapsed on paper. Nobody could see an overflow coming.
+
+     * A sheet can no longer silently grow onto a second page. Content that
+       does not fit visibly overhangs a fixed box, which JS can detect
+       (scrollHeight > clientHeight) and tests can assert on. An overflow
+       becomes a loud failure instead of a mystery blank page.
+
+     * assets/sf/paginate.js can measure real geometry off the live DOM
+       instead of trusting hard-coded row counts.
+
+   WHY THE GEOMETRY IS IN CUSTOM PROPERTIES ON :root, OUTSIDE ANY @media:
+   `getComputedStyle` cannot read declarations inside `@media print`. Putting
+   the numbers in `:root` custom properties lets JS read the true print
+   geometry while the page is still on screen. The `@media print` block below
+   only ever *consumes* these variables, it never redefines them.
+
+   WHAT THIS FILE DELIBERATELY DOES NOT OWN: `@page`.
+   `@page` is document-global and cannot be scoped by selector or class, so a
+   shared stylesheet cannot declare it for a Letter studio and an A4 studio at
+   the same time. Each studio declares its own literal `@page` and sets the
+   matching `--sf-page-*` variables. tests/print/css-contract.spec.ts asserts
+   the two agree, so they cannot drift apart.
+   ========================================================================= */
+
+:root {
+  /* --- Paper. Override these per studio; yaya sets A4. --- */
+  --sf-page-w: 8.5in;
+  --sf-page-h: 11in;
+  --sf-page-margin: 0.4in;
+
+  /*
+   * Asymmetric paper margins. Set --sf-page-margin for the common square
+   * case; override one axis only when the @page rule genuinely differs
+   * (the workbooks use `margin: 0.45in 0.5in`). These resolve against
+   * whichever --sf-page-margin ultimately wins the cascade, so a studio that
+   * overrides only the shorthand still gets both axes right.
+   */
+  --sf-page-margin-x: var(--sf-page-margin);
+  --sf-page-margin-y: var(--sf-page-margin);
+
+  /* --- Inner padding of a sheet, inside the @page margin. --- */
+  --sf-sheet-pad-y: 0.3in;
+  --sf-sheet-pad-x: 0.35in;
+
+  /*
+   * Headroom between a sheet and the page it prints on.
+   *
+   * Two things eat into the fit. The printable height rarely lands on a whole
+   * CSS pixel (Letter at 0.4in margins is 979.2px), so a sheet that rounds up
+   * can tip onto a second page. And the studio wrappers around the sheets --
+   * app shell, main column, stage section -- contribute a few pixels of
+   * browser layout noise that varies with the window width: the clock
+   * worksheet's sheets started 2.3px down in a narrow window and 7.2px down in
+   * a normal one, and since that offset accumulates against the total, the
+   * printed page count changed with the size of the reader's window.
+   *
+   * There is also a gap between what `emulateMedia({media:'print'})` reports
+   * and what the printer actually does: Chromium re-lays-out at the paper
+   * width when it really prints, and the result runs about 10px taller per
+   * sheet than the emulated layout measures. That is invisible to every
+   * in-page measurement, so it can only be found by rendering a real PDF and
+   * counting pages -- which is why the print suite does exactly that.
+   *
+   * 16px was chosen by measurement, not taste. The clock worksheet at 32
+   * clocks printed a spurious fifth page in 9 of 10 runs at 6px of cushion and
+   * in 0 of 10 at 16px (tests/print/regressions.spec.ts keeps that honest). It
+   * costs about 1.6% of the page. The alternative -- chasing every wrapper in
+   * every studio until the discrepancy is exactly zero -- would have to be
+   * redone for each new studio, which is the opposite of what this
+   * architecture is for.
+   */
+  --sf-sheet-cushion: 16px;
+
+  /* --- Derived. Do not set these directly. --- */
+  --sf-print-w: calc(var(--sf-page-w) - 2 * var(--sf-page-margin-x));
+  --sf-print-h: calc(var(--sf-page-h) - 2 * var(--sf-page-margin-y));
+  --sf-sheet-h: calc(var(--sf-print-h) - var(--sf-sheet-cushion));
+  --sf-sheet-content-h: calc(var(--sf-sheet-h) - 2 * var(--sf-sheet-pad-y));
+}
+
+/* -------------------------------------------------------------------------
+   The sheet box. Identical in both media -- see the note above.
+   ------------------------------------------------------------------------- */
+.sf-sheet {
+  width: var(--sf-print-w);
+  max-width: var(--sf-print-w);
+  height: var(--sf-sheet-h);
+  min-height: var(--sf-sheet-h);
+
+  /*
+   * A sheet must never be resized by whatever contains it. The studios stack
+   * their sheets in a column flexbox, and a flex item's default
+   * `flex-shrink: 1` let the container squeeze the page: olivia's sheet
+   * measured 954px on screen against 977px in print, so the preview showed
+   * more room than the paper actually has. `flex: 0 0 auto` makes the
+   * declared height the real height in every layout context.
+   */
+  flex: 0 0 auto;
+
+  padding: var(--sf-sheet-pad-y) var(--sf-sheet-pad-x);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #fff;
+
+  /*
+   * Never `hidden`. Clipping an overflow would hide the exact defect this
+   * architecture exists to surface: the content would silently disappear off
+   * the bottom of the page instead of being caught by the paginator or the
+   * test suite.
+   */
+  overflow: visible;
+}
+
+/* Screen-only paper simulation. None of this survives into print. */
+@media screen {
+  .sf-sheet {
+    box-shadow: var(--shadow-lg, 0 10px 30px rgba(15, 23, 42, 0.12));
+    border-radius: 4px;
+    margin-bottom: 30px;
+  }
+}
+
+/*
+ * Off-screen measurement host used by assets/sf/paginate.js.
+ *
+ * `visibility: hidden` rather than `display: none` because the browser must
+ * still lay the content out for us to measure it. `contain: layout style`
+ * isolates the reflow; `size` is deliberately absent, since containing size
+ * would zero out the intrinsic heights we are trying to read.
+ */
+.sf-measure-host {
+  position: absolute;
+  left: -20000px;
+  top: 0;
+
+  /*
+   * Zero-height and out of flow, so the host contributes nothing to the
+   * document's height even while a sheet is being measured inside it. Its
+   * children still lay out and can still be measured -- overflow is visible,
+   * it is simply not counted.
+   */
+  height: 0;
+  overflow: visible;
+
+  visibility: hidden;
+  pointer-events: none;
+  contain: layout style;
+  z-index: -1;
+}
+
+/* While measuring content, the sheet must be free to report its natural
+   height -- we want to know how tall all the candidate rows are, not how tall
+   one page is. */
+.sf-measure-host .sf-sheet {
+  height: auto;
+  min-height: 0;
+  flex: 0 0 auto;
+  max-height: none;
+  box-shadow: none;
+  margin: 0;
+}
+
+/* ...except the probe that measures how much room a page leaves for content,
+   which needs the real page height so its flexed grid reports exactly the
+   space left over between the header and the footer. */
+.sf-measure-host .sf-sheet.sf-measure-fixed {
+  height: var(--sf-sheet-h);
+  min-height: var(--sf-sheet-h);
+  max-height: var(--sf-sheet-h);
+}
+
+@media print {
+  html,
+  body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .sf-sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    margin: 0 !important;
+
+    /* One sheet, one page. Legacy and modern properties both, because
+       Chromium, Firefox and WebKit do not agree on which they honour. */
+    page-break-after: always !important;
+    break-after: page !important;
+
+    /*
+     * Explicitly ALLOW a sheet to break internally.
+     *
+     * This kills a genuinely harmful rule that used to live in
+     * sophia-math/css/styles.css: `page-break-inside: avoid` on `.paper-sheet`,
+     * a full-page element. When such a sheet overflowed even slightly, the
+     * browser could not split it, so it pushed the entire sheet to the next
+     * page and left a blank one behind. That is the origin of the reported
+     * blank pages. Atomicity belongs on cards, never on pages.
+     */
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  /*
+   * No trailing blank page. Both selectors on purpose: `:last-child` fails if
+   * anything at all follows the final sheet in the DOM (a script tag, a
+   * stray text node), and `:last-of-type` fails if the sheets are not all the
+   * same element type. Together they cover both.
+   */
+  .sf-sheet:last-child,
+  .sf-sheet:last-of-type {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /*
+   * Opt-in hard break. Applied to the FIRST sheet of a new document section
+   * (the first answer-key page, say) and never to the rest of it -- a blanket
+   * `break-before` on every answer-key sheet would insert a blank page
+   * between each one now that answer keys are paginated.
+   */
+  /*
+   * Any container holding sheets loses its spacing. Studios stack their pages
+   * with a flex gap or a margin so the preview looks like a pile of paper; in
+   * print that gap is real vertical space between page boxes, and it pushes
+   * the following sheets down until an extra blank page appears. The clock
+   * worksheet produced five printed pages for four sheets exactly this way.
+   *
+   * `:has()` means a studio cannot forget: adding a new sheet container needs
+   * no new rule here.
+   */
+  :has(> .sf-sheet) {
+    gap: 0 !important;
+    row-gap: 0 !important;
+    column-gap: 0 !important;
+  }
+
+  /*
+   * Wrappers between the page root and a sheet stop existing.
+   *
+   * `display: contents` removes an element's box altogether while keeping its
+   * children, so the studio's app shell, main column and stage section
+   * contribute no padding, no margin, and -- importantly -- no anonymous line
+   * boxes from the whitespace in the HTML source. Their children become direct
+   * children of the body, which is exactly the document a printer should get:
+   * a stack of sheets and nothing else.
+   *
+   * Zeroing padding and margin individually was not enough. Those wrappers are
+   * sized for the screen and several are width-responsive, so the space they
+   * added changed with the browser window: the clock worksheet printed four
+   * pages from a narrow window and five from a normal one. Paper should not
+   * care how wide the window was.
+   */
+  :has(.sf-sheet) {
+    display: contents !important;
+  }
+
+  /* The document root and body must keep their boxes. */
+  html:has(.sf-sheet),
+  body:has(.sf-sheet) {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .sf-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+
+  /* Atomic units. These, and only these, must not be split across pages. */
+  .sf-card,
+  .sf-key-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .sf-no-print {
+    display: none !important;
+  }
+
+  /*
+   * `.sf-measuring` is deliberately NOT hidden here either, for the same
+   * reason as the host below: `display: none` removes layout, so the sheet
+   * being measured reports zero-height rows and the paginator concludes the
+   * whole worksheet fits on one page. The marker exists purely so that code
+   * querying sheets can exclude a half-built one; it must never change how
+   * that sheet lays out. It is unprintable by virtue of living inside
+   * .sf-measure-host, which is invisible, off-page and empty at rest.
+   */
+
+  /*
+   * The measurement host is deliberately NOT hidden with `display: none` here.
+   *
+   * `display: none` removes an element from layout entirely, so every row
+   * inside it measures zero and the paginator concludes that the whole
+   * worksheet fits on a single page. That is not a hypothetical: browsers
+   * re-render the document when print preview opens, so any pagination that
+   * ran at that moment would silently collapse.
+   *
+   * The host is already unprintable without it -- `visibility: hidden`,
+   * positioned 20000px off-page, zero height, and empty at rest, since every
+   * measurement removes its sheet when it finishes.
+   */
+}

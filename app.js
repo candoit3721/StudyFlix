@@ -34,11 +34,14 @@ const DEFAULT_PROFILES = [
     },
     subjects: [
       { title: "Ancient Rome Quest & Studio", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", kind: "quest", family: "rome", art: "rome-forum" },
+      { title: "Geometry & Area Masterclass", badge: "NEW STUDIO", desc: "Interactive 2D shape transformer, shearing proofs & Waterloo Gauss Arena", link: "sophia-math/geometry.html", kind: "quest", family: "math", art: "math-geometry" },
       { title: "Science & Chemistry Quest", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", kind: "quest", family: "science", art: "sci-atom" },
       { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" },
       { title: "Grade 6 Ontario Science Strands", badge: "NEW & COMPLETE", desc: "All 4 strands: Biodiversity, Flight, Space & Electricity with live labs", link: "sophia-science/index.html#tab-biodiversity", kind: "quest", family: "science", art: "sci-space" }
     ],
     topics: [
+      { title: "Area of Polygons & Proofs", badge: "SPATIAL SENSE", desc: "Visual shearing proofs, base & perpendicular heights & trapezoid averages", link: "sophia-math/geometry.html#tab-triangle", kind: "lesson", family: "math", art: "math-geometry" },
+      { title: "Circles & Composite Area", badge: "GAUSS CONTEST", desc: "Radius squared, annulus rings, L-shapes & Waterloo shaded region puzzles", link: "sophia-math/geometry.html#tab-circle", kind: "lesson", family: "math", art: "math-geometry" },
       { title: "Biodiversity & Six Kingdoms", badge: "GRADE 6 STRAND B", desc: "Kingdom sorter, dichotomous key & Great Lakes food web collapse", link: "sophia-science/index.html#tab-biodiversity", kind: "lesson", family: "science", art: "sci-biodiversity" },
       { title: "Flight & the Four Forces", badge: "GRADE 6 STRAND D", desc: "Lift, weight, thrust, drag, Bernoulli's principle & wing loading", link: "sophia-science/index.html#tab-flight", kind: "lesson", family: "science", art: "sci-flight" },
       { title: "Space & the Solar System", badge: "GRADE 6 STRAND E", desc: "Orbit simulator, axial tilt seasons & mass vs. weight on 9 worlds", link: "sophia-science/index.html#tab-space", kind: "lesson", family: "science", art: "sci-space" },
@@ -58,6 +61,8 @@ const DEFAULT_PROFILES = [
       { title: "Fraction Mastery", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", kind: "lesson", family: "math", art: "math-fractions" }
     ],
     printable: [
+      { title: "30-Question Area Masterclass Guide", badge: "STUDY GUIDE", desc: "Comprehensive printable workbook with visual proofs, traps & Gauss solutions", link: "sophia-math/worksheets/sophia_geometry_area_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Composite Shapes & Shaded Area Test", badge: "20 QUESTIONS", desc: "Printable worksheet on decomposed polygons, house silhouettes & pool walkways", link: "sophia-math/worksheets/grade6_area_composite_shapes.md", kind: "printable", family: "math", art: "generic-printable" },
       { title: "Complete Ancient Rome Workbook", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", kind: "printable", family: "rome", art: "generic-printable" },
       { title: "Complete Science Workbook", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", kind: "printable", family: "science", art: "generic-printable" },
       { title: "Grade 5/6 Math Practice", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", kind: "printable", family: "math", art: "math-worksheet" }
@@ -1029,6 +1034,8 @@ let searchIndex = [];
 // Profile-Specific Popular Search Tags
 const PROFILE_QUICK_TAGS = {
   sophia: [
+    { label: "📐 Area & Geometry", query: "Geometry" },
+    { label: "🧩 Composite Shapes", query: "Composite" },
     { label: "🏛️ Ancient Rome", query: "Ancient Rome" },
     { label: "🌉 Roman Arch & Keystones", query: "Arch" },
     { label: "🕵️ Caesar Cipher", query: "Cipher" },
@@ -1037,7 +1044,7 @@ const PROFILE_QUICK_TAGS = {
     { label: "🥞 Matter & Reactions", query: "Matter" },
     { label: "🎢 Roller Coaster Physics", query: "Physics" },
     { label: "🍕 Fractions", query: "Fraction" },
-    { label: "📖 Rome Workbook", query: "Workbook" }
+    { label: "📖 Area Masterclass", query: "Masterclass" }
   ],
   olivia: [
     { label: "⏰ Analog Clocks", query: "Clock" },

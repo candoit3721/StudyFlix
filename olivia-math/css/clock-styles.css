@@ -851,12 +851,20 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   flex-wrap: wrap;
 }
 
+/* One printed page. Box model comes from .sf-sheet in assets/sf/print.css so
+   the on-screen preview is the same box that reaches the paper. */
 .printable-clock-doc {
   background: #ffffff;
   border: 2px solid #e2e8f0;
   border-radius: var(--radius-md);
-  padding: 36px;
   margin-top: 20px;
+}
+
+#printable-clock-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
 
 .doc-header {
@@ -872,9 +880,19 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   margin-bottom: 12px;
 }
 
+/* The sheet is only 7.7in wide, so the title and its subtitle both wrapped to
+   two lines and pushed the first row of clocks down. Sized to sit on one line
+   at the printable width, with the subtitle allowed to shrink beside it. */
 .doc-title-row h2 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #000;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.doc-title-row .doc-sub {
+  text-align: right;
+  min-width: 0;
 }
 
 .doc-meta-row {
@@ -891,10 +909,23 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   margin-left: 4px;
 }
 
+/* The grid stretches to fill its sheet, so a page with few clocks still looks
+   like a page rather than a strip of content at the top. */
 .printable-clocks-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px 16px;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
+}
+
+.printable-clocks-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.printable-clocks-grid.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .printable-clock-item {
@@ -945,9 +976,11 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   #view-worksheet-gen {
     display: block !important;
   }
+  /* Box model and page breaks come from .sf-sheet in assets/sf/print.css.
+     This page previously had no @page rule, no sheet element and no
+     page-break rules at all -- the clocks simply broke wherever they fell. */
   .printable-clock-doc {
     border: none;
-    padding: 0;
   }
 }
 

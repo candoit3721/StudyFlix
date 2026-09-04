@@ -412,18 +412,12 @@ body {
   gap: 30px;
 }
 
-/* Printable Worksheet Sheet Simulation */
+/* Printable Worksheet Sheet Simulation.
+   The box model -- width, height, padding, flex column -- lives on .sf-sheet
+   in assets/sf/print.css so it is byte-identical on screen and in print.
+   Only olivia's own paint stays here. */
 .worksheet-page {
-  width: 8.5in;
-  min-height: 11in;
   background: #fff;
-  box-shadow: var(--shadow-lg);
-  padding: 0.55in 0.6in 0.6in 0.6in;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  box-sizing: border-box;
 }
 
 /* Worksheet Header */
@@ -479,6 +473,15 @@ body {
   flex: 1;
   display: grid;
   gap: 20px 24px;
+}
+
+/* Declared explicitly. The renderer emits `grid-cols-1` for word problems
+   (olivia-math/js/app.js), and it previously worked only by accident: a bare
+   `display: grid` with no template happens to produce a single implicit
+   column. Relying on that meant any future change to .problems-container
+   could silently reflow every word-problem worksheet. */
+.grid-cols-1 {
+  grid-template-columns: 1fr;
 }
 
 .grid-cols-2 {
@@ -584,6 +587,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  /*
+   * Keep the equation intact and let the answer box move instead.
+   *
+   * As a plain flex row, the equation text is one anonymous item that the
+   * browser is free to break anywhere it fits -- so a narrow card at four
+   * columns produced "3 × 7" on one line and a lonely "=" on the next.
+   * `nowrap` keeps the expression together; `flex-wrap: wrap` lets the answer
+   * box drop below it when the card is too narrow for both.
+   */
+  flex-wrap: wrap;
+  white-space: nowrap;
+
   font-size: 1.25rem;
   font-weight: 700;
   padding: 10px 0;
@@ -770,9 +786,12 @@ body {
   color: #1e293b;
 }
 
-/* Answer Key Page Specifics (Paper Saver) */
+/* Answer Key Page Specifics (Paper Saver).
+   The page break before the key is applied by the renderer to the FIRST key
+   sheet only, via the shared .sf-break-before class. A blanket rule here
+   would insert a blank page between every key sheet now that answer keys
+   paginate across more than one. */
 .answer-key-page {
-  page-break-before: always;
   min-height: auto;
 }
 
@@ -793,13 +812,14 @@ body {
 }
 
 /* Compact Answer Key Grid */
+/* Print geometry, applied in both media -- see the note in the print block. */
 .compact-answers-container {
   display: grid;
-  gap: 6px 10px;
+  gap: 4px 8px;
   background: #f8fafc;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 10px;
+  padding: 6px;
 }
 
 .compact-answers-container.grid-cols-2 {
@@ -822,8 +842,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 6px 10px;
+  gap: 6px;
+  padding: 3px 6px;
+  font-size: 0.85rem;
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 4px;
@@ -847,8 +868,13 @@ body {
 }
 
 /* PRINT MEDIA STYLES - CRITICAL FOR CLEAN WORKSHEET PRINTING */
+/* Paper size is pinned rather than left to the browser: `size: portrait`
+   alone lets the printer choose between Letter and A4, whose printable
+   heights differ, so the same worksheet would paginate differently on
+   different machines. Must match the --sf-page-* variables in
+   assets/sf/print.css; tests/print/css-contract.spec.ts enforces that. */
 @page {
-  size: portrait;
+  size: letter portrait;
   margin: 0.4in;
 }
 
@@ -885,48 +911,30 @@ body {
     gap: 0 !important;
   }
 
-  .worksheet-page {
-    width: 100% !important;
-    min-height: auto !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    padding: 0.3in 0.35in !important;
-    margin: 0 !important;
-    page-break-after: always;
-  }
+  /* Box model, page breaks and the no-trailing-blank-page rule all come from
+     .sf-sheet in assets/sf/print.css -- including the `break-after: page` and
+     the !important that were missing here, which meant the modern property
+     was never set and the legacy one could be overridden by any later rule. */
 
-  .worksheet-page.answer-key-page {
-    padding: 0.25in 0.35in !important;
-    min-height: auto !important;
-    page-break-before: always;
-  }
-
-  .worksheet-page:last-child {
-    page-break-after: auto;
-  }
-
+  /* Geometry declared once, for BOTH media. A print-only size override
+     silently invalidates pagination: assets/sf/paginate.js measures
+     these elements on screen, so any rule that makes them a different
+     size on paper means the page breaks were computed for a document
+     that is not the one being printed. Enforced by
+     tests/print/css-contract.spec.ts. */
   .compact-answers-container {
     background: transparent !important;
     border: 1px solid #94a3b8 !important;
-    padding: 6px !important;
-    gap: 4px 8px !important;
   }
 
+  /* break-inside: avoid comes from .sf-key-item / .sf-card in print.css. */
   .compact-answer-item {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 6px !important;
     white-space: nowrap !important;
     border: 1px solid #cbd5e1 !important;
-    padding: 3px 6px !important;
-    font-size: 0.85rem !important;
-    break-inside: avoid;
   }
 
   .problem-card {
     border: 1px solid #e2e8f0 !important;
-    break-inside: avoid;
   }
 
   .problem-card.print-clean {

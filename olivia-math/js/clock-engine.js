@@ -639,40 +639,167 @@ function nextContestPuzzle() {
 // =========================================================================
 // 7. PRINTABLE WORKSHEETS GENERATOR
 // =========================================================================
-function generatePrintableClocks() {
-  const grid = document.getElementById('printable-clocks-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
+/**
+ * Build the printable clock worksheet.
+ *
+ * Two defects fixed here.
+ *
+ * 1. It emitted no page structure at all: twelve clocks were poured into one
+ *    unbounded grid with no sheet element and no page-break rules, so the
+ *    browser split them wherever it liked. Asking for more than twelve
+ *    (now possible) would have made that visible immediately.
+ *
+ * 2. Printing from the top bar produced an EMPTY worksheet. The clocks were
+ *    only generated on entering the worksheet view, but the print stylesheet
+ *    force-shows `#view-worksheet-gen` from any view -- so printing without
+ *    first opening that tab yielded a header, a footer and nothing between
+ *    them. Generation now happens on load, and a `beforeprint` guard
+ *    regenerates if the grid is somehow still empty.
+ */
+function buildClockItem(index) {
+  const time = generateRandomTime();
+  const item = document.createElement('div');
+  item.className = 'sf-card printable-clock-item';
 
-  for (let i = 1; i <= 12; i++) {
-    const time = generateRandomTime();
-    const item = document.createElement('div');
-    item.className = 'printable-clock-item';
-    
-    // Half are "Read the Clock", half are "Draw the Hands"
-    const isDrawMode = (i % 2 === 0);
+  // Alternate between "draw the hands" and "read the clock".
+  const isDrawMode = (index % 2 === 0);
+  const stamp = `${time.h}:${time.m.toString().padStart(2, '0')}`;
 
-    if (isDrawMode) {
-      item.innerHTML = `
-        <span class="q-num">${i}. Draw hands for: <strong>${time.h}:${time.m.toString().padStart(2, '0')}</strong></span>
+  if (isDrawMode) {
+    item.innerHTML = `
+        <span class="q-num">${index}. Draw hands for: <strong>${stamp}</strong></span>
         ${createClockSVG(time.h, time.m, 130, clockState.showPrintAnswers)}
         <div style="margin-top:6px; font-weight:700; font-size:0.9rem;">
-          ${clockState.showPrintAnswers ? `<span style="color:#059669;">[${time.h}:${time.m.toString().padStart(2, '0')}]</span>` : '&nbsp;'}
+          ${clockState.showPrintAnswers ? `<span style="color:#059669;">[${stamp}]</span>` : '&nbsp;'}
         </div>
       `;
-    } else {
-      item.innerHTML = `
-        <span class="q-num">${i}. What time is it?</span>
+  } else {
+    item.innerHTML = `
+        <span class="q-num">${index}. What time is it?</span>
         ${createClockSVG(time.h, time.m, 130, true)}
         <div style="margin-top:6px; font-weight:700; font-size:0.9rem;">
-          Time: _________ 
-          ${clockState.showPrintAnswers ? `<span style="color:#059669;">[${time.h}:${time.m.toString().padStart(2, '0')}]</span>` : ''}
+          Time: _________
+          ${clockState.showPrintAnswers ? `<span style="color:#059669;">[${stamp}]</span>` : ''}
         </div>
       `;
-    }
-
-    grid.appendChild(item);
   }
+  return item;
+}
+
+function clockSheetHeader(pageIdx, totalPages) {
+  const header = document.createElement('div');
+  header.className = 'doc-header';
+  const page = totalPages > 1 ? ` • Page ${pageIdx + 1} of ${totalPages}` : '';
+  header.innerHTML = `
+            <div class="doc-title-row">
+              <h2>Grade 3 Telling Time &amp; Clocks Practice</h2>
+              <span class="doc-sub">Olivia's Learning Studio • Ontario Curricula${page}</span>
+            </div>
+            <div class="doc-meta-row">
+              <div>Name: <span class="doc-line">Olivia</span></div>
+              <div>Date: <span class="doc-line"></span></div>
+              <div>Score: <span class="doc-line" style="min-width: 60px;"></span></div>
+            </div>
+  `;
+  return header;
+}
+
+function clockSheetFooter() {
+  const footer = document.createElement('div');
+  footer.className = 'doc-footer';
+  footer.innerHTML = `
+            <span>Olivia's Math Studio • Grade 3 Curricula</span>
+            <span>⭐ Draw the time or write the digital numbers below each clock! ⭐</span>
+  `;
+  return footer;
+}
+
+function generatePrintableClocks() {
+  const target = document.getElementById('printable-clock-doc');
+  if (!target || typeof SFPaginate === 'undefined') return Promise.resolve();
+
+  const count = clockState.printCount || 12;
+  const cols = clockState.printCols || 4;
+
+  const items = [];
+  for (let i = 1; i <= count; i++) items.push(i);
+
+  SFPaginate.beginRender();
+
+  return SFPaginate.paginate({
+    target: target,
+    mode: 'fill',
+    items: items,
+    sheetClass: 'sf-sheet printable-clock-doc',
+    gridClass: `printable-clocks-grid cols-${cols}`,
+    cacheKey: `clock|cols=${cols}`,
+    renderItem: index => buildClockItem(index),
+    renderHeader: clockSheetHeader,
+    renderFooter: clockSheetFooter
+  }).then(result => {
+    SFPaginate.publish({
+      sheets: result.sheets.length,
+      requestedPages: null,
+      overflowRows: result.overflowRows,
+      chunkSplits: 0,
+      config: { count: count, cols: cols, showAnswers: clockState.showPrintAnswers }
+    });
+    return result;
+  });
+}
+
+/**
+ * URL parameters for the printable worksheet.
+ *
+ * The count and column axes are what determine whether the clocks fit a page,
+ * so they must be addressable for the print matrix to sweep them.
+ */
+const CLOCK_URL_SCHEMA = {
+  count: {
+    type: 'int', min: 4, max: 48,
+    apply: (c, v) => {
+      c.printCount = v;
+      const sel = document.getElementById('clock-count-select');
+      if (sel) sel.value = String(v);
+    }
+  },
+  cols: {
+    type: 'int', min: 2, max: 5,
+    apply: (c, v) => {
+      c.printCols = v;
+      const sel = document.getElementById('clock-cols-select');
+      if (sel) sel.value = String(v);
+    }
+  },
+  answers: {
+    type: 'bool',
+    apply: (c, v) => {
+      c.showPrintAnswers = v;
+      const chk = document.getElementById('chk-show-answers-print');
+      if (chk) chk.checked = v;
+    }
+  },
+  /*
+   * Open a particular activity directly. `?view=worksheet_gen` is how a deep
+   * link (or a print test) lands on the printable worksheet rather than the
+   * course lessons the page opens on by default. The worksheet is generated
+   * either way -- printing must work from any view -- but it is only *visible*
+   * on screen when its own tab is showing.
+   */
+  view: {
+    type: 'string',
+    apply: (c, v) => setActivityMode(v)
+  }
+};
+
+function setPrintClockCount(value) {
+  clockState.printCount = parseInt(value, 10) || 12;
+  return generatePrintableClocks();
+}
+
+function setPrintClockCols(value) {
+  clockState.printCols = parseInt(value, 10) || 4;
+  return generatePrintableClocks();
 }
 
 function togglePrintAnswers(isChecked) {
@@ -725,7 +852,10 @@ function setActivityMode(mode) {
   else if (mode === 'elapsed_time') generateNewElapsedQuestion();
   else if (mode === 'word_problems') generateNewStoryProblem();
   else if (mode === 'waterloo_puzzles') renderContestPuzzle();
-  else if (mode === 'worksheet_gen') generatePrintableClocks();
+  // The worksheet is generated on load, so entering this view need not
+  // rebuild it -- and must not, or it would discard a sheet the user is
+  // looking at. Regeneration is explicit: the Generate button, the answers
+  // toggle, or a count/column change.
 }
 
 function updatePrecision(val) {
@@ -821,4 +951,22 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Start with course lessons
   setActivityMode('course_lessons');
+
+  /*
+   * Build the printable worksheet up front, whichever view is showing.
+   * The print stylesheet force-shows #view-worksheet-gen, so the top-bar
+   * Print button can be pressed from anywhere -- and used to produce a sheet
+   * with a header, a footer and no clocks at all.
+   */
+  if (typeof SFUrl !== 'undefined') SFUrl.read(CLOCK_URL_SCHEMA, clockState);
+  generatePrintableClocks();
+});
+
+/*
+ * Last line of defence. If anything ever empties the grid, regenerate before
+ * the print dialog rather than sending blank paper to the printer.
+ */
+window.addEventListener('beforeprint', () => {
+  const grid = document.querySelector('#printable-clock-doc .printable-clocks-grid');
+  if (!grid || !grid.children.length) generatePrintableClocks();
 });

@@ -198,7 +198,7 @@
   function createProblemCard(p, globalIndex) {
     const qNum = globalIndex + 1;
     const card = document.createElement('div');
-    card.className = 'problem-card';
+    card.className = 'sf-card problem-card';
     card.setAttribute('data-id', p.id);
     card.setAttribute('data-index', globalIndex);
 
@@ -288,38 +288,37 @@
     return card;
   }
 
-  // Render the full multi-page exam sheet and separate answer sheet on the last page
+  // Render the full multi-page exam sheet and its separate answer sheet.
+  //
+  // Pagination is measured, not guessed. calculatePerPage() above survives
+  // only as the user's EXPLICIT override; the auto path lets
+  // assets/sf/paginate.js lay the real cards out in the real A4 print box.
+  // That matters most here: KaTeX-typeset mathematics has wildly variable
+  // height, and this page overflowed by 183-345px on every question page --
+  // and by 3307px on the answer sheet, which piled every worked solution onto
+  // a single page. See tests/print/BASELINE.md.
   function renderWorksheet() {
-    if (!els.pagesContainer) return;
+    if (!els.pagesContainer) return Promise.resolve();
 
     els.pagesContainer.className = `pages-container font-${state.config.fontSize}`;
-    els.pagesContainer.innerHTML = '';
 
     const problems = state.problems;
     const isTwoCol = state.config.gridCols === 2;
-    const perPage = calculatePerPage();
+    const explicitPerPage = state.config.questionsPerPage
+      && state.config.questionsPerPage !== 'auto'
+      ? parseInt(state.config.questionsPerPage, 10)
+      : null;
 
-    // Split problems into page chunks
-    const pageChunks = [];
-    for (let i = 0; i < problems.length; i += perPage) {
-      pageChunks.push(problems.slice(i, i + perPage));
-    }
+    SFPaginate.beginRender();
 
-    const questionPagesCount = pageChunks.length;
-    const totalPages = questionPagesCount + (state.config.includeAnswerKey ? 1 : 0);
+    // KaTeX must typeset before anything is measured: an unrendered `$...$`
+    // is a completely different height from the formula it becomes.
+    const typeset = root => window.MathEngine.renderMath(root);
 
-    let globalIndex = 0;
-
-    // Render each Question Page (NO answers on any of these pages)
-    pageChunks.forEach((chunk, pageIdx) => {
-      const pageNum = pageIdx + 1;
-      const examPage = document.createElement('div');
-      examPage.className = 'exam-page';
-
-      // Page Header: Full header on Page 1, compact continuation header on subsequent pages
-      let headerHtml = '';
-      if (pageNum === 1) {
-        headerHtml = `
+    const questionHeader = (pageIdx, totalPages) => {
+      const wrap = document.createElement('div');
+      if (pageIdx === 0) {
+        wrap.innerHTML = `
           <div class="exam-header">
             <div class="exam-school">★ 全国高中数学名校联考 / 大学预科水平测试 ★</div>
             <h2>${escapeHtml(state.config.worksheetTitle)}</h2>
@@ -348,108 +347,200 @@
           </div>
         `;
       } else {
-        headerHtml = `
+        wrap.innerHTML = `
           <div class="exam-header" style="border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.88rem; color: var(--text-muted);">
               <span><strong>${escapeHtml(state.config.worksheetTitle)}</strong>（试题部分 · 续）</span>
               <span>考生姓名：<strong>${escapeHtml(state.config.studentName || 'Yaya')}</strong></span>
-              <span>第 ${pageNum} 页 / 共 ${totalPages} 页</span>
+              <span>第 ${pageIdx + 1} 页</span>
             </div>
           </div>
         `;
       }
+      return wrap;
+    };
 
-      // Problem List container for this page
-      const listDiv = document.createElement('div');
-      listDiv.className = `problems-list ${isTwoCol ? 'cols-2' : ''}`;
-
-      chunk.forEach(p => {
-        const card = createProblemCard(p, globalIndex);
-        listDiv.appendChild(card);
-        globalIndex++;
-      });
-
-      examPage.innerHTML = headerHtml;
-      examPage.appendChild(listDiv);
-
-      // Page Footer
-      const footerDiv = document.createElement('div');
-      footerDiv.className = 'exam-footer';
-      footerDiv.innerHTML = `
-        <span>第 ${pageNum} 页（共 ${totalPages} 页 · 试题部分）</span>
+    const questionFooter = (pageIdx) => {
+      const footer = document.createElement('div');
+      footer.className = 'exam-footer';
+      // Same reasoning as the answer sheet's footer: the placeholder carries
+      // the full shape of the text that replaces it, so stamping the totals
+      // cannot change the page's height after it has been verified.
+      footer.innerHTML = `
+        <span data-sf-page>第 ${pageIdx + 1} 页（共 0 页 · 试题部分）</span>
         <span>Yaya's 高等数学与统计练习工作室 · 祝考试顺利！</span>
       `;
-      examPage.appendChild(footerDiv);
+      return footer;
+    };
 
-      els.pagesContainer.appendChild(examPage);
+    const mode = explicitPerPage
+      ? { mode: 'fixedChunk', chunkSize: explicitPerPage }
+      : { mode: 'fill' };
+
+    return SFPaginate.paginate(Object.assign({
+      target: els.pagesContainer,
+      items: problems,
+      sheetClass: 'sf-sheet exam-page',
+      gridClass: `problems-list ${isTwoCol ? 'cols-2' : ''}`,
+      cacheKey: `yaya|cols=${state.config.gridCols}|font=${state.config.fontSize}|ws=${state.config.includeWorkSpace ? 1 : 0}`,
+      beforeMeasure: typeset,
+      renderItem: (p, idx) => createProblemCard(p, idx),
+      renderHeader: questionHeader,
+      renderFooter: questionFooter
+    }, mode)).then(result => {
+      return renderAnswerSheet(problems, result.sheets.length, typeset).then(keySheets => {
+        stampPageNumbers(result.sheets.length + keySheets.length);
+
+        // KaTeX again over the emitted DOM: the measurement pass typeset a
+        // throwaway copy, not the cards that ended up on the page.
+        window.MathEngine.renderMath(els.pagesContainer);
+
+        document.querySelectorAll('.accordion-header').forEach(header => {
+          header.addEventListener('click', function () {
+            const body = this.nextElementSibling;
+            if (body) {
+              const isHidden = window.getComputedStyle(body).display === 'none';
+              body.style.display = isHidden ? 'block' : 'none';
+            }
+          });
+        });
+
+        updateInteractiveStats();
+
+        SFPaginate.publish({
+          sheets: result.sheets.length + keySheets.length,
+          worksheetPages: result.sheets.length,
+          requestedPages: null,
+          overflowRows: result.overflowRows,
+          chunkSplits: result.chunkSplits,
+          config: {
+            category: state.config.category,
+            gridCols: state.config.gridCols,
+            fontSize: state.config.fontSize,
+            questionsPerPage: state.config.questionsPerPage,
+            includeWorkSpace: state.config.includeWorkSpace,
+            includeAnswerKey: state.config.includeAnswerKey,
+            count: problems.length
+          }
+        });
+      });
     });
+  }
 
-    // Build the SEPARATE Answer Sheet strictly on the VERY LAST PAGE
-    if (state.config.includeAnswerKey) {
-      const answerPage = document.createElement('div');
-      answerPage.className = 'exam-page answer-sheet-page';
-      answerPage.id = 'answer-sheet-section';
+  /**
+   * The answer sheet, paginated.
+   *
+   * It is two sections -- a quick-answer lookup grid followed by full
+   * step-by-step worked solutions -- and they must flow continuously through
+   * one shared page budget, which is what paginateSections does. Paginating
+   * them separately would waste a page at the seam; not paginating them at
+   * all is what put 3307px of solutions onto a single A4 sheet.
+   */
+  function renderAnswerSheet(problems, questionPages, typeset) {
+    if (!state.config.includeAnswerKey || !problems.length) return Promise.resolve([]);
 
-      // 1. Quick Answer Grid
-      let quickGridHtml = '<div class="quick-answer-grid">';
-      problems.forEach((p, idx) => {
-        quickGridHtml += `
-          <div class="quick-answer-item">
+    const keyTarget = document.createElement('div');
+    els.pagesContainer.appendChild(keyTarget);
+
+    const quickItem = (p, idx) => {
+      const el = document.createElement('div');
+      el.className = 'sf-key-item quick-answer-item';
+      el.innerHTML = `
             <span class="q-idx">第 ${idx + 1} 题</span>
             <span class="q-val">${escapeHtml(p.expectedAnswer)}</span>
-          </div>
-        `;
-      });
-      quickGridHtml += '</div>';
+      `;
+      return el;
+    };
 
-      // 2. Detailed Step-by-Step Solutions List
-      let detailedSolutionsHtml = '<div class="solutions-list">';
-      problems.forEach((p, idx) => {
-        detailedSolutionsHtml += `
-          <div class="solution-item">
+    const solutionItem = (p, idx) => {
+      const el = document.createElement('div');
+      el.className = 'sf-card solution-item';
+      el.innerHTML = `
             <h4>第 ${idx + 1} 题【${escapeHtml(p.title || '')}】详细解析与分步评分要点：</h4>
             <div class="solution-steps">
               ${p.solution || `<p>参考答案：${p.expectedAnswer}</p>`}
             </div>
-          </div>
-        `;
-      });
-      detailedSolutionsHtml += '</div>';
-
-      answerPage.innerHTML = `
-        <div class="answer-sheet-title">🔑 试卷参考答案与详细评分标准（独立最末页）</div>
-        <div style="background: #eef2ff; border-left: 4px solid var(--primary); padding: 9px 14px; margin-bottom: 20px; font-size: 0.86rem; color: var(--primary); line-height: 1.5;">
-          <strong>独立答案页说明：</strong> 本页为独立答案与分步评分解析页。所有试题答案全部汇总于此，打印时作为最后一页输出，前面的试题卷面无任何答案，确保真实模拟测试环境。
-        </div>
-        <div style="margin-bottom: 12px; font-weight: 700; color: var(--text-main); font-size: 0.95rem;">【第一部分：客观题与最终答案速查表】</div>
-        ${quickGridHtml}
-        <div style="margin-bottom: 16px; font-weight: 700; color: var(--text-main); font-size: 0.95rem;">【第二部分：主观解答大题完整分步评分解析】</div>
-        ${detailedSolutionsHtml}
-        <div class="exam-footer">
-          <span>第 ${totalPages} 页（共 ${totalPages} 页 · 独立答案与评分解析页）</span>
-          <span>Yaya's Math Studio · 严谨推导 · 步步求精</span>
-        </div>
       `;
+      return el;
+    };
 
-      els.pagesContainer.appendChild(answerPage);
-    }
-
-    // Attach click listeners to accordion headers (if any hints)
-    document.querySelectorAll('.accordion-header').forEach(header => {
-      header.addEventListener('click', function () {
-        const body = this.nextElementSibling;
-        if (body) {
-          const isHidden = window.getComputedStyle(body).display === 'none';
-          body.style.display = isHidden ? 'block' : 'none';
+    return SFPaginate.paginateSections({
+      target: keyTarget,
+      // keyTarget is a bare wrapper; the font-size modifier that decides how
+      // much fits lives on the pages container it sits inside.
+      measureContext: els.pagesContainer,
+      sheetClass: 'sf-sheet exam-page answer-sheet-page',
+      cacheKey: `yaya-key|font=${state.config.fontSize}`,
+      beforeMeasure: typeset,
+      sections: [
+        { gridClass: 'quick-answer-grid', items: problems, renderItem: quickItem },
+        { gridClass: 'solutions-list', items: problems, renderItem: solutionItem }
+      ],
+      renderHeader: (pageIdx) => {
+        const wrap = document.createElement('div');
+        if (pageIdx === 0) {
+          wrap.innerHTML = `
+        <div class="answer-sheet-title">🔑 试卷参考答案与详细评分标准（独立答案页）</div>
+        <div style="background: #eef2ff; border-left: 4px solid var(--primary); padding: 9px 14px; margin-bottom: 20px; font-size: 0.86rem; color: var(--primary); line-height: 1.5;">
+          <strong>独立答案页说明：</strong> 本页起为独立答案与分步评分解析页。所有试题答案全部汇总于此，打印时作为最后输出，前面的试题卷面无任何答案，确保真实模拟测试环境。
+        </div>
+          `;
+        } else {
+          wrap.innerHTML = `
+        <div class="answer-sheet-title" style="font-size: 1rem; margin-bottom: 12px;">🔑 参考答案与评分标准（续）</div>
+          `;
         }
+        return wrap;
+      },
+      renderFooter: () => {
+        const footer = document.createElement('div');
+        footer.className = 'exam-footer';
+        /*
+         * The page number is stamped later, once both the question pages and
+         * the answer sheets have been counted -- but the placeholder must
+         * already occupy the space the real text will. An empty span measures
+         * as a zero-height line, so the footer grew by a full line after the
+         * paginator had finished checking its work, and the last solution on
+         * the page was pushed off the bottom edge. Same shape, dummy numbers.
+         */
+        footer.innerHTML = `
+          <span data-sf-page>第 0 页（共 0 页 · 独立答案与评分解析页）</span>
+          <span>Yaya's Math Studio · 严谨推导 · 步步求精</span>
+        `;
+        return footer;
+      }
+    }).then(result => {
+      // Only the FIRST answer sheet starts a new page; a blanket break-before
+      // would put a blank page between every one of them.
+      if (result.sheets.length) {
+        result.sheets[0].classList.add('sf-break-before');
+        result.sheets[0].id = 'answer-sheet-section';
+      }
+
+      const parent = keyTarget.parentNode;
+      while (keyTarget.firstChild) parent.insertBefore(keyTarget.firstChild, keyTarget);
+      parent.removeChild(keyTarget);
+
+      return result.sheets;
+    });
+  }
+
+  /**
+   * Stamp "第 N 页 / 共 M 页" once the total is known.
+   *
+   * The total spans the question pages AND the answer sheets, and neither
+   * count exists until both have been paginated, so it cannot be written
+   * while the sheets are being built.
+   */
+  function stampPageNumbers(totalPages) {
+    const sheets = els.pagesContainer.querySelectorAll('.sf-sheet:not(.sf-measuring)');
+    sheets.forEach((sheet, idx) => {
+      const isKey = sheet.classList.contains('answer-sheet-page');
+      const label = isKey ? '独立答案与评分解析页' : '试题部分';
+      sheet.querySelectorAll('[data-sf-page]').forEach(el => {
+        el.textContent = `第 ${idx + 1} 页（共 ${totalPages} 页 · ${label}）`;
       });
     });
-
-    // Render KaTeX Math in all containers
-    window.MathEngine.renderMath(els.pagesContainer);
-
-    // Update Interactive stats
-    updateInteractiveStats();
   }
 
   // Update Interactive mode stats
@@ -784,9 +875,64 @@
     }
   }
 
+  /**
+   * URL parameters.
+   *
+   * Yaya's studio parsed none before this, so none of its layouts were
+   * reachable from a test -- including every combination of columns, explicit
+   * per-page count and font size, which is exactly the space where the
+   * 183-345px page overflows lived.
+   *
+   * Each `apply` writes into the sidebar control as well as the config, so
+   * the form and the rendered paper agree.
+   */
+  const URL_SCHEMA = {
+    category: {
+      type: 'string',
+      apply: (c, v) => { c.category = v; SFUrl.syncControl('topic-select', v); }
+    },
+    difficulty: {
+      type: 'string',
+      apply: (c, v) => { c.difficulty = v; SFUrl.syncControl('difficulty-select', v); }
+    },
+    count: {
+      type: 'int', min: 2, max: 40,
+      apply: (c, v) => { c.count = v; SFUrl.syncControl("question-count", v); }
+    },
+    cols: {
+      type: 'int', min: 1, max: 2,
+      apply: (c, v) => { c.gridCols = v; SFUrl.syncControl('grid-cols-select', v); }
+    },
+    perpage: {
+      type: 'string',
+      apply: (c, v) => { c.questionsPerPage = v; SFUrl.syncControl('per-page-select', v); }
+    },
+    font: {
+      type: 'enum', values: ['normal', 'large', 'compact'],
+      apply: (c, v) => { c.fontSize = v; SFUrl.syncControl('font-size-select', v); }
+    },
+    workspace: {
+      type: 'bool',
+      apply: (c, v) => { c.includeWorkSpace = v; SFUrl.syncControl('include-workspace-check', v); }
+    },
+    answerkey: {
+      type: 'bool',
+      apply: (c, v) => { c.includeAnswerKey = v; SFUrl.syncControl('include-answer-key-check', v); }
+    },
+    hints: {
+      type: 'bool',
+      apply: (c, v) => { c.includeHints = v; SFUrl.syncControl('include-hints-check', v); }
+    }
+  };
+
   // Initialize Application
   function init() {
     initEvents();
+    try {
+      SFUrl.read(URL_SCHEMA, state.config);
+    } catch (e) {
+      console.warn('Could not parse URL params', e);
+    }
     generateProblems();
     renderWorksheet();
   }
