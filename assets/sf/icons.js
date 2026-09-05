@@ -71,6 +71,13 @@
     atom: 'M12 14.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4M12 3.2c4.2 0 7.6 3.94 7.6 8.8s-3.4 8.8-7.6 8.8-7.6-3.94-7.6-8.8S7.8 3.2 12 3.2M4.5 7.7c2.1-3.64 7-4.34 11.2-1.9s6.1 6.98 4 10.62-7 4.34-11.2 1.9-6.1-6.98-4-10.62M19.5 7.7c2.1 3.64.2 8.18-4 10.62s-9.1 1.74-11.2-1.9-.2-8.18 4-10.62 9.1-1.74 11.2 1.9',
     ruler: 'M14.6 2.9 21.1 9.4a1.2 1.2 0 0 1 0 1.7L11.1 21.1a1.2 1.2 0 0 1-1.7 0L2.9 14.6a1.2 1.2 0 0 1 0-1.7L12.9 2.9a1.2 1.2 0 0 1 1.7 0M12 5.8l2.2 2.2M9.2 8.6l1.5 1.5M6.4 11.4l2.2 2.2M8.6 14.8l1.5 1.5',
     clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5.2l3.4 2',
+    // A month grid with the header band and two marked days, so it still reads
+    // as a calendar rather than a plain window at pill size.
+    calendar: 'M4 6.5a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM4 10h16M8 3.5v3M16 3.5v3M8.5 13.5h.01M12 13.5h.01M8.5 16.5h.01M12 16.5h.01',
+    // A coin face carrying the dollar stroke. It has to read at pill size
+    // next to a score, so the face carries one symbol rather than a value
+    // like "25" that would go illegible below about 18px.
+    coin: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17M14.4 9.3a3 3 0 0 0-2.4-1.1c-1.45 0-2.5.75-2.5 1.9s1 1.65 2.5 1.9 2.5.85 2.5 1.9-1.05 1.9-2.5 1.9a3 3 0 0 1-2.4-1.1M12 6.6v10.8',
     coffee: 'M4 8.5h13v6.2a4.3 4.3 0 0 1-4.3 4.3H8.3A4.3 4.3 0 0 1 4 14.7zM17 10h1.6a2.6 2.6 0 0 1 0 5.2H17M6.5 2.5v2.6M10.5 2.5v2.6M14.5 2.5v2.6M3 21.5h15',
     sigma: 'M17.5 4.5h-11l6.4 7.5-6.4 7.5h11',
     chartLine: 'M4 4v15.5a.5.5 0 0 0 .5.5H20M7.5 15.5l3.5-4.5 3 2.5 4.5-6',
@@ -84,18 +91,29 @@
     person: 'M12 12.5a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5M4.5 20.5a7.5 7.5 0 0 1 15 0',
     leaf: 'M4.5 19.5C3 15 4.5 9.5 9 6.5c3.6-2.4 8-2.2 11-2 .2 3 .4 7.4-2 11-3 4.5-8.5 6-13 4.5M11.5 12.5 4.5 19.5',
     droplet: 'M12 3.2s6.5 6.4 6.5 10.7A6.5 6.5 0 0 1 5.5 13.9C5.5 9.6 12 3.2 12 3.2M9.2 15.4a2.9 2.9 0 0 0 2.8 2.4',
-    cell: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M13.4 12.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M8 15.6h.01M16.4 15.9h.01M7.6 8.6h.01'
+    cell: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M13.4 12.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M8 15.6h.01M16.4 15.9h.01M7.6 8.6h.01',
+
+    /* Grade 6 Ontario strands */
+    species: 'M7.5 21c-2 0-3.5-1.6-3.5-3.6 0-3 2.6-4.6 3.5-7.4M16.5 21c2 0 3.5-1.6 3.5-3.6 0-3-2.6-4.6-3.5-7.4M7.5 21h9M6 8.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M18 8.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M12 6.6a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4',
+    plane: 'M10.4 3.3a1.6 1.6 0 0 1 3.2 0V9l7.9 4.6v2.6l-7.9-2.4v4.1l2.6 1.9v1.9L12 20.6l-4.2 1.1v-1.9l2.6-1.9v-4.1L2.5 16.2v-2.6L10.4 9Z',
+    rocket: 'M12 2.5c3.2 2.4 5 6 5 10l-1.9 3.4H8.9L7 12.5c0-4 1.8-7.6 5-10M12 11.4a1.9 1.9 0 1 0 0-3.8 1.9 1.9 0 0 0 0 3.8M8.9 15.9 6.4 18l1.2 3.5L12 19.4l4.4 2.1 1.2-3.5-2.5-2.1M7 12.5 3.9 14.7l.7 3.6M17 12.5l3.1 2.2-.7 3.6',
+    bolt: 'M13.6 2.5 5 13.4h5.4l-.9 8.1L18.5 10.6h-5.4z',
+    circuit: 'M4.5 12H8m8 0h3.5M4.5 12v5.5h6M19.5 12V6.5h-6M12 14.4a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8M10.5 17.5h3M10.5 6.5h3',
+    telescope: 'M3.4 13.6 6 6.9l4.7 1.8-2.6 6.7zM10.7 8.7 15.4 5l3.4 4.6-4.7 3.7zM8.1 15.4l2.4 6M8.1 15.4 5 21M6.6 17.5h5.3'
   };
 
   // Glyphs whose silhouette needs a fill to read at small sizes.
-  var FILLED = { play: true, star: true, flame: true, sparkle: true };
+  var FILLED = { play: true, star: true, flame: true, sparkle: true, bolt: true, plane: true };
 
   var ALIASES = {
     worksheets: 'printer', print: 'printer', trophies: 'trophy',
     allSubjects: 'grid', profile: 'person', science: 'flask',
     chemistry: 'flask', history: 'temple', rome: 'temple',
     math: 'ruler', calculus: 'sigma', statistics: 'chartLine',
-    time: 'clock', biology: 'cell', ecology: 'leaf', water: 'droplet'
+    time: 'clock', biology: 'cell', ecology: 'leaf', water: 'droplet',
+    biodiversity: 'species', flight: 'plane', space: 'rocket',
+    electricity: 'bolt', physics: 'chartLine',
+    money: 'coin', coins: 'coin', financial: 'coin'
   };
 
   function resolve(name) {

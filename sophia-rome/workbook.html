@@ -8,11 +8,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
   <style>
     @page {
       size: letter portrait;
       margin: 0.45in 0.5in;
     }
+
+    /* The shared print geometry (assets/sf/print.css) describes this page.
+       These must agree with the @page rule above: the sheet IS the printable
+       box, i.e. the paper minus its margins, so it carries no padding of its
+       own. tests/print/css-contract.spec.ts asserts the two stay in step. */
+    :root {
+      --sf-page-w: 8.5in;
+      --sf-page-h: 11in;
+      --sf-page-margin-y: 0.45in;
+      --sf-page-margin-x: 0.5in;
+      --sf-sheet-pad-y: 0in;
+      --sf-sheet-pad-x: 0in;
+    }
+
 
     :root {
       --primary: #8b0000;
@@ -75,21 +92,24 @@
     .btn-outline:hover { background: #f1f5f9; }
 
     /* Worksheet Document Canvas */
+    /* Hand-authored page. Box model and page breaks come from .sf-sheet in
+       assets/sf/print.css, which also supplies the `:last-of-type` reset that
+       stops a blank sheet being emitted after the final page. Because that box
+       is now a FIXED height in both media, content pasted in beyond what fits
+       visibly overhangs instead of silently reflowing -- and
+       tests/print/all-printables.spec.ts fails with the offending page index. */
     .document-page {
-      max-width: 8.5in;
       margin: 0 auto 30px;
       background: #ffffff;
-      padding: 0.45in 0.5in;
       border-radius: 4px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      page-break-after: always;
       position: relative;
     }
 
     .test-header {
       border-bottom: 2px solid #000000;
-      padding-bottom: 10px;
-      margin-bottom: 16px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
@@ -127,6 +147,13 @@
     }
 
     /* Section Styles */
+    /* Spacing tightened so Module 1 fits its page.
+       The fixed-height sheet from assets/sf/print.css made an existing
+       overflow visible: page 1 needed 1006px of a 968px box, so the last few
+       questions were printing off the bottom edge. Nothing was dropped from
+       the workbook -- the vertical rhythm was simply pulled in enough for the
+       authored content to fit. tests/print/all-printables.spec.ts fails if it
+       ever stops fitting again. */
     .section-title {
       font-family: 'Cinzel', serif;
       font-size: 1.1rem;
@@ -134,7 +161,7 @@
       color: #000000;
       border-bottom: 1.5px solid #000000;
       padding-bottom: 4px;
-      margin: 16px 0 10px;
+      margin: 10px 0 7px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -145,8 +172,8 @@
       border: 1px solid #cbd5e1;
       border-left: 3px solid #000000;
       border-radius: 4px;
-      padding: 8px 12px;
-      margin-bottom: 12px;
+      padding: 6px 12px;
+      margin-bottom: 8px;
       font-size: 0.88rem;
     }
 
@@ -161,7 +188,7 @@
 
     .q-item {
       font-size: 0.88rem;
-      line-height: 1.45;
+      line-height: 1.32;
       page-break-inside: avoid;
     }
 
@@ -194,8 +221,8 @@
     /* Diagram Art */
     .ascii-diagram {
       font-family: 'Courier New', monospace;
-      font-size: 0.75rem;
-      line-height: 1.15;
+      font-size: 0.73rem;
+      line-height: 1.12;
       background: #ffffff;
       border: 1px solid #94a3b8;
       padding: 6px 10px;
@@ -240,13 +267,6 @@
         display: none !important;
       }
 
-      .document-page {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 0 15px 0 !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-      }
 
       .concept-box {
         background: #ffffff !important;
@@ -276,7 +296,7 @@
   <!-- ========================================================================= -->
   <!-- PAGE 1: REPUBLIC, LAW & STEM ARCHITECTURE -->
   <!-- ========================================================================= -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🏛️ STUDYFLIX &bull; ANCIENT ROME MASTER WORKBOOK</div>
@@ -359,7 +379,7 @@
   <!-- ========================================================================= -->
   <!-- PAGE 2: NUMERALS, CAESAR CIPHER & WATERLOO CHALLENGE -->
   <!-- ========================================================================= -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">🏛️ MODULE 3 & 4: CIPHERS & WATERLOO CONTEST ARENA</div>

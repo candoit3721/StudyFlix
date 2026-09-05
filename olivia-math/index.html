@@ -7,8 +7,11 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.1.0">
-  <link rel="stylesheet" href="css/styles.css?v=3.1.0">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
+  <link rel="stylesheet" href="css/styles.css?v=3.2.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
@@ -23,6 +26,7 @@
         <div style="margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;">
           <a href="../index.html" style="background:#181818; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;"><span data-sf-icon="arrowLeft" data-sf-size="14"></span><span>StudyFlix Hub</span></a>
           <a href="clock-time.html" style="background:#8b5cf6; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;"><span data-sf-icon="clock" data-sf-size="14"></span><span>Clock &amp; Elapsed Time</span></a>
+          <a href="money-coins.html" style="background:#059669; color:#fff; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;"><span data-sf-icon="coin" data-sf-size="14"></span><span>Money &amp; Coins</span></a>
         </div>
       </div>
 
@@ -321,9 +325,14 @@
   <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999; display: none;"></canvas>
 
   <!-- Scripts -->
-  <script src="../assets/sf/icons.js?v=3.1.0"></script>
-  <script src="js/math-engine.js?v=3.1.0"></script>
-  <script src="js/word-problems.js?v=3.1.0"></script>
-  <script src="js/app.js?v=3.1.0"></script>
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <!-- Shared print machinery. paginate.js measures the real cards in the real
+       print box and decides page breaks; urlconfig.js makes every layout
+       combination addressable so the print test matrix can reach it. -->
+  <script src="../assets/sf/urlconfig.js?v=3.2.0"></script>
+  <script src="../assets/sf/paginate.js?v=3.2.0"></script>
+  <script src="js/math-engine.js?v=3.2.0"></script>
+  <script src="js/word-problems.js?v=3.2.0"></script>
+  <script src="js/app.js?v=3.2.0"></script>
 </body>
 </html>

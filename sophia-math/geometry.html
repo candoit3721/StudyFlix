@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sophia's Geometry &amp; Area Masterclass | StudyFlix</title>
+  <meta name="description" content="Master 2D &amp; 3D geometry and area calculation for Ontario Grade 5 &amp; 6 and Waterloo CEMC Gauss contest with interactive visual proofs, dynamic sliders, and gamified quiz arena.">
+  
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <link rel="stylesheet" href="css/geometry.css?v=3.2.0">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Studio Navigation Bar -->
+  <header class="studio-nav">
+    <a href="../index.html" class="nav-brand">
+      <span class="nav-badge">SOPHIA • GRADE 5/6</span>
+      <span class="nav-title">Geometry &amp; Area Masterclass</span>
+    </a>
+    
+    <div class="nav-actions">
+      <div class="xp-counter">
+        <span>⭐</span>
+        <span id="global-user-xp">0 XP</span>
+      </div>
+      <a href="index.html?preset=g5_6_geometry_area" class="btn-nav-return" style="border-color: var(--accent-cyan);">
+        <span>🖨️ Math Worksheet Studio</span>
+      </a>
+      <a href="../index.html" class="btn-nav-return">
+        <span>← Hub</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    <!-- Hero Header Banner -->
+    <section class="hero-banner">
+      <div class="hero-tagline">
+        <span>🇨🇦 ONTARIO STRAND E: SPATIAL SENSE &bull; WATERLOO CEMC ENRICHMENT</span>
+      </div>
+      <h1 class="hero-title">Visual Geometry &amp; Area Studio</h1>
+      <p class="hero-subtitle">
+        Explore <em>why</em> area formulas work through dynamic geometric transformations, shearing proofs, and decomposition. Master triangles, parallelograms, trapezoids, rhombuses, circles, and Waterloo Gauss shaded region challenges.
+      </p>
+      <div class="hero-stats-row">
+        <div class="hero-stat-pill">
+          <span>📐</span>
+          <span><strong>6 Interactive</strong> Shape Labs</span>
+        </div>
+        <div class="hero-stat-pill">
+          <span>✨</span>
+          <span><strong>Visual Proofs</strong> &amp; Animations</span>
+        </div>
+        <div class="hero-stat-pill">
+          <span>🏆</span>
+          <span><strong>3-Tier Arena</strong> (Gauss Contest)</span>
+        </div>
+        <div class="hero-stat-pill">
+          <span>🍁</span>
+          <span><strong>100% Canadian</strong> Metric Standards</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station Selection Bar -->
+    <nav class="station-nav" aria-label="Shape Exploration Stations">
+      <button class="station-btn active" data-station="triangle" id="tab-triangle">
+        <span>📐 Triangles</span>
+        <span class="badge-pill">A = ½bh</span>
+      </button>
+      <button class="station-btn" data-station="parallelogram" id="tab-parallelogram">
+        <span>▱ Parallelograms</span>
+        <span class="badge-pill">A = bh</span>
+      </button>
+      <button class="station-btn" data-station="trapezoid" id="tab-trapezoid">
+        <span>⏢ Trapezoids</span>
+        <span class="badge-pill">A = ½(a+b)h</span>
+      </button>
+      <button class="station-btn" data-station="rhombus" id="tab-rhombus">
+        <span>🔶 Rhombus &amp; Kite</span>
+        <span class="badge-pill">A = ½d₁d₂</span>
+      </button>
+      <button class="station-btn" data-station="circle" id="tab-circle">
+        <span>⭕ Circles &amp; Rings</span>
+        <span class="badge-pill">A = πr²</span>
+      </button>
+      <button class="station-btn" data-station="composite" id="tab-composite">
+        <span>🧩 Composite Shapes</span>
+        <span class="badge-pill">Decomposition</span>
+      </button>
+    </nav>
+
+    <!-- Interactive Workspace Grid (Visualizer & Calculation Breakdown) -->
+    <section class="studio-grid">
+      <!-- Left Column: Interactive SVG Canvas & Parameter Sliders -->
+      <div class="studio-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>✨ Interactive Shape Transformer</span>
+          </h2>
+          <div class="card-badge">LIVE SVG ENGINE</div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <div class="canvas-toolbar">
+            <button class="canvas-tool-btn active" id="toggle-grid-btn" title="Toggle 1 cm² unit grid">
+              # Grid
+            </button>
+          </div>
+          
+          <svg id="geometry-svg-canvas" class="shape-svg" viewBox="0 0 500 320">
+            <!-- Dynamic SVG elements rendered via geometry-lab.js -->
+          </svg>
+        </div>
+
+        <!-- Dynamic Station Dimension Controls (Sliders) -->
+        <div class="controls-container" id="station-controls-container">
+          <!-- Populated dynamically based on active station -->
+        </div>
+
+        <!-- Proof Animation Action Bar -->
+        <div class="proof-bar">
+          <button class="btn-proof" id="proof-action-btn">
+            <span>✨ Animate Visual Proof &amp; Decomposition</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Formula Hero, Calculation Steps, Live Area & Common Traps -->
+      <div class="studio-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span>📋 Formula &amp; Step-by-Step Breakdown</span>
+          </h2>
+          <div class="card-badge">ONTARIO STANDARD</div>
+        </div>
+
+        <div class="formula-hero-box">
+          <div class="formula-label">Master Formula</div>
+          <div class="formula-equation" id="station-formula-display">A = ½ × b × h</div>
+        </div>
+
+        <div class="calculation-steps-box">
+          <div class="steps-title">
+            <span>🧮 Live Calculation Steps</span>
+          </div>
+          <div id="calculation-steps-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <div class="live-area-result">
+          <div class="live-area-label">Total Calculated Area</div>
+          <div class="live-area-value" id="live-area-result-value">48 cm²</div>
+        </div>
+
+        <div class="trap-box" id="station-trap-container">
+          <span id="station-trap-text">⚠️ Watch out: Never multiply the slanted sides! Always use the perpendicular 90° height.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Gamified 3-Tier Quiz Arena (Ontario Core to Waterloo CEMC Gauss) -->
+    <!-- ========================================================================= -->
+    <section class="arena-section" id="arena">
+      <div class="section-title-row">
+        <div>
+          <h2 class="section-heading">🎯 Geometry &amp; Area Challenge Arena</h2>
+          <p class="section-sub">Solve multi-tiered area problems with instant visual diagrams, step-by-step solutions, and Waterloo Gauss challenges.</p>
+        </div>
+
+        <div class="tier-tabs">
+          <button class="tier-tab-btn active" data-tier="1" id="tier-btn-1">⭐ Tier 1: Core</button>
+          <button class="tier-tab-btn" data-tier="2" id="tier-btn-2">⭐⭐ Tier 2: Enriched</button>
+          <button class="tier-tab-btn" data-tier="3" id="tier-btn-3">⭐⭐⭐ Tier 3: Gauss Contest</button>
+        </div>
+      </div>
+
+      <div class="arena-card">
+        <div class="arena-topbar">
+          <div class="question-tracker" id="arena-q-tracker">QUESTION 1 OF 6</div>
+          <div class="streak-pill">
+            <span>🔥</span>
+            <span>Streak: <strong id="arena-streak-count">0</strong></span>
+          </div>
+        </div>
+
+        <div class="arena-question-body">
+          <!-- Question Diagram Box -->
+          <div class="question-diagram-box" id="arena-diagram-container">
+            <!-- Dynamic Diagram SVG -->
+          </div>
+
+          <!-- Question Prompt & Options -->
+          <div class="question-text-box">
+            <span class="question-badge badge-tier1" id="arena-q-badge">TIER 1 &bull; ONTARIO BENCHMARK</span>
+            <div class="question-prompt" id="arena-q-prompt">
+              <!-- Prompt text -->
+            </div>
+
+            <div class="question-options-grid" id="arena-options-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Instant Feedback & Worked Solution Reveal -->
+        <div class="arena-feedback-box" id="arena-feedback-container">
+          <div class="feedback-headline" id="feedback-headline-text"></div>
+          <div class="feedback-steps" id="feedback-solution-text"></div>
+          <button class="btn-next-question" id="btn-next-arena-q">
+            <span>Next Challenge Question →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- Printable Learning Guides & Worksheets Section -->
+    <!-- ========================================================================= -->
+    <section class="print-section">
+      <div class="section-title-row" style="margin-bottom: 8px;">
+        <div>
+          <h2 class="section-heading" style="font-size: 1.35rem;">🖨️ Printable Workbooks &amp; Master Study Guides</h2>
+          <p class="section-sub">Download, read, or print clean distraction-free study sheets and problem sets.</p>
+        </div>
+      </div>
+
+      <div class="print-card-grid">
+        <div class="print-tile">
+          <div>
+            <div class="print-tile-title">📖 30-Question Area Masterclass Study Guide</div>
+            <div class="print-tile-desc">Full conceptual guide with visual proofs, common traps, 3-tier Gauss problems, and complete step-by-step solutions.</div>
+          </div>
+          <a href="worksheets/sophia_geometry_area_masterclass.md" target="_blank" class="btn-print-link">
+            📄 View Masterclass Markdown (.md)
+          </a>
+        </div>
+
+        <div class="print-tile">
+          <div>
+            <div class="print-tile-title">🧩 Polygons &amp; Composite Shapes Test (20 Qs)</div>
+            <div class="print-tile-desc">Paper-ready practice sheet with L-shapes, house profiles, pool walkways, cross gardens, and complete answer key.</div>
+          </div>
+          <a href="worksheets/grade6_area_composite_shapes.md" target="_blank" class="btn-print-link">
+            📄 View Composite Shapes Worksheet (.md)
+          </a>
+        </div>
+
+        <div class="print-tile">
+          <div>
+            <div class="print-tile-title">⚙️ Custom Math Worksheet Generator</div>
+            <div class="print-tile-desc">Generate unlimited randomized printable PDF worksheets with Smart Layouts, column packaging, and answer keys.</div>
+          </div>
+          <a href="index.html?preset=g5_6_geometry_area" class="btn-print-link" style="background: rgba(16, 185, 129, 0.2); border-color: var(--accent-emerald); color: #6ee7b7;">
+            🖨️ Open Math Studio Generator
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <script src="js/geometry-lab.js?v=3.2.0"></script>
+</body>
+</html>

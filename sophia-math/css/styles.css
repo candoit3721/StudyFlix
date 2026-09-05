@@ -383,25 +383,12 @@ body {
   width: 100%;
 }
 
-/* Paper Sheet Simulation (8.5 x 11 inches) */
+/* Paper Sheet Simulation.
+   The box model -- width, height, padding, flex column -- lives on .sf-sheet
+   in assets/sf/print.css so that it is byte-identical on screen and in print.
+   Only sophia's own paint stays here. */
 .paper-sheet {
-  width: 8.5in;
-  min-height: 11in;
-  height: 11in;
-  max-width: 8.5in;
   background: #fff;
-  padding: 0.45in 0.55in 0.4in 0.55in;
-  box-shadow: var(--shadow-lg);
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  box-sizing: border-box;
-}
-
-.paper-sheet.answer-key-sheet {
-  height: auto;
-  min-height: 6in;
 }
 
 /* Interactive Single-Sheet Wrapper */
@@ -683,9 +670,10 @@ body {
 }
 
 /* Scratchpad / Work Area for Print */
+/* Print geometry, applied in both media -- see the note in the print block. */
 .workspace-box {
   flex: 1;
-  min-height: 48px;
+  min-height: 40px;
   margin-top: 6px;
   border: 1px dashed #cbd5e1;
   border-radius: 4px;
@@ -867,14 +855,14 @@ body {
 .compact-key-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px 14px;
+  gap: 6px 10px;
   font-size: 0.82rem;
 }
 
 .key-item {
   display: flex;
   gap: 6px;
-  padding: 5px 8px;
+  padding: 4px 6px;
   background: #f8fafc;
   border-radius: 4px;
   border: 1px solid #e2e8f0;
@@ -956,9 +944,14 @@ body {
 }
 
 /* PRINT MEDIA STYLES - ROBUST MULTI-PAGE PRINTING WITH EVEN DISTRIBUTION */
+/* Paper size is pinned, not left to the browser: `size: portrait` alone lets
+   the printer decide between Letter and A4, and the two have different
+   printable heights, so the same worksheet would paginate differently on
+   different machines. The literal here must match the --sf-page-* variables
+   in assets/sf/print.css; tests/print/css-contract.spec.ts enforces that. */
 @page {
   size: letter portrait;
-  margin: 0.4in 0.45in;
+  margin: 0.4in;
 }
 
 @media print {
@@ -991,6 +984,7 @@ body {
     height: auto !important;
     overflow: visible !important;
     display: block !important;
+    padding: 0 !important;
   }
 
   .worksheet-viewport {
@@ -1008,46 +1002,39 @@ body {
     gap: 0 !important;
   }
 
+  /* Box model, page breaks and the no-trailing-blank-page rule all come from
+     .sf-sheet in assets/sf/print.css. In particular the old
+     `page-break-inside: avoid` on this full-page element is GONE: it stopped
+     an overflowing sheet from splitting, so the browser pushed the whole
+     sheet to the next page and left a blank one behind. Only paint remains. */
   .paper-sheet {
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    height: 10.1in !important;
-    max-height: 10.1in !important;
-    min-height: 10.1in !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    page-break-after: always !important;
-    break-after: page !important;
-  }
-
-  .paper-sheet:last-child {
-    page-break-after: auto !important;
-    break-after: auto !important;
-  }
-
-  .paper-sheet.answer-key-sheet {
-    page-break-before: always !important;
-    break-before: page !important;
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
     border-top: none !important;
-    padding-top: 0.1in !important;
   }
 
+  /* The hard break before the answer key is applied by the renderer, to the
+     FIRST key sheet only, via the shared .sf-break-before class. Putting it
+     on every .answer-key-sheet would inject a blank page between each one now
+     that answer keys paginate across several sheets. */
+
+  /* No grid-auto-rows override here any more. The sheet is now the same fixed
+     box on screen and on paper, so the rows that stretch in the preview are
+     the rows that print -- which is the whole point of the fixed-height sheet. */
+  .problems-grid {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+  }
+
+  /* break-inside: avoid comes from .sf-card in assets/sf/print.css. */
   .problem-card {
     border: 1px solid #94a3b8 !important;
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    height: 100% !important;
   }
 
+  /* Geometry declared once, for BOTH media. A print-only size override
+     silently invalidates pagination: assets/sf/paginate.js measures
+     these elements on screen, so any rule that makes them a different
+     size on paper means the page breaks were computed for a document
+     that is not the one being printed. Enforced by
+     tests/print/css-contract.spec.ts. */
   .workspace-box {
     background-color: transparent !important;
     border: 1px dashed #94a3b8 !important;
@@ -1057,14 +1044,9 @@ body {
     color: #94a3b8 !important;
   }
 
-  .compact-key-grid {
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 8px 12px !important;
-  }
-
+  /* break-inside: avoid comes from .sf-key-item in assets/sf/print.css.
+     Paint only: the padding is declared once above, for both media. */
   .key-item {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
     background: transparent !important;
     border: 1px solid #cbd5e1 !important;
   }

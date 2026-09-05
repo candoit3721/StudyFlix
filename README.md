@@ -79,7 +79,7 @@ kids/
 ├── style.css                    <-- Netflix Dark Theme & Slider Animations
 ├── app.js                       <-- Multi-Profile Engine & Topic Registry
 ├── start_kids_hub.py            <-- 1-Click Local Server & Browser Launcher
-├── olivia-math/                 <-- Olivia's Grade 3 Math Studio
+├── olivia-math/                 <-- Olivia's Grade 3 Math Studio (worksheets, clock & money courses)
 ├── sophia-math/                 <-- Sophia's Grade 5/6 Math Studio
 ├── sophia-science/              <-- Sophia's Science & Chemistry Quest
 ├── sophia-rome/                 <-- Sophia's Ancient Rome & Engineering Quest

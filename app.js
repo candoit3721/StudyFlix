@@ -24,6 +24,9 @@ const DEFAULT_PROFILES = [
     grade: "Grade 5 & 6 Champion",
     themeClass: "theme-sophia",
     family: "rome",
+    // The study schedule lives outside the hub, so the chooser links out to it
+    // rather than pretending to own it.
+    calendarUrl: "https://calendar.studyflix.vip/sophia",
     featured: {
       tag: "FEATURED QUEST",
       title: "Sophia's Ancient Rome & Engineering Quest",
@@ -34,10 +37,18 @@ const DEFAULT_PROFILES = [
     },
     subjects: [
       { title: "Ancient Rome Quest & Studio", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", kind: "quest", family: "rome", art: "rome-forum" },
+      { title: "Geometry & Area Masterclass", badge: "NEW STUDIO", desc: "Interactive 2D shape transformer, shearing proofs & Waterloo Gauss Arena", link: "sophia-math/geometry.html", kind: "quest", family: "math", art: "math-geometry" },
       { title: "Science & Chemistry Quest", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", kind: "quest", family: "science", art: "sci-atom" },
-      { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" }
+      { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" },
+      { title: "Grade 6 Ontario Science Strands", badge: "NEW & COMPLETE", desc: "All 4 strands: Biodiversity, Flight, Space & Electricity with live labs", link: "sophia-science/index.html#tab-biodiversity", kind: "quest", family: "science", art: "sci-space" }
     ],
     topics: [
+      { title: "Area of Polygons & Proofs", badge: "SPATIAL SENSE", desc: "Visual shearing proofs, base & perpendicular heights & trapezoid averages", link: "sophia-math/geometry.html#tab-triangle", kind: "lesson", family: "math", art: "math-geometry" },
+      { title: "Circles & Composite Area", badge: "GAUSS CONTEST", desc: "Radius squared, annulus rings, L-shapes & Waterloo shaded region puzzles", link: "sophia-math/geometry.html#tab-circle", kind: "lesson", family: "math", art: "math-geometry" },
+      { title: "Biodiversity & Six Kingdoms", badge: "GRADE 6 STRAND B", desc: "Kingdom sorter, dichotomous key & Great Lakes food web collapse", link: "sophia-science/index.html#tab-biodiversity", kind: "lesson", family: "science", art: "sci-biodiversity" },
+      { title: "Flight & the Four Forces", badge: "GRADE 6 STRAND D", desc: "Lift, weight, thrust, drag, Bernoulli's principle & wing loading", link: "sophia-science/index.html#tab-flight", kind: "lesson", family: "science", art: "sci-flight" },
+      { title: "Space & the Solar System", badge: "GRADE 6 STRAND E", desc: "Orbit simulator, axial tilt seasons & mass vs. weight on 9 worlds", link: "sophia-science/index.html#tab-space", kind: "lesson", family: "science", art: "sci-space" },
+      { title: "Electricity & Circuits", badge: "GRADE 6 STRAND C", desc: "Series vs. parallel builder, conductor bench & Ontario energy audit", link: "sophia-science/index.html#tab-electricity", kind: "lesson", family: "science", art: "sci-electricity" },
       { title: "Roman Arch & Keystone Lab", badge: "ENGINEERING", desc: "Interactive keystone insertion, compression forces & abutments", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-arch" },
       { title: "Aqueduct Hydraulic Flow", badge: "HYDRAULICS", desc: "Adjust gravity slopes (0.2%-0.5%) to transport mountain water", link: "sophia-rome/index.html#tab-engineering", kind: "lesson", family: "rome", art: "rome-aqueduct" },
       { title: "Caesar's Military Cipher", badge: "CRYPTOGRAPHY", desc: "Decode top-secret battlefield messages sent across Gaul", link: "sophia-rome/index.html#tab-cipher", kind: "lesson", family: "rome", art: "rome-cipher" },
@@ -53,6 +64,8 @@ const DEFAULT_PROFILES = [
       { title: "Fraction Mastery", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", kind: "lesson", family: "math", art: "math-fractions" }
     ],
     printable: [
+      { title: "30-Question Area Masterclass Guide", badge: "STUDY GUIDE", desc: "Comprehensive printable workbook with visual proofs, traps & Gauss solutions", link: "sophia-math/worksheets/sophia_geometry_area_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Composite Shapes & Shaded Area Test", badge: "20 QUESTIONS", desc: "Printable worksheet on decomposed polygons, house silhouettes & pool walkways", link: "sophia-math/worksheets/grade6_area_composite_shapes.md", kind: "printable", family: "math", art: "generic-printable" },
       { title: "Complete Ancient Rome Workbook", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", kind: "printable", family: "rome", art: "generic-printable" },
       { title: "Complete Science Workbook", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", kind: "printable", family: "science", art: "generic-printable" },
       { title: "Grade 5/6 Math Practice", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", kind: "printable", family: "math", art: "math-worksheet" }
@@ -67,10 +80,11 @@ const DEFAULT_PROFILES = [
     grade: "Grade 3 Explorer",
     themeClass: "theme-olivia",
     family: "grade3",
+    calendarUrl: "https://calendar.studyflix.vip/olivia",
     featured: {
       tag: "FEATURED STUDIO",
       title: "Olivia's Math Worksheet Studio",
-      desc: "Operations with carrying & borrowing, 12x12 times tables, clock time, money math, geometry, and fun word problems!",
+      desc: "Operations with carrying & borrowing, 12x12 times tables, clock time, Canadian money & coins, geometry, and fun word problems!",
       link: "olivia-math/index.html",
       family: "grade3",
       art: "math-operations"
@@ -78,20 +92,23 @@ const DEFAULT_PROFILES = [
     subjects: [
       { title: "Grade 3 Math Studio", badge: "CORE STUDIO", desc: "Interactive practice & clean printable worksheet generator", link: "olivia-math/index.html", kind: "quest", family: "grade3", art: "math-operations" },
       { title: "Clock & Elapsed Time Studio", badge: "NEW & INTERACTIVE", desc: "Read analog clocks, set hands, timeline jumps & time word problems", link: "olivia-math/clock-time.html", kind: "quest", family: "grade3", art: "g3-clock" },
-      { title: "Times Table Blitz", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-times" },
-      { title: "Money & Coin Math", badge: "REAL LIFE", desc: "Counting dollars, quarters, dimes, nickels, and making change", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-money" }
+      { title: "Times Table Blitz", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html?preset=mult_core", kind: "lesson", family: "grade3", art: "g3-times" },
+      { title: "Money & Coin Math", badge: "NEW & INTERACTIVE", desc: "Count Canadian coins, build a purse, make change & print money tests", link: "olivia-math/money-coins.html", kind: "quest", family: "grade3", art: "g3-money" }
     ],
     topics: [
       { title: "Telling Time & Clocks", badge: "TIME MATH", desc: "Read hour & minute hands with 5-minute intervals", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-clock" },
       { title: "Elapsed Time Numberline", badge: "TIMELINE JUMPS", desc: "Calculate elapsed hours & minutes with visual jumps", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-numberline" },
-      { title: "3-Digit Addition", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column" },
-      { title: "3-Digit Subtraction", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column-borrow" },
-      { title: "Missing Addend Equations", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-missing" },
+      { title: "Counting Coins & Bills", badge: "MONEY MATH", desc: "Add up piles of nickels, dimes, quarters, loonies & toonies", link: "olivia-math/money-coins.html?view=count_money", kind: "lesson", family: "grade3", art: "g3-money" },
+      { title: "Making Change", badge: "COUNT UP", desc: "Count up from the price to what you paid, Canadian rounding included", link: "olivia-math/money-coins.html?view=make_change", kind: "lesson", family: "grade3", art: "g3-money" },
+      { title: "3-Digit Addition", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html?preset=add_3digit", kind: "lesson", family: "grade3", art: "g3-column" },
+      { title: "3-Digit Subtraction", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html?preset=sub_3digit", kind: "lesson", family: "grade3", art: "g3-column-borrow" },
+      { title: "Missing Addend Equations", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html?preset=missing_ops", kind: "lesson", family: "grade3", art: "g3-missing" },
       { title: "Early Equal Fractions", badge: "FRACTIONS", desc: "Visual halves, thirds, fourths, sixths, and eighths", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "math-fractions" }
     ],
     printable: [
       { title: "Printable Clock & Time Worksheets", badge: "CLOCK PDF", desc: "12-clock test generator to draw hands or write digital times", link: "olivia-math/clock-time.html", kind: "printable", family: "grade3", art: "g3-clock" },
-      { title: "100-Problem Times Table Sprint", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "g3-times" },
+      { title: "Printable Money & Coin Tests", badge: "MONEY PDF", desc: "Count-the-coins, making-change & fewest-coin tests with answer keys", link: "olivia-math/money-coins.html?view=worksheet_gen", kind: "printable", family: "grade3", art: "g3-money" },
+      { title: "100-Problem Times Table Sprint", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html?preset=mult_core", kind: "printable", family: "grade3", art: "g3-times" },
       { title: "Daily Math Worksheet", badge: "CUSTOM PDF", desc: "Generate custom mixed review tests with paper-saving keys", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "math-worksheet" }
     ]
   },
@@ -208,11 +225,15 @@ let isManageMode = false;
 let editingProfileId = null;
 
 // Confetti System
+// Guarded: this runs at the top level, so a missing 2d context here would
+// abort the rest of app.js and leave the hub with no profiles at all.
+// Celebration is optional; the catalog is not.
 const canvas = document.getElementById('confetti-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = (canvas && canvas.getContext) ? canvas.getContext('2d') : null;
 let confetti = [];
 
 function resizeCanvas() {
+  if (!canvas) return;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
@@ -220,6 +241,7 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
 function launchConfetti() {
+  if (!ctx) return;
   confetti = [];
   const colors = ['#E50914', '#f59e0b', '#06b6d4', '#10b981', '#a855f7', '#ffffff'];
   for (let i = 0; i < 80; i++) {
@@ -239,6 +261,7 @@ function launchConfetti() {
 }
 
 function updateConfetti() {
+  if (!ctx) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   confetti = confetti.filter(p => p.life > 0);
   confetti.forEach(p => {
@@ -302,6 +325,11 @@ function renderProfileSelectScreen() {
   container.innerHTML = '';
 
   appProfiles.forEach(p => {
+    // The picture and the calendar are two separate destinations, so they are
+    // two siblings in one column rather than a link buried inside a button.
+    const slot = document.createElement('div');
+    slot.className = 'profile-slot';
+
     const card = document.createElement('div');
     card.className = 'profile-card';
     // The chooser is the first screen of the product, so it has to be usable
@@ -343,7 +371,23 @@ function renderProfileSelectScreen() {
         card.click();
       }
     };
-    container.appendChild(card);
+    slot.appendChild(card);
+
+    // The study schedule lives on its own site, so it is offered as a plain
+    // link out rather than as a studio tile: choosing a profile and checking
+    // the week are different errands.
+    if (p.calendarUrl) {
+      const link = document.createElement('a');
+      link.className = 'profile-calendar-link';
+      link.href = p.calendarUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', `Open ${p.name}'s study calendar in a new tab`);
+      link.innerHTML = '<span data-sf-icon="calendar" data-sf-size="15"></span><span>Calendar</span>';
+      slot.appendChild(link);
+    }
+
+    container.appendChild(slot);
   });
 
   SFIcons.upgrade(container);
@@ -1018,6 +1062,8 @@ let searchIndex = [];
 // Profile-Specific Popular Search Tags
 const PROFILE_QUICK_TAGS = {
   sophia: [
+    { label: "📐 Area & Geometry", query: "Geometry" },
+    { label: "🧩 Composite Shapes", query: "Composite" },
     { label: "🏛️ Ancient Rome", query: "Ancient Rome" },
     { label: "🌉 Roman Arch & Keystones", query: "Arch" },
     { label: "🕵️ Caesar Cipher", query: "Cipher" },
@@ -1026,7 +1072,7 @@ const PROFILE_QUICK_TAGS = {
     { label: "🥞 Matter & Reactions", query: "Matter" },
     { label: "🎢 Roller Coaster Physics", query: "Physics" },
     { label: "🍕 Fractions", query: "Fraction" },
-    { label: "📖 Rome Workbook", query: "Workbook" }
+    { label: "📖 Area Masterclass", query: "Masterclass" }
   ],
   olivia: [
     { label: "⏰ Analog Clocks", query: "Clock" },

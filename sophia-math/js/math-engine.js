@@ -1117,29 +1117,236 @@ const MathEngine = (function () {
   // --- Geometry & Measurement ---
 
   /**
-   * Generates Geometry & Measurement problems
+   * Generates Geometry & Measurement problems (Ontario Spatial Sense)
    */
-  function generateGeometry() {
-    const subType = pickRandom(['area_triangle', 'volume_prism', 'area_parallelogram', 'triangle_angle', 'surface_area_prism']);
+  function generateGeometry(specificType) {
+    const subTypes = [
+      'area_triangle',
+      'area_parallelogram',
+      'area_trapezoid',
+      'area_rhombus_kite',
+      'area_circle',
+      'area_ring',
+      'area_composite',
+      'area_missing_dimension',
+      'volume_prism',
+      'surface_area_prism',
+      'triangle_angle'
+    ];
+
+    const subType = specificType || pickRandom(subTypes);
 
     if (subType === 'area_triangle') {
-      const b = randomInt(4, 18);
-      const h = randomInt(3, 14);
+      const triangleKind = pickRandom(['right', 'acute', 'obtuse']);
+      const b = randomInt(6, 24);
+      const h = randomInt(4, 18);
       const area = (b * h) / 2;
+      const unit = pickRandom(['cm', 'm']);
+      const desc = triangleKind === 'obtuse' ? `(obtuse triangle with external height)` : `(base = ${b} ${unit}, height = ${h} ${unit})`;
+
       return {
         type: 'area_triangle',
         category: 'Geometry',
         topic: 'Area of a Triangle',
-        prompt: `Find the area of a triangle with base = ${b} cm and height = ${h} cm.`,
-        htmlQuestion: `<div class="math-expr">Triangle: <span class="whole-num">b = ${b} cm</span>, <span class="whole-num">h = ${h} cm</span> &nbsp;➔ Area = <span class="math-blank">? cm²</span></div>`,
+        prompt: `Find the area of a ${triangleKind} triangle with base = ${b} ${unit} and perpendicular height = ${h} ${unit}.`,
+        htmlQuestion: `<div class="math-expr">Triangle ${desc}: <span class="whole-num">b = ${b} ${unit}</span>, <span class="whole-num">h = ${h} ${unit}</span> &nbsp;➔ Area = <span class="math-blank">? ${unit}²</span></div>`,
         answer: area.toString(),
-        altAnswers: [area.toString(), `${area} cm^2`, `${area} cm²`, `${area} sq cm`],
+        altAnswers: [area.toString(), `${area} ${unit}^2`, `${area} ${unit}²`, `${area} sq ${unit}`],
         steps: [
-          `Formula for area of a triangle: A = (1/2) × base × height`,
-          `Calculate: (1/2) × ${b} × ${h} = ${area} cm².`
+          `Formula for area of any triangle: A = (1/2) × base × height`,
+          `Substitute values: A = (1/2) × ${b} × ${h}`,
+          `Calculate: (1/2) × ${b * h} = ${area} ${unit}²`
         ],
-        hint: `Use the formula Area = 1/2 × base × height.`
+        hint: `Multiply base times perpendicular height, then divide by 2.`
       };
+    } else if (subType === 'area_parallelogram') {
+      const b = randomInt(5, 20);
+      const h = randomInt(4, 15);
+      const area = b * h;
+      const unit = pickRandom(['cm', 'm']);
+      return {
+        type: 'area_parallelogram',
+        category: 'Geometry',
+        topic: 'Area of a Parallelogram',
+        prompt: `Find the area of a parallelogram with base = ${b} ${unit} and perpendicular height = ${h} ${unit}.`,
+        htmlQuestion: `<div class="math-expr">Parallelogram: <span class="whole-num">b = ${b} ${unit}</span>, <span class="whole-num">h = ${h} ${unit}</span> &nbsp;➔ Area = <span class="math-blank">? ${unit}²</span></div>`,
+        answer: area.toString(),
+        altAnswers: [area.toString(), `${area} ${unit}²`, `${area} ${unit}^2`],
+        steps: [
+          `Formula: A = base × perpendicular height`,
+          `Calculate: ${b} × ${h} = ${area} ${unit}² (Cut and slide the triangular corner to make a rectangle).`
+        ],
+        hint: `Multiply base by the perpendicular height (ignore any slanted sides for area).`
+      };
+    } else if (subType === 'area_trapezoid') {
+      const b1 = randomInt(4, 16);
+      const b2 = randomInt(b1 + 2, b1 + 14);
+      const h = randomInt(2, 8) * 2; // Even height ensures integer area
+      const area = ((b1 + b2) / 2) * h;
+      const unit = pickRandom(['cm', 'm']);
+      return {
+        type: 'area_trapezoid',
+        category: 'Geometry',
+        topic: 'Area of a Trapezoid',
+        prompt: `Find the area of a trapezoid with parallel bases ${b1} ${unit} and ${b2} ${unit}, and perpendicular height ${h} ${unit}.`,
+        htmlQuestion: `<div class="math-expr">Trapezoid: <span class="whole-num">a = ${b1} ${unit}</span>, <span class="whole-num">b = ${b2} ${unit}</span>, <span class="whole-num">h = ${h} ${unit}</span> &nbsp;➔ Area = <span class="math-blank">? ${unit}²</span></div>`,
+        answer: area.toString(),
+        altAnswers: [area.toString(), `${area} ${unit}²`, `${area} ${unit}^2`, `${area} sq ${unit}`],
+        steps: [
+          `Formula: A = ((a + b) / 2) × h`,
+          `Average the parallel bases: (${b1} + ${b2}) / 2 = ${(b1 + b2) / 2}`,
+          `Multiply by height: ${(b1 + b2) / 2} × ${h} = ${area} ${unit}²`
+        ],
+        hint: `Add the two parallel bases together, divide by 2, and multiply by the height.`
+      };
+    } else if (subType === 'area_rhombus_kite') {
+      const d1 = randomInt(4, 16) * 2;
+      const d2 = randomInt(3, 12) * 2;
+      const area = (d1 * d2) / 2;
+      const shape = pickRandom(['rhombus', 'kite']);
+      return {
+        type: 'area_rhombus_kite',
+        category: 'Geometry',
+        topic: `Area of a ${shape === 'rhombus' ? 'Rhombus' : 'Kite'}`,
+        prompt: `Find the area of a ${shape} whose intersecting perpendicular diagonals measure ${d1} cm and ${d2} cm.`,
+        htmlQuestion: `<div class="math-expr">${shape === 'rhombus' ? 'Rhombus' : 'Kite'}: <span class="whole-num">d₁ = ${d1} cm</span>, <span class="whole-num">d₂ = ${d2} cm</span> &nbsp;➔ Area = <span class="math-blank">? cm²</span></div>`,
+        answer: area.toString(),
+        altAnswers: [area.toString(), `${area} cm²`, `${area} cm^2`],
+        steps: [
+          `Formula for a ${shape}: A = (d₁ × d₂) / 2`,
+          `Multiply diagonals: ${d1} × ${d2} = ${d1 * d2}`,
+          `Divide by 2: ${d1 * d2} / 2 = ${area} cm²`
+        ],
+        hint: `Multiply the lengths of both perpendicular diagonals and divide by 2.`
+      };
+    } else if (subType === 'area_circle') {
+      const r = randomInt(2, 10);
+      const d = r * 2;
+      const useDiameter = Math.random() < 0.5;
+      const areaVal = Math.round(3.14 * r * r * 100) / 100;
+      return {
+        type: 'area_circle',
+        category: 'Geometry',
+        topic: 'Area of a Circle',
+        prompt: useDiameter
+          ? `Find the area of a circle with diameter d = ${d} m (use π ≈ 3.14).`
+          : `Find the area of a circle with radius r = ${r} m (use π ≈ 3.14).`,
+        htmlQuestion: `<div class="math-expr">Circle: <span class="whole-num">${useDiameter ? `d = ${d} m` : `r = ${r} m`}</span> (π ≈ 3.14) &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
+        answer: areaVal.toString(),
+        altAnswers: [areaVal.toString(), `${areaVal} m²`, `${areaVal} m^2`],
+        steps: [
+          useDiameter ? `First find radius: r = d / 2 = ${d} / 2 = ${r} m` : `Radius r = ${r} m`,
+          `Formula: A = π × r²`,
+          `Calculate: 3.14 × ${r}² = 3.14 × ${r * r} = ${areaVal} m²`
+        ],
+        hint: `Square the radius (r × r) and multiply by 3.14. If diameter is given, divide it by 2 first!`
+      };
+    } else if (subType === 'area_ring') {
+      const rInner = randomInt(2, 6);
+      const rOuter = rInner + randomInt(1, 4);
+      const areaVal = Math.round(3.14 * (rOuter * rOuter - rInner * rInner) * 100) / 100;
+      return {
+        type: 'area_ring',
+        category: 'Geometry',
+        topic: 'Area of a Circular Ring (Annulus)',
+        prompt: `A circular walking path has inner radius ${rInner} m and outer radius ${rOuter} m. Find the path's area (use π ≈ 3.14).`,
+        htmlQuestion: `<div class="math-expr">Ring: <span class="whole-num">r = ${rInner} m</span>, <span class="whole-num">R = ${rOuter} m</span> &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
+        answer: areaVal.toString(),
+        altAnswers: [areaVal.toString(), `${areaVal} m²`, `${areaVal} m^2`],
+        steps: [
+          `Outer circle area: A_outer = π × ${rOuter}² = 3.14 × ${rOuter * rOuter} = ${Math.round(3.14 * rOuter * rOuter * 100) / 100} m²`,
+          `Inner circle area: A_inner = π × ${rInner}² = 3.14 × ${rInner * rInner} = ${Math.round(3.14 * rInner * rInner * 100) / 100} m²`,
+          `Ring area = A_outer − A_inner = π(R² − r²) = 3.14 × (${rOuter * rOuter} − ${rInner * rInner}) = ${areaVal} m²`
+        ],
+        hint: `Subtract the inner circle's area from the outer circle's area: π(R² − r²).`
+      };
+    } else if (subType === 'area_composite') {
+      const isLshape = Math.random() < 0.5;
+      if (isLshape) {
+        const outerW = randomInt(7, 14);
+        const outerH = randomInt(8, 16);
+        const cutW = randomInt(3, outerW - 2);
+        const cutH = randomInt(3, outerH - 2);
+        const area = outerW * outerH - cutW * cutH;
+        return {
+          type: 'area_composite',
+          category: 'Geometry',
+          topic: 'Area of L-Shaped Composite Figure',
+          prompt: `An L-shaped room fits inside a ${outerW} m × ${outerH} m boundary, with an empty corner of ${cutW} m × ${cutH} m cut away. Find the room's area.`,
+          htmlQuestion: `<div class="math-expr">L-Shape: <span class="whole-num">${outerW} × ${outerH} m box</span> − <span class="whole-num">${cutW} × ${cutH} m corner</span> &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
+          answer: area.toString(),
+          altAnswers: [area.toString(), `${area} m²`, `${area} m^2`],
+          steps: [
+            `Total outer bounding area: ${outerW} × ${outerH} = ${outerW * outerH} m²`,
+            `Cutout corner area: ${cutW} × ${cutH} = ${cutW * cutH} m²`,
+            `Net composite area: ${outerW * outerH} − ${cutW * cutH} = ${area} m²`
+          ],
+          hint: `Use the subtractive method: Outer bounding rectangle minus the missing corner.`
+        };
+      } else {
+        const baseW = randomInt(6, 14);
+        const wallH = randomInt(4, 10);
+        const roofH = randomInt(3, 8) * 2;
+        const rectArea = baseW * wallH;
+        const triArea = (baseW * roofH) / 2;
+        const totalArea = rectArea + triArea;
+        return {
+          type: 'area_composite',
+          category: 'Geometry',
+          topic: 'Area of House Profile (Composite)',
+          prompt: `A garage silhouette has a rectangular wall ${baseW} m wide by ${wallH} m tall, topped with a triangular roof of base ${baseW} m and peak height ${roofH} m. Find total area.`,
+          htmlQuestion: `<div class="math-expr">House Profile: <span class="whole-num">${baseW} × ${wallH} m wall</span> + <span class="whole-num">roof (b=${baseW}, h=${roofH})</span> &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
+          answer: totalArea.toString(),
+          altAnswers: [totalArea.toString(), `${totalArea} m²`, `${totalArea} m^2`],
+          steps: [
+            `Rectangle wall area: ${baseW} × ${wallH} = ${rectArea} m²`,
+            `Triangle roof area: (1/2) × ${baseW} × ${roofH} = ${triArea} m²`,
+            `Total composite area: ${rectArea} + ${triArea} = ${totalArea} m²`
+          ],
+          hint: `Split the house into a rectangle and a triangle, calculate each area, and add them together.`
+        };
+      }
+    } else if (subType === 'area_missing_dimension') {
+      const isTriangle = Math.random() < 0.5;
+      if (isTriangle) {
+        const b = randomInt(6, 20);
+        const h = randomInt(5, 15);
+        const area = (b * h) / 2;
+        return {
+          type: 'area_missing_dimension',
+          category: 'Geometry',
+          topic: 'Missing Height of a Triangle',
+          prompt: `A triangle has an area of ${area} cm² and a base of ${b} cm. What is its perpendicular height?`,
+          htmlQuestion: `<div class="math-expr">Triangle: <span class="whole-num">Area = ${area} cm²</span>, <span class="whole-num">base = ${b} cm</span> &nbsp;➔ height = <span class="math-blank">? cm</span></div>`,
+          answer: h.toString(),
+          altAnswers: [h.toString(), `${h} cm`],
+          steps: [
+            `Area formula: A = (1/2) × b × h`,
+            `Rearrange for height: h = (2 × Area) / b`,
+            `Calculate: (2 × ${area}) / ${b} = ${2 * area} / ${b} = ${h} cm`
+          ],
+          hint: `Multiply the area by 2 first, then divide by the base.`
+        };
+      } else {
+        const b = randomInt(5, 18);
+        const h = randomInt(4, 14);
+        const area = b * h;
+        return {
+          type: 'area_missing_dimension',
+          category: 'Geometry',
+          topic: 'Missing Height of a Parallelogram',
+          prompt: `A parallelogram has an area of ${area} m² and a base of ${b} m. What is its perpendicular height?`,
+          htmlQuestion: `<div class="math-expr">Parallelogram: <span class="whole-num">Area = ${area} m²</span>, <span class="whole-num">base = ${b} m</span> &nbsp;➔ height = <span class="math-blank">? m</span></div>`,
+          answer: h.toString(),
+          altAnswers: [h.toString(), `${h} m`],
+          steps: [
+            `Area formula: A = base × height`,
+            `Rearrange for height: h = Area / base`,
+            `Calculate: ${area} / ${b} = ${h} m`
+          ],
+          hint: `Divide the total area by the base length.`
+        };
+      }
     } else if (subType === 'volume_prism') {
       const l = randomInt(3, 12);
       const w = randomInt(2, 8);
@@ -1159,27 +1366,9 @@ const MathEngine = (function () {
         ],
         hint: `Multiply length × width × height.`
       };
-    } else if (subType === 'triangle_angle') {
-      const a1 = randomInt(30, 85);
-      const a2 = randomInt(30, 85);
-      const a3 = 180 - a1 - a2;
-      return {
-        type: 'triangle_angle',
-        category: 'Geometry',
-        topic: 'Missing Angle in a Triangle',
-        prompt: `Two angles in a triangle measure ${a1}° and ${a2}°. Find the third angle.`,
-        htmlQuestion: `<div class="math-expr">Triangle Angles: <span class="whole-num">${a1}°</span>, <span class="whole-num">${a2}°</span>, <span class="math-var">x°</span> &nbsp;➔ x = </div>`,
-        answer: a3.toString(),
-        altAnswers: [a3.toString(), `${a3}°`, `${a3} degrees`],
-        steps: [
-          `The sum of all three angles inside any triangle is always 180°.`,
-          `Calculate: 180° − (${a1}° + ${a2}°) = 180° − ${a1 + a2}° = ${a3}°.`
-        ],
-        hint: `Angles in a triangle always add up to 180°.`
-      };
     } else if (subType === 'surface_area_prism') {
-      const l = randomInt(2, 6);
-      const w = randomInt(2, 5);
+      const l = randomInt(3, 8);
+      const w = randomInt(2, 6);
       const h = randomInt(2, 6);
       const sa = 2 * (l * w + l * h + w * h);
       return {
@@ -1198,44 +1387,23 @@ const MathEngine = (function () {
         hint: `Calculate the area of all 6 faces (2 of each pair) and add them together.`
       };
     } else {
-      // Area of Parallelogram / Trapezoid
-      const isTrap = Math.random() < 0.5;
-      if (isTrap) {
-        const b1 = randomInt(4, 14);
-        const b2 = randomInt(6, 18);
-        const h = randomInt(2, 8) * 2; // even height for clean answer
-        const area = ((b1 + b2) / 2) * h;
-        return {
-          type: 'area_trapezoid',
-          category: 'Geometry',
-          topic: 'Area of a Trapezoid',
-          prompt: `Find the area of a trapezoid with parallel bases ${b1} in and ${b2} in, and height ${h} in.`,
-          htmlQuestion: `<div class="math-expr">Trapezoid: <span class="whole-num">b₁ = ${b1}</span>, <span class="whole-num">b₂ = ${b2}</span>, <span class="whole-num">h = ${h}</span> &nbsp;➔ Area = <span class="math-blank">? in²</span></div>`,
-          answer: area.toString(),
-          altAnswers: [area.toString(), `${area} in²`, `${area} sq in`],
-          steps: [
-            `Formula: A = ((b₁ + b₂) / 2) × h`,
-            `Calculate average of bases: (${b1} + ${b2}) / 2 = ${(b1 + b2) / 2}`,
-            `Multiply by height: ${(b1 + b2) / 2} × ${h} = ${area} in².`
-          ],
-          hint: `Add the two parallel bases, divide by 2, and multiply by the height.`
-        };
-      } else {
-        const b = randomInt(4, 16);
-        const h = randomInt(3, 12);
-        const area = b * h;
-        return {
-          type: 'area_parallelogram',
-          category: 'Geometry',
-          topic: 'Area of a Parallelogram',
-          prompt: `Find the area of a parallelogram with base = ${b} m and height = ${h} m.`,
-          htmlQuestion: `<div class="math-expr">Parallelogram: <span class="whole-num">b = ${b} m</span>, <span class="whole-num">h = ${h} m</span> &nbsp;➔ Area = <span class="math-blank">? m²</span></div>`,
-          answer: area.toString(),
-          altAnswers: [area.toString(), `${area} m²`],
-          steps: [`Formula: A = base × height`, `Calculate: ${b} × ${h} = ${area} m².`],
-          hint: `Multiply base times perpendicular height.`
-        };
-      }
+      const a1 = randomInt(30, 85);
+      const a2 = randomInt(30, 85);
+      const a3 = 180 - a1 - a2;
+      return {
+        type: 'triangle_angle',
+        category: 'Geometry',
+        topic: 'Missing Angle in a Triangle',
+        prompt: `Two angles in a triangle measure ${a1}° and ${a2}°. Find the third angle.`,
+        htmlQuestion: `<div class="math-expr">Triangle Angles: <span class="whole-num">${a1}°</span>, <span class="whole-num">${a2}°</span>, <span class="math-var">x°</span> &nbsp;➔ x = <span class="math-blank">?°</span></div>`,
+        answer: a3.toString(),
+        altAnswers: [a3.toString(), `${a3}°`, `${a3} degrees`],
+        steps: [
+          `The sum of all three angles inside any triangle is always 180°.`,
+          `Calculate: 180° − (${a1}° + ${a2}°) = 180° − ${a1 + a2}° = ${a3}°.`
+        ],
+        hint: `Angles in a triangle always add up to 180°.`
+      };
     }
   }
 
@@ -1402,6 +1570,24 @@ const MathEngine = (function () {
 
       case 'geometry':
         return generateGeometry();
+
+      case 'geometry_area':
+        return generateGeometry(pickRandom(['area_triangle', 'area_parallelogram', 'area_trapezoid', 'area_rhombus_kite', 'area_circle', 'area_ring', 'area_composite', 'area_missing_dimension']));
+
+      case 'geometry_triangles':
+        return generateGeometry('area_triangle');
+
+      case 'geometry_quadrilaterals':
+        return generateGeometry(pickRandom(['area_parallelogram', 'area_trapezoid', 'area_rhombus_kite']));
+
+      case 'geometry_circles':
+        return generateGeometry(pickRandom(['area_circle', 'area_ring']));
+
+      case 'geometry_composite':
+        return generateGeometry('area_composite');
+
+      case 'geometry_missing':
+        return generateGeometry('area_missing_dimension');
 
       case 'statistics':
         return generateStatistics();

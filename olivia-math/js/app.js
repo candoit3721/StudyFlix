@@ -245,8 +245,128 @@
     if (p.worksheetTitle) els.worksheetTitle.value = p.worksheetTitle;
 
     syncFormFields();
-    generateAndRender();
+    return true;
   }
+
+  /**
+   * URL parameters.
+   *
+   * Olivia's studio parsed none at all before this. That made most of its
+   * layouts unreachable from a test -- including horizontal at 4 columns, the
+   * combination that overflowed the page by 37px on every print. Every knob
+   * that can change how much fits on a page is addressable here.
+   *
+   * Each `apply` writes straight into the sidebar control rather than into
+   * state, because readConfigFromUI() is the single source of truth for the
+   * config; setting the control keeps the form and the worksheet agreeing.
+   */
+  const URL_SCHEMA = {
+    type: {
+      type: 'enum',
+      values: ['addition', 'subtraction', 'add_sub_mixed', 'multiplication', 'division',
+               'mult_div_mixed', 'all_mixed', 'comparison', 'word_problems'],
+      apply: (c, v) => { els.opType.value = v; }
+    },
+    format: {
+      type: 'enum', values: ['vertical', 'horizontal'],
+      apply: (c, v) => SFUrl.syncControl('layoutFormat', v)
+    },
+    cols: {
+      type: 'int', min: 2, max: 4,
+      apply: (c, v) => SFUrl.syncControl('gridCols', v)
+    },
+    pages: {
+      type: 'int', min: 1, max: 6,
+      apply: (c, v) => { els.pageCountSelect.value = String(v); }
+    },
+    missing: {
+      type: 'bool',
+      apply: (c, v) => { els.missingOpCheckbox.checked = v; }
+    },
+    digits: {
+      type: 'enum', values: ['2digit', '3digit'],
+      apply: (c, v) => SFUrl.syncControl('digitRange', v)
+    },
+    regroup: {
+      type: 'enum', values: ['any', 'force', 'none'],
+      apply: (c, v) => SFUrl.syncControl('regrouping', v)
+    },
+    borrow: {
+      type: 'enum', values: ['any', 'force', 'none'],
+      apply: (c, v) => SFUrl.syncControl('borrowing', v)
+    },
+    table: {
+      type: 'string',
+      apply: (c, v) => { els.multRangeSelect.value = v; }
+    },
+    divisor: {
+      type: 'string',
+      apply: (c, v) => { els.divRangeSelect.value = v; }
+    },
+    answerkey: {
+      type: 'bool',
+      apply: (c, v) => { els.includeAnswerKey.checked = v; }
+    },
+    name: {
+      type: 'string',
+      apply: (c, v) => { els.studentName.value = v; }
+    },
+    title: {
+      type: 'string',
+      apply: (c, v) => { els.worksheetTitle.value = v; }
+    }
+  };
+
+  function applyUrlConfig() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const preset = params.get('preset');
+      if (preset) applyPreset(preset);
+
+      // Explicit parameters always win over a preset's own defaults.
+      SFUrl.read(URL_SCHEMA, state.currentConfig);
+      syncFormFields();
+    } catch (e) {
+      console.warn('Could not parse URL params', e);
+    }
+  }
+
+  function buildSubtitle(config) {
+    if (config.type === 'addition') return `Addition Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
+    if (config.type === 'subtraction') return `Subtraction Drill (${config.digitRange === '3digit' ? '3-Digit' : '2-Digit'})`;
+    if (config.type === 'add_sub_mixed') return 'Addition & Subtraction Mixed';
+    if (config.type === 'multiplication') return `Multiplication Facts (${config.tableRange})`;
+    if (config.type === 'division') return `Division Facts (÷ up to ${config.maxDivisor})`;
+    if (config.type === 'mult_div_mixed') return 'Multiplication & Division Mixed';
+    if (config.type === 'all_mixed') return 'Mixed 4 Operations Review';
+    if (config.type === 'comparison') return 'Compare Expressions (<, >, =)';
+    if (config.type === 'word_problems') return 'Grade 3 Story Problems';
+    return '';
+  }
+
+  /*
+   * How many problems fit on a page is no longer guessed.
+   *
+   * This used to be getMaxDensityCap(), a table of constants measured by hand:
+   * word problems 4; comparison cols * (6|7|8); otherwise
+   * `layoutFormat === 'horizontal' ? cols * 7 : cols * 4`. That last line is
+   * the reported bug. Vertical at 2 columns came out 954px and fit; horizontal
+   * at 4 columns came out 1016px against a 979px printable page and ran off
+   * the paper -- so the same worksheet paginated correctly in one format and
+   * overflowed in the other. See tests/print/BASELINE.md.
+   *
+   * The constants were not merely mistuned, they were unmaintainable: each one
+   * silently expired the moment a card, a font or a padding changed, and
+   * nothing in the system could notice. assets/sf/paginate.js lays the real
+   * cards out in the real print box and cuts pages where the content says to,
+   * so comparison cards that grow as columns narrow, full-width word problems
+   * and missing-operand cards that ignore the format switch are all handled
+   * without a single branch describing them.
+   *
+   * SEED_PER_PAGE is only a starting guess for how many problems to generate
+   * before measuring; no page break depends on it.
+   */
+  const SEED_PER_PAGE = 30;
 
   /**
    * Generate Problem Set and Render to DOM
@@ -264,67 +384,72 @@
     return '';
   }
 
-  function getMaxDensityCap(config) {
-    if (config.type === 'word_problems') return 4;
-    const cols = config.gridCols || 3;
-
-    // Comparison problems are their own card shape: they always render a
-    // .comparison-box, ignoring the vertical/horizontal switch (which is why
-    // syncFormFields hides that control for them). They also get TALLER as the
-    // columns narrow, because the two expressions wrap - measured against the
-    // same printable box as below: 82px at 2 cols, 94px at 3, 118px at 4,
-    // leaving room for 8, 7 and 6 rows. Without this branch a 4-column sheet
-    // was packed to 7 rows and spilled onto an extra physical page.
-    if (config.type === 'comparison') {
-      const rows = cols >= 4 ? 6 : (cols === 3 ? 7 : 8);
-      return cols * rows;
-    }
-
-    // Measured directly off the rendered DOM (with the on-screen 11in
-    // stretch neutralized, since a flexed grid otherwise inflates card
-    // height when a page has few rows) against the real printed content
-    // box - 11in page minus the 0.4in @page margin and the sheet's own
-    // 0.3in padding, minus header+footer, leaves ~814px: a vertical
-    // arithmetic card row measures ~192px (4 rows fit), a single-line
-    // horizontal-equation row ~102px (7 rows fit). This is the "fit"
-    // Smart Layout packs every page to, exactly, with no manual override.
-    return config.layoutFormat === 'horizontal' ? cols * 7 : cols * 4;
-  }
-
-  /**
-   * Smart Layout: the user picks how many PAGES of questions they want
-   * (for double-sided printing + one answer sheet); the question count is
-   * derived so every page comes out completely full - pageCount * cap -
-   * rather than the user picking a count and hoping it divides evenly.
-   */
-  function getEffectiveQuestionsPerPage(config, total) {
-    const cap = getMaxDensityCap(config);
-    if (!total) return cap;
-    const pageCount = Math.max(1, Math.ceil(total / cap));
-    return Math.ceil(total / pageCount);
-  }
-
   /**
    * Generate Problem Set and Render to DOM
    */
+
+  /** Build `count` fresh problems for the current configuration. */
+  function makeProblems(count) {
+    const config = state.currentConfig;
+    const previous = config.count;
+    config.count = count;
+    const problems = config.type === 'word_problems'
+      ? WordProblems.generateWordProblemsList(count)
+      : MathEngine.generateWorksheet(config);
+    config.count = previous;
+    return problems;
+  }
+
+  /**
+   * Re-lay-out the worksheet that is already on screen, keeping its questions.
+   * Used by the controls that change presentation only: student name,
+   * worksheet title, the answer toggle and the mode switch.
+   */
+  function rerender() {
+    SFPaginate.beginRender();
+    if (state.mode === 'interactive') {
+      renderWorksheet({ reuse: true });
+      return Promise.resolve();
+    }
+    return renderWorksheet({ reuse: true })
+      .then(worksheet => renderAnswerKey(worksheet.sheets.length).then(keySheets => ({ worksheet, keySheets })))
+      .then(({ worksheet, keySheets }) => publishPrintState(worksheet, keySheets));
+  }
+
+  function publishPrintState(worksheet, keySheets) {
+    SFPaginate.publish({
+      sheets: worksheet.sheets.length + keySheets.length,
+      worksheetPages: worksheet.sheets.length,
+      requestedPages: parseInt(state.currentConfig.pageCount, 10) || 2,
+      overflowRows: worksheet.overflowRows,
+      chunkSplits: 0,
+      config: {
+        type: state.currentConfig.type,
+        layoutFormat: state.currentConfig.layoutFormat,
+        gridCols: state.currentConfig.gridCols,
+        missingOperand: state.currentConfig.missingOperand,
+        includeAnswerKey: state.currentConfig.includeAnswerKey,
+        count: state.currentConfig.count
+      }
+    });
+  }
+
   function generateAndRender() {
     readConfigFromUI();
-    const config = state.currentConfig;
-    const cap = getMaxDensityCap(config);
-    config.count = Math.max(cap, (config.pageCount || 2) * cap);
-
-    if (config.type === 'word_problems') {
-      state.problems = WordProblems.generateWordProblemsList(config.count);
-    } else {
-      state.problems = MathEngine.generateWorksheet(config);
-    }
-
-    renderWorksheet();
-    if (state.mode !== 'interactive') renderAnswerKey();
+    SFPaginate.beginRender();
 
     if (state.mode === 'interactive') {
+      const config = state.currentConfig;
+      config.count = (config.pageCount || 2) * SEED_PER_PAGE;
+      state.problems = makeProblems(config.count);
+      renderWorksheet();
       resetInteractiveState();
+      return Promise.resolve();
     }
+
+    return renderWorksheet()
+      .then(worksheet => renderAnswerKey(worksheet.sheets.length).then(keySheets => ({ worksheet, keySheets })))
+      .then(({ worksheet, keySheets }) => publishPrintState(worksheet, keySheets));
   }
 
   function buildPageHeader(config, subtitle, pageNum, totalPages) {
@@ -376,16 +501,23 @@
   }
 
   /**
-   * Render the worksheet as one or more physical pages, splitting the
-   * question set intelligently (see getEffectiveQuestionsPerPage) instead
-   * of dumping everything into a single ever-growing container.
+   * Render the worksheet as one or more physical pages.
+   *
+   * "Pages of Questions = N" is honoured exactly: the paginator over-supplies
+   * problems, measures the real cards in the real print box, then keeps
+   * exactly N full pages. Nothing here needs to know that a comparison card is
+   * taller than an arithmetic one, that a word problem spans the full grid
+   * width, or that a missing-operand problem renders horizontally whatever the
+   * format switch says. Those were all special cases in the old density table,
+   * and every one of them is now simply measured.
    */
-  function renderWorksheet() {
+  function renderWorksheet(opts) {
+    const reuse = !!(opts && opts.reuse);
     const config = state.currentConfig;
     const isWordProblem = config.type === 'word_problems';
-    const total = state.problems.length;
     const subtitle = buildSubtitle(config);
     const gridClass = `problems-container grid-cols-${isWordProblem ? '1' : config.gridCols}`;
+    const pages = Math.max(1, parseInt(config.pageCount, 10) || 2);
 
     els.pagesContainer.innerHTML = '';
 
@@ -401,56 +533,73 @@
       page.appendChild(grid);
       page.appendChild(buildPageFooter());
       els.pagesContainer.appendChild(page);
-      return;
+      return Promise.resolve({ sheets: [], overflowRows: 0 });
     }
 
-    const perPage = getEffectiveQuestionsPerPage(config, total);
-    const chunks = [];
-    for (let i = 0; i < total; i += perPage) chunks.push(state.problems.slice(i, i + perPage));
-    const totalPages = chunks.length || 1;
+    /*
+     * `reuse` re-paginates the problems already on the page instead of
+     * generating new ones. Retyping the student's name or toggling the answer
+     * display must not silently swap every question out from under whoever is
+     * halfway through the worksheet. Since those problems were chosen to fill
+     * exactly `pages` pages, packing them again with 'fill' reproduces the
+     * same pages -- same content, same measurement, same breaks.
+     */
+    const paginationMode = reuse
+      ? { mode: 'fill', items: state.problems }
+      : { mode: 'exactPages', pages: pages, seedPerPage: SEED_PER_PAGE, itemFactory: makeProblems };
 
-    let globalIdx = 0;
-    chunks.forEach((chunk, chunkIdx) => {
-      const page = document.createElement('div');
-      page.className = 'worksheet-page';
-      page.appendChild(buildPageHeader(config, subtitle, chunkIdx + 1, totalPages));
-      const grid = document.createElement('div');
-      grid.className = gridClass;
-      chunk.forEach((p) => {
-        grid.appendChild(buildProblemCard(p, globalIdx, false));
-        globalIdx++;
-      });
-      page.appendChild(grid);
-      page.appendChild(buildPageFooter());
-      els.pagesContainer.appendChild(page);
+    return SFPaginate.paginate(Object.assign({
+      target: els.pagesContainer,
+      sheetClass: 'sf-sheet worksheet-page',
+      gridClass: gridClass,
+      cacheKey: `olivia|type=${config.type}|fmt=${config.layoutFormat}|cols=${config.gridCols}`,
+      // Problem numbers must stay contiguous after the surplus is trimmed.
+      renumber: items => items.forEach((p, i) => { p.index = i + 1; }),
+      renderItem: (p, idx) => buildProblemCard(p, idx, false),
+      renderHeader: (pageIdx, totalPages) =>
+        buildPageHeader(config, subtitle, pageIdx + 1, totalPages),
+      renderFooter: () => buildPageFooter()
+    }, paginationMode)).then(result => {
+      if (result.items) {
+        state.problems = result.items;
+        config.count = result.items.length;
+      }
+      return result;
     });
   }
 
   /**
-   * Render Simplified, Paper-Saving Answer Key (Strictly Question ID and Answer)
+   * Paper-saving answer key, paginated.
+   *
+   * It never used to be. Every answer went onto one sheet regardless of how
+   * many there were, so a six-page worksheet piled well over a hundred answers
+   * onto a single page and ran off the paper. `mode: 'fill'` lets the key take
+   * as many sheets as it needs, and no more.
    */
-  function renderAnswerKey() {
+  function renderAnswerKey(worksheetPages) {
     const config = state.currentConfig;
-    if (!config.includeAnswerKey || !state.problems.length) return;
+    if (!config.includeAnswerKey || !state.problems.length) return Promise.resolve([]);
 
     const isWordProblem = config.type === 'word_problems';
+    // Word problems carry longer answers, so they get wider cells; otherwise
+    // pack tighter as the count grows.
     let cols = 5;
-    if (isWordProblem) {
-      cols = 2;
-    } else if (config.count <= 10) {
-      cols = 2;
-    } else if (config.count <= 20) {
-      cols = 4;
-    } else {
-      cols = 5;
-    }
+    if (isWordProblem) cols = 2;
+    else if (config.count <= 10) cols = 2;
+    else if (config.count <= 20) cols = 4;
 
-    const page = document.createElement('div');
-    page.className = 'worksheet-page answer-key-page';
-    page.innerHTML = `
-      <div class="ws-header" style="margin-bottom: 12px; padding-bottom: 8px;">
+    const keyTarget = document.createElement('div');
+    els.pagesContainer.appendChild(keyTarget);
+
+    const buildHeader = (pageIdx, totalPages) => {
+      const header = document.createElement('div');
+      header.className = 'ws-header';
+      header.style.marginBottom = '12px';
+      header.style.paddingBottom = '8px';
+      const continued = totalPages > 1 ? ` (${pageIdx + 1} of ${totalPages})` : '';
+      header.innerHTML = `
         <div class="ws-title-row" style="margin-bottom: 6px;">
-          <h2 class="ws-title" style="font-size: 1.3rem;">Answer Key</h2>
+          <h2 class="ws-title" style="font-size: 1.3rem;">Answer Key${continued}</h2>
           <span class="answer-key-badge">PARENT / TEACHER QUICK KEY (PAPER SAVER)</span>
         </div>
         <div class="ws-meta-row" style="font-size: 0.85rem;">
@@ -458,15 +607,13 @@
           <div class="meta-field"><span>Subject:</span><span style="font-weight: 700; color: #1e293b;">${config.worksheetTitle}</span></div>
           <div class="meta-field"><span>Total Questions:</span><span style="font-weight: 700; color: #1e293b;">${config.count}</span></div>
         </div>
-      </div>
-    `;
+      `;
+      return header;
+    };
 
-    const grid = document.createElement('div');
-    grid.className = `compact-answers-container grid-cols-${cols}`;
-
-    state.problems.forEach((p) => {
+    const buildAnswerItem = (p) => {
       const item = document.createElement('div');
-      item.className = 'compact-answer-item';
+      item.className = 'sf-key-item compact-answer-item';
 
       const idSpan = document.createElement('span');
       idSpan.className = 'compact-q-id';
@@ -475,7 +622,6 @@
 
       const ansSpan = document.createElement('span');
       ansSpan.className = 'compact-q-ans';
-
       if (p.type === 'word_problem') {
         ansSpan.innerHTML = `<span class="answer-highlight">${p.answer} ${p.unit || ''}</span>`;
       } else if (p.type === 'comparison') {
@@ -486,22 +632,45 @@
         ansSpan.innerHTML = `<span class="answer-highlight">${p.answer}</span>`;
       }
       item.appendChild(ansSpan);
+      return item;
+    };
 
-      grid.appendChild(item);
+    return SFPaginate.paginate({
+      target: keyTarget,
+      // keyTarget is a bare wrapper; the styles that matter come from the
+      // pages container it sits inside.
+      measureContext: els.pagesContainer,
+      mode: 'fill',
+      items: state.problems,
+      sheetClass: 'sf-sheet worksheet-page answer-key-page',
+      gridClass: `compact-answers-container grid-cols-${cols}`,
+      cacheKey: `olivia-key|cols=${cols}`,
+      renderItem: buildAnswerItem,
+      renderHeader: buildHeader,
+      renderFooter: (pageIdx, totalPages) => {
+        const footer = document.createElement('div');
+        footer.className = 'ws-footer';
+        footer.style.marginTop = '14px';
+        footer.style.paddingTop = '6px';
+        footer.innerHTML = `
+          <span>Olivia's Math Studio • Quick Answer Key</span>
+          <span>Page ${worksheetPages + pageIdx + 1} of ${worksheetPages + totalPages}</span>
+        `;
+        return footer;
+      }
+    }).then(result => {
+      // Only the FIRST key sheet starts a new page; a blanket break-before
+      // would put a blank page between every key sheet.
+      if (result.sheets.length) result.sheets[0].classList.add('sf-break-before');
+
+      // Unwrap the paginator's target so the key sheets sit as direct children
+      // of the pages container, which is what the layout CSS expects.
+      const parent = keyTarget.parentNode;
+      while (keyTarget.firstChild) parent.insertBefore(keyTarget.firstChild, keyTarget);
+      parent.removeChild(keyTarget);
+
+      return result.sheets;
     });
-    page.appendChild(grid);
-
-    const footer = document.createElement('div');
-    footer.className = 'ws-footer';
-    footer.style.marginTop = '14px';
-    footer.style.paddingTop = '6px';
-    footer.innerHTML = `
-      <span>Olivia's Math Studio • Quick Answer Key</span>
-      <span>Generated on ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-    `;
-    page.appendChild(footer);
-
-    els.pagesContainer.appendChild(page);
   }
 
   /**
@@ -509,7 +678,7 @@
    */
   function renderVerticalCard(p, idx, isAnswerKey) {
     const card = document.createElement('div');
-    card.className = 'problem-card';
+    card.className = 'sf-card problem-card';
 
     const numSpan = document.createElement('span');
     numSpan.className = 'problem-number';
@@ -570,7 +739,7 @@
    */
   function renderHorizontalCard(p, idx, isAnswerKey) {
     const card = document.createElement('div');
-    card.className = 'problem-card';
+    card.className = 'sf-card problem-card';
 
     const numSpan = document.createElement('span');
     numSpan.className = 'problem-number';
@@ -633,7 +802,7 @@
    */
   function renderComparisonCard(p, idx, isAnswerKey) {
     const card = document.createElement('div');
-    card.className = 'problem-card';
+    card.className = 'sf-card problem-card';
 
     const numSpan = document.createElement('span');
     numSpan.className = 'problem-number';
@@ -662,7 +831,7 @@
    */
   function renderWordProblemCard(p, idx, isAnswerKey) {
     const card = document.createElement('div');
-    card.className = 'word-problem-card';
+    card.className = 'sf-card word-problem-card';
 
     const text = document.createElement('div');
     text.className = 'wp-text';
@@ -733,8 +902,7 @@
       els.interactiveTimer.style.display = 'none';
       stopTimer();
     }
-    renderWorksheet();
-    if (newMode !== 'interactive') renderAnswerKey();
+    rerender();
   }
 
   /**
@@ -896,19 +1064,18 @@
     els.pageCountSelect.addEventListener('change', generateAndRender);
     els.studentName.addEventListener('input', () => {
       readConfigFromUI();
-      renderWorksheet();
-      if (state.mode !== 'interactive') renderAnswerKey();
+      rerender();
     });
     els.worksheetTitle.addEventListener('input', () => {
       readConfigFromUI();
-      renderWorksheet();
-      if (state.mode !== 'interactive') renderAnswerKey();
+      rerender();
     });
 
     // Preset Buttons
     document.querySelectorAll('.preset-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         applyPreset(btn.dataset.preset);
+        generateAndRender();
       });
     });
 
@@ -921,8 +1088,7 @@
     els.btnToggleAnswers.addEventListener('click', () => {
       state.showAnswers = !state.showAnswers;
       els.btnToggleAnswers.textContent = state.showAnswers ? '🙈 Hide Answers' : '👁️ Show Answers';
-      renderWorksheet();
-      if (state.mode !== 'interactive') renderAnswerKey();
+      rerender();
     });
 
     // Mode Buttons
@@ -937,5 +1103,6 @@
   // Initialization
   syncFormFields();
   initEvents();
+  applyUrlConfig();
   generateAndRender();
 })();

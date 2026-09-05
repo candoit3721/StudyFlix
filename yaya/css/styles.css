@@ -16,6 +16,20 @@
   --border-color: #cbd5e1;
   --border-subtle: #e2e8f0;
   
+  /* Yaya's exam paper is A4, not Letter. Overriding the shared geometry
+     variables from assets/sf/print.css is the whole mechanism: the paginator
+     reads these at runtime, so it measures against A4 without knowing that
+     A4 exists. The literal @page below must agree with them --
+     tests/print/css-contract.spec.ts enforces that.
+     The margin was 12mm top / 15mm elsewhere; it is symmetric now so that a
+     single --sf-page-margin can describe the page. 3mm of extra top margin
+     is not worth a second, asymmetric geometry model. */
+  --sf-page-w: 210mm;
+  --sf-page-h: 297mm;
+  --sf-page-margin: 15mm;
+  --sf-sheet-pad-y: 0mm;
+  --sf-sheet-pad-x: 0mm;
+
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
@@ -447,17 +461,12 @@ body {
 }
 
 .exam-page {
-  width: 100%;
-  max-width: 900px;
+  /* Box model comes from .sf-sheet in assets/sf/print.css, sized from the A4
+     variables above. The old `max-width: 900px` with `min-height: 1160px` was
+     an eyeballed approximation of A4 that matched no real paper, so the
+     preview and the printout disagreed about how much fits. */
   background: #ffffff;
   border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 40px 48px;
-  box-shadow: var(--shadow-sheet);
-  display: flex;
-  flex-direction: column;
-  min-height: 1160px; /* A4 aspect ratio approximation */
-  position: relative;
 }
 
 /* Exam Paper Header */
@@ -621,11 +630,12 @@ body {
 }
 
 /* Calculation Workspace */
+/* Print geometry, applied in both media -- see the note in the print block. */
 .workspace-box {
   border: 1px dashed #cbd5e1;
   border-radius: 6px;
   background: #fafbfd;
-  min-height: 110px;
+  min-height: 120px;
   padding: 8px 12px;
   position: relative;
   margin-top: 8px;
@@ -755,11 +765,11 @@ body {
   border-left: 3px solid var(--primary);
 }
 
-/* Paper-Saver Answer Key Sheet */
-.answer-sheet-page {
-  page-break-before: always;
-  break-before: page;
-}
+/* Paper-Saver Answer Key Sheet.
+   The page break before the key is applied by the renderer to the FIRST key
+   sheet only, via the shared .sf-break-before class -- a blanket rule would
+   insert a blank page between every key sheet now that the answer sheet
+   paginates instead of piling every worked solution onto one page. */
 
 .answer-sheet-title {
   font-size: 1.3rem;
@@ -853,14 +863,51 @@ body {
 .font-compact .problem-body { font-size: 0.88rem; }
 .font-compact .exam-page { padding: 28px 36px; }
 
+/*
+ * Compact mode also tightens the first page's cover chrome, not just the
+ * questions.
+ *
+ * The exam header and instructions cost 267px of an A4 page while a
+ * continuation header costs 47px -- a 220px gap, over a fifth of the paper.
+ * At compact density a single problem card can exceed what that leaves, so a
+ * question that fits every other page cannot fit page one, and the paginator
+ * has nowhere to put it. Compact is precisely the mode where the reader has
+ * asked for density, so the cover shrinks with everything else.
+ */
+.font-compact .exam-header {
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+
+.font-compact .exam-header .exam-school {
+  font-size: 0.85rem;
+}
+
+.font-compact .exam-meta-grid {
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.font-compact .exam-instructions {
+  padding: 6px 12px;
+  font-size: 0.76rem;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
 /* ==========================================================================
    PRINT STYLES (@media print)
    ========================================================================== */
+/* Declared at the top level rather than nested inside @media print: both are
+   legal, but a top-level rule is discoverable through the CSSOM, which is how
+   tests/print/css-contract.spec.ts checks it against --sf-page-*. */
+@page {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
 @media print {
-  @page {
-    size: A4 portrait;
-    margin: 12mm 15mm 15mm 15mm;
-  }
 
   body {
     background: #ffffff !important;
@@ -901,39 +948,43 @@ body {
     width: 100% !important;
   }
 
+  /* Box model and page breaks come from .sf-sheet in assets/sf/print.css,
+     including the `:last-child { break-after: auto }` reset this file never
+     had -- which is why the final question page emitted a blank sheet
+     whenever the answer key was switched off. */
   .exam-page {
-    box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    margin-bottom: 0 !important;
-    page-break-after: always !important;
-    break-after: page !important;
   }
 
+  /* Geometry declared once, for BOTH media. A print-only size override
+     silently invalidates pagination: assets/sf/paginate.js measures
+     these elements on screen, so any rule that makes them a different
+     size on paper means the page breaks were computed for a document
+     that is not the one being printed. Enforced by
+     tests/print/css-contract.spec.ts. */
+  /* break-inside: avoid comes from .sf-card in assets/sf/print.css.
+     The old `margin-bottom: 16px` here made every card 16px taller on paper
+     than when it was measured, which is where this page's 183-345px overflows
+     came from. The grid's own `gap` already separates the cards. */
   .problem-card {
     border: 1px solid #d1d5db !important;
     box-shadow: none !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin-bottom: 16px !important;
   }
 
   .workspace-box {
     background: #ffffff !important;
     border: 1px dashed #9ca3af !important;
-    min-height: 120px !important;
   }
 
-  .answer-sheet-page {
-    page-break-before: always !important;
-    break-before: page !important;
-    page-break-after: auto !important;
-    break-after: auto !important;
-    display: flex !important;
-    padding-top: 20px !important;
-  }
+  /*
+   * .sf-break-before on the first key sheet supplies the page break.
+   *
+   * The `padding-top: 20px` that used to live here is gone. It applied only in
+   * print, so the answer sheet was 20px shorter when the paginator measured
+   * and verified it than when it was printed, and the last worked solution on
+   * the page was pushed past the bottom edge. Sheet padding comes from the
+   * --sf-sheet-pad-* variables, in both media.
+   */
 }
 
 /* Worksheet preset glyphs come from the shared StudyFlix icon set, so they

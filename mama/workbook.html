@@ -8,11 +8,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
   <style>
     @page {
       size: letter portrait;
       margin: 0.45in 0.5in;
     }
+
+    /* The shared print geometry (assets/sf/print.css) describes this page.
+       These must agree with the @page rule above: the sheet IS the printable
+       box, i.e. the paper minus its margins, so it carries no padding of its
+       own. tests/print/css-contract.spec.ts asserts the two stay in step. */
+    :root {
+      --sf-page-w: 8.5in;
+      --sf-page-h: 11in;
+      --sf-page-margin-y: 0.45in;
+      --sf-page-margin-x: 0.5in;
+      --sf-sheet-pad-y: 0in;
+      --sf-sheet-pad-x: 0in;
+    }
+
 
     * {
       box-sizing: border-box;
@@ -67,14 +84,17 @@
     }
     .btn-outline:hover { background: #f1f5f9; }
 
+    /* Hand-authored page. Box model and page breaks come from .sf-sheet in
+       assets/sf/print.css, which also supplies the `:last-of-type` reset that
+       stops a blank sheet being emitted after the final page. Because that box
+       is now a FIXED height in both media, content pasted in beyond what fits
+       visibly overhangs instead of silently reflowing -- and
+       tests/print/all-printables.spec.ts fails with the offending page index. */
     .document-page {
-      max-width: 8.5in;
       margin: 0 auto 30px;
       background: #ffffff;
-      padding: 0.45in 0.5in;
       border-radius: 4px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      page-break-after: always;
       position: relative;
     }
 
@@ -217,12 +237,6 @@
         font-size: 9pt;
       }
       .toolbar-header { display: none !important; }
-      .document-page {
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 0 0 15px 0 !important;
-        box-shadow: none !important;
-      }
     }
   </style>
 </head>
@@ -242,7 +256,7 @@
   <!-- ========================================================================= -->
   <!-- PAGE 1: ORIGIN ATLAS & VARIETAL PROFILES -->
   <!-- ========================================================================= -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">☕ MAMA'S SPECIALTY COFFEE MASTER GUIDE</div>
@@ -337,7 +351,7 @@
   <!-- ========================================================================= -->
   <!-- PAGE 2: MAMA'S CUPPING & TASTING JOURNAL LOG -->
   <!-- ========================================================================= -->
-  <main class="document-page">
+  <main class="sf-sheet document-page">
     <div class="test-header">
       <div>
         <div class="brand-title">☕ MAMA'S DAILY COFFEE TASTING LOG & CUPPING JOURNAL</div>

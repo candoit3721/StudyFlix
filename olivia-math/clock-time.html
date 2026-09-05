@@ -7,9 +7,12 @@
   <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
   <link rel="icon" type="image/x-icon" href="../favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
-  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.1.0">
-  <link rel="stylesheet" href="css/styles.css?v=3.1.0">
-  <link rel="stylesheet" href="css/clock-styles.css?v=3.1.0">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
+  <link rel="stylesheet" href="css/styles.css?v=3.2.0">
+  <link rel="stylesheet" href="css/clock-styles.css?v=3.2.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
@@ -21,6 +24,7 @@
     <div class="header-brand">
       <a href="../index.html" class="btn-back-portal"><span data-sf-icon="arrowLeft" data-sf-size="15"></span><span>StudyFlix Hub</span></a>
       <a href="index.html" class="btn-back-math"><span data-sf-icon="ruler" data-sf-size="15"></span><span>Math Studio</span></a>
+      <a href="money-coins.html" class="btn-back-money"><span data-sf-icon="coin" data-sf-size="15"></span><span>Money &amp; Coins</span></a>
       <div class="brand-text">
         <h1><span data-sf-icon="clock" data-sf-size="22"></span>Olivia's Clock &amp; Elapsed Time Course</h1>
         <p>Ontario Grade 3 Enriched &bull; Interactive Lessons &bull; Waterloo Contest Puzzles</p>
@@ -538,7 +542,23 @@
           <h2>Printable Clock Worksheet &amp; Master Workbook Generator</h2>
           <p>Generate clean vector-printed clock homework or download the master 5-unit curriculum workbook!</p>
           <div class="worksheet-controls-row">
-            <button class="btn btn-primary" onclick="generatePrintableClocks()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Generate 12 Clocks</span></button>
+            <button class="btn btn-primary" onclick="generatePrintableClocks()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Generate Clocks</span></button>
+            <label class="custom-check-pill">
+              <span>Clocks:</span>
+              <select id="clock-count-select" onchange="setPrintClockCount(this.value)">
+                <option value="12" selected>12</option>
+                <option value="16">16</option>
+                <option value="24">24</option>
+                <option value="32">32</option>
+              </select>
+            </label>
+            <label class="custom-check-pill">
+              <span>Columns:</span>
+              <select id="clock-cols-select" onchange="setPrintClockCols(this.value)">
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+              </select>
+            </label>
             <button class="btn btn-secondary" onclick="window.print()"><span data-sf-icon="printer" data-sf-size="16"></span><span>Print Worksheet (Paper Saver)</span></button>
             <a href="worksheets/olivia_complete_clock_course_workbook.md" class="btn btn-accent" download>📥 Download Master Workbook (.md)</a>
             <label class="custom-check-pill">
@@ -548,29 +568,12 @@
           </div>
         </div>
 
-        <!-- Printable Document Canvas -->
-        <div class="printable-clock-doc" id="printable-clock-doc">
-          <div class="doc-header">
-            <div class="doc-title-row">
-              <h2>Grade 3 Telling Time &amp; Clocks Practice</h2>
-              <span class="doc-sub">Olivia's Learning Studio • Ontario Curricula</span>
-            </div>
-            <div class="doc-meta-row">
-              <div>Name: <span class="doc-line">Olivia</span></div>
-              <div>Date: <span class="doc-line"></span></div>
-              <div>Score: <span class="doc-line" style="min-width: 60px;"></span></div>
-            </div>
-          </div>
-
-          <div class="printable-clocks-grid" id="printable-clocks-grid">
-            <!-- 12 Printable Clock Problems Injected via JS -->
-          </div>
-
-          <div class="doc-footer">
-            <span>Olivia's Math Studio • Grade 3 Curricula</span>
-            <span>⭐ Draw the time or write the digital numbers below each clock! ⭐</span>
-          </div>
-        </div>
+        <!-- Printable Document Canvas.
+             assets/sf/paginate.js fills this with one .sf-sheet per printed
+             page, each carrying its own header, clock grid and footer. It used
+             to be a single unbounded div, so the browser broke the clocks
+             wherever they happened to land. -->
+        <div id="printable-clock-doc"></div>
       </section>
 
     </main>
@@ -579,8 +582,11 @@
   <!-- Confetti Canvas -->
   <canvas id="confetti-canvas"></canvas>
 
-  <script src="../assets/sf/icons.js?v=3.1.0"></script>
-  <script src="../assets/sf/progress.js?v=3.1.0"></script>
-  <script src="js/clock-engine.js?v=3.1.0"></script>
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <script src="../assets/sf/progress.js?v=3.2.0"></script>
+  <!-- Shared print machinery: real sheets, measured page breaks. -->
+  <script src="../assets/sf/urlconfig.js?v=3.2.0"></script>
+  <script src="../assets/sf/paginate.js?v=3.2.0"></script>
+  <script src="js/clock-engine.js?v=3.2.0"></script>
 </body>
 </html>
