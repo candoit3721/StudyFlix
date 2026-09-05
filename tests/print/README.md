@@ -30,12 +30,19 @@ npx playwright test --project=print                      # the full matrix (~505
 npx playwright test --project=print --grep "@print-smoke"  # the fast set (~62 cases, ~15s)
 ```
 
-CI runs the smoke set on every push and the full matrix nightly and on `main`.
+CI runs the smoke set on every push and pull request; the full matrix runs
+nightly, and on demand via `workflow_dispatch`.
 
 The matrix runs **unseeded on purpose**.
 Measurement-based pagination is supposed to be correct for any content, so
 every run is a fresh fuzz of the question space.
 Pass `?seed=<int>` on any studio URL to reproduce a specific worksheet.
+
+That is also why the matrix is not a merge gate.
+An unseeded run makes a red build mean "this layout has never been sampled
+before", not "this commit broke something", so blocking a merge on it stops
+the fuzzing from being useful and starts making it an obstacle.
+The smoke set is the deterministic subset, and that is what gates.
 
 ## Files
 

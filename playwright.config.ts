@@ -21,7 +21,15 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  /*
+   * The suite is parallel-safe: every spec drives its own page against the
+   * static server and the print project pins its own viewport, so nothing
+   * shared changes under it. Serialising CI bought no determinism and cost
+   * roughly 4x wall clock (the print matrix: 64s at 5 workers, 276s at 1).
+   * Half the runner's cores leaves headroom so a loaded box does not turn
+   * layout measurement into timeout flake.
+   */
+  workers: process.env.CI ? '50%' : undefined,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
 
   use: {

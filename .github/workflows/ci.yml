@@ -1,0 +1,114 @@
+name: Test & Deploy
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Nightly, so the full print matrix runs against fresh randomised content.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+# Read-only by default; the deploy job widens this for itself alone.
+permissions:
+  contents: read
+
+jobs:
+  # The merge gate. Everything here is deterministic and attributable: if it
+  # goes red, this commit did it. Kept to a few minutes so it is worth waiting
+  # for -- the unseeded fuzz matrix below is not part of this decision.
+  test:
+    name: UI + print smoke
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - name: UI specs (chromium, firefox, webkit)
+        run: npx playwright test --project=chromium --project=firefox --project=webkit
+      - name: Print smoke
+        run: npx playwright test --project=print --grep "@print-smoke"
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-smoke
+          path: playwright-report/
+          retention-days: 30
+
+  # The full ~505-case layout matrix. Deliberately NOT a merge gate: it is a
+  # fuzz run, not a pass/fail statement about the commit. The studios generate
+  # fresh random questions every time, so a failure here is a layout the suite
+  # had never sampled before rather than something the merge broke -- and it
+  # can equally fail on a commit that changed no print code at all.
+  # Nightly runs against the default branch, so main still gets full coverage
+  # every day; use workflow_dispatch to force a run on demand.
+  print-matrix:
+    name: Full print matrix
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Every printable, every layout
+        run: npx playwright test --project=print
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report-matrix
+          path: playwright-report/
+          retention-days: 30
+
+  # Publishing waits for the gate. main is the live site for two kids, so a
+  # commit that fails the gate must not be able to reach it -- previously this
+  # was a separate workflow on the same `push: main` trigger, which meant it
+  # raced the tests and published regardless of the result.
+  #
+  # `needs: test` also ties the deployment to the commit that was tested. A
+  # workflow keyed on the push event independently can start against a newer
+  # tip than the one that went green; a dependent job cannot.
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    # Never let two deployments interleave, and never cancel one part-way:
+    # a half-published site is worse than a stale one.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      # The site is served straight from the repo root: it is static, so there
+      # is no build step and nothing to exclude (node_modules and the
+      # Playwright reports are all gitignored, so they never reach checkout).
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
