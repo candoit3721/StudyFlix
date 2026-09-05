@@ -326,6 +326,17 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   margin-bottom: 50px;
 }
 
+/* One column per profile: the picture (a button) on top, the calendar (a link
+   out) under it. Keeping them as siblings is what lets the card stay a single
+   role="button" instead of a button with a link inside it. */
+.profile-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 150px;
+}
+
 .profile-card {
   display: flex;
   flex-direction: column;
@@ -451,6 +462,40 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   align-items: flex-start;
   justify-content: center;
   text-align: center;
+}
+
+/* The study calendar lives on its own site, so the chooser offers it as a
+   quiet secondary link: never loud enough to compete with the picture, but
+   reachable without first having to enter a profile. */
+.profile-calendar-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: -4px;
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.profile-calendar-link:hover,
+.profile-calendar-link:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--nf-white);
+  color: var(--nf-white);
+}
+
+/* Manage Profiles makes the whole card an edit target; a link that navigates
+   off the page would contradict that, so it steps out while still holding its
+   space so the row does not jump. */
+.manage-mode .profile-calendar-link {
+  visibility: hidden;
 }
 
 .profile-actions {
@@ -1867,6 +1912,7 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 .avatar-option-btn:focus-visible,
 .backdrop-swatch:focus-visible,
 .avatar-edit-badge:focus-visible,
+.profile-calendar-link:focus-visible,
 .dropdown-item:focus-visible,
 .profile-card:focus-visible {
   outline: 2px solid var(--nf-white);

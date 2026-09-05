@@ -71,6 +71,9 @@
     atom: 'M12 14.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4M12 3.2c4.2 0 7.6 3.94 7.6 8.8s-3.4 8.8-7.6 8.8-7.6-3.94-7.6-8.8S7.8 3.2 12 3.2M4.5 7.7c2.1-3.64 7-4.34 11.2-1.9s6.1 6.98 4 10.62-7 4.34-11.2 1.9-6.1-6.98-4-10.62M19.5 7.7c2.1 3.64.2 8.18-4 10.62s-9.1 1.74-11.2-1.9-.2-8.18 4-10.62 9.1-1.74 11.2 1.9',
     ruler: 'M14.6 2.9 21.1 9.4a1.2 1.2 0 0 1 0 1.7L11.1 21.1a1.2 1.2 0 0 1-1.7 0L2.9 14.6a1.2 1.2 0 0 1 0-1.7L12.9 2.9a1.2 1.2 0 0 1 1.7 0M12 5.8l2.2 2.2M9.2 8.6l1.5 1.5M6.4 11.4l2.2 2.2M8.6 14.8l1.5 1.5',
     clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5.2l3.4 2',
+    // A month grid with the header band and two marked days, so it still reads
+    // as a calendar rather than a plain window at pill size.
+    calendar: 'M4 6.5a1.5 1.5 0 0 1 1.5-1.5h13A1.5 1.5 0 0 1 20 6.5v12a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM4 10h16M8 3.5v3M16 3.5v3M8.5 13.5h.01M12 13.5h.01M8.5 16.5h.01M12 16.5h.01',
     // A coin face carrying the dollar stroke. It has to read at pill size
     // next to a score, so the face carries one symbol rather than a value
     // like "25" that would go illegible below about 18px.

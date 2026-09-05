@@ -24,6 +24,9 @@ const DEFAULT_PROFILES = [
     grade: "Grade 5 & 6 Champion",
     themeClass: "theme-sophia",
     family: "rome",
+    // The study schedule lives outside the hub, so the chooser links out to it
+    // rather than pretending to own it.
+    calendarUrl: "https://calendar.studyflix.vip/sophia",
     featured: {
       tag: "FEATURED QUEST",
       title: "Sophia's Ancient Rome & Engineering Quest",
@@ -77,6 +80,7 @@ const DEFAULT_PROFILES = [
     grade: "Grade 3 Explorer",
     themeClass: "theme-olivia",
     family: "grade3",
+    calendarUrl: "https://calendar.studyflix.vip/olivia",
     featured: {
       tag: "FEATURED STUDIO",
       title: "Olivia's Math Worksheet Studio",
@@ -321,6 +325,11 @@ function renderProfileSelectScreen() {
   container.innerHTML = '';
 
   appProfiles.forEach(p => {
+    // The picture and the calendar are two separate destinations, so they are
+    // two siblings in one column rather than a link buried inside a button.
+    const slot = document.createElement('div');
+    slot.className = 'profile-slot';
+
     const card = document.createElement('div');
     card.className = 'profile-card';
     // The chooser is the first screen of the product, so it has to be usable
@@ -362,7 +371,23 @@ function renderProfileSelectScreen() {
         card.click();
       }
     };
-    container.appendChild(card);
+    slot.appendChild(card);
+
+    // The study schedule lives on its own site, so it is offered as a plain
+    // link out rather than as a studio tile: choosing a profile and checking
+    // the week are different errands.
+    if (p.calendarUrl) {
+      const link = document.createElement('a');
+      link.className = 'profile-calendar-link';
+      link.href = p.calendarUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.setAttribute('aria-label', `Open ${p.name}'s study calendar in a new tab`);
+      link.innerHTML = '<span data-sf-icon="calendar" data-sf-size="15"></span><span>Calendar</span>';
+      slot.appendChild(link);
+    }
+
+    container.appendChild(slot);
   });
 
   SFIcons.upgrade(container);
