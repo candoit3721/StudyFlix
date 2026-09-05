@@ -26,8 +26,8 @@ out in the real print box and cuts pages where the content says to.
 ## Running
 
 ```bash
-npx playwright test --project=print                      # the full matrix (~460 cases, ~80s)
-npx playwright test --project=print --grep "@print-smoke"  # the fast set (~54 cases, ~15s)
+npx playwright test --project=print                      # the full matrix (~505 cases, ~60s)
+npx playwright test --project=print --grep "@print-smoke"  # the fast set (~62 cases, ~15s)
 ```
 
 CI runs the smoke set on every push and the full matrix nightly and on `main`.

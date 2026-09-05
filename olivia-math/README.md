@@ -54,6 +54,22 @@ An interactive and print-ready math worksheet generator designed specifically fo
   - *Waterloo CEMC Contest Logic*: Mirror reflection clocks, faulty museum clocks, time zone flights.
 - **Master Course Workbook**: [`worksheets/olivia_complete_clock_course_workbook.md`](./worksheets/olivia_complete_clock_course_workbook.md) — 5-chapter printable workbook with complete solutions!
 
+### 3. 🪙 Money & Coin Math Course (Ontario Financial Literacy)
+
+Open [`money-coins.html`](./money-coins.html) for the full Canadian money course.
+Every coin is drawn as vector art at its **true relative diameter**, so the dime really is the smallest coin in the set even though it beats the nickel.
+
+- **Course Lessons Hub**: 5 chapters covering the coins, dollar and cent notation, counting a pile biggest-first, the count-up change ladder, and the Canadian cash rounding rule.
+- **Count the Money**: Add up a random pile of nickels, dimes, quarters, loonies, toonies and bills, with a skip-count ladder as the hint.
+- **Build the Amount**: Fill a purse to an exact target and find out whether a cashier could have done it with fewer coins.
+- **Making Change**: Count up from the price to what was handed over, with the ladder showing each hop and the coins that make it.
+- **Canadian Money Stories**: Sugar bush, bake sale, hockey card and farmers market problems, several of them multi-step.
+- **Fewest-Coins Contest Logic**: Enriched puzzles on coin combinations, the six-coin dollar, and penny-free rounding.
+- **Printable Money Tests**: Count-the-coins, making-change and fewest-coin questions, 1 to 3 columns, with an optional answer key.
+
+All money arithmetic is done in **integer cents** and only formatted as dollars at the edge, so no drill or answer key can ever be off by a floating-point remainder.
+The arithmetic is exposed as `window.SFMoney` and is covered by `tests/olivia_money.spec.ts`, which recomputes every printed answer from the coins actually drawn on the sheet.
+
 ---
 
 ## 🖨️ Print Layout & Sheet Options
@@ -80,12 +96,22 @@ An interactive and print-ready math worksheet generator designed specifically fo
 
 ```
 olivia-math/
-├── index.html              # Main web application entry point
+├── index.html              # Worksheet studio: the arithmetic generator
+├── clock-time.html         # Clock & elapsed time course
+├── money-coins.html        # Money & coin math course
 ├── css/
-│   └── styles.css          # Modern UI and print-optimized styles
+│   ├── styles.css          # Worksheet studio UI and print styles
+│   ├── clock-styles.css    # Clock course styles
+│   └── money-styles.css    # Money course styles and its @page rule
 ├── js/
 │   ├── math-engine.js      # Core arithmetic generator & Grade 3 algorithms
 │   ├── word-problems.js    # Grade 3 word problems template engine
-│   └── app.js              # Application controller, presets & interactive logic
+│   ├── app.js              # Worksheet studio controller, presets & interactive logic
+│   ├── clock-engine.js     # Vector clocks, elapsed time & clock worksheets
+│   └── money-engine.js     # Canadian currency, change arithmetic & money tests
+├── worksheets/             # Printable master workbooks
 └── README.md               # User guide
 ```
+
+Page breaks for every printable here come from `assets/sf/paginate.js`, which measures the real cards in the real print box.
+See `tests/print/README.md` before changing anything that affects how tall a question is.

@@ -75,8 +75,58 @@ h1, h2, h3, h4, .brand-text h1, .btn, .btn-jump {
   transition: background 0.15s;
 }
 
-.btn-back-portal:hover, .btn-back-math:hover {
+/* The door to the money course, sitting beside the door back to the studio. */
+.btn-back-money {
+  background: #d1fae5;
+  color: #047857;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.btn-back-portal:hover, .btn-back-math:hover, .btn-back-money:hover {
   transform: scale(1.04);
+}
+
+/*
+ * Two controls in the worksheet toolbar were carrying class names that no rule
+ * matched, so the top-bar Print button rendered with no fill at all and the
+ * clock count / column pickers sat as bare form controls in a row of pills.
+ */
+.btn-print-top {
+  background: var(--clock-pink);
+  color: #ffffff;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+}
+
+.btn-print-top:hover { background: #db2777; }
+
+.custom-check-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 30px;
+  padding: 7px 14px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #334155;
+  cursor: pointer;
+}
+
+.custom-check-pill select {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-weight: 700;
+  font-family: inherit;
+  background: #ffffff;
+  cursor: pointer;
 }
 
 .brand-text h1 {

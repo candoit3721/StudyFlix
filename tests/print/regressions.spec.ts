@@ -215,6 +215,74 @@ test.describe('print regressions', () => {
     expect(r.rawDollars, 'no untypeset $...$ may reach the page').toBe(0);
   });
 
+  test('@print-smoke a money question measures as the question it prints', async ({ page }) => {
+    /*
+     * MEASURED, in the money studio: the item renderer drew a fresh random
+     * pile of coins every time it was called, and assets/sf/paginate.js calls
+     * it twice -- once to measure, once to emit. So the page breaks were
+     * computed for a worksheet nobody would ever see. A pile of six notes
+     * measured where a pile of two was emitted left 300px of empty paper on a
+     * page whose tallest question was 180px tall, and the opposite draw would
+     * have overflowed instead.
+     *
+     * The check is the general one rather than a check for the specific cause:
+     * a page that is not the last must be packed to within one question of
+     * full. That is only true when the thing measured is the thing printed.
+     */
+    const p = P('olivia-money');
+    // Seeded, so the packing this asserts on is the same worksheet every run.
+    await gotoPrintable(
+      page,
+      '/olivia-math/money-coins.html?view=worksheet_gen&mode=count&level=with_bills&cols=3&count=16&seed=7',
+    );
+
+    /*
+     * The contract itself: rendering one question twice must produce the same
+     * markup, because the paginator does exactly that. Asserted directly as
+     * well as through the packing below, since the packing symptom depends on
+     * which way the random draw happened to go.
+     */
+    const pure = await page.evaluate(() => {
+      const make = (window as any).makeMoneyQuestion;
+      const build = (window as any).buildMoneyItem;
+      // Indices 1, 2 and 3 cover all three question kinds in a mixed test.
+      return [1, 2, 3].every((i) => {
+        const q = make(i);
+        return build(q).outerHTML === build(q).outerHTML;
+      });
+    });
+    expect(pure, 'rendering the same question twice must produce the same markup').toBe(true);
+
+    const layout = await page.evaluate((sel) => {
+      const sheets = Array.from(document.querySelectorAll<HTMLElement>(sel));
+      let tallestCard = 0;
+      const pages = sheets.map((sheet) => {
+        const grid = sheet.querySelector('[data-sf-grid]') as HTMLElement;
+        const cards = Array.from(grid.children) as HTMLElement[];
+        for (const c of cards) {
+          tallestCard = Math.max(tallestCard, c.getBoundingClientRect().height);
+        }
+        const gridBottom = grid.getBoundingClientRect().bottom;
+        const lastBottom = cards[cards.length - 1].getBoundingClientRect().bottom;
+        return { cards: cards.length, free: gridBottom - lastBottom };
+      });
+      return { pages, tallestCard };
+    }, p.sheetSelector);
+
+    expect(layout.pages.length, 'this configuration should span several pages').toBeGreaterThan(1);
+
+    // The row gap the grid puts between questions, plus subpixel slack.
+    const GAP = 20;
+    layout.pages.slice(0, -1).forEach((pg, i) => {
+      expect(
+        pg.free,
+        `page ${i + 1} left ${Math.round(pg.free)}px unused, more than a whole ` +
+          `${Math.round(layout.tallestCard)}px question: the page was packed against ` +
+          'content other than what it printed',
+      ).toBeLessThanOrEqual(layout.tallestCard + GAP + EPS);
+    });
+  });
+
   test('@print-smoke a reuse render keeps the same questions', async ({ page }) => {
     /*
      * Measured pagination generates questions through an itemFactory, so a

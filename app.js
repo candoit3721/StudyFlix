@@ -80,7 +80,7 @@ const DEFAULT_PROFILES = [
     featured: {
       tag: "FEATURED STUDIO",
       title: "Olivia's Math Worksheet Studio",
-      desc: "Operations with carrying & borrowing, 12x12 times tables, clock time, money math, geometry, and fun word problems!",
+      desc: "Operations with carrying & borrowing, 12x12 times tables, clock time, Canadian money & coins, geometry, and fun word problems!",
       link: "olivia-math/index.html",
       family: "grade3",
       art: "math-operations"
@@ -88,20 +88,23 @@ const DEFAULT_PROFILES = [
     subjects: [
       { title: "Grade 3 Math Studio", badge: "CORE STUDIO", desc: "Interactive practice & clean printable worksheet generator", link: "olivia-math/index.html", kind: "quest", family: "grade3", art: "math-operations" },
       { title: "Clock & Elapsed Time Studio", badge: "NEW & INTERACTIVE", desc: "Read analog clocks, set hands, timeline jumps & time word problems", link: "olivia-math/clock-time.html", kind: "quest", family: "grade3", art: "g3-clock" },
-      { title: "Times Table Blitz", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-times" },
-      { title: "Money & Coin Math", badge: "REAL LIFE", desc: "Counting dollars, quarters, dimes, nickels, and making change", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-money" }
+      { title: "Times Table Blitz", badge: "MULTIPLICATION", desc: "Master 0-12 multiplication tables with speed challenges", link: "olivia-math/index.html?preset=mult_core", kind: "lesson", family: "grade3", art: "g3-times" },
+      { title: "Money & Coin Math", badge: "NEW & INTERACTIVE", desc: "Count Canadian coins, build a purse, make change & print money tests", link: "olivia-math/money-coins.html", kind: "quest", family: "grade3", art: "g3-money" }
     ],
     topics: [
       { title: "Telling Time & Clocks", badge: "TIME MATH", desc: "Read hour & minute hands with 5-minute intervals", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-clock" },
       { title: "Elapsed Time Numberline", badge: "TIMELINE JUMPS", desc: "Calculate elapsed hours & minutes with visual jumps", link: "olivia-math/clock-time.html", kind: "lesson", family: "grade3", art: "g3-numberline" },
-      { title: "3-Digit Addition", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column" },
-      { title: "3-Digit Subtraction", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-column-borrow" },
-      { title: "Missing Addend Equations", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "g3-missing" },
+      { title: "Counting Coins & Bills", badge: "MONEY MATH", desc: "Add up piles of nickels, dimes, quarters, loonies & toonies", link: "olivia-math/money-coins.html?view=count_money", kind: "lesson", family: "grade3", art: "g3-money" },
+      { title: "Making Change", badge: "COUNT UP", desc: "Count up from the price to what you paid, Canadian rounding included", link: "olivia-math/money-coins.html?view=make_change", kind: "lesson", family: "grade3", art: "g3-money" },
+      { title: "3-Digit Addition", badge: "REGROUPING", desc: "Master column addition with carrying into tens and hundreds", link: "olivia-math/index.html?preset=add_3digit", kind: "lesson", family: "grade3", art: "g3-column" },
+      { title: "3-Digit Subtraction", badge: "BORROWING", desc: "Borrowing across zeros and multi-step subtraction", link: "olivia-math/index.html?preset=sub_3digit", kind: "lesson", family: "grade3", art: "g3-column-borrow" },
+      { title: "Missing Addend Equations", badge: "ALGEBRA", desc: "Solve mystery equations like 38 + __ = 95", link: "olivia-math/index.html?preset=missing_ops", kind: "lesson", family: "grade3", art: "g3-missing" },
       { title: "Early Equal Fractions", badge: "FRACTIONS", desc: "Visual halves, thirds, fourths, sixths, and eighths", link: "olivia-math/index.html", kind: "lesson", family: "grade3", art: "math-fractions" }
     ],
     printable: [
       { title: "Printable Clock & Time Worksheets", badge: "CLOCK PDF", desc: "12-clock test generator to draw hands or write digital times", link: "olivia-math/clock-time.html", kind: "printable", family: "grade3", art: "g3-clock" },
-      { title: "100-Problem Times Table Sprint", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "g3-times" },
+      { title: "Printable Money & Coin Tests", badge: "MONEY PDF", desc: "Count-the-coins, making-change & fewest-coin tests with answer keys", link: "olivia-math/money-coins.html?view=worksheet_gen", kind: "printable", family: "grade3", art: "g3-money" },
+      { title: "100-Problem Times Table Sprint", badge: "SPEED TEST", desc: "Print a high-density speed drill on standard paper", link: "olivia-math/index.html?preset=mult_core", kind: "printable", family: "grade3", art: "g3-times" },
       { title: "Daily Math Worksheet", badge: "CUSTOM PDF", desc: "Generate custom mixed review tests with paper-saving keys", link: "olivia-math/index.html", kind: "printable", family: "grade3", art: "math-worksheet" }
     ]
   },

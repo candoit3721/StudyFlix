@@ -71,6 +71,10 @@
     atom: 'M12 14.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4M12 3.2c4.2 0 7.6 3.94 7.6 8.8s-3.4 8.8-7.6 8.8-7.6-3.94-7.6-8.8S7.8 3.2 12 3.2M4.5 7.7c2.1-3.64 7-4.34 11.2-1.9s6.1 6.98 4 10.62-7 4.34-11.2 1.9-6.1-6.98-4-10.62M19.5 7.7c2.1 3.64.2 8.18-4 10.62s-9.1 1.74-11.2-1.9-.2-8.18 4-10.62 9.1-1.74 11.2 1.9',
     ruler: 'M14.6 2.9 21.1 9.4a1.2 1.2 0 0 1 0 1.7L11.1 21.1a1.2 1.2 0 0 1-1.7 0L2.9 14.6a1.2 1.2 0 0 1 0-1.7L12.9 2.9a1.2 1.2 0 0 1 1.7 0M12 5.8l2.2 2.2M9.2 8.6l1.5 1.5M6.4 11.4l2.2 2.2M8.6 14.8l1.5 1.5',
     clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5.2l3.4 2',
+    // A coin face carrying the dollar stroke. It has to read at pill size
+    // next to a score, so the face carries one symbol rather than a value
+    // like "25" that would go illegible below about 18px.
+    coin: 'M12 20.5a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17M14.4 9.3a3 3 0 0 0-2.4-1.1c-1.45 0-2.5.75-2.5 1.9s1 1.65 2.5 1.9 2.5.85 2.5 1.9-1.05 1.9-2.5 1.9a3 3 0 0 1-2.4-1.1M12 6.6v10.8',
     coffee: 'M4 8.5h13v6.2a4.3 4.3 0 0 1-4.3 4.3H8.3A4.3 4.3 0 0 1 4 14.7zM17 10h1.6a2.6 2.6 0 0 1 0 5.2H17M6.5 2.5v2.6M10.5 2.5v2.6M14.5 2.5v2.6M3 21.5h15',
     sigma: 'M17.5 4.5h-11l6.4 7.5-6.4 7.5h11',
     chartLine: 'M4 4v15.5a.5.5 0 0 0 .5.5H20M7.5 15.5l3.5-4.5 3 2.5 4.5-6',
@@ -105,7 +109,8 @@
     math: 'ruler', calculus: 'sigma', statistics: 'chartLine',
     time: 'clock', biology: 'cell', ecology: 'leaf', water: 'droplet',
     biodiversity: 'species', flight: 'plane', space: 'rocket',
-    electricity: 'bolt', physics: 'chartLine'
+    electricity: 'bolt', physics: 'chartLine',
+    money: 'coin', coins: 'coin', financial: 'coin'
   };
 
   function resolve(name) {

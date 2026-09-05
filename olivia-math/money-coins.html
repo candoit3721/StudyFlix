@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivia's Money &amp; Coin Math Course</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+  <link rel="icon" type="image/x-icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/sf/shell.css?v=3.2.0">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="../assets/sf/print.css?v=3.2.0">
+  <!-- money-styles.css carries this studio's own @page rule, which must agree
+       with the --sf-page-* variables (tests/print/css-contract.spec.ts checks
+       it). The worksheet studio's stylesheet is deliberately NOT linked here:
+       borrowing it for its @page rule also imported its sidebar button sizing,
+       which stretched every action button across the card. -->
+  <link rel="stylesheet" href="css/money-styles.css?v=3.2.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="sf-subject-grade3 sf-on-light">
+
+  <!-- Top Header Navigation -->
+  <header class="money-app-header">
+    <div class="header-brand">
+      <a href="../index.html" class="btn-back-portal"><span data-sf-icon="arrowLeft" data-sf-size="15"></span><span>StudyFlix Hub</span></a>
+      <a href="index.html" class="btn-back-math"><span data-sf-icon="ruler" data-sf-size="15"></span><span>Math Studio</span></a>
+      <a href="clock-time.html" class="btn-back-clock"><span data-sf-icon="clock" data-sf-size="15"></span><span>Clock &amp; Time</span></a>
+      <div class="brand-text">
+        <h1><span data-sf-icon="coin" data-sf-size="22"></span>Olivia's Money &amp; Coin Math Course</h1>
+        <p>Ontario Grade 3 Financial Literacy &bull; Canadian Coins &bull; Making Change</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <div class="score-pill"><span data-sf-icon="star" data-sf-size="15"></span>XP: <span id="sf-xp-count">0</span></div>
+      <div class="score-pill" style="background:#dcfce7; color:#166534;"><span data-sf-icon="coin" data-sf-size="15"></span>Coin Points: <span id="money-score">0</span></div>
+      <div class="streak-pill"><span data-sf-icon="flame" data-sf-size="15"></span>Answer Streak: <span id="money-streak">0</span></div>
+      <div class="score-pill" style="background:#fdf4ff; color:#86198f;"><span data-sf-icon="trophy" data-sf-size="15"></span><span id="sf-badge-count">0/6</span></div>
+      <button class="btn btn-print-top" onclick="window.print()"><span data-sf-icon="printer" data-sf-size="15"></span><span>Print Test</span></button>
+    </div>
+  </header>
+
+  <div class="money-app-layout">
+
+    <!-- Left Sidebar Controls -->
+    <aside class="money-sidebar">
+
+      <!-- Mode Selection Tabs -->
+      <div class="sidebar-section">
+        <h3>Course Modules &amp; Activities</h3>
+        <div class="activity-mode-buttons">
+
+          <button class="activity-btn active" data-mode="course_lessons" onclick="setActivityMode('course_lessons')">
+            <span class="act-icon" data-sf-icon="lesson" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>1. Course Lessons Hub</strong>
+              <small>5 chapters on Canadian coins &amp; change</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="count_money" onclick="setActivityMode('count_money')">
+            <span class="act-icon" data-sf-icon="search" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>2. Count the Money</strong>
+              <small>Add up a pile of coins and bills</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="build_amount" onclick="setActivityMode('build_amount')">
+            <span class="act-icon" data-sf-icon="person" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>3. Build the Amount</strong>
+              <small>Fill the purse to match a target price</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="make_change" onclick="setActivityMode('make_change')">
+            <span class="act-icon" data-sf-icon="refresh" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>4. Making Change</strong>
+              <small>Count up from the price to what you paid</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="word_problems" onclick="setActivityMode('word_problems')">
+            <span class="act-icon" data-sf-icon="leaf" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>5. Canadian Money Stories</strong>
+              <small>Sugar bush, bake sale &amp; hockey card puzzles</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="contest_puzzles" onclick="setActivityMode('contest_puzzles')">
+            <span class="act-icon" data-sf-icon="star" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>6. Fewest-Coins Contest Logic</strong>
+              <small>Penny rounding &amp; coin combination puzzles</small>
+            </div>
+          </button>
+
+          <button class="activity-btn" data-mode="worksheet_gen" onclick="setActivityMode('worksheet_gen')">
+            <span class="act-icon" data-sf-icon="printer" data-sf-size="22"></span>
+            <div class="act-info">
+              <strong>7. Printable Money Tests</strong>
+              <small>Vector coins, change &amp; answer keys</small>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Difficulty Controls -->
+      <div class="sidebar-section">
+        <h3>Money Level</h3>
+        <div class="radio-options-grid">
+          <label class="custom-radio-card">
+            <input type="radio" name="level" value="coins_small" onchange="updateLevel(this.value)">
+            <span>Silver Coins Only (under $1.00)</span>
+          </label>
+          <label class="custom-radio-card">
+            <input type="radio" name="level" value="coins_all" checked onchange="updateLevel(this.value)">
+            <span>All Coins incl. Loonie &amp; Toonie (under $10)</span>
+          </label>
+          <label class="custom-radio-card">
+            <input type="radio" name="level" value="with_bills" onchange="updateLevel(this.value)">
+            <span>Coins + $5 / $10 Bills (under $50)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Quick Tips Box -->
+      <div class="sidebar-section tip-box">
+        <h4>Olivia's Money Secrets:</h4>
+        <ul>
+          <li><span class="tip-mark">🪙</span><span><strong>Biggest first</strong>: count toonies, then loonies, then quarters, dimes, nickels</span></li>
+          <li><span class="tip-mark">📏</span><span>The <strong>dime</strong> is the <strong>smallest</strong> coin but it beats the nickel</span></li>
+          <li><span class="tip-mark">💵</span><span><strong>100 cents = $1.00</strong>; always write two digits after the dot</span></li>
+          <li><span class="tip-mark">🧮</span><span><strong>Change</strong> = count UP from the price to what you paid</span></li>
+          <li><span class="tip-mark">🍁</span><span>Canada has <strong>no pennies</strong>: cash totals round to the nearest 5¢</span></li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- Main Interactive Workspace -->
+    <main class="money-main-stage">
+
+      <!-- ================================================================= -->
+      <!-- VIEW 0: COURSE LESSONS HUB -->
+      <!-- ================================================================= -->
+      <section id="view-course-lessons" class="activity-stage active">
+        <div class="stage-header">
+          <h2>Olivia's Complete Canadian Money Course</h2>
+          <p>Learn every coin, count a pile like a cashier, and make change without a calculator!</p>
+        </div>
+
+        <div class="lessons-deck">
+
+          <!-- Chapter 1 -->
+          <div class="course-chapter-card">
+            <div class="chapter-badge">Chapter 1</div>
+            <h3>Meet the Canadian Coins (Drawn to Real Size)</h3>
+            <p>Every coin below is drawn at its <strong>true relative size</strong>, so the biggest surprise in Canadian money is impossible to miss.</p>
+
+            <!-- The coin gallery is the whole point of this chapter, so it is
+                 drawn from the same vector coins the drills and the printable
+                 test use, at real relative diameters. -->
+            <div class="coin-gallery" id="coin-gallery"></div>
+
+            <div class="chapter-highlight">
+              <strong>🪙 The Dime Trap:</strong> The <strong>dime (10¢)</strong> is the <em>smallest</em> coin in your hand, but it is worth <strong>twice</strong> the much bigger nickel (5¢). Size does not equal value!
+            </div>
+            <div class="chapter-highlight" style="background:#fffbeb; border-color:#f59e0b;">
+              <strong>🍁 Shape &amp; Metal Clues:</strong> The <strong>loonie ($1)</strong> is gold and has <strong>11 straight sides</strong> you can feel. The <strong>toonie ($2)</strong> is the only coin made of <strong>two metals</strong>: a silver ring around a gold centre.
+            </div>
+          </div>
+
+          <!-- Chapter 2 -->
+          <div class="course-chapter-card">
+            <div class="chapter-badge">Chapter 2</div>
+            <h3>Writing Money Two Ways: Cents and Dollars</h3>
+            <p>The same amount can be written with a cent sign or a dollar sign. <strong>100 cents = $1.00.</strong></p>
+            <ul>
+              <li><strong>75¢ = $0.75</strong> (less than a dollar, so a zero goes in front of the dot)</li>
+              <li><strong>275¢ = $2.75</strong> (two whole dollars and 75 cents left over)</li>
+              <li><strong>$3.05</strong> means 3 dollars and 5 cents, <em>not</em> 3 dollars and 50 cents. Always write <strong>two digits</strong> after the dot!</li>
+            </ul>
+            <div class="chapter-highlight">
+              <strong>✏️ The Split Rule:</strong> To turn cents into dollars, split the number two digits from the right: <strong>4 | 85</strong> &rarr; <strong>$4.85</strong>.
+            </div>
+          </div>
+
+          <!-- Chapter 3 -->
+          <div class="course-chapter-card">
+            <div class="chapter-badge">Chapter 3</div>
+            <h3>Counting a Pile: Biggest Coin First</h3>
+            <p>Cashiers never count coins in a random order. Sort from the <strong>biggest value</strong> down, then skip count.</p>
+            <div class="worked-count" id="worked-count-example"></div>
+            <div class="chapter-highlight" style="background:#eff6ff; border-color:#3b82f6;">
+              <strong>🧮 Skip-Counting Ladders:</strong> Quarters go <strong>25, 50, 75, 100</strong>. Dimes go <strong>10, 20, 30</strong>. Nickels go <strong>5, 10, 15</strong>. Four quarters make exactly one loonie.
+            </div>
+          </div>
+
+          <!-- Chapter 4 -->
+          <div class="course-chapter-card">
+            <div class="chapter-badge">Chapter 4</div>
+            <h3>Making Change: The "Count Up" Ladder</h3>
+            <p>Do not subtract in your head. Start at the <strong>price</strong> and hop <strong>up</strong> to what you paid. The hops <em>are</em> the change.</p>
+
+            <!-- Change is a number-line idea before it is a subtraction, so the
+                 worked example is drawn rather than described in words alone. -->
+            <figure class="money-numberline">
+              <svg viewBox="0 0 820 214" role="img"
+                   aria-label="Number line from $3.45 to $5.00. A five cent hop reaches $3.50, a fifty cent hop reaches $4.00, and a one dollar hop reaches $5.00. The change is one dollar and fifty-five cents.">
+                <line x1="40" y1="150" x2="790" y2="150" stroke="#334155" stroke-width="3"/>
+                <polygon points="790,150 778,144 778,156" fill="#334155"/>
+
+                <g fill="none" stroke-width="3.5" stroke-linecap="round">
+                  <path d="M80 150 Q140 104 200 150" stroke="#d97706"/>
+                  <path d="M200 150 Q310 70 420 150" stroke="#0891b2"/>
+                  <path d="M420 150 Q560 46 700 150" stroke="#15803d"/>
+                </g>
+
+                <g font-family="Nunito, sans-serif" font-size="15" font-weight="800" text-anchor="middle">
+                  <text x="140" y="96" fill="#b45309">+5¢</text>
+                  <text x="310" y="62" fill="#0e7490">+50¢</text>
+                  <text x="560" y="38" fill="#15803d">+$1.00</text>
+                </g>
+                <g font-family="Nunito, sans-serif" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">
+                  <text x="140" y="112">1 nickel</text>
+                  <text x="310" y="78">2 quarters</text>
+                  <text x="560" y="54">1 loonie</text>
+                </g>
+
+                <g>
+                  <circle cx="80" cy="150" r="7" fill="#b45309"/>
+                  <circle cx="200" cy="150" r="6" fill="#fff" stroke="#b45309" stroke-width="3"/>
+                  <circle cx="420" cy="150" r="6" fill="#fff" stroke="#0891b2" stroke-width="3"/>
+                  <circle cx="700" cy="150" r="7" fill="#15803d"/>
+                </g>
+                <g font-family="'Space Mono', monospace" font-size="16" font-weight="700" text-anchor="middle" fill="#1e293b">
+                  <text x="80" y="180">$3.45</text>
+                  <text x="200" y="180">$3.50</text>
+                  <text x="420" y="180">$4.00</text>
+                  <text x="700" y="180">$5.00</text>
+                </g>
+                <g font-family="Nunito, sans-serif" font-size="12" font-weight="800" text-anchor="middle">
+                  <text x="80" y="202" fill="#b45309">PRICE</text>
+                  <text x="700" y="202" fill="#15803d">PAID</text>
+                </g>
+              </svg>
+              <figcaption>
+                $3.45 up to $5.00 = 5¢ + 50¢ + $1.00 =
+                <strong>$1.55 change</strong>
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- Chapter 5 -->
+          <div class="course-chapter-card">
+            <div class="chapter-badge">Chapter 5</div>
+            <h3>Canada Has No Pennies: The Cash Rounding Rule</h3>
+            <p>The penny was retired in 2013. When you pay <strong>cash</strong>, the final total rounds to the nearest <strong>5 cents</strong>. Paying by debit or credit card still charges the exact amount.</p>
+
+            <table class="rounding-table">
+              <thead>
+                <tr><th>Total ends in</th><th>Rounds</th><th>Example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1¢ or 2¢</td><td>DOWN to 0</td><td>$7.32 &rarr; <strong>$7.30</strong></td></tr>
+                <tr><td>3¢ or 4¢</td><td>UP to 5</td><td>$7.34 &rarr; <strong>$7.35</strong></td></tr>
+                <tr><td>6¢ or 7¢</td><td>DOWN to 5</td><td>$7.37 &rarr; <strong>$7.35</strong></td></tr>
+                <tr><td>8¢ or 9¢</td><td>UP to 10</td><td>$7.38 &rarr; <strong>$7.40</strong></td></tr>
+              </tbody>
+            </table>
+            <div class="chapter-highlight" style="background:#f0fdf4; border-color:#22c55e;">
+              <strong>🍁 Fairness Check:</strong> Rounding happens on the <em>whole bill</em>, once, at the very end. It never happens on each item, and it never happens on the tax.
+            </div>
+          </div>
+
+        </div>
+
+        <div class="course-actions-footer">
+          <button class="sf-btn sf-btn--play" onclick="setActivityMode('count_money')">
+            <span data-sf-icon="play" data-sf-size="18"></span><span>Start Counting Drills</span>
+          </button>
+          <button class="sf-btn sf-btn--explore" onclick="setActivityMode('make_change')">
+            <span data-sf-icon="chartLine" data-sf-size="18"></span><span>Try Making Change</span>
+          </button>
+          <button class="sf-btn sf-btn--print" onclick="setActivityMode('worksheet_gen')">
+            <span data-sf-icon="printable" data-sf-size="18"></span><span>Print a Money Test</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 1: COUNT THE MONEY -->
+      <!-- ================================================================= -->
+      <section id="view-count-money" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>How Much Money Is This?</h2>
+          <p>Sort the pile from the biggest coin down, skip count, then type the total.</p>
+        </div>
+
+        <div class="money-activity-card">
+          <div class="coin-pile" id="count-coin-pile">
+            <!-- Vector coins rendered by JS -->
+          </div>
+
+          <div class="money-input-area">
+            <div class="money-inputs">
+              <span class="money-sign">$</span>
+              <input type="number" id="count-dollars-input" min="0" max="99" placeholder="0" class="money-box" aria-label="Dollars">
+              <span class="money-dot">.</span>
+              <input type="number" id="count-cents-input" min="0" max="99" placeholder="00" class="money-box" aria-label="Cents">
+            </div>
+
+            <div class="feedback-msg hidden" id="count-feedback"></div>
+
+            <div class="money-action-buttons">
+              <button class="btn btn-primary" onclick="checkCountAnswer()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Total</span></button>
+              <button class="btn btn-secondary" onclick="generateNewCountQuestion()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>New Pile</span></button>
+              <button class="btn btn-ghost" onclick="showCountLadder()"><span data-sf-icon="lightbulb" data-sf-size="16"></span><span>Show Skip-Count Ladder</span></button>
+            </div>
+
+            <div class="ladder-box hidden" id="count-ladder"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 2: BUILD THE AMOUNT -->
+      <!-- ================================================================= -->
+      <section id="view-build-amount" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>Fill the Purse!</h2>
+          <p>Tap coins until your purse holds exactly the target amount. Then try it again with the fewest coins possible.</p>
+        </div>
+
+        <div class="money-activity-card">
+          <div class="target-amount-badge">
+            Target: <span id="build-target-display">$1.85</span>
+          </div>
+
+          <div class="purse-box">
+            <div class="purse-label">Olivia's Purse</div>
+            <div class="coin-pile purse-pile" id="build-purse-pile">
+              <span class="purse-empty">Empty. Tap a coin below to add it.</span>
+            </div>
+            <div class="purse-status">
+              <span>In the purse: <strong id="build-current-total">$0.00</strong></span>
+              <span>Coins used: <strong id="build-coin-count">0</strong></span>
+              <span>Fewest possible: <strong id="build-fewest">0</strong></span>
+            </div>
+          </div>
+
+          <div class="coin-button-row" id="build-coin-buttons">
+            <!-- Coin buttons rendered by JS so their faces match the drills -->
+          </div>
+
+          <div class="money-action-buttons">
+            <button class="btn btn-secondary" onclick="undoBuildCoin()"><span data-sf-icon="arrowLeft" data-sf-size="16"></span><span>Undo Last Coin</span></button>
+            <button class="btn btn-secondary" onclick="resetBuildPurse()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Empty Purse</span></button>
+          </div>
+
+          <div class="feedback-msg hidden" id="build-feedback"></div>
+
+          <div class="money-action-buttons">
+            <button class="btn btn-primary" onclick="checkBuildAmount()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check My Purse</span></button>
+            <button class="btn btn-secondary" onclick="generateNewBuildChallenge()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>New Target</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 3: MAKING CHANGE -->
+      <!-- ================================================================= -->
+      <section id="view-make-change" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>How Much Change Comes Back?</h2>
+          <p>Start at the price and count UP to what Olivia handed over.</p>
+        </div>
+
+        <div class="money-activity-card">
+          <div class="receipt-card">
+            <div class="receipt-line">
+              <span class="receipt-icon" id="change-item-icon">🧃</span>
+              <span id="change-item-text">Maple syrup taffy</span>
+            </div>
+            <div class="receipt-row"><span>Price</span><strong id="change-price-display">$3.45</strong></div>
+            <div class="receipt-row"><span>Olivia paid</span><strong id="change-paid-display">$5.00</strong></div>
+            <div class="receipt-row receipt-total"><span>Change back</span><strong>?</strong></div>
+          </div>
+
+          <div class="money-input-area">
+            <div class="money-inputs">
+              <span class="money-sign">$</span>
+              <input type="number" id="change-dollars-input" min="0" max="99" placeholder="0" class="money-box" aria-label="Dollars of change">
+              <span class="money-dot">.</span>
+              <input type="number" id="change-cents-input" min="0" max="99" placeholder="00" class="money-box" aria-label="Cents of change">
+            </div>
+
+            <div class="feedback-msg hidden" id="change-feedback"></div>
+
+            <div class="money-action-buttons">
+              <button class="btn btn-primary" onclick="checkChangeAnswer()"><span data-sf-icon="check" data-sf-size="16"></span><span>Check Change</span></button>
+              <button class="btn btn-secondary" onclick="generateNewChangeQuestion()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Purchase</span></button>
+              <button class="btn btn-ghost" onclick="showChangeLadder()"><span data-sf-icon="lightbulb" data-sf-size="16"></span><span>Show Count-Up Ladder</span></button>
+            </div>
+
+            <div class="ladder-box hidden" id="change-ladder"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 4: CANADIAN MONEY STORIES -->
+      <!-- ================================================================= -->
+      <section id="view-word-problems" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>Real-World Canadian Money Stories</h2>
+          <p>Multi-step shopping puzzles from the sugar bush, the bake sale and the hockey card shop.</p>
+        </div>
+
+        <div class="story-problem-card">
+          <div class="story-icon" id="story-icon">🍁</div>
+          <h3 id="story-problem-text" class="story-text">Loading a story problem...</h3>
+
+          <div class="story-options-grid" id="story-options-container">
+            <!-- Options injected via JS -->
+          </div>
+
+          <div class="feedback-msg hidden" id="story-feedback"></div>
+
+          <div class="money-action-buttons">
+            <button class="btn btn-secondary" onclick="generateNewStoryProblem()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Money Story</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 5: FEWEST-COINS CONTEST LOGIC -->
+      <!-- ================================================================= -->
+      <section id="view-contest-puzzles" class="activity-stage hidden">
+        <div class="stage-header">
+          <h2>Fewest-Coins &amp; Rounding Contest Logic</h2>
+          <p>Enriched Waterloo-style puzzles: coin combinations, fewest coins and the Canadian rounding rule.</p>
+        </div>
+
+        <div class="contest-puzzles-container">
+          <div class="contest-card">
+            <div class="contest-tag">CONTEST PUZZLE #<span id="contest-num">1</span></div>
+            <h3 id="contest-title">The Fewest Coins Challenge</h3>
+            <p id="contest-desc">Loading puzzle...</p>
+
+            <div class="contest-options-grid" id="contest-options-grid">
+              <!-- Injected via JS -->
+            </div>
+
+            <div class="feedback-msg hidden" id="contest-feedback"></div>
+
+            <div class="money-action-buttons">
+              <button class="btn btn-secondary" onclick="nextContestPuzzle()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Next Contest Puzzle</span></button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 6: PRINTABLE MONEY TEST GENERATOR -->
+      <!-- ================================================================= -->
+      <section id="view-worksheet-gen" class="activity-stage hidden">
+        <div class="stage-header no-print">
+          <h2>Printable Money &amp; Coin Test Generator</h2>
+          <p>Generate a clean vector-printed money test: count the coins, make change, and pay with the fewest coins.</p>
+          <div class="worksheet-controls-row">
+            <button class="btn btn-primary" onclick="generatePrintableMoney()"><span data-sf-icon="refresh" data-sf-size="16"></span><span>Generate Test</span></button>
+            <label class="custom-check-pill">
+              <span>Questions:</span>
+              <select id="money-count-select" onchange="setPrintMoneyCount(this.value)">
+                <option value="8">8</option>
+                <option value="12" selected>12</option>
+                <option value="16">16</option>
+                <option value="24">24</option>
+              </select>
+            </label>
+            <label class="custom-check-pill">
+              <span>Columns:</span>
+              <select id="money-cols-select" onchange="setPrintMoneyCols(this.value)">
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+            <label class="custom-check-pill">
+              <span>Question mix:</span>
+              <select id="money-mode-select" onchange="setPrintMoneyMode(this.value)">
+                <option value="mixed" selected>Mixed test</option>
+                <option value="count">Count the money only</option>
+                <option value="change">Making change only</option>
+                <option value="fewest">Fewest coins only</option>
+              </select>
+            </label>
+            <button class="btn btn-secondary" onclick="window.print()"><span data-sf-icon="printer" data-sf-size="16"></span><span>Print Test (Paper Saver)</span></button>
+            <label class="custom-check-pill">
+              <input type="checkbox" id="chk-show-answers-print" onchange="togglePrintAnswers(this.checked)">
+              <span>Show Answers / Keys</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Printable Document Canvas.
+             assets/sf/paginate.js fills this with one .sf-sheet per printed
+             page, each carrying its own header, question grid and footer, so
+             no question is ever split across the page break. -->
+        <div id="printable-money-doc"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script src="../assets/sf/icons.js?v=3.2.0"></script>
+  <script src="../assets/sf/progress.js?v=3.2.0"></script>
+  <script src="../assets/sf/quest-bridge.js?v=3.2.0"></script>
+  <!-- Shared print machinery: real sheets, measured page breaks. -->
+  <script src="../assets/sf/urlconfig.js?v=3.2.0"></script>
+  <script src="../assets/sf/paginate.js?v=3.2.0"></script>
+  <script src="js/money-engine.js?v=3.2.0"></script>
+</body>
+</html>

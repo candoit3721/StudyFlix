@@ -68,6 +68,19 @@ export const PRINTABLES: Printable[] = [
     paper: 'letter',
   },
   {
+    id: 'olivia-money',
+    // Same shape as the clock studio: the course opens on its lessons and the
+    // printable money test is a tab, so the route asks for that tab. Printing
+    // works from any view; the sheet is only on screen when its tab is showing,
+    // which is what lets the print tests compare screen against print geometry.
+    route: '/olivia-math/money-coins.html?view=worksheet_gen',
+    sheetSelector: '.sf-sheet:not(.sf-measuring)',
+    cardSelector: '.printable-money-item',
+    paginated: true,
+    paper: 'letter',
+    note: 'Canadian coin and change questions drawn as vector coins.',
+  },
+  {
     id: 'yaya-exam',
     route: '/yaya/index.html',
     sheetSelector: '.sf-sheet:not(.sf-measuring)',

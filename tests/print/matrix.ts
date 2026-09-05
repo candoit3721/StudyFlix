@@ -284,6 +284,60 @@ export function clockCases(): Case[] {
   return out;
 }
 
+/* ------------------------------------------------------------------- money */
+
+/**
+ * The money test mixes three differently shaped questions -- a wrapping pile of
+ * vector coins, a two-line receipt, and a writing task -- so the density axes
+ * are the question mix and the column count, and the level decides how many
+ * coins a pile can hold.
+ */
+export const MONEY_MODES = ['mixed', 'count', 'change', 'fewest'];
+export const MONEY_LEVELS = ['coins_small', 'coins_all', 'with_bills'];
+
+export function moneyCases(): Case[] {
+  const out: Case[] = [];
+  const route = '/olivia-math/money-coins.html';
+
+  // Full sweep of the density axes: question mix x columns x answer key.
+  for (const [mode, cols, answers] of cross(
+    MONEY_MODES,
+    [1, 2, 3] as const,
+    [0, 1] as const,
+  ) as [string, number, number][]) {
+    out.push({
+      printable: 'olivia-money',
+      label: `${mode} ${cols}col answers=${answers}`,
+      url: withParams(route, { view: 'worksheet_gen', mode, cols, answers, count: 12 }),
+      smoke: mode === 'mixed' && cols === 3 && answers === 1,
+    });
+  }
+
+  // The level changes how many pieces a pile holds and how wide a bill is,
+  // which is what decides whether a coin question fits a narrow column.
+  for (const [level, cols] of cross(MONEY_LEVELS, [2, 3] as const) as [string, number][]) {
+    out.push({
+      printable: 'olivia-money',
+      label: `${level} ${cols}col`,
+      url: withParams(route, { view: 'worksheet_gen', level, cols, mode: 'count', count: 16 }),
+      smoke: level === 'with_bills' && cols === 3,
+    });
+  }
+
+  // Question count at its extremes, where a short test must not leave a blank
+  // page and a long one must break cleanly.
+  for (const count of [4, 8, 16, 24, 40]) {
+    out.push({
+      printable: 'olivia-money',
+      label: `count=${count}`,
+      url: withParams(route, { view: 'worksheet_gen', count, cols: 2, mode: 'mixed', answers: 1 }),
+      smoke: count === 40,
+    });
+  }
+
+  return out;
+}
+
 /* --------------------------------------------------------------- workbooks */
 
 export function workbookCases(): Case[] {
@@ -300,6 +354,7 @@ export function allCases(): Case[] {
     ...oliviaCases(),
     ...yayaCases(),
     ...clockCases(),
+    ...moneyCases(),
     ...workbookCases(),
   ];
 }
