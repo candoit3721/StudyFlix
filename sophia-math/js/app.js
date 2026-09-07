@@ -89,6 +89,13 @@
       worksheetTitle: 'Grade 5/6: Geometry & Area of Polygons & Circles',
       includeWorkSpace: true
     },
+    g5_6_gauss_sums: {
+      category: 'sequential_sums_all',
+      pageCount: 2,
+      gridCols: 2,
+      worksheetTitle: 'Grade 5 & 6: Sequential Sums & Gauss Magic',
+      includeWorkSpace: true
+    },
     g6_composite_shapes: {
       category: 'geometry_composite',
       pageCount: 2,

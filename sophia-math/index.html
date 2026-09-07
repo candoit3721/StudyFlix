@@ -28,12 +28,20 @@
       </div>
 
       <div class="sidebar-content">
-        <!-- Interactive Lab Feature Banner -->
-        <div class="control-group" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid var(--border-focus); border-radius: var(--radius-md); padding: 14px;">
-          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">✨ NEW INTERACTIVE STUDIO</div>
-          <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 6px;">Geometry &amp; Area Masterclass</div>
-          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">Visual shearing proofs, dynamic SVG mutators, and 3-Tier Gauss Arena.</p>
-          <a href="geometry.html" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 8px 12px; font-size: 0.82rem; font-weight: 800; text-decoration: none; width: 100%;">
+        <!-- Interactive Lab Feature Banners -->
+        <div class="control-group" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid var(--border-focus); border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px;">
+          <div style="font-size: 0.78rem; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">⚡ NEW INTERACTIVE STUDIO</div>
+          <div style="font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 6px;">Sequential Sums &amp; Gauss Magic</div>
+          <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px;">Rapid mental addition (1..N &amp; A..B), pairing visualizers, and Waterloo contest puzzles.</p>
+          <a href="sequential-sums.html" class="btn btn-primary" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 8px 12px; font-size: 0.82rem; font-weight: 800; text-decoration: none; width: 100%;">
+            <span>⚡ Launch Gauss Magic Studio →</span>
+          </a>
+        </div>
+
+        <div class="control-group" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.12)); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 800; text-transform: uppercase; margin-bottom: 4px;">📐 INTERACTIVE STUDIO</div>
+          <div style="font-weight: 800; font-size: 0.92rem; color: #fff; margin-bottom: 6px;">Geometry &amp; Area Masterclass</div>
+          <a href="geometry.html" class="btn btn-secondary" style="display: flex; justify-content: center; align-items: center; gap: 6px; padding: 6px 10px; font-size: 0.8rem; font-weight: 700; text-decoration: none; width: 100%;">
             <span>📐 Launch Interactive Geometry Lab →</span>
           </a>
         </div>
@@ -42,6 +50,10 @@
         <div class="control-group">
           <h3>Quick Presets</h3>
           <div class="preset-grid">
+            <button class="preset-btn" data-preset="g5_6_gauss_sums">
+              <span><span class="preset-glyph" data-sf-icon="sigma" data-sf-size="17"></span>Gauss Sums (1..N &amp; A..B)</span>
+              <span class="badge">Grade 5/6 Fast Sums</span>
+            </button>
             <button class="preset-btn" data-preset="g5_fractions">
               <span><span class="preset-glyph" data-sf-icon="ruler" data-sf-size="17"></span>Fraction Mastery</span>
               <span class="badge">Grade 5 (+, −, ×, ÷)</span>
@@ -95,6 +107,13 @@
           <div class="form-field">
             <label for="topic-select">Category:</label>
             <select id="topic-select" class="form-select">
+              <optgroup label="Sequential Sums &amp; Gauss Magic (Ontario Strands B &amp; C)">
+                <option value="sequential_sums_all">Gauss Sequential Sums (All Types)</option>
+                <option value="sequential_sums_1_to_n">Sum of 1 to N (1..10, 1..100, 1..1000)</option>
+                <option value="sequential_sums_a_to_b">Sum of A to B (5..25, 5..10000, 5..10001)</option>
+                <option value="sequential_sums_even_odd">Even, Odd &amp; Step Sequences</option>
+                <option value="sequential_sums_contest">Waterloo Gauss Contest Problems</option>
+              </optgroup>
               <optgroup label="Geometry &amp; Spatial Sense (Ontario Strand E)">
                 <option value="geometry_area">Area of 2D Shapes (All Polygons &amp; Circles)</option>
                 <option value="geometry_triangles">Triangle Areas (Right, Acute, Obtuse)</option>

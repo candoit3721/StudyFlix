@@ -36,13 +36,17 @@ const DEFAULT_PROFILES = [
       art: "rome-forum"
     },
     subjects: [
+      { title: "Sequential Sums & Gauss Magic", badge: "NEW STUDIO", desc: "Instant mental addition, pairing proofs, arbitrary range sums & Gauss contest riddles", link: "sophia-math/sequential-sums.html", kind: "quest", family: "math", art: "math-gauss" },
       { title: "Ancient Rome Quest & Studio", badge: "NEW & FEATURED", desc: "History, Arch Engineering, Aqueducts, Caesar's Cipher & Senate Law", link: "sophia-rome/index.html", kind: "quest", family: "rome", art: "rome-forum" },
-      { title: "Geometry & Area Masterclass", badge: "NEW STUDIO", desc: "Interactive 2D shape transformer, shearing proofs & Waterloo Gauss Arena", link: "sophia-math/geometry.html", kind: "quest", family: "math", art: "math-geometry" },
+      { title: "Geometry & Area Masterclass", badge: "GEOMETRY LAB", desc: "Interactive 2D shape transformer, shearing proofs & Waterloo Gauss Arena", link: "sophia-math/geometry.html", kind: "quest", family: "math", art: "math-geometry" },
       { title: "Science & Chemistry Quest", badge: "SCIENCE STUDIO", desc: "Periodic Table, Matter, Cells, Physics & Scientific Method", link: "sophia-science/index.html", kind: "quest", family: "science", art: "sci-atom" },
       { title: "Grade 5/6 Math Studio", badge: "MATH STUDIO", desc: "Fractions, Decimals, PEMDAS, Pre-Algebra, and Geometry", link: "sophia-math/index.html", kind: "quest", family: "math", art: "math-geometry" },
       { title: "Grade 6 Ontario Science Strands", badge: "NEW & COMPLETE", desc: "All 4 strands: Biodiversity, Flight, Space & Electricity with live labs", link: "sophia-science/index.html#tab-biodiversity", kind: "quest", family: "science", art: "sci-space" }
     ],
     topics: [
+      { title: "Gauss 1 to N Sums & Proofs", badge: "GAUSS MAGIC", desc: "Pairing discovery, 1 to 1000 in seconds & stepped staircase rectangle proof", link: "sophia-math/sequential-sums.html#tab-gauss-1-n", kind: "lesson", family: "math", art: "math-gauss" },
+      { title: "Arbitrary Ranges (5 to 10,000)", badge: "FENCEPOST RULE", desc: "Universal A to B formula, N = B - A + 1, and dual prefix subtraction verification", link: "sophia-math/sequential-sums.html#tab-range-a-b", kind: "lesson", family: "math", art: "math-gauss" },
+      { title: "Waterloo Gauss Contest Series", badge: "CONTEST LOGIC", desc: "Handshake problems, bowling pin pyramids, and reverse sum equations", link: "sophia-math/sequential-sums.html#tab-contest", kind: "lesson", family: "math", art: "math-gauss" },
       { title: "Area of Polygons & Proofs", badge: "SPATIAL SENSE", desc: "Visual shearing proofs, base & perpendicular heights & trapezoid averages", link: "sophia-math/geometry.html#tab-triangle", kind: "lesson", family: "math", art: "math-geometry" },
       { title: "Circles & Composite Area", badge: "GAUSS CONTEST", desc: "Radius squared, annulus rings, L-shapes & Waterloo shaded region puzzles", link: "sophia-math/geometry.html#tab-circle", kind: "lesson", family: "math", art: "math-geometry" },
       { title: "Biodiversity & Six Kingdoms", badge: "GRADE 6 STRAND B", desc: "Kingdom sorter, dichotomous key & Great Lakes food web collapse", link: "sophia-science/index.html#tab-biodiversity", kind: "lesson", family: "science", art: "sci-biodiversity" },
@@ -64,6 +68,7 @@ const DEFAULT_PROFILES = [
       { title: "Fraction Mastery", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", kind: "lesson", family: "math", art: "math-fractions" }
     ],
     printable: [
+      { title: "30-Question Gauss Masterclass Workbook", badge: "GAUSS WORKBOOK", desc: "Printable study guide with 1..N sprints, arbitrary ranges, evens/odds & full solutions", link: "sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
       { title: "30-Question Area Masterclass Guide", badge: "STUDY GUIDE", desc: "Comprehensive printable workbook with visual proofs, traps & Gauss solutions", link: "sophia-math/worksheets/sophia_geometry_area_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
       { title: "Composite Shapes & Shaded Area Test", badge: "20 QUESTIONS", desc: "Printable worksheet on decomposed polygons, house silhouettes & pool walkways", link: "sophia-math/worksheets/grade6_area_composite_shapes.md", kind: "printable", family: "math", art: "generic-printable" },
       { title: "Complete Ancient Rome Workbook", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", kind: "printable", family: "rome", art: "generic-printable" },
