@@ -1522,6 +1522,236 @@ const MathEngine = (function () {
     }
   }
 
+  // --- Sequential Sums & Gauss Magic Generators ---
+  function generateSequentialSums(subType = 'mixed') {
+    if (subType === 'mixed' || subType === 'all') {
+      subType = pickRandom(['1_to_n', '1_to_n', 'a_to_b', 'a_to_b', 'even_odd', 'contest']);
+    }
+
+    if (subType === '1_to_n') {
+      const presets = [10, 12, 15, 20, 25, 30, 40, 50, 60, 100, 200, 500, 1000, 5000, 10000];
+      const n = pickRandom(presets);
+      const sum = (n * (n + 1)) / 2;
+      const formattedSum = sum.toLocaleString('en-US');
+      const formattedN = n.toLocaleString('en-US');
+      const formattedN1 = (n + 1).toLocaleString('en-US');
+
+      return {
+        category: 'sequential_sums',
+        subType: '1_to_n',
+        grade: n > 100 ? 6 : 5,
+        difficulty: n > 1000 ? 'hard' : (n > 50 ? 'medium' : 'easy'),
+        promptText: `Find the sum of all whole numbers from 1 to ${formattedN}:\n1 + 2 + 3 + ... + ${formattedN}`,
+        promptHTML: `<div class="seq-sum-prompt">Find the sum of consecutive integers from <strong>1</strong> to <strong>${formattedN}</strong>:<div class="math-seq-display">1 + 2 + 3 + ··· + ${formattedN}</div></div>`,
+        answer: `${sum}`,
+        displayAnswer: `${formattedSum}`,
+        hint: `Use Gauss's formula: Sum = (N × (N + 1)) / 2 with N = ${formattedN}.`,
+        steps: [
+          `1. Identify N = ${formattedN}.`,
+          `2. Apply Gauss formula: Sum = (${formattedN} × ${formattedN1}) / 2.`,
+          `3. Calculate: (${formattedN} × ${formattedN1}) / 2 = ${formattedSum}.`
+        ]
+      };
+    }
+
+    if (subType === 'a_to_b') {
+      const ranges = [
+        [5, 25],
+        [5, 10000],
+        [5, 10001],
+        [10, 50],
+        [12, 40],
+        [21, 60],
+        [50, 150],
+        [100, 200],
+        [11, 99],
+        [15, 75],
+        [25, 100],
+        [50, 500],
+        [1, 1000]
+      ];
+      const range = pickRandom(ranges);
+      const a = range[0];
+      const b = range[1];
+      const N = b - a + 1;
+      const pairSum = a + b;
+      const sum = (N * pairSum) / 2;
+
+      const formattedA = a.toLocaleString('en-US');
+      const formattedB = b.toLocaleString('en-US');
+      const formattedN = N.toLocaleString('en-US');
+      const formattedPair = pairSum.toLocaleString('en-US');
+      const formattedSum = sum.toLocaleString('en-US');
+
+      return {
+        category: 'sequential_sums',
+        subType: 'a_to_b',
+        grade: 6,
+        difficulty: b > 1000 ? 'hard' : 'medium',
+        promptText: `Find the sum of all consecutive whole numbers from ${formattedA} to ${formattedB}:\n${formattedA} + ${a + 1} + ${a + 2} + ... + ${formattedB}`,
+        promptHTML: `<div class="seq-sum-prompt">Find the sum of consecutive integers from <strong>${formattedA}</strong> to <strong>${formattedB}</strong>:<div class="math-seq-display">${formattedA} + ${a + 1} + ${a + 2} + ··· + ${formattedB}</div></div>`,
+        answer: `${sum}`,
+        displayAnswer: `${formattedSum}`,
+        hint: `1. Find N = (${formattedB} - ${formattedA}) + 1. 2. Pair sum = ${formattedA} + ${formattedB}. 3. Sum = (N × Pair) / 2.`,
+        steps: [
+          `1. Count of terms: N = (${formattedB} - ${formattedA}) + 1 = ${formattedN} numbers.`,
+          `2. Sum of outer pair: ${formattedA} + ${formattedB} = ${formattedPair}.`,
+          `3. Total sum: (${formattedN} × ${formattedPair}) / 2 = ${formattedSum}.`,
+          `4. (Alternative: Sum(1..${formattedB}) - Sum(1..${a - 1}) = ${formattedSum}).`
+        ]
+      };
+    }
+
+    if (subType === 'even_odd') {
+      const mode = pickRandom(['evens', 'odds', 'multiples']);
+      if (mode === 'evens') {
+        const k = pickRandom([10, 15, 20, 25, 30, 50]);
+        const lastEven = 2 * k;
+        const sum = k * (k + 1);
+        return {
+          category: 'sequential_sums',
+          subType: 'evens',
+          grade: 6,
+          difficulty: 'medium',
+          promptText: `Find the sum of the first ${k} consecutive even numbers:\n2 + 4 + 6 + ... + ${lastEven}`,
+          promptHTML: `<div class="seq-sum-prompt">Find the sum of the first <strong>${k}</strong> even numbers:<div class="math-seq-display">2 + 4 + 6 + ··· + ${lastEven}</div></div>`,
+          answer: `${sum}`,
+          displayAnswer: `${sum.toLocaleString('en-US')}`,
+          hint: `Sum of first k even numbers = k(k + 1) with k = ${k}.`,
+          steps: [
+            `1. Number of even terms k = ${k}.`,
+            `2. Apply formula: k(k + 1) = ${k} × ${k + 1}.`,
+            `3. Total = ${sum.toLocaleString('en-US')}.`
+          ]
+        };
+      } else if (mode === 'odds') {
+        const k = pickRandom([10, 12, 15, 20, 25, 30]);
+        const lastOdd = 2 * k - 1;
+        const sum = k * k;
+        return {
+          category: 'sequential_sums',
+          subType: 'odds',
+          grade: 6,
+          difficulty: 'medium',
+          promptText: `Find the sum of the first ${k} consecutive odd numbers:\n1 + 3 + 5 + ... + ${lastOdd}`,
+          promptHTML: `<div class="seq-sum-prompt">Find the sum of the first <strong>${k}</strong> odd numbers:<div class="math-seq-display">1 + 3 + 5 + ··· + ${lastOdd}</div></div>`,
+          answer: `${sum}`,
+          displayAnswer: `${sum.toLocaleString('en-US')}`,
+          hint: `Sum of first k odd numbers = k² with k = ${k}.`,
+          steps: [
+            `1. Number of odd terms k = ${k}.`,
+            `2. Apply formula: k² = ${k}² = ${k} × ${k}.`,
+            `3. Total = ${sum.toLocaleString('en-US')}.`
+          ]
+        };
+      } else {
+        const stepVal = pickRandom([3, 5, 7]);
+        const count = pickRandom([10, 12, 15, 20]);
+        const first = stepVal;
+        const last = stepVal * count;
+        const pairSum = first + last;
+        const sum = (count * pairSum) / 2;
+        return {
+          category: 'sequential_sums',
+          subType: 'multiples',
+          grade: 6,
+          difficulty: 'hard',
+          promptText: `Find the sum of all multiples of ${stepVal} from ${first} to ${last}:\n${first} + ${first + stepVal} + ... + ${last}`,
+          promptHTML: `<div class="seq-sum-prompt">Find the sum of multiples of <strong>${stepVal}</strong> up to <strong>${last}</strong>:<div class="math-seq-display">${first} + ${first + stepVal} + ··· + ${last}</div></div>`,
+          answer: `${sum}`,
+          displayAnswer: `${sum.toLocaleString('en-US')}`,
+          hint: `Factor out ${stepVal}: ${stepVal} × (1 + 2 + ... + ${count}).`,
+          steps: [
+            `1. Factor out ${stepVal}: ${stepVal} × (1 + 2 + ... + ${count}).`,
+            `2. Sum of 1 to ${count} = (${count} × ${count + 1}) / 2 = ${(count * (count + 1)) / 2}.`,
+            `3. Total = ${stepVal} × ${(count * (count + 1)) / 2} = ${sum.toLocaleString('en-US')}.`
+          ]
+        };
+      }
+    }
+
+    // Contest Problems
+    const contestType = pickRandom(['handshake', 'reverse', 'consecutive_int', 'bowling']);
+    if (contestType === 'handshake') {
+      const nPeople = pickRandom([10, 12, 15, 16, 20, 24]);
+      const handshakes = (nPeople * (nPeople - 1)) / 2;
+      return {
+        category: 'sequential_sums',
+        subType: 'contest',
+        grade: 6,
+        difficulty: 'hard',
+        promptText: `At a math tournament, ${nPeople} students meet. If every student shakes hands with every other student exactly once, how many total handshakes occur?`,
+        promptHTML: `<div class="seq-sum-prompt">At a math tournament, <strong>${nPeople}</strong> students meet. If every student shakes hands with every other student exactly once, how many total handshakes occur?</div>`,
+        answer: `${handshakes}`,
+        displayAnswer: `${handshakes}`,
+        hint: `Sum from 1 to ${nPeople - 1} = (${nPeople} × ${nPeople - 1}) / 2.`,
+        steps: [
+          `1. Person 1 shakes ${nPeople - 1} hands, Person 2 shakes ${nPeople - 2}, down to 1.`,
+          `2. Total handshakes = (${nPeople} × ${nPeople - 1}) / 2.`,
+          `3. (${nPeople} × ${nPeople - 1}) / 2 = ${handshakes} handshakes.`
+        ]
+      };
+    } else if (contestType === 'reverse') {
+      const n = pickRandom([10, 15, 20, 21, 24, 25, 30]);
+      const sum = (n * (n + 1)) / 2;
+      return {
+        category: 'sequential_sums',
+        subType: 'contest',
+        grade: 6,
+        difficulty: 'hard',
+        promptText: `If 1 + 2 + 3 + ... + n = ${sum}, what is the value of n?`,
+        promptHTML: `<div class="seq-sum-prompt">Solve for <strong>n</strong>: 1 + 2 + 3 + ··· + n = <strong>${sum}</strong></div>`,
+        answer: `${n}`,
+        displayAnswer: `${n}`,
+        hint: `n(n + 1) = 2 × ${sum} = ${2 * sum}. Find two consecutive numbers that multiply to ${2 * sum}.`,
+        steps: [
+          `1. n(n + 1) / 2 = ${sum} ⇒ n(n + 1) = ${2 * sum}.`,
+          `2. Since ${n} × ${n + 1} = ${2 * sum}, we find n = ${n}.`
+        ]
+      };
+    } else if (contestType === 'bowling') {
+      const rows = pickRandom([10, 12, 15, 20, 25]);
+      const pins = (rows * (rows + 1)) / 2;
+      return {
+        category: 'sequential_sums',
+        subType: 'contest',
+        grade: 6,
+        difficulty: 'medium',
+        promptText: `A triangular display has ${rows} rows of pins (1 pin in row 1, 2 pins in row 2, up to ${rows} pins in row ${rows}). How many total pins are in the display?`,
+        promptHTML: `<div class="seq-sum-prompt">A triangular pin display has <strong>${rows} rows</strong> (1 in row 1, 2 in row 2, up to ${rows} in row ${rows}). How many total pins are in the display?</div>`,
+        answer: `${pins}`,
+        displayAnswer: `${pins}`,
+        hint: `Sum of 1 to ${rows} = (${rows} × ${rows + 1}) / 2.`,
+        steps: [
+          `1. Pin count = 1 + 2 + ... + ${rows}.`,
+          `2. Apply Gauss formula: (${rows} × ${rows + 1}) / 2.`,
+          `3. Total = ${pins} pins.`
+        ]
+      };
+    } else {
+      const count = 5;
+      const middle = pickRandom([20, 25, 27, 30, 33, 35, 40]);
+      const total = middle * count;
+      const smallest = middle - 2;
+      return {
+        category: 'sequential_sums',
+        subType: 'contest',
+        grade: 6,
+        difficulty: 'hard',
+        promptText: `The sum of 5 consecutive whole numbers is ${total}. What is the smallest of the 5 numbers?`,
+        promptHTML: `<div class="seq-sum-prompt">The sum of <strong>5 consecutive whole numbers</strong> is <strong>${total}</strong>. What is the <strong>smallest</strong> number?</div>`,
+        answer: `${smallest}`,
+        displayAnswer: `${smallest}`,
+        hint: `The average (middle number) is ${total} ÷ 5 = ${middle}.`,
+        steps: [
+          `1. Average (middle number) = ${total} ÷ 5 = ${middle}.`,
+          `2. The 5 numbers centered at ${middle} are: ${middle - 2}, ${middle - 1}, ${middle}, ${middle + 1}, ${middle + 2}.`,
+          `3. Smallest number is ${smallest}.`
+        ]
+      };
+    }
+  }
+
   // --- Master Problem Dispatcher ---
 
   /**
@@ -1589,22 +1819,38 @@ const MathEngine = (function () {
       case 'geometry_missing':
         return generateGeometry('area_missing_dimension');
 
+      case 'sequential_sums_all':
+      case 'sequential_sums':
+        return generateSequentialSums('mixed');
+
+      case 'sequential_sums_1_to_n':
+        return generateSequentialSums('1_to_n');
+
+      case 'sequential_sums_a_to_b':
+        return generateSequentialSums('a_to_b');
+
+      case 'sequential_sums_even_odd':
+        return generateSequentialSums('even_odd');
+
+      case 'sequential_sums_contest':
+        return generateSequentialSums('contest');
+
       case 'statistics':
         return generateStatistics();
 
       case 'grade5_mixed': {
-        const g5Categories = ['fractions', 'decimals', 'pemdas', 'geometry'];
+        const g5Categories = ['fractions', 'decimals', 'pemdas', 'geometry', 'sequential_sums_1_to_n'];
         return generateProblem({ category: pickRandom(g5Categories) });
       }
 
       case 'grade6_mixed': {
-        const g6Categories = ['ratios', 'percentages', 'integers', 'algebra', 'exponents', 'statistics'];
+        const g6Categories = ['ratios', 'percentages', 'integers', 'algebra', 'exponents', 'statistics', 'sequential_sums'];
         return generateProblem({ category: pickRandom(g6Categories) });
       }
 
       case 'all_mixed':
       default: {
-        const allCategories = ['fractions', 'decimals', 'ratios', 'percentages', 'pemdas', 'integers', 'algebra', 'exponents', 'geometry', 'statistics'];
+        const allCategories = ['fractions', 'decimals', 'ratios', 'percentages', 'pemdas', 'integers', 'algebra', 'exponents', 'geometry', 'statistics', 'sequential_sums'];
         return generateProblem({ category: pickRandom(allCategories) });
       }
     }
@@ -1612,6 +1858,7 @@ const MathEngine = (function () {
 
   return {
     generateProblem,
+    generateSequentialSums,
     generateFractionAddSub,
     generateFractionMult,
     generateFractionDiv,

@@ -382,6 +382,24 @@
       return s;
     },
 
+    'math-gauss': function (p) {
+      var s = '<g stroke="' + p.stone + '" stroke-width="2.5" fill="none" opacity="0.4" stroke-linecap="round">';
+      s += '<path d="M50 145 Q 160 40 270 145"/>';
+      s += '<path d="M85 145 Q 160 70 235 145"/>';
+      s += '<path d="M120 145 Q 160 100 200 145"/>';
+      s += '</g>';
+      s += '<path d="M50 145 Q 160 40 270 145" stroke="' + p.accent + '" stroke-width="4" fill="none" stroke-linecap="round"/>';
+      var nodes = [50, 85, 120, 200, 235, 270];
+      for (var i = 0; i < nodes.length; i++) {
+        var isEdge = i === 0 || i === nodes.length - 1;
+        s += '<circle cx="' + nodes[i] + '" cy="145" r="' + (isEdge ? '14' : '10') + '" fill="' + (isEdge ? p.accent : p.stone) + '" opacity="' + (isEdge ? '0.95' : '0.6') + '"/>';
+      }
+      s += '<text x="160" y="44" font-family="Montserrat,sans-serif" font-size="16" font-weight="900" fill="' + p.accent + '" text-anchor="middle">S = 5050</text>';
+      s += '<text x="50" y="149" font-family="Space Mono,monospace" font-size="10" font-weight="700" fill="' + p.ink + '" text-anchor="middle">1</text>';
+      s += '<text x="270" y="149" font-family="Space Mono,monospace" font-size="9" font-weight="700" fill="' + p.ink + '" text-anchor="middle">100</text>';
+      return s + ground(p);
+    },
+
     /* ---------------- Grade 3 ---------------- */
     'g3-clock': function (p) {
       var s = '<circle cx="160" cy="100" r="66" fill="' + p.stone + '" opacity="0.16" stroke="' + p.stone + '" stroke-width="4"/>';
