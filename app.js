@@ -895,8 +895,17 @@ function playFeaturedFromDetails() {
   launchFeaturedTopic();
 }
 
+/**
+ * Markdown worksheets are served as raw text, so they open through the shared
+ * reader page, which renders them (math included) as a printable sheet.
+ */
+function studioUrlFor(link) {
+  return /\.md(?:[?#]|$)/i.test(link) ? `reader.html?src=${encodeURIComponent(link)}` : link;
+}
+
 function openStudio(link, title) {
   stopHeroRotation();
+  link = studioUrlFor(link);
   currentStudioUrl = link;
   document.getElementById('studio-viewer-title').textContent = title;
   document.getElementById('studio-iframe').src = link;
