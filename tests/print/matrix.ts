@@ -348,6 +348,41 @@ export function workbookCases(): Case[] {
   ];
 }
 
+/* ------------------------------------------------------------------ reader */
+
+/**
+ * Every Markdown worksheet the site links to, rendered through reader.html.
+ * The content is fixed rather than generated, so each document is one case;
+ * the smoke subset covers the shapes that stress pagination differently: a
+ * forced page break (set 2's answer key), a long table of contents and wide
+ * diagrams (the clock workbook), and dense display math (the Gauss workbook).
+ */
+export const READER_DOCS = [
+  'sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md',
+  'sophia-math/worksheets/sophia_fraction_word_problems_set2.md',
+  'olivia-math/worksheets/olivia_complete_clock_course_workbook.md',
+  'sophia-math/worksheets/sophia_advanced_fraction_remainder_challenges.md',
+  'sophia-math/worksheets/sophia_geometry_area_masterclass.md',
+  'sophia-math/worksheets/grade6_statistics_data_management.md',
+  'sophia-math/worksheets/grade6_area_composite_shapes.md',
+  'sophia-math/worksheets/grade6_algebra_and_equations.md',
+  'sophia-math/worksheets/grade6_ratios_percentages_integers.md',
+  'sophia-math/worksheets/grade5_fractions_and_decimals.md',
+  'sophia-math/worksheets/grade5_pemdas_and_geometry.md',
+  'sophia-math/worksheets/grade5_6_geometry_and_statistics.md',
+  'sophia-math/worksheets/grade5_6_challenge_word_problems.md',
+  'mama/00_MAMA_COFFEE_MASTERCLASS_GUIDE.md',
+];
+
+export function readerCases(): Case[] {
+  return READER_DOCS.map((src, i) => ({
+    printable: 'reader',
+    url: withParams('/reader.html', { src }),
+    label: `reader ${src.split('/').pop()}`,
+    smoke: i < 3,
+  }));
+}
+
 export function allCases(): Case[] {
   return [
     ...sophiaCases(),
@@ -356,5 +391,6 @@ export function allCases(): Case[] {
     ...clockCases(),
     ...moneyCases(),
     ...workbookCases(),
+    ...readerCases(),
   ];
 }

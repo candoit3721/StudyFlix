@@ -13,17 +13,17 @@
 
 ## 📑 COURSE ROADMAP & TABLE OF CONTENTS
 
-* **[Unit 1: Anatomy of the Analog Clock & Precision Time-Telling](#unit-1-anatomy-of-the-analog-clock--precision-time-telling)**  
+* **[Unit 1: Anatomy of the Analog Clock & Precision Time-Telling](#unit-1-anatomy-of-the-analog-clock--precision-time-telling-)**  
   *(Hour hand mechanics, 60-minute tick marks, quarter past, half past, quarter to, and exact-minute reading)*
-* **[Unit 2: AM vs. PM, Noon, Midnight & 24-Hour Digital Time](#unit-2-am-vs-pm-noon-midnight--24-hour-digital-time)**  
+* **[Unit 2: AM vs. PM, Noon, Midnight & 24-Hour Digital Time](#unit-2-am-vs-pm-noon-midnight--24-hour-time-)**  
   *(The 24-hour cycle, Canadian daily routines, and Toronto Pearson Airport / VIA Rail 24-hour schedules)*
-* **[Unit 3: Elapsed Time Mastery: The "Mountains, Hills & Rocks" Strategy](#unit-3-elapsed-time-mastery-the-mountains-hills--rocks-strategy)**  
+* **[Unit 3: Elapsed Time Mastery: The "Mountains, Hills & Rocks" Strategy](#unit-3-elapsed-time-the-mountains-hills--rocks-strategy-)**  
   *(How much time passed? Visual number line jumping forward, jumping backward, and crossing the hour barrier)*
-* **[Unit 4: Advanced Multi-Step Canadian Schedule Story Problems](#unit-4-advanced-multi-step-canadian-schedule-story-problems)**  
+* **[Unit 4: Advanced Multi-Step Canadian Schedule Story Problems](#unit-4-advanced-multi-step-canadian-schedule-word-problems-)**  
   *(Rideau Canal skating, Algonquin camping, Toronto Blue Jays games, and baking Canadian maple tarts)*
-* **[Unit 5: Waterloo CEMC & Kangaroo Math Contest Time Puzzles (Tier 3 Advanced)](#unit-5-waterloo-cemc--kangaroo-math-contest-time-puzzles)**  
+* **[Unit 5: Waterloo CEMC & Kangaroo Math Contest Time Puzzles (Tier 3 Advanced)](#unit-5-waterloo-cemc--kangaroo-contest-logic-time-puzzles-)**  
   *(Mirror reflection clocks, faulty clocks losing minutes, overlapping hands, and Canadian time zones)*
-* **[Complete Answer Key & Pedagogical Explanations](#complete-answer-key--pedagogical-explanations)**
+* **[Complete Answer Key & Pedagogical Explanations](#complete-answer-key--teacherparent-solutions-)**
 
 ---
 
@@ -91,7 +91,8 @@ There are **24 hours in a full day**, but a standard analog clock only shows 12 
   * Eating lunch ($12:15\text{ PM}$), school dismissal ($3:30\text{ PM}$), dinner ($6:00\text{ PM}$), bedtime ($8:30\text{ PM}$).
 
 ```
-[ 12:00 Midnight ] ─── (A.M. Morning) ───> [ 12:00 Noon ] ─── (P.M. Afternoon/Night) ───> [ 12:00 Midnight ]
+[ 12:00 Midnight ] ─── (A.M. Morning) ──────────> [ 12:00 Noon ]
+[ 12:00 Noon ] ─────── (P.M. Afternoon/Night) ───> [ 12:00 Midnight ]
 ```
 
 ### ✈️ 2.2 Canadian 24-Hour Time (Airport & Train Schedules):

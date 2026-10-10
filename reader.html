@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyFlix Reader</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+  <!-- Shared print contract: sheet box model, page-break rules and the
+       geometry variables assets/sf/paginate.js measures against. -->
+  <link rel="stylesheet" href="assets/sf/print.css?v=3.2.0">
+  <!--
+    Renders the Markdown worksheets and guides (sophia-math/worksheets/*.md,
+    mama/*.md, ...) as printable Letter pages. GitHub Pages serves .md files
+    as raw text/markdown, so linking to them directly shows unrendered source.
+
+    Usage: reader.html?src=<site-root-relative path to a .md file>
+
+    The rendered document is paginated into fixed .sf-sheet pages by
+    assets/sf/paginate.js, so the on-screen preview is exactly what prints.
+    Phones get the same content as one continuous column instead: a Letter
+    sheet scaled to a phone's width is unreadable.
+  -->
+  <style>
+    /* Matches the --sf-page-* defaults in assets/sf/print.css (Letter, 0.4in);
+       tests/print/css-contract.spec.ts asserts the two agree. */
+    @page {
+      size: letter portrait;
+      margin: 0.4in;
+    }
+
+    :root {
+      --ink: #1a1a24;
+      --muted: #5b6070;
+      --accent: #4f46e5;
+      --rule: #e2e5ec;
+      --tint: #f4f5fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px 16px 48px;
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background: #eef0f4;
+      line-height: 1.55;
+    }
+
+    .toolbar {
+      max-width: var(--sf-print-w);
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(16, 24, 40, 0.08);
+    }
+
+    .toolbar-title {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--muted);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .btn-print {
+      flex: none;
+      font: 700 0.95rem 'Nunito', sans-serif;
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-print:hover { background: #4338ca; }
+    .btn-print:disabled { opacity: 0.5; cursor: default; }
+
+    .reader-status {
+      max-width: var(--sf-print-w);
+      margin: 0 auto;
+      padding: 3em 1em;
+      text-align: center;
+      color: var(--muted);
+      background: #fff;
+      border-radius: 4px;
+    }
+    .reader-status--error { color: #b42318; }
+
+    .reader-pages {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .reader-fluid {
+      max-width: var(--sf-print-w);
+      margin: 0 auto;
+      padding: 24px 16px;
+      background: #fff;
+    }
+
+    /* Sheets on wide screens and paper; one continuous column on phones. */
+    @media screen and (min-width: 740px) {
+      .reader-fluid { display: none; }
+    }
+    @media screen and (max-width: 771px) {
+      body { padding-left: 0; padding-right: 0; }
+      .toolbar { margin-left: 16px; margin-right: 16px; }
+    }
+    @media screen and (max-width: 739px) {
+      body { padding-top: 12px; }
+      .reader-pages { display: none; }
+      .reader-fluid h1 { font-size: 1.5rem; }
+    }
+
+    .reader-footer {
+      margin-top: auto;
+      padding-top: 8px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .reader-footer-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .reader-footer-page { flex: none; }
+
+    /* ---- Markdown typography (sheets and the phone column alike) ---- */
+    .doc { font-size: 15px; overflow-wrap: break-word; }
+    .md-flow, .reader-fluid { container-type: inline-size; }
+    .md-flow > .md-item:first-child > :first-child,
+    .reader-fluid > :first-child { margin-top: 0; }
+    .md-flow > .md-item:last-child > :last-child { margin-bottom: 0; }
+
+    .doc h1 { font-size: 1.75rem; font-weight: 900; line-height: 1.25; margin: 0 0 0.35em; }
+    .doc h2 {
+      font-size: 1.3rem; font-weight: 900; line-height: 1.3;
+      margin: 1.5em 0 0.55em; padding-bottom: 0.25em;
+      border-bottom: 2px solid var(--rule);
+    }
+    .doc h3 { font-size: 1.1rem; font-weight: 800; line-height: 1.35; margin: 1.25em 0 0.4em; }
+    .doc h4 { font-size: 1rem; font-weight: 800; margin: 1.1em 0 0.3em; }
+    .doc p, .doc ul, .doc ol, .doc blockquote, .doc pre, .doc .table-wrap { margin: 0 0 0.85em; }
+    .doc ul, .doc ol { padding-left: 1.6em; }
+    .doc li { margin: 0.2em 0; }
+    .doc li > p { margin: 0.2em 0; }
+    /* A list split across items (so it can break between pages) keeps the
+       spacing of the whole list: only its last piece carries the gap after. */
+    .doc .md-split { margin-top: 0; margin-bottom: 0; }
+    .doc .md-split.md-split-end { margin-bottom: 0.85em; }
+    .doc hr { border: 0; border-top: 1px solid var(--rule); margin: 1.4em 0; }
+    .doc a { color: var(--accent); }
+    .doc img { max-width: 100%; height: auto; }
+    .doc blockquote {
+      margin-left: 0; padding: 0.6em 1em;
+      border-left: 4px solid var(--accent);
+      background: var(--tint); border-radius: 0 6px 6px 0;
+    }
+    .doc blockquote > :last-child { margin-bottom: 0; }
+    .doc code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9em; background: var(--tint); padding: 0.1em 0.35em; border-radius: 4px;
+    }
+    /* Code blocks hold box-drawing diagrams, which break if wrapped: shrink
+       the font so a typical 84-column diagram fits the column (0.6em glyphs),
+       and scroll only what is wider still. */
+    .doc pre {
+      background: var(--tint); padding: 0.8rem 1rem; border-radius: 6px; overflow-x: auto;
+      font-size: clamp(9px, calc((100cqi - 2rem) / 51), 14px); line-height: 1.35;
+    }
+    .doc pre code { background: none; padding: 0; font-size: inherit; }
+    .doc .table-wrap { overflow-x: auto; }
+    .doc table { border-collapse: collapse; width: 100%; font-size: 0.95em; }
+    .doc th, .doc td { border: 1px solid var(--rule); padding: 0.4em 0.65em; text-align: left; vertical-align: top; }
+    .doc th { background: var(--tint); font-weight: 800; }
+    .doc .katex-display { margin: 0.7em 0; overflow-x: auto; overflow-y: hidden; padding: 0.1em 0; }
+
+    @media print {
+      .doc .table-wrap, .doc .katex-display, .doc pre { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar sf-no-print">
+    <span class="toolbar-title" id="toolbar-title">Loading…</span>
+    <button class="btn-print" id="btn-print" type="button" onclick="window.print()" disabled>🖨️ Print</button>
+  </header>
+  <p class="reader-status sf-no-print" id="reader-status">Loading…</p>
+  <article class="doc reader-fluid sf-no-print" id="reader-fluid" hidden></article>
+  <div class="reader-pages" id="reader-pages"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="assets/sf/paginate.js?v=3.2.0"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      const statusEl = document.getElementById('reader-status');
+      const fluidEl = document.getElementById('reader-fluid');
+      const pagesEl = document.getElementById('reader-pages');
+      const titleEl = document.getElementById('toolbar-title');
+
+      function fail(message) {
+        titleEl.textContent = 'Could not open this page';
+        statusEl.textContent = message;
+        statusEl.classList.add('reader-status--error');
+      }
+
+      /**
+       * Only same-origin .md files are rendered: the page injects the result
+       * as HTML, so it must never fetch content from an arbitrary URL.
+       */
+      function resolveSource(raw) {
+        if (!raw || /^[a-z][a-z0-9+.-]*:|^\/\/|\\/i.test(raw)) return null;
+        const url = new URL(raw, location.href);
+        if (url.origin !== location.origin || !/\.md$/i.test(url.pathname)) return null;
+        return url;
+      }
+
+      /**
+       * Pull TeX out before Markdown parsing, so marked never sees (and
+       * mangles) its backslashes, underscores and asterisks. Math is $...$
+       * (inline) or $$...$$ (display); \$ is a literal dollar sign, both in
+       * prose and inside math. Code spans and fenced blocks are left alone.
+       */
+      function extractMath(src) {
+        const math = [];
+        let out = '';
+        let i = 0;
+        const n = src.length;
+        const atLineStart = (k) => k === 0 || src[k - 1] === '\n';
+
+        while (i < n) {
+          const ch = src[i];
+
+          if (ch === '\\' && i + 1 < n) { out += src.slice(i, i + 2); i += 2; continue; }
+
+          if (atLineStart(i) && (src.startsWith('```', i) || src.startsWith('~~~', i))) {
+            const fence = src.slice(i, i + 3);
+            const close = src.indexOf('\n' + fence, i + 3);
+            const lineEnd = close === -1 ? -1 : src.indexOf('\n', close + 1);
+            const end = lineEnd === -1 ? n : lineEnd;
+            out += src.slice(i, end); i = end; continue;
+          }
+
+          if (ch === '`') {
+            let ticks = 0;
+            while (src[i + ticks] === '`') ticks++;
+            const delim = '`'.repeat(ticks);
+            const close = src.indexOf(delim, i + ticks);
+            if (close !== -1) { out += src.slice(i, close + ticks); i = close + ticks; continue; }
+            out += delim; i += ticks; continue;
+          }
+
+          if (ch === '$') {
+            const display = src[i + 1] === '$';
+            const open = display ? 2 : 1;
+            let j = i + open;
+            let found = -1;
+            while (j < n) {
+              if (src[j] === '\\') { j += 2; continue; }
+              if (!display && src[j] === '\n') break;
+              if (src[j] === '$' && (!display || src[j + 1] === '$')) { found = j; break; }
+              j++;
+            }
+            const tex = found === -1 ? '' : src.slice(i + open, found);
+            if (found !== -1 && tex.trim()) {
+              out += 'SFMATH' + math.length + 'X';
+              math.push({ tex: tex, display: display });
+              i = found + open;
+              continue;
+            }
+          }
+
+          out += ch; i++;
+        }
+        return { text: out, math: math };
+      }
+
+      function renderTex(item) {
+        return katex.renderToString(item.tex, {
+          displayMode: item.display,
+          throwOnError: false,
+          output: 'html',
+        });
+      }
+
+      /**
+       * GitHub-style heading anchors, so a Markdown table of contents written
+       * against GitHub's renderer links the same way here. They are stored as
+       * data-anchor rather than id because the document exists twice (sheets
+       * and the phone column); in-page links resolve against the visible copy.
+       */
+      function addHeadingAnchors(root) {
+        const seen = new Map();
+        root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((h) => {
+          const base = h.textContent.trim().toLowerCase()
+            .replace(/[^\p{L}\p{N}\p{Mc}\p{Pc} -]/gu, '')
+            .replace(/ /g, '-');
+          const count = seen.get(base) || 0;
+          seen.set(base, count + 1);
+          h.dataset.anchor = count ? base + '-' + count : base;
+        });
+      }
+
+      /** Relative links and images in the Markdown are relative to the .md file. */
+      function rebaseUrls(root, base) {
+        root.querySelectorAll('[src], a[href]').forEach((el) => {
+          const attr = el.hasAttribute('src') ? 'src' : 'href';
+          const value = el.getAttribute(attr);
+          if (!value || value.startsWith('#') || /^[a-z][a-z0-9+.-]*:/i.test(value)) return;
+          const url = new URL(value, base);
+          el.setAttribute(attr, resolveSource(url.href) ? 'reader.html?src=' + encodeURIComponent(url.pathname.replace(/^\//, '')) : url.href);
+        });
+        root.querySelectorAll('a[href^="http"]').forEach((a) => {
+          if (new URL(a.href).origin !== location.origin) { a.target = '_blank'; a.rel = 'noopener'; }
+        });
+      }
+
+      function anchorTarget(name) {
+        const candidates = document.querySelectorAll('[data-anchor="' + CSS.escape(name) + '"]');
+        return Array.from(candidates).find((el) => el.getClientRects().length > 0) || null;
+      }
+
+      document.addEventListener('click', (event) => {
+        const link = event.target.closest('a[href^="#"]');
+        if (!link) return;
+        const target = anchorTarget(decodeURIComponent(link.getAttribute('href').slice(1)));
+        if (!target) return;
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.replaceState(null, '', link.getAttribute('href'));
+      });
+
+      /* ---------------------------------------------------------------
+         Pagination
+         --------------------------------------------------------------- */
+
+      const isHeading = (el) => /^H[1-6]$/.test(el.tagName);
+      const isForcedBreak = (el) =>
+        /(?:page-)?break-before\s*:\s*(?:always|page)/i.test(el.getAttribute('style') || '');
+
+      /**
+       * Turn the rendered document into sections of paginatable items.
+       *
+       * Lists split into one piece per item so a long list can break between
+       * pages rather than overflow one. Headings are bundled with the block
+       * after them, so a page never ends on an orphaned heading. A
+       * `<div style="page-break-before: always">` in the Markdown starts a
+       * new section, which starts on a new page.
+       */
+      function buildSections(root) {
+        const sections = [[]];
+        for (const el of Array.from(root.children)) {
+          if (isForcedBreak(el)) {
+            if (sections[sections.length - 1].length) sections.push([]);
+            continue;
+          }
+          const pieces = sections[sections.length - 1];
+          if (el.tagName === 'UL' || el.tagName === 'OL') {
+            const items = Array.from(el.children);
+            const start = el.tagName === 'OL' ? parseInt(el.getAttribute('start') || '1', 10) : 0;
+            items.forEach((li, k) => {
+              const piece = el.cloneNode(false);
+              piece.classList.add('md-split');
+              if (k === items.length - 1) piece.classList.add('md-split-end');
+              if (el.tagName === 'OL') piece.setAttribute('start', String(start + k));
+              piece.appendChild(li);
+              pieces.push(piece);
+            });
+          } else {
+            pieces.push(el);
+          }
+        }
+
+        return sections.map((pieces) => {
+          // A rule at the very start or end of a page is noise.
+          while (pieces.length && pieces[0].tagName === 'HR') pieces.shift();
+          while (pieces.length && pieces[pieces.length - 1].tagName === 'HR') pieces.pop();
+
+          const items = [];
+          let pending = [];
+          for (const piece of pieces) {
+            pending.push(piece);
+            if (isHeading(piece)) continue;
+            items.push(wrapItem(pending));
+            pending = [];
+          }
+          if (pending.length) items.push(wrapItem(pending));
+          return items;
+        }).filter((items) => items.length);
+      }
+
+      function wrapItem(nodes) {
+        const item = document.createElement('div');
+        item.className = 'md-item sf-card';
+        nodes.forEach((node) => item.appendChild(node));
+        return item;
+      }
+
+      function renderFooter(title) {
+        return () => {
+          const footer = document.createElement('div');
+          footer.className = 'reader-footer';
+          const name = document.createElement('span');
+          name.className = 'reader-footer-title';
+          name.textContent = title;
+          const pageNo = document.createElement('span');
+          pageNo.className = 'reader-footer-page';
+          // Filled in once every section is laid out and the total is known.
+          pageNo.textContent = 'Page 00 of 00';
+          footer.append(name, pageNo);
+          return footer;
+        };
+      }
+
+      /**
+       * KaTeX and Nunito glyphs must be loaded before anything is measured:
+       * fallback-font metrics would put every page break in the wrong place.
+       * Laying the content out once makes the browser request the faces the
+       * document actually uses; fonts.ready then waits for exactly those.
+       */
+      async function loadFontsFor(root) {
+        const probe = document.createElement('div');
+        probe.className = 'doc sf-measure-host';
+        probe.appendChild(root);
+        document.body.appendChild(probe);
+        probe.getBoundingClientRect();
+        root.getBoundingClientRect();
+        await document.fonts.ready;
+        probe.remove();
+      }
+
+      async function paginateDocument(root, title) {
+        const sections = buildSections(root);
+        const sheets = [];
+        let overflowRows = 0;
+
+        for (let s = 0; s < sections.length; s++) {
+          const target = document.createElement('div');
+          target.className = 'doc reader-section';
+          pagesEl.appendChild(target);
+          const result = await SFPaginate.paginate({
+            mode: 'fill',
+            target: target,
+            items: sections[s],
+            renderItem: (item) => item.cloneNode(true),
+            sheetClass: 'sf-sheet reader-sheet',
+            gridClass: 'md-flow',
+            renderFooter: renderFooter(title),
+            cacheKey: 'reader',
+          });
+          if (s > 0 && result.sheets.length) result.sheets[0].classList.add('sf-break-before');
+          sheets.push(...result.sheets);
+          overflowRows += result.overflowRows;
+        }
+
+        sheets.forEach((sheet, i) => {
+          sheet.querySelector('.reader-footer-page').textContent = 'Page ' + (i + 1) + ' of ' + sheets.length;
+        });
+        return { sheets: sheets.length, overflowRows: overflowRows };
+      }
+
+      async function main() {
+        SFPaginate.beginRender();
+        const source = resolveSource(new URLSearchParams(location.search).get('src'));
+        if (!source) { fail('No worksheet was specified, or the link is not a StudyFlix Markdown file.'); return; }
+        if (typeof marked === 'undefined' || typeof katex === 'undefined') {
+          fail('The page renderer could not be loaded. Check your internet connection and reload.');
+          return;
+        }
+
+        let markdown;
+        try {
+          const res = await fetch(source.href, { cache: 'no-cache' });
+          if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+          markdown = await res.text();
+        } catch (err) {
+          fail('Could not load ' + source.pathname + ' (' + err.message + ').');
+          return;
+        }
+
+        const extracted = extractMath(markdown);
+        const html = marked.parse(extracted.text, { gfm: true, breaks: false });
+        const root = document.createElement('div');
+        root.innerHTML = html.replace(/SFMATH(\d+)X/g, (_, k) => renderTex(extracted.math[Number(k)]));
+
+        root.querySelectorAll('table').forEach((table) => {
+          const wrap = document.createElement('div');
+          wrap.className = 'table-wrap';
+          table.replaceWith(wrap);
+          wrap.appendChild(table);
+        });
+        addHeadingAnchors(root);
+        rebaseUrls(root, source);
+
+        const h1 = root.querySelector('h1');
+        const title = h1 ? h1.textContent.trim() : decodeURIComponent(source.pathname.split('/').pop());
+        document.title = title;
+        titleEl.textContent = title;
+
+        fluidEl.innerHTML = root.innerHTML;
+        await loadFontsFor(root);
+        const result = await paginateDocument(root, title);
+
+        statusEl.remove();
+        fluidEl.hidden = false;
+        document.getElementById('btn-print').disabled = false;
+        SFPaginate.publish({ sheets: result.sheets, overflowRows: result.overflowRows, chunkSplits: 0 });
+
+        if (location.hash) {
+          const target = anchorTarget(decodeURIComponent(location.hash.slice(1)));
+          if (target) target.scrollIntoView({ block: 'start' });
+        }
+      }
+
+      main();
+    })();
+  </script>
+</body>
+</html>

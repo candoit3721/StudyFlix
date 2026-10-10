@@ -113,6 +113,17 @@ export const PRINTABLES: Printable[] = [
     paginated: false,
     paper: 'letter',
   },
+  {
+    id: 'reader',
+    // Markdown worksheets rendered and paginated by reader.html. The route
+    // needs a document to show; matrix.ts runs every linked worksheet.
+    route: '/reader.html?src=sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md',
+    sheetSelector: '.sf-sheet:not(.sf-measuring)',
+    cardSelector: '.md-item',
+    paginated: true,
+    paper: 'letter',
+    note: 'Markdown worksheets with KaTeX math, paginated block by block.',
+  },
 ];
 
 export const PAPER_SIZES: Record<Paper, { w: number; h: number }> = {
