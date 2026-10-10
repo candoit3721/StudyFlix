@@ -1411,114 +1411,319 @@ const MathEngine = (function () {
 
   /**
    * Generates Statistics problems (Mean, Median, Mode, Range)
+   * Options:
+   * - subType: 'mean', 'median', 'mode', 'range', 'target_mean', 'mixed'
    */
-  function generateStatistics() {
-    const subType = pickRandom(['mean', 'median', 'mode', 'range']);
-    const count = pickRandom([5, 7]);
-    
-    // Generate clean numbers
-    let dataset = [];
-    if (subType === 'mean') {
-      // Ensure mean is a clean whole number or .5
-      const targetMean = randomInt(10, 30);
-      let sum = targetMean * count;
-      dataset = [];
-      for (let i = 0; i < count - 1; i++) {
-        const val = targetMean + randomInt(-8, 8);
-        dataset.push(val);
-        sum -= val;
-      }
-      dataset.push(sum);
-      dataset = shuffle(dataset);
-    } else {
-      for (let i = 0; i < count; i++) {
-        dataset.push(randomInt(5, 35));
-      }
+  function generateStatistics(options = {}) {
+    let subType = typeof options === 'string' ? options : (options.subType || options.type || pickRandom(['mean', 'median', 'mode', 'range']));
+    if (subType === 'statistics' || subType === 'mixed' || subType === 'all') {
+      subType = pickRandom(['mean', 'median', 'mode', 'range']);
     }
 
-    const sorted = [...dataset].sort((a, b) => a - b);
-    const sumVal = dataset.reduce((acc, curr) => acc + curr, 0);
-    const meanVal = parseFloat((sumVal / count).toFixed(2));
-    const midIdx = Math.floor(sorted.length / 2);
-    const medianVal = sorted[midIdx];
-    const rangeVal = sorted[sorted.length - 1] - sorted[0];
+    const contexts = [
+      { label: 'Quiz Scores', unit: 'marks', min: 65, max: 98 },
+      { label: 'Hockey Goals', unit: 'goals', min: 1, max: 8 },
+      { label: 'Daily High Temperatures', unit: '°C', min: 12, max: 32 },
+      { label: 'Books Read', unit: 'books', min: 2, max: 14 },
+      { label: 'Running Times', unit: 'minutes', min: 15, max: 45 },
+      { label: 'Plant Heights', unit: 'cm', min: 10, max: 40 }
+    ];
 
-    // Find mode
-    const freq = {};
-    let maxFreq = 0;
-    dataset.forEach(n => {
-      freq[n] = (freq[n] || 0) + 1;
-      if (freq[n] > maxFreq) maxFreq = freq[n];
-    });
-    let modeVals = Object.keys(freq).filter(k => freq[k] === maxFreq && maxFreq > 1).map(Number);
-    let modeText = modeVals.length === 0 ? 'no mode' : modeVals.join(', ');
+    if (subType === 'mean' || subType === 'stats_mean') {
+      // 35% chance of Target Mean / Missing Value problem (Grade 5/6 Enriched & Waterloo Gauss style)
+      const isTargetMean = Math.random() < 0.35;
 
-    if (subType === 'mean') {
-      return {
-        type: 'stats_mean',
-        category: 'Statistics',
-        topic: 'Mean (Average)',
-        prompt: `Find the mean of the data set: [ ${dataset.join(', ')} ]`,
-        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">${dataset.join(', ')}</span> &nbsp;➔ Mean = </div>`,
-        answer: meanVal.toString(),
-        altAnswers: [meanVal.toString()],
-        steps: [
-          `Add all numbers in the set: ${dataset.join(' + ')} = ${sumVal}.`,
-          `Divide the sum by the total number of values (${count}): ${sumVal} ÷ ${count} = ${meanVal}.`
-        ],
-        hint: `Add up all the values and divide by the count (${count}).`
-      };
-    } else if (subType === 'median') {
+      if (isTargetMean) {
+        const studentName = pickRandom(['Sophia', 'Lucas', 'Maya', 'Liam', 'Emma', 'Ethan', 'Chloe']);
+        const count = pickRandom([4, 5]); // total tests
+        const targetMean = randomInt(80, 94);
+        const totalSumNeeded = targetMean * count;
+        
+        let knownScores = [];
+        let runningSum = 0;
+        for (let i = 0; i < count - 1; i++) {
+          const score = targetMean + randomInt(-10, 10);
+          knownScores.push(score);
+          runningSum += score;
+        }
+        const neededScore = totalSumNeeded - runningSum;
+
+        // If neededScore is too high or low, adjust
+        if (neededScore > 100 || neededScore < 50) {
+          const diff = neededScore > 100 ? (neededScore - 96) : (65 - neededScore);
+          knownScores[0] += diff;
+          runningSum += diff;
+        }
+        const finalNeededScore = totalSumNeeded - runningSum;
+
+        const knownStr = knownScores.join(', ');
+        const prompt = `${studentName}'s scores on the first ${count - 1} tests are ${knownStr}. What score must ${studentName} get on the next test to achieve an overall mean of ${targetMean}?`;
+        const htmlQuestion = `<div class="word-problem-text">${studentName}'s scores on ${count - 1} tests: <strong>${knownStr}</strong>.<br>What score is needed on test #${count} to have a mean of <strong>${targetMean}</strong>?</div>`;
+
+        const steps = [
+          `Find the total points needed for all ${count} tests: ${count} × ${targetMean} = ${totalSumNeeded}.`,
+          `Calculate the sum of the current ${count - 1} scores: ${knownScores.join(' + ')} = ${runningSum}.`,
+          `Subtract the current sum from the total needed: ${totalSumNeeded} − ${runningSum} = ${finalNeededScore}.`
+        ];
+
+        return {
+          type: 'stats_mean_target',
+          category: 'Statistics',
+          topic: 'Target Mean (Missing Value)',
+          prompt,
+          htmlQuestion,
+          answer: finalNeededScore.toString(),
+          altAnswers: [finalNeededScore.toString()],
+          steps,
+          hint: `Multiply the target mean (${targetMean}) by the total number of tests (${count}) to find the required total, then subtract the sum of the existing scores.`
+        };
+      } else {
+        // Direct Mean Calculation
+        const ctx = pickRandom(contexts);
+        const count = pickRandom([5, 6, 7]);
+        const targetMean = randomInt(ctx.min + 4, ctx.max - 4);
+        let dataset = [];
+        let runningSum = 0;
+        for (let i = 0; i < count - 1; i++) {
+          const delta = randomInt(-5, 5);
+          const val = Math.max(1, targetMean + delta);
+          dataset.push(val);
+          runningSum += val;
+        }
+        let lastVal = targetMean * count - runningSum;
+        if (lastVal <= 0) {
+          dataset[0] += (1 - lastVal);
+          lastVal = 1;
+        }
+        dataset.push(lastVal);
+        dataset = shuffle(dataset);
+
+        const sumVal = dataset.reduce((acc, curr) => acc + curr, 0);
+        const meanVal = parseFloat((sumVal / count).toFixed(2));
+        const datasetStr = dataset.join(', ');
+
+        const steps = [
+          `Add all ${count} values in the data set: ${dataset.join(' + ')} = ${sumVal}.`,
+          `Divide the total sum by the number of values (${count}): ${sumVal} ÷ ${count} = ${meanVal}.`
+        ];
+
+        return {
+          type: 'stats_mean',
+          category: 'Statistics',
+          topic: 'Mean (Average)',
+          prompt: `Find the mean of the data set: [ ${datasetStr} ]`,
+          htmlQuestion: `<div class="math-expr">${ctx.label}: <span class="whole-num">[ ${datasetStr} ]</span> &nbsp;➔ Mean = <span class="math-blank">?</span></div>`,
+          answer: meanVal.toString(),
+          altAnswers: [meanVal.toString(), `${meanVal} ${ctx.unit}`],
+          steps,
+          hint: `Add all the numbers together (${dataset.join(' + ')} = ${sumVal}), then divide by the total count (${count}).`
+        };
+      }
+    } else if (subType === 'median' || subType === 'stats_median') {
+      // Test both ODD count (5, 7) and EVEN count (6, 8)
+      const isEven = Math.random() < 0.5;
+      const count = isEven ? pickRandom([6, 8]) : pickRandom([5, 7]);
+      const ctx = pickRandom(contexts);
+
+      let dataset = [];
+      for (let i = 0; i < count; i++) {
+        dataset.push(randomInt(ctx.min, ctx.max));
+      }
+
+      const sorted = [...dataset].sort((a, b) => a - b);
+      let medianVal;
+      let steps = [
+        `Step 1: Order the data from least to greatest: [ ${sorted.join(', ')} ].`
+      ];
+
+      if (count % 2 === 1) {
+        // Odd count: exact middle element
+        const midIdx = Math.floor(count / 2);
+        medianVal = sorted[midIdx];
+        steps.push(`Step 2: Since there are ${count} (an odd number) values, the median is the exact middle number at position ${midIdx + 1}: ${medianVal}.`);
+      } else {
+        // Even count: mean of the two middle elements
+        const mid1 = sorted[count / 2 - 1];
+        const mid2 = sorted[count / 2];
+        const midSum = mid1 + mid2;
+        medianVal = parseFloat((midSum / 2).toFixed(1));
+        steps.push(`Step 2: Since there are ${count} (an even number) values, find the two middle numbers: ${mid1} and ${mid2}.`);
+        steps.push(`Step 3: Calculate their mean: (${mid1} + ${mid2}) ÷ 2 = ${midSum} ÷ 2 = ${medianVal}.`);
+      }
+
+      const datasetStr = dataset.join(', ');
       return {
         type: 'stats_median',
         category: 'Statistics',
-        topic: 'Median (Middle Value)',
-        prompt: `Find the median of the data set: [ ${dataset.join(', ')} ]`,
-        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">${dataset.join(', ')}</span> &nbsp;➔ Median = </div>`,
+        topic: `Median (${count % 2 === 1 ? 'Odd' : 'Even'} Set of ${count})`,
+        prompt: `Find the median of the data set: [ ${datasetStr} ]`,
+        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">[ ${datasetStr} ]</span> &nbsp;➔ Median = <span class="math-blank">?</span></div>`,
         answer: medianVal.toString(),
-        altAnswers: [medianVal.toString()],
-        steps: [
-          `Sort the numbers in ascending order: ${sorted.join(', ')}.`,
-          `Identify the exact middle number: ${medianVal}.`
-        ],
-        hint: `First put the numbers in order from least to greatest, then pick the middle number.`
+        altAnswers: [medianVal.toString(), `${medianVal} ${ctx.unit}`],
+        steps,
+        hint: count % 2 === 1 
+          ? `First arrange the numbers from least to greatest, then find the single middle number.`
+          : `First order the numbers from least to greatest. Since there are ${count} numbers, add the two middle numbers and divide by 2.`
       };
-    } else if (subType === 'range') {
-      return {
-        type: 'stats_range',
-        category: 'Statistics',
-        topic: 'Range',
-        prompt: `Find the range of the data set: [ ${dataset.join(', ')} ]`,
-        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">${dataset.join(', ')}</span> &nbsp;➔ Range = </div>`,
-        answer: rangeVal.toString(),
-        altAnswers: [rangeVal.toString()],
-        steps: [
-          `Find the maximum value (${sorted[sorted.length - 1]}) and minimum value (${sorted[0]}).`,
-          `Subtract minimum from maximum: ${sorted[sorted.length - 1]} − ${sorted[0]} = ${rangeVal}.`
-        ],
-        hint: `Subtract the lowest number from the highest number.`
-      };
-    } else {
-      // Ensure there is a mode
-      if (modeVals.length === 0) {
-        // inject mode
-        dataset[0] = dataset[1];
-        modeText = dataset[0].toString();
+    } else if (subType === 'mode' || subType === 'stats_mode') {
+      // 3 Modes: Unimodal (60%), Bimodal (25%), No Mode (15%)
+      const modeScenario = pickRandom(['unimodal', 'unimodal', 'unimodal', 'bimodal', 'no_mode']);
+      const count = 7;
+      let dataset = [];
+      let answerText = '';
+      let altAnswers = [];
+      let steps = [];
+
+      if (modeScenario === 'unimodal') {
+        const baseNum = randomInt(12, 35);
+        const modeNum = randomInt(12, 35);
+        const otherNums = [];
+        while (otherNums.length < 4) {
+          const r = randomInt(10, 40);
+          if (r !== modeNum && !otherNums.includes(r)) otherNums.push(r);
+        }
+        // Mode appears 3 times
+        dataset = shuffle([modeNum, modeNum, modeNum, ...otherNums]);
+        answerText = modeNum.toString();
+        altAnswers = [answerText];
+        steps = [
+          `Count the frequency of each number in the set: [ ${dataset.join(', ')} ].`,
+          `Number ${modeNum} appears 3 times, which is more than any other number.`,
+          `The mode is ${modeNum}.`
+        ];
+      } else if (modeScenario === 'bimodal') {
+        const m1 = randomInt(10, 25);
+        let m2 = randomInt(26, 40);
+        const otherNums = [];
+        while (otherNums.length < 3) {
+          const r = randomInt(10, 45);
+          if (r !== m1 && r !== m2 && !otherNums.includes(r)) otherNums.push(r);
+        }
+        dataset = shuffle([m1, m1, m2, m2, ...otherNums]);
+        const sortedModes = [m1, m2].sort((a, b) => a - b);
+        answerText = `${sortedModes[0]}, ${sortedModes[1]}`;
+        altAnswers = [
+          `${sortedModes[0]}, ${sortedModes[1]}`,
+          `${sortedModes[0]} and ${sortedModes[1]}`,
+          `${sortedModes[1]}, ${sortedModes[0]}`,
+          `${sortedModes[1]} and ${sortedModes[0]}`,
+          `${sortedModes[0]} ${sortedModes[1]}`
+        ];
+        steps = [
+          `Count the frequency of each number in the set: [ ${dataset.join(', ')} ].`,
+          `Both ${sortedModes[0]} and ${sortedModes[1]} appear 2 times each (tied for highest frequency).`,
+          `This data set is bimodal with modes: ${sortedModes[0]} and ${sortedModes[1]}.`
+        ];
+      } else {
+        // No mode: all unique numbers
+        const uniqueSet = new Set();
+        while (uniqueSet.size < 6) {
+          uniqueSet.add(randomInt(10, 45));
+        }
+        dataset = Array.from(uniqueSet);
+        answerText = 'no mode';
+        altAnswers = ['no mode', 'none', 'no-mode', '0 modes', 'no modes'];
+        steps = [
+          `Count the frequency of each number in the set: [ ${dataset.join(', ')} ].`,
+          `Every number appears exactly once.`,
+          `Since no number appears more than once, there is no mode.`
+        ];
       }
+
+      const datasetStr = dataset.join(', ');
       return {
         type: 'stats_mode',
         category: 'Statistics',
-        topic: 'Mode',
-        prompt: `Find the mode of the data set: [ ${dataset.join(', ')} ]`,
-        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">${dataset.join(', ')}</span> &nbsp;➔ Mode = </div>`,
-        answer: modeText,
-        altAnswers: [modeText],
-        steps: [
-          `Count the frequency of each number in the set: [ ${dataset.join(', ')} ].`,
-          `The number that appears most frequently is ${modeText}.`
-        ],
-        hint: `Look for the number that occurs most frequently.`
+        topic: `Mode (${modeScenario === 'bimodal' ? 'Bimodal' : (modeScenario === 'no_mode' ? 'No Mode' : 'Single Mode')})`,
+        prompt: `Find the mode(s) of the data set: [ ${datasetStr} ] (write 'no mode' if none)`,
+        htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">[ ${datasetStr} ]</span> &nbsp;➔ Mode = <span class="math-blank">?</span></div>`,
+        answer: answerText,
+        altAnswers,
+        steps,
+        hint: `The mode is the number that appears most frequently. If each number appears once, write 'no mode'. If two numbers tie for the most, list both.`
       };
+    } else {
+      // Range & Data Spread
+      const isTempContext = Math.random() < 0.4;
+      const isReverseRange = Math.random() < 0.25;
+
+      if (isReverseRange) {
+        const minVal = randomInt(15, 60);
+        const rangeVal = randomInt(12, 35);
+        const maxVal = minVal + rangeVal;
+
+        const prompt = `A set of data has a range of ${rangeVal}. If the smallest value in the set is ${minVal}, what is the largest value?`;
+        const htmlQuestion = `<div class="word-problem-text">A data set has a <strong>range of ${rangeVal}</strong> and a <strong>minimum value of ${minVal}</strong>.<br>What is the maximum value?</div>`;
+
+        return {
+          type: 'stats_range_reverse',
+          category: 'Statistics',
+          topic: 'Range (Finding Max Value)',
+          prompt,
+          htmlQuestion,
+          answer: maxVal.toString(),
+          altAnswers: [maxVal.toString()],
+          steps: [
+            `Range formula: Range = Maximum − Minimum.`,
+            `Rearrange to solve for Maximum: Maximum = Minimum + Range.`,
+            `Calculate: ${minVal} + ${rangeVal} = ${maxVal}.`
+          ],
+          hint: `Since Range = Maximum − Minimum, add the range (${rangeVal}) to the minimum value (${minVal}) to find the maximum.`
+        };
+      } else if (isTempContext) {
+        const canadianCities = ['Toronto', 'Ottawa', 'Vancouver', 'Montreal', 'Calgary', 'Halifax'];
+        const city = pickRandom(canadianCities);
+        const lowTemp = randomInt(-5, 14);
+        const highTemp = lowTemp + randomInt(8, 22);
+        const rangeVal = highTemp - lowTemp;
+
+        const prompt = `In ${city}, the recorded high temperature was ${highTemp}°C and the overnight low was ${lowTemp}°C. What was the temperature range?`;
+        const htmlQuestion = `<div class="math-expr">${city} Temps: <span class="whole-num">High ${highTemp}°C</span>, <span class="whole-num">Low ${lowTemp}°C</span> &nbsp;➔ Range = <span class="math-blank">?°C</span></div>`;
+
+        return {
+          type: 'stats_range_temp',
+          category: 'Statistics',
+          topic: 'Temperature Range (°C)',
+          prompt,
+          htmlQuestion,
+          answer: rangeVal.toString(),
+          altAnswers: [rangeVal.toString(), `${rangeVal}°C`, `${rangeVal} degrees`],
+          steps: [
+            `Subtract the minimum temperature from the maximum temperature:`,
+            `Range = High − Low = ${highTemp}°C − (${lowTemp}°C) = ${rangeVal}°C.`
+          ],
+          hint: `Subtract the lower temperature (${lowTemp}°C) from the higher temperature (${highTemp}°C).`
+        };
+      } else {
+        const count = randomInt(5, 8);
+        const dataset = [];
+        for (let i = 0; i < count; i++) {
+          dataset.push(randomInt(8, 65));
+        }
+        const sorted = [...dataset].sort((a, b) => a - b);
+        const minVal = sorted[0];
+        const maxVal = sorted[sorted.length - 1];
+        const rangeVal = maxVal - minVal;
+        const datasetStr = dataset.join(', ');
+
+        const steps = [
+          `Find the highest (maximum) value in the set: ${maxVal}.`,
+          `Find the lowest (minimum) value in the set: ${minVal}.`,
+          `Subtract the minimum from the maximum: ${maxVal} − ${minVal} = ${rangeVal}.`
+        ];
+
+        return {
+          type: 'stats_range',
+          category: 'Statistics',
+          topic: 'Range (Data Spread)',
+          prompt: `Find the range of the data set: [ ${datasetStr} ]`,
+          htmlQuestion: `<div class="math-expr">Data: <span class="whole-num">[ ${datasetStr} ]</span> &nbsp;➔ Range = <span class="math-blank">?</span></div>`,
+          answer: rangeVal.toString(),
+          altAnswers: [rangeVal.toString()],
+          steps,
+          hint: `Subtract the smallest number (${minVal}) from the largest number (${maxVal}).`
+        };
+      }
     }
   }
 
@@ -1836,7 +2041,20 @@ const MathEngine = (function () {
         return generateSequentialSums('contest');
 
       case 'statistics':
+      case 'statistics_all':
         return generateStatistics();
+
+      case 'stats_mean':
+        return generateStatistics('mean');
+
+      case 'stats_median':
+        return generateStatistics('median');
+
+      case 'stats_mode':
+        return generateStatistics('mode');
+
+      case 'stats_range':
+        return generateStatistics('range');
 
       case 'grade5_mixed': {
         const g5Categories = ['fractions', 'decimals', 'pemdas', 'geometry', 'sequential_sums_1_to_n'];

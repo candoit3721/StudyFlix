@@ -75,6 +75,13 @@
       worksheetTitle: 'Grade 6: Positive & Negative Integers Sprint',
       includeWorkSpace: false
     },
+    g6_statistics: {
+      category: 'statistics',
+      pageCount: 2,
+      gridCols: 2,
+      worksheetTitle: 'Grade 6: Statistics (Mean, Median, Mode & Range)',
+      includeWorkSpace: true
+    },
     g5_6_word_problems: {
       category: 'word_problems',
       pageCount: 2,
@@ -139,24 +146,28 @@
   // Normalize string for math answers
   function normalizeAnswer(str) {
     if (str === null || str === undefined) return '';
-    return str
-      .toString()
-      .trim()
-      .toLowerCase()
+    let s = str.toString().trim().toLowerCase();
+    
+    // Handle "no mode" variants
+    if (s === 'no mode' || s === 'none' || s === 'no-mode' || s === 'no modes' || s === '0 modes' || s === 'no') {
+      return 'no mode';
+    }
+
+    return s
       .replace(/\$/g, '')
-      .replace(/\s+/g, ' ')
+      .replace(/°c|°f|°/g, '')
+      .replace(/degrees?(?:\s*celsius|\s*fahrenheit)?/g, '')
+      .replace(/cm²|cm\^2|sq cm/g, '')
+      .replace(/m²|m\^2|sq m/g, '')
+      .replace(/in²|in\^2|sq in/g, '')
+      .replace(/m³|m\^3|cubic m/g, '')
+      .replace(/cups?|pizzas?|dollars?|books?|miles?|ounces?|oz|marks?|goals?|minutes?|min|cm|m/g, '')
       .replace(/x\s*=\s*/g, '')
       .replace(/y\s*=\s*/g, '')
       .replace(/n\s*=\s*/g, '')
       .replace(/a\s*=\s*/g, '')
       .replace(/m\s*=\s*/g, '')
-      .replace(/°/g, '')
-      .replace(/degrees?/g, '')
-      .replace(/cm²|cm\^2|sq cm/g, '')
-      .replace(/m²|m\^2|sq m/g, '')
-      .replace(/in²|in\^2|sq in/g, '')
-      .replace(/m³|m\^3|cubic m/g, '')
-      .replace(/cups?|pizzas?|dollars?|books?|miles?|ounces?|oz/g, '')
+      .replace(/\s+/g, ' ')
       .trim();
   }
 
@@ -197,6 +208,13 @@
       if (normUser === normalizeAnswer(alt)) return true;
     }
 
+    // Check if both are comma or 'and' separated lists of numbers (e.g. bimodal modes like "12, 18" vs "18, 12")
+    const userTokens = normUser.split(/[\s,]+and[\s,]+|[\s,]+/).filter(Boolean).sort();
+    const correctTokens = normCorrect.split(/[\s,]+and[\s,]+|[\s,]+/).filter(Boolean).sort();
+    if (userTokens.length > 1 && userTokens.length === correctTokens.length) {
+      if (userTokens.every((val, idx) => val === correctTokens[idx])) return true;
+    }
+
     const numUser = parseFractionValue(userVal);
     const numCorrect = parseFractionValue(correctVal);
 
@@ -225,6 +243,11 @@
       'geometry_composite',
       'geometry_missing',
       'statistics',
+      'statistics_all',
+      'stats_mean',
+      'stats_median',
+      'stats_mode',
+      'stats_range',
       'algebra',
       'exponents'
     ];
