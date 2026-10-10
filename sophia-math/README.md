@@ -85,6 +85,7 @@ An interactive, print-ready math worksheet and practice studio designed specific
 | 🏷️ **Percentages & Sales** | Grade 6 | 15 Questions covering % of quantity, Discounts, Sales Tax & Tips |
 | 💡 **Pre-Algebra Equations** | Grade 6 | 15 Questions solving 1-Step and 2-Step Equations & Combining Like Terms |
 | ❄️ **Negative Integers** | Grade 6 | 20 Rapid-fire questions with positive and negative arithmetic |
+| 📊 **Statistics & Data** | Grade 6 | 15 Questions on Mean, Median (odd & even), Mode (unimodal, bimodal, no mode), and Range |
 | 📖 **Multi-Step Stories** | Grade 5/6 | 10 In-depth realistic word problems with multi-part questions |
 | 🏆 **5th/6th Assessment** | Grade 5/6 | 20 Comprehensive mixed questions spanning all core standards |
 
@@ -94,6 +95,9 @@ An interactive, print-ready math worksheet and practice studio designed specific
 
 In addition to dynamic generation in the web app, curated printable markdown worksheets are available in [`worksheets/`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets):
 
+- [`sophia_advanced_fraction_remainder_challenges.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/sophia_advanced_fraction_remainder_challenges.md) (Multi-step Fraction of Remainder challenges, Singapore bar models & Waterloo Gauss contest problems)
+- [`sophia_fraction_word_problems_set2.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/sophia_fraction_word_problems_set2.md) (Set 2: 10 more "fraction of what's left" word problems at the Kamala-juice level + answer key)
+- [`grade6_statistics_data_management.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/grade6_statistics_data_management.md) (20 questions + concept spotlight + Waterloo CEMC challenges + detailed solutions)
 - [`sophia_sequential_sums_gauss_masterclass.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md) (30 questions + concept spotlights + Waterloo Gauss challenges + step-by-step solutions)
 - [`sophia_geometry_area_masterclass.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/sophia_geometry_area_masterclass.md) (30 questions + visual proofs + detailed solutions)
 - [`grade6_area_composite_shapes.md`](file:///Users/henryw/project/workdir/StudyFlix/sophia-math/worksheets/grade6_area_composite_shapes.md) (20 questions + detailed solutions)

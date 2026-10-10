@@ -11,12 +11,25 @@
  */
 
 const WordProblems = (function () {
+  const mathEngineRef = (typeof MathEngine !== 'undefined')
+    ? MathEngine
+    : (typeof require !== 'undefined' ? require('./math-engine') : {});
+
   function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   function pickRandom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function shuffle(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
   }
 
   const names = ['Sophia', 'Olivia', 'Emma', 'Lucas', 'Mia', 'Noah', 'Liam', 'Ava', 'Ethan', 'Chloe', 'Zoe', 'Alexander', 'Maya', 'Benjamin'];
@@ -36,8 +49,8 @@ const WordProblems = (function () {
         ]);
         const batches = randomInt(3, 6);
         const totalN = cups.n * batches;
-        const sim = MathEngine.simplifyFraction(totalN, cups.d);
-        const ans = MathEngine.formatFraction(sim.n, sim.d, true);
+        const sim = (mathEngineRef.simplifyFraction || MathEngine.simplifyFraction)(totalN, cups.d);
+        const ans = (mathEngineRef.formatFraction || MathEngine.formatFraction)(sim.n, sim.d, true);
 
         return {
           question: `${name} is baking cookies for a school fair. Each batch requires ${cups.text} cup of sugar. If ${name} wants to make ${batches} batches, how many cups of sugar will be needed in total?`,
@@ -66,12 +79,12 @@ const WordProblems = (function () {
         const d = pickRandom([3, 4, 6, 8]);
         const eatenN = randomInt(d + 1, totalPizzas * d - 1);
         const remN = totalPizzas * d - eatenN;
-        const sim = MathEngine.simplifyFraction(remN, d);
-        const ans = MathEngine.formatFraction(sim.n, sim.d, true);
+        const sim = (mathEngineRef.simplifyFraction || MathEngine.simplifyFraction)(remN, d);
+        const ans = (mathEngineRef.formatFraction || MathEngine.formatFraction)(sim.n, sim.d, true);
 
         return {
-          question: `${name1} and ${name2} ordered ${totalPizzas} large pizzas. Together, they ate ${MathEngine.formatFraction(eatenN, d, true)} pizzas. How much pizza was left over?`,
-          equation: `${totalPizzas} − ${MathEngine.formatFraction(eatenN, d, true)} = ${ans}`,
+          question: `${name1} and ${name2} ordered ${totalPizzas} large pizzas. Together, they ate ${(mathEngineRef.formatFraction || MathEngine.formatFraction)(eatenN, d, true)} pizzas. How much pizza was left over?`,
+          equation: `${totalPizzas} − ${(mathEngineRef.formatFraction || MathEngine.formatFraction)(eatenN, d, true)} = ${ans}`,
           answer: ans,
           altAnswers: [ans, `${sim.n}/${sim.d}`],
           unit: 'pizzas',
@@ -298,6 +311,254 @@ const WordProblems = (function () {
             `Calculate unit price at Store B: Total Price ÷ Number of Notebooks = \$11.00 ÷ 10 = \$1.10 per notebook.`
           ],
           hint: `Divide the total cost at Store B (\$11.00) by the number of notebooks (10).`
+        };
+      }
+    },
+
+    // 11. Statistics: Target Mean Quiz Score
+    {
+      category: 'statistics',
+      topic: 'Target Mean Quiz Score',
+      generate: () => {
+        const name = pickRandom(names);
+        const count = 4;
+        const targetMean = randomInt(84, 92);
+        const totalNeeded = targetMean * count;
+        
+        let score1 = targetMean + randomInt(-8, 8);
+        let score2 = targetMean + randomInt(-8, 8);
+        let score3 = targetMean + randomInt(-8, 8);
+        let sumKnown = score1 + score2 + score3;
+        let score4 = totalNeeded - sumKnown;
+
+        if (score4 > 100 || score4 < 70) {
+          score1 = targetMean - 2;
+          score2 = targetMean + 4;
+          score3 = targetMean - 6;
+          sumKnown = score1 + score2 + score3;
+          score4 = totalNeeded - sumKnown;
+        }
+
+        return {
+          question: `${name} has taken 3 math quizzes this term with scores of ${score1}, ${score2}, and ${score3}. What score must ${name} earn on the 4th quiz to achieve an overall mean (average) score of ${targetMean}?`,
+          equation: `(${score1} + ${score2} + ${score3} + x) ÷ 4 = ${targetMean} ➔ x = ${score4}`,
+          answer: score4.toString(),
+          altAnswers: [score4.toString(), `${score4} marks`, `${score4}%`],
+          unit: 'marks',
+          steps: [
+            `Find the total points needed for all 4 quizzes: 4 × ${targetMean} = ${totalNeeded}.`,
+            `Add the first 3 quiz scores: ${score1} + ${score2} + ${score3} = ${sumKnown}.`,
+            `Subtract the current total from the needed total: ${totalNeeded} − ${sumKnown} = ${score4}.`
+          ],
+          hint: `Multiply the target average (${targetMean}) by 4, then subtract the sum of the first 3 quiz scores.`
+        };
+      }
+    },
+
+    // 12. Statistics: Median Running Times
+    {
+      category: 'statistics',
+      topic: 'Median Race Times',
+      generate: () => {
+        const name = pickRandom(names);
+        const rawTimes = [
+          randomInt(18, 22),
+          randomInt(23, 26),
+          randomInt(27, 30),
+          randomInt(31, 35),
+          randomInt(36, 40)
+        ];
+        const shuffled = shuffle(rawTimes);
+        const sorted = [...rawTimes].sort((a, b) => a - b);
+        const medianTime = sorted[2];
+
+        return {
+          question: `${name} recorded 5 km training run times over 5 consecutive days: ${shuffled.join(' min, ')} min. What was ${name}'s median running time?`,
+          equation: `Sorted: [ ${sorted.join(', ')} ] ➔ Median = ${medianTime} min`,
+          answer: `${medianTime}`,
+          altAnswers: [`${medianTime}`, `${medianTime} min`, `${medianTime} minutes`],
+          unit: 'minutes',
+          steps: [
+            `Arrange the running times in ascending order: [ ${sorted.join(', ')} ].`,
+            `Identify the middle value in the 5-number list: the 3rd number is ${medianTime} minutes.`
+          ],
+          hint: `Put the 5 times in order from shortest to longest, then select the middle time.`
+        };
+      }
+    },
+
+    // 13. Statistics: Temperature Range in Canadian Cities
+    {
+      category: 'statistics',
+      topic: 'Canadian City Temperature Range',
+      generate: () => {
+        const cities = ['Ottawa', 'Toronto', 'Calgary', 'Montreal', 'Vancouver', 'Halifax'];
+        const city = pickRandom(cities);
+        const lowTemp = randomInt(-6, 12);
+        const tempSpread = randomInt(9, 18);
+        const highTemp = lowTemp + tempSpread;
+
+        return {
+          question: `During an autumn week in ${city}, the highest recorded daytime temperature was ${highTemp}°C and the lowest nighttime temperature was ${lowTemp}°C. What was the temperature range in ${city}?`,
+          equation: `${highTemp}°C − (${lowTemp}°C) = ${tempSpread}°C`,
+          answer: `${tempSpread}`,
+          altAnswers: [`${tempSpread}`, `${tempSpread}°C`, `${tempSpread} degrees`],
+          unit: '°C',
+          steps: [
+            `Range formula: Range = Maximum Value − Minimum Value.`,
+            `Calculate: ${highTemp}°C − (${lowTemp}°C) = ${tempSpread}°C.`
+          ],
+          hint: `Subtract the lowest temperature (${lowTemp}°C) from the highest temperature (${highTemp}°C).`
+        };
+      }
+    },
+
+    // 14. Statistics: Mode of Soccer Goals
+    {
+      category: 'statistics',
+      topic: 'Mode of Soccer Goals',
+      generate: () => {
+        const teamName = pickRandom(['Maple Leafs Junior', 'Ottawa Senators Youth', 'Hamilton Hornets', 'York United']);
+        const modeVal = randomInt(2, 4);
+        const games = [modeVal, modeVal, modeVal, modeVal + 1, modeVal - 1, modeVal + 2, 0];
+        const shuffled = [...games].sort(() => Math.random() - 0.5);
+
+        return {
+          question: `The ${teamName} soccer team scored the following number of goals in their last 7 matches: [ ${shuffled.join(', ')} ]. What is the mode of goals scored?`,
+          equation: `Mode of [ ${shuffled.join(', ')} ] = ${modeVal}`,
+          answer: `${modeVal}`,
+          altAnswers: [`${modeVal}`, `${modeVal} goals`],
+          unit: 'goals',
+          steps: [
+            `Count the frequency of each goal tally:`,
+            `Number ${modeVal} occurred 3 times, while all other numbers occurred once.`,
+            `The mode is ${modeVal} goals.`
+          ],
+          hint: `Find the number of goals that occurred most frequently in the list.`
+        };
+      }
+    },
+
+    // 15. Enriched Fraction of Remainder (Singapore Math / Waterloo Challenge)
+    {
+      category: 'fractions',
+      topic: 'Fraction of Remainder (Multi-Step)',
+      generate: () => {
+        const name = pickRandom(names);
+        const relative = pickRandom(['brother', 'sister', 'cousin', 'friend']);
+        const liquid = pickRandom(['fresh lemonade', 'maple iced tea', 'apple cider', 'fruit punch', 'blueberry juice']);
+        
+        // Choose parameters that yield clean fractional reductions:
+        // Initial: 4 4/5 L = 24/5 L
+        // Frac 1: 1/4 -> Person gets 6/5 L, Remainder 1 = 18/5 L
+        // Frac 2: 1/9 of Remainder 1 -> Drank 2/5 L, Remainder 2 = 16/5 L
+        // Frac 3: 1/2 of Remainder 2 -> Used 8/5 L, Final Left = 8/5 L
+        // Diff = |8/5 - 6/5| = 2/5 L
+        const scenarios = [
+          {
+            initWhole: 4, initNum: 4, initDen: 5, // 24/5 L
+            f1Num: 1, f1Den: 4, // 1/4
+            f2Num: 1, f2Den: 9, // 1/9
+            f3Text: 'half', f3Num: 1, f3Den: 2, // 1/2
+            personVal: '1 1/5', personN: 6, personD: 5,
+            rem1Val: '3 3/5', rem1N: 18, rem1D: 5,
+            drankVal: '2/5', drankN: 2, drankD: 5,
+            rem2Val: '3 1/5', rem2N: 16, rem2D: 5,
+            finalVal: '1 3/5', finalN: 8, finalD: 5,
+            diffVal: '2/5', diffN: 2, diffD: 5
+          },
+          {
+            initWhole: 3, initNum: 3, initDen: 4, // 15/4 L
+            f1Num: 1, f1Den: 3, // 1/3 -> Person gets 5/4 L, Rem 1 = 10/4 = 5/2 L
+            f2Num: 1, f2Den: 5, // 1/5 -> Drank 1/2 L, Rem 2 = 2 L = 4/2 L
+            f3Text: 'half', f3Num: 1, f3Den: 2, // 1/2 -> Used 1 L, Final Left = 1 L = 4/4 L
+            personVal: '1 1/4', personN: 5, personD: 4,
+            rem1Val: '2 1/2', rem1N: 5, rem1D: 2,
+            drankVal: '1/2', drankN: 1, drankD: 2,
+            rem2Val: '2', rem2N: 2, rem2D: 1,
+            finalVal: '1', finalN: 1, finalD: 1,
+            diffVal: '1/4', diffN: 1, diffD: 4
+          },
+          {
+            initWhole: 5, initNum: 1, initDen: 3, // 16/3 L
+            f1Num: 1, f1Den: 4, // 1/4 -> Person gets 4/3 L, Rem 1 = 12/3 = 4 L
+            f2Num: 1, f2Den: 4, // 1/4 -> Drank 1 L, Rem 2 = 3 L
+            f3Text: 'half', f3Num: 1, f3Den: 2, // 1/2 -> Used 1 1/2 L = 3/2 L, Final Left = 3/2 L
+            personVal: '1 1/3', personN: 4, personD: 3,
+            rem1Val: '4', rem1N: 4, rem1D: 1,
+            drankVal: '1', drankN: 1, drankD: 1,
+            rem2Val: '3', rem2N: 3, rem2D: 1,
+            finalVal: '1 1/2', finalN: 3, finalD: 2,
+            diffVal: '1/6', diffN: 1, diffD: 6
+          }
+        ];
+
+        const sc = pickRandom(scenarios);
+        const initText = `${sc.initWhole} ${sc.initNum}/${sc.initDen}`;
+        const f1Text = `${sc.f1Num}/${sc.f1Den}`;
+        const f2Text = `${sc.f2Num}/${sc.f2Den}`;
+
+        const question = `${name} had ${initText} L of ${liquid}. After giving ${f1Text} of it to her ${relative}, she drank ${f2Text} of what she still had. She then used ${sc.f3Text} of the remaining ${liquid} for a science club event. What is the difference between what ${name} had left and what she gave to her ${relative}?`;
+
+        const steps = [
+          `Step 1: Find how much ${name} gave to her ${relative}: (${f1Text}) × (${initText} L) = (${sc.f1Num}/${sc.f1Den}) × (${sc.initWhole * sc.initDen + sc.initNum}/${sc.initDen}) = ${sc.personVal} L.`,
+          `Step 2: Find the remaining amount: ${initText} L − ${sc.personVal} L = ${sc.rem1Val} L.`,
+          `Step 3: Calculate how much she drank: (${f2Text}) of (${sc.rem1Val} L) = ${sc.drankVal} L.`,
+          `Step 4: Find the second remainder: ${sc.rem1Val} L − ${sc.drankVal} L = ${sc.rem2Val} L.`,
+          `Step 5: She used half of ${sc.rem2Val} L for the event, leaving: ${sc.finalVal} L.`,
+          `Step 6: Find the difference between what she had left (${sc.finalVal} L) and what she gave her ${relative} (${sc.personVal} L): |${sc.finalVal} − ${sc.personVal}| = ${sc.diffVal} L.`
+        ];
+
+        return {
+          question,
+          equation: `Difference = |${sc.finalVal} L − ${sc.personVal} L| = ${sc.diffVal} L`,
+          answer: sc.diffVal,
+          altAnswers: [sc.diffVal, `${sc.diffVal} L`, `${sc.diffVal} liters`, `${sc.diffVal} litres`],
+          unit: 'L',
+          steps,
+          hint: `Work step by step: (1) Find ${f1Text} of ${initText} L. (2) Subtract to find remainder 1. (3) Find ${f2Text} of remainder 1. (4) Subtract to find remainder 2. (5) Take half of remainder 2. (6) Subtract what was given to the ${relative} from what was left.`
+        };
+      }
+    },
+
+    // 16. Working Backwards with Fractions (Remainder Chain)
+    {
+      category: 'fractions',
+      topic: 'Working Backwards (Fraction Chain)',
+      generate: () => {
+        const name = pickRandom(names);
+        const item = pickRandom(['blueberry muffins', 'maple cookies', 'granola bars', 'apple tarts']);
+        
+        // Let Total = 60, Rem 1 (after giving 1/3) = 40, Rem 2 (after giving 1/4 of rem) = 30, Final left (after giving 1/2 of rem) = 15
+        const scenarios = [
+          { f1Text: '1/3', f2Text: '1/4', f3Text: 'half', left: 15, total: 60 },
+          { f1Text: '1/4', f2Text: '1/3', f3Text: 'half', left: 12, total: 48 },
+          { f1Text: '1/5', f2Text: '1/2', f3Text: 'half', left: 8, total: 40 },
+          { f1Text: '1/2', f2Text: '1/3', f3Text: 'half', left: 9, total: 54 }
+        ];
+
+        const sc = pickRandom(scenarios);
+        const question = `${name} baked a tray of fresh ${item}. She gave ${sc.f1Text} of the total to her class. Of the remaining ${item}, she gave ${sc.f2Text} to her neighbours. Finally, she gave ${sc.f3Text} of what was left to her family. If ${name} has ${sc.left} ${item} left for herself, how many ${item} did she bake in total?`;
+
+        const steps = [
+          `Method 1: Fraction of the Whole method:`,
+          `• Fraction remaining after class: 1 − ${sc.f1Text} = ${(sc.f1Text === '1/3' ? '2/3' : sc.f1Text === '1/4' ? '3/4' : sc.f1Text === '1/5' ? '4/5' : '1/2')}`,
+          `• Fraction remaining after neighbours: (1 − ${sc.f2Text}) × (previous remainder)`,
+          `• Fraction remaining after family: (1/2) × (previous remainder) = ${(sc.left / sc.total === 0.25 ? '1/4' : sc.left / sc.total === 0.2 ? '1/5' : '1/6')}`,
+          `Method 2: Working Backwards step by step:`,
+          `1. Before giving to family (${sc.f3Text}): ${sc.left} × 2 = ${sc.left * 2}.`,
+          `2. Before giving to neighbours (${sc.f2Text}): (${sc.left * 2}) ÷ (1 − ${sc.f2Text}) = ${Math.round((sc.left * 2) / (1 - eval(sc.f2Text)))}.`,
+          `3. Before giving to class (${sc.f1Text}): Total = (${Math.round((sc.left * 2) / (1 - eval(sc.f2Text)))}) ÷ (1 − ${sc.f1Text}) = ${sc.total}.`
+        ];
+
+        return {
+          question,
+          equation: `Final ${sc.left} ➔ Initial Total = ${sc.total}`,
+          answer: sc.total.toString(),
+          altAnswers: [sc.total.toString(), `${sc.total} ${item}`],
+          unit: item,
+          steps,
+          hint: `Work backwards from ${sc.left}: double it first, then divide by the fraction remaining at each previous stage.`
         };
       }
     }

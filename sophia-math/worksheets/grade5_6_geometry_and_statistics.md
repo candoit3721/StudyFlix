@@ -65,18 +65,18 @@ For Questions 9–12, use the following dataset of quiz scores:
 
 ---
 
-For Questions 13–16, use the dataset of weekly temperatures in $^\circ\text{F}$:  
-**Dataset:** $[ 68, 72, 70, 75, 72, 81, 74, 68 ]$
+For Questions 13–16, use the dataset of weekly temperatures in $^\circ\text{C}$ recorded in Toronto:  
+**Dataset:** $[ 20, 24, 22, 27, 24, 33, 26, 20 ]$
 
 13. Arrange the data in ascending order: $[\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad]$  
 
-14. What is the **Median** of this 8-number dataset? $\underline{\quad\quad\quad\quad}$  
+14. What is the **Median** of this 8-number dataset? $\underline{\quad\quad\quad\quad}^\circ\text{C}$  
     *Space for work:*  
     <br><br><br>
 
 15. What is the **Mode** (or modes) of this dataset? $\underline{\quad\quad\quad\quad}$  
 
-16. What is the **Range** of temperatures? $\underline{\quad\quad\quad\quad}^\circ\text{F}$  
+16. What is the **Range** of temperatures? $\underline{\quad\quad\quad\quad}^\circ\text{C}$  
 
 ---
 
@@ -112,10 +112,10 @@ For Questions 13–16, use the dataset of weekly temperatures in $^\circ\text{F}
 10. **$18$** — Sorted: $[ 14, 15, 18, \mathbf{18}, 22, 25, 28 ] \rightarrow$ middle is $18$.
 11. **$18$** — Appears twice.
 12. **$14$** — $28 - 14 = 14$.
-13. **$[ 68, 68, 70, 72, 72, 74, 75, 81 ]$**
-14. **$72$** — Average of 4th and 5th items: $\frac{72 + 72}{2} = 72$.
-15. **$68\text{ and }72$** (Bimodal — each appears twice).
-16. **$13^\circ\text{F}$** — $81 - 68 = 13$.
+13. **$[ 20, 20, 22, 24, 24, 26, 27, 33 ]$**
+14. **$24^\circ\text{C}$** — Average of 4th and 5th items: $\frac{24 + 24}{2} = 24$.
+15. **$20\text{ and }24$** (Bimodal — each appears twice).
+16. **$13^\circ\text{C}$** — $33 - 20 = 13$.
 17. **$\frac{1}{2}$** — Even numbers: $\{2, 4, 6\} \rightarrow \frac{3}{6} = \frac{1}{2}$.
 18. **$\frac{2}{5}$** — Total $= 4 + 6 + 5 = 15$; Blue $= \frac{6}{15} = \frac{2}{5}$ (or $40\%$).
 19. **$\frac{11}{15}$** — Not red $= 6 + 5 = 11 \rightarrow \frac{11}{15}$.
