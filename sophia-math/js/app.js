@@ -89,6 +89,20 @@
       worksheetTitle: 'Grade 5/6: Multi-Step Real World Word Problems',
       includeWorkSpace: true
     },
+    g5_6_fraction_remainder: {
+      category: 'fraction_remainder',
+      pageCount: 2,
+      gridCols: 1,
+      worksheetTitle: 'Grade 5/6: Fraction of a Remainder Word Problems',
+      includeWorkSpace: true
+    },
+    g5_6_fraction_backwards: {
+      category: 'fraction_remainder_backwards',
+      pageCount: 2,
+      gridCols: 1,
+      worksheetTitle: 'Grade 5/6: Working Backwards with Fractions',
+      includeWorkSpace: true
+    },
     g5_6_geometry_area: {
       category: 'geometry_area',
       pageCount: 2,
@@ -233,7 +247,7 @@
   // get a bit more room (2), everything else defaults dense (3). The user
   // can always override with the Layout Columns chips.
   function getSmartDefaultCols(category) {
-    if (category === 'word_problems') return 1;
+    if (['word_problems', 'fraction_remainder', 'fraction_remainder_backwards'].includes(category)) return 1;
     const spacious = [
       'geometry',
       'geometry_area',
@@ -318,7 +332,7 @@
             <div class="steps-box" id="steps-box-${p.id}">
               <strong>Solution Steps:</strong>
               <ol>${(p.steps || []).map(s => `<li>${s}</li>`).join('')}</ol>
-              <div style="margin-top:4px; font-weight:700; color:#1e293b;">Answer: ${p.answer}</div>
+              <div style="margin-top:4px; font-weight:700; color:#1e293b;">Answer: ${p.answerDisplay || p.answer}</div>
             </div>
           </div>
         </div>
@@ -497,6 +511,10 @@
     }
 
     const totalCount = state.problems.length;
+    // Multi-step problems carry their full worked chain (`keySteps`); the
+    // last line alone would not show where its numbers came from. Those
+    // answers need room, so a key that holds any of them uses two columns.
+    const worked = state.problems.some(p => p.keySteps && p.keySteps.length);
     const keyTarget = document.createElement('div');
     els.pagesContainer.appendChild(keyTarget);
 
@@ -508,16 +526,19 @@
       mode: 'fill',
       items: state.problems,
       sheetClass: 'sf-sheet paper-sheet answer-key-sheet',
-      gridClass: 'compact-key-grid',
-      cacheKey: `sophia-key|n=${totalCount}`,
+      gridClass: worked ? 'compact-key-grid compact-key-grid--worked' : 'compact-key-grid',
+      cacheKey: `sophia-key|n=${totalCount}|worked=${worked}`,
       renderItem: p => {
         const item = document.createElement('div');
         item.className = 'sf-key-item key-item';
+        const explanation = p.keySteps && p.keySteps.length
+          ? `<ol class="key-worked-steps">${p.keySteps.map(s => `<li>${s}</li>`).join('')}</ol>`
+          : (p.steps && p.steps.length > 0 ? `<div class="key-steps-text">${p.steps[p.steps.length - 1]}</div>` : '');
         item.innerHTML = `
           <span class="key-num">${p.id}.</span>
           <div>
-            <span class="key-val">${p.answer}</span>
-            ${p.steps && p.steps.length > 0 ? `<div class="key-steps-text">${p.steps[p.steps.length - 1]}</div>` : ''}
+            <span class="key-val">${p.answerDisplay || p.answer}</span>
+            ${explanation}
           </div>
         `;
         return item;

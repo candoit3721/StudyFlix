@@ -25,6 +25,11 @@ An interactive, print-ready math worksheet and practice studio designed specific
   - Addition & Subtraction (like & unlike denominators with LCD, mixed numbers, simplifying)
   - Multiplication (fraction × fraction, fraction × whole number, mixed number × mixed number)
   - Division (Keep-Change-Flip: fraction ÷ fraction, whole ÷ fraction, fraction ÷ whole)
+- **Fraction of a Remainder (Singapore / Waterloo Gauss style)**:
+  - Multi-step "fraction of what's left" stories in litres, kilograms, metres, dollars and whole items
+  - Differences, amounts left, middle steps, combined steps, fraction of the original, repeated fractions, fixed-amount steps and two-person comparisons
+  - Working backwards from the amount left to the start
+  - Every number is generated so each step comes out clean, with a full worked chain in the answer key
 - **Decimals & Place Value**:
   - Multi-digit addition & subtraction with vertical decimal alignment
   - Decimal multiplication
@@ -87,6 +92,8 @@ An interactive, print-ready math worksheet and practice studio designed specific
 | ❄️ **Negative Integers** | Grade 6 | 20 Rapid-fire questions with positive and negative arithmetic |
 | 📊 **Statistics & Data** | Grade 6 | 15 Questions on Mean, Median (odd & even), Mode (unimodal, bimodal, no mode), and Range |
 | 📖 **Multi-Step Stories** | Grade 5/6 | 10 In-depth realistic word problems with multi-part questions |
+| 💧 **Fraction of a Remainder** | Grade 5/6 | Fresh "fraction of what's left" stories every time, with worked answer keys |
+| 🔄 **Working Backwards** | Grade 5/6 | Find the starting amount from what is left after three fraction steps |
 | 🏆 **5th/6th Assessment** | Grade 5/6 | 20 Comprehensive mixed questions spanning all core standards |
 
 ---
@@ -125,6 +132,7 @@ StudyFlix/sophia-math/
 │   ├── sequential-sums-lab.js                    # Interactive Gauss solver, SVG visualizer & quiz arena
 │   ├── geometry-lab.js                           # Interactive geometry shape transformer & shearing proofs
 │   ├── math-engine.js                            # Core Grade 5/6 arithmetic & algebraic engine
+│   ├── fraction-remainder.js                     # "Fraction of a remainder" story generator (exact arithmetic)
 │   ├── word-problems.js                          # Multi-step story problem generator
 │   └── app.js                                    # App controller, timer, grading & confetti
 ├── worksheets/                                   # Curated offline printable question sets

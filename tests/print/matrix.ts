@@ -48,6 +48,7 @@ export const SOPHIA_CATEGORIES = [
   'geometry_area', 'geometry_triangles', 'geometry_quadrilaterals', 'geometry_circles',
   'geometry_composite', 'geometry_missing', 'geometry',
   'fractions', 'fractions_add_sub', 'fractions_mult', 'fractions_div',
+  'fraction_remainder', 'fraction_remainder_backwards',
   'decimals', 'pemdas', 'grade5_mixed',
   'ratios', 'percentages', 'algebra', 'integers', 'exponents', 'statistics', 'grade6_mixed',
   'word_problems', 'all_mixed',
@@ -55,8 +56,8 @@ export const SOPHIA_CATEGORIES = [
 
 export const SOPHIA_PRESETS = [
   'g5_fractions', 'g5_decimals', 'g5_pemdas', 'g5_6_geometry_area', 'g6_composite_shapes',
-  'g6_ratios', 'g6_percentages', 'g6_equations', 'g6_integers', 'g5_6_word_problems',
-  'g5_6_assessment',
+  'g6_ratios', 'g6_percentages', 'g6_equations', 'g6_integers', 'g6_statistics', 'g5_6_word_problems',
+  'g5_6_fraction_remainder', 'g5_6_fraction_backwards', 'g5_6_gauss_sums', 'g5_6_assessment',
 ];
 
 export function sophiaCases(): Case[] {

@@ -1125,14 +1125,79 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .media-card:hover,
-.media-card:focus-visible {
+.media-card:focus-within {
   transform: scale(1.06) translateY(-5px);
   z-index: 10;
   box-shadow: var(--shadow-card);
   border-color: var(--card-accent, rgba(255, 255, 255, 0.5));
 }
 
-.media-card:focus-visible {
+.media-card:has(.card-open:focus-visible) {
+  outline: 2px solid var(--nf-white);
+  outline-offset: 2px;
+}
+
+/* The text block is the card's primary button. Its ::after stretches over
+   the whole tile, so a click anywhere on the card opens it, while the
+   optional secondary action sits above that layer. */
+.card-open {
+  appearance: none;
+  width: 100%;
+  margin: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.card-open:focus-visible { outline: none; }
+
+.card-open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+/* "New random set": same chip language as the type mark, anchored to the
+   bottom of the art band. */
+.card-random {
+  position: absolute;
+  right: 10px;
+  top: 94px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px 0 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(4px);
+  color: var(--nf-white);
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.card-random:hover,
+.card-random:focus-visible {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: var(--card-accent, var(--nf-white));
+  color: var(--card-accent, var(--nf-white));
+}
+
+.card-random:focus-visible {
   outline: 2px solid var(--nf-white);
   outline-offset: 2px;
 }
@@ -1245,7 +1310,7 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 }
 
 .media-card:hover .card-title,
-.media-card:focus-visible .card-title { color: var(--card-accent, var(--nf-white)); }
+.media-card:focus-within .card-title { color: var(--card-accent, var(--nf-white)); }
 
 /* A quest is the headline act: its accent divides art from label. */
 .media-card--quest .card-content {
@@ -1273,7 +1338,7 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
 
 @media (prefers-reduced-motion: reduce) {
   .media-card, .row-arrow, .row-slider-wrap::before, .row-slider-wrap::after { transition: none; }
-  .media-card:hover, .media-card:focus-visible { transform: none; }
+  .media-card:hover, .media-card:focus-within { transform: none; }
   .row-slider { scroll-behavior: auto; }
   /* The hero still changes when a dot is picked; it just does not animate,
      and app.js does not auto-rotate it. */
@@ -1737,7 +1802,8 @@ h1, h2, h3, h4, .brand-logo, .portal-brand, .billboard-title, .row-title {
   /* Key art is on-screen decoration; on paper the label is what matters. */
   .card-art,
   .card-scrim,
-  .card-type {
+  .card-type,
+  .card-random {
     display: none !important;
   }
 
