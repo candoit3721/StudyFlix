@@ -1959,6 +1959,12 @@ const MathEngine = (function () {
 
   // --- Master Problem Dispatcher ---
 
+  /** The fraction-of-a-remainder generator lives in its own module. */
+  function fractionRemainder() {
+    if (typeof FractionRemainder !== 'undefined') return FractionRemainder;
+    return require('./fraction-remainder');
+  }
+
   /**
    * Generates a single problem based on topic category & configuration
    */
@@ -1982,6 +1988,12 @@ const MathEngine = (function () {
 
       case 'decimals':
         return generateDecimals(config);
+
+      case 'fraction_remainder':
+        return fractionRemainder().generate('all');
+
+      case 'fraction_remainder_backwards':
+        return fractionRemainder().generate('backwards');
 
       case 'ratios':
       case 'proportions':

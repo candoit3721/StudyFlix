@@ -13,6 +13,10 @@
  *                                          so the ICON tells you what opens
  *   family  subject palette             -> shared across a subject's tiles
  *   art     key-art scene id            -> a drawn scene, never a flat gradient
+ *
+ * A fixed worksheet can also name `random`: a studio link that generates a
+ * fresh set of the same kind of questions, offered on the card as
+ * "New random set".
  */
 const DEFAULT_PROFILES = [
   {
@@ -69,12 +73,12 @@ const DEFAULT_PROFILES = [
       { title: "Fraction Mastery", badge: "MATH", desc: "Unlike Denominators, Mixed Numbers & Keep-Change-Flip", link: "sophia-math/index.html", kind: "lesson", family: "math", art: "math-fractions" }
     ],
     printable: [
-      { title: "Fraction Word Problems — Set 2", badge: "NEW • 10 PROBLEMS", desc: "Multi-step \"fraction of what's left\" stories (juice, ribbon, paint) + working backwards, with answer key", link: "sophia-math/worksheets/sophia_fraction_word_problems_set2.md", kind: "printable", family: "math", art: "generic-printable" },
-      { title: "Fraction of a Remainder Masterclass", badge: "BAR MODELS", desc: "Kamala juice walkthrough + 8 Singapore/Gauss-style remainder challenges with full solutions", link: "sophia-math/worksheets/sophia_advanced_fraction_remainder_challenges.md", kind: "printable", family: "math", art: "generic-printable" },
-      { title: "Grade 6 Statistics & Data Management Worksheet", badge: "20 QUESTIONS", desc: "Mean, odd/even median, unimodal/bimodal mode & temperature ranges with full answer key", link: "sophia-math/worksheets/grade6_statistics_data_management.md", kind: "printable", family: "math", art: "generic-printable" },
-      { title: "30-Question Gauss Masterclass Workbook", badge: "GAUSS WORKBOOK", desc: "Printable study guide with 1..N sprints, arbitrary ranges, evens/odds & full solutions", link: "sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
-      { title: "30-Question Area Masterclass Guide", badge: "STUDY GUIDE", desc: "Comprehensive printable workbook with visual proofs, traps & Gauss solutions", link: "sophia-math/worksheets/sophia_geometry_area_masterclass.md", kind: "printable", family: "math", art: "generic-printable" },
-      { title: "Composite Shapes & Shaded Area Test", badge: "20 QUESTIONS", desc: "Printable worksheet on decomposed polygons, house silhouettes & pool walkways", link: "sophia-math/worksheets/grade6_area_composite_shapes.md", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Fraction Word Problems — Set 2", badge: "NEW • 10 PROBLEMS", desc: "Multi-step \"fraction of what's left\" stories (juice, ribbon, paint) + working backwards, with answer key", link: "sophia-math/worksheets/sophia_fraction_word_problems_set2.md", random: "sophia-math/index.html?preset=g5_6_fraction_remainder", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Fraction of a Remainder Masterclass", badge: "BAR MODELS", desc: "Kamala juice walkthrough + 8 Singapore/Gauss-style remainder challenges with full solutions", link: "sophia-math/worksheets/sophia_advanced_fraction_remainder_challenges.md", random: "sophia-math/index.html?preset=g5_6_fraction_remainder", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Grade 6 Statistics & Data Management Worksheet", badge: "20 QUESTIONS", desc: "Mean, odd/even median, unimodal/bimodal mode & temperature ranges with full answer key", link: "sophia-math/worksheets/grade6_statistics_data_management.md", random: "sophia-math/index.html?preset=g6_statistics", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "30-Question Gauss Masterclass Workbook", badge: "GAUSS WORKBOOK", desc: "Printable study guide with 1..N sprints, arbitrary ranges, evens/odds & full solutions", link: "sophia-math/worksheets/sophia_sequential_sums_gauss_masterclass.md", random: "sophia-math/index.html?preset=g5_6_gauss_sums", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "30-Question Area Masterclass Guide", badge: "STUDY GUIDE", desc: "Comprehensive printable workbook with visual proofs, traps & Gauss solutions", link: "sophia-math/worksheets/sophia_geometry_area_masterclass.md", random: "sophia-math/index.html?preset=g5_6_geometry_area", kind: "printable", family: "math", art: "generic-printable" },
+      { title: "Composite Shapes & Shaded Area Test", badge: "20 QUESTIONS", desc: "Printable worksheet on decomposed polygons, house silhouettes & pool walkways", link: "sophia-math/worksheets/grade6_area_composite_shapes.md", random: "sophia-math/index.html?preset=g6_composite_shapes", kind: "printable", family: "math", art: "generic-printable" },
       { title: "Complete Ancient Rome Workbook", badge: "NEW WORKBOOK", desc: "Paper-Ready Study Guide with Arches, Law, Numerals & Solutions", link: "sophia-rome/workbook.html", kind: "printable", family: "rome", art: "generic-printable" },
       { title: "Complete Science Workbook", badge: "ALL-IN-ONE", desc: "Printable Master Study Guide with all questions & answers", link: "sophia-science/workbook.html", kind: "printable", family: "science", art: "generic-printable" },
       { title: "Grade 5/6 Math Practice", badge: "PDF WORKSHEET", desc: "Customizable math test generator with instant answer keys", link: "sophia-math/index.html", kind: "printable", family: "math", art: "math-worksheet" }
@@ -762,9 +766,11 @@ function renderMediaRow(sliderId, items) {
   items.forEach(item => {
     const kind = CONTENT_TYPES[item.kind] ? item.kind : 'lesson';
     const type = CONTENT_TYPES[kind];
-    const card = document.createElement('button');
+    // The tile is a container rather than one big button, so a card can
+    // offer a second action ("New random set") without nesting buttons. The
+    // text block is the primary button and stretches over the whole tile.
+    const card = document.createElement('div');
     card.className = `media-card media-card--${kind}`;
-    card.type = 'button';
     card.style.setProperty('--card-accent', SFKeyArt.palette(item.family).accent);
     card.innerHTML = `
       <span class="card-art">${SFKeyArt.art(item.art, item.family, kind)}</span>
@@ -773,12 +779,19 @@ function renderMediaRow(sliderId, items) {
         ${SFIcons.icon(type.icon, { size: 15 })}<span>${type.label}</span>
       </span>
       <span class="card-badge">${item.badge}</span>
-      <span class="card-content">
+      <button type="button" class="card-content card-open">
         <span class="card-title">${item.title}</span>
         <span class="card-desc">${item.desc}</span>
-      </span>
+      </button>
+      ${item.random ? `
+        <button type="button" class="card-random" aria-label="New random set like ${item.title.replace(/"/g, '&quot;')}">
+          ${SFIcons.icon('refresh', { size: 13 })}<span>Random set</span>
+        </button>` : ''}
     `;
-    card.onclick = () => openStudio(item.link, item.title);
+    card.querySelector('.card-open').onclick = () => openStudio(item.link, item.title);
+    if (item.random) {
+      card.querySelector('.card-random').onclick = () => openStudio(item.random, `${item.title} · Random Set`);
+    }
     slider.appendChild(card);
   });
 }
